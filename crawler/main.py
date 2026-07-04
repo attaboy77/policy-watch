@@ -11,13 +11,14 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
-from sources import law_api, korea_kr  # noqa: E402  (법제처 주력, 정책브리핑 보조)
+from sources import law_api, kasb, fsc_fss, korea_kr  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 DATA_FILE = ROOT / "data" / "items.json"
 SITE_DATA = ROOT / "site" / "data.js"
 
-SOURCES = [law_api, korea_kr]
+# 법제처 API(가장 안정) → 회계기준원 → 금융위·금감원 → 정책브리핑
+SOURCES = [law_api, kasb, fsc_fss, korea_kr]
 HEADERS = {
     "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                    "AppleWebKit/537.36 (KHTML, like Gecko) "

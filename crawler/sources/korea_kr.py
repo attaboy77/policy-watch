@@ -1,24 +1,15 @@
-"""대한민국 정책브리핑(korea.kr) RSS — 프록시 경유 보조 수집.
+"""대한민국 정책브리핑(korea.kr) RSS — 세법·회계 보도자료 수집.
 
-korea.kr이 해외 IP(GitHub Actions)를 차단하므로, 공개 리더 프록시를 경유한다.
-여러 프록시를 순서대로 시도하고, 모두 실패하면 조용히 건너뛴다(주력은 법제처 API).
+해외 IP 차단 대비로 공용 프록시 유틸(_http)을 경유한다.
 """
 import re
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from html import unescape
-from urllib.parse import quote
 
-import requests
+from . import _http
 
 RSS_TARGET = "https://www.korea.kr/rss/pressrelease.xml"
-
-# 공개 프록시들 (앞에서부터 시도). {url}에 대상 주소가 채워진다.
-PROXIES = [
-    "https://r.jina.ai/{raw}",
-    "https://api.allorigins.win/raw?url={url}",
-    "https://api.codetabs.com/v1/proxy/?quest={raw}",
-]
 
 CATEGORY_RULES = [
     ("회계기준", ["회계기준", "K-IFRS", "IFRS", "회계처리", "외부감사", "감사기준",
@@ -55,28 +46,10 @@ def _parse_date(pub: str) -> str:
     return datetime.today().strftime("%Y-%m-%d")
 
 
-def _fetch_via_proxy(session: requests.Session) -> bytes | None:
-    for tpl in PROXIES:
-        url = tpl.format(url=quote(RSS_TARGET, safe=""), raw=RSS_TARGET)
-        host = tpl.split("/")[2]
-        try:
-            resp = session.get(url, timeout=40)
-            resp.raise_for_status()
-            if b"<item" in resp.content or b"<rss" in resp.content:
-                print(f"  [korea_kr] 프록시 성공: {host}")
-                return resp.content
-            print(f"  [korea_kr] 프록시 응답에 RSS 없음: {host}")
-        except Exception as e:
-            print(f"  [korea_kr] 프록시 실패({host}): {str(e)[:80]}")
-    return None
-
-
-def fetch(session: requests.Session) -> list[dict]:
-    content = _fetch_via_proxy(session)
+def fetch(session):
+    content = _http.fetch_url(session, RSS_TARGET, tag="korea_kr")
     if not content:
-        print("  [korea_kr] 모든 프록시 실패 — 건너뜀 (법제처 API가 주력)")
         return []
-
     try:
         root = ET.fromstring(content)
     except Exception as e:
@@ -94,13 +67,9 @@ def fetch(session: requests.Session) -> list[dict]:
         if category is None:
             continue
         items.append({
-            "source": "정책브리핑",
-            "category": category,
-            "title": title,
-            "url": link,
-            "date": _parse_date(pub),
+            "source": "정책브리핑", "category": category,
+            "title": title, "url": link, "date": _parse_date(pub),
         })
         matched += 1
-
     print(f"  [korea_kr] {matched}건 분류됨")
     return items
