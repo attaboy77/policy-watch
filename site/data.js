@@ -1,165 +1,13 @@
 window.POLICY_DATA = {
-  "updated": "2026-07-04 04:53",
+  "updated": "2026-07-04 06:13",
   "items": [
     {
-      "source": "금융감독원",
+      "source": "금융위원회",
       "category": "법령",
-      "title": "제도권금융회사조회",
-      "url": "https://fine.fss.or.kr/fine/fncco/systemFncCo/list.do?menuNo=900038",
+      "title": "연체초기 성실상환 채무자에게 불측의 불이익을 야기하는 채권매각을 제한하겠습니다. - ｢개인채무자보호법 감독규정｣ 개정안 금융위 의결",
+      "url": "https://www.fsc.go.kr/no010101/87234",
       "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "법령",
-      "title": "인허가등록신고시스템",
-      "url": "http://fcsc.kr",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "회계부정신고",
-      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200348",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "회계부정 익명신고",
-      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200351",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "법령",
-      "title": "국민검사청구제도",
-      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200104",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "투자매매 중개업자 공시",
-      "url": "https://www.fss.or.kr/fss/bbs/B0000310/list.do?menuNo=200403",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "집합투자기구공시",
-      "url": "http://fines.fss.or.kr/fssnew/index.jsp",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "신용평가공시",
-      "url": "https://www.fss.or.kr/fss/job/creditPolcy/list.do?menuNo=200600",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "보험회사종합공시",
-      "url": "https://www.fss.or.kr/fss/bbs/B0000116/list.do?menuNo=200413",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "지급여력제도 및 감독회계",
-      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200421",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "기업공시제도일반",
-      "url": "https://www.fss.or.kr/fss/bbs/B0000145/list.do?menuNo=200152",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "공시유의사항",
-      "url": "https://www.fss.or.kr/fss/bbs/B0000146/list.do?menuNo=200153",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "기업공시길라잡이",
-      "url": "https://dart.fss.or.kr/info/main.do",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "회계감독권역 소개",
-      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200427",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "회계법인 정보 통합조회",
-      "url": "https://www.fss.or.kr/fss/job/cprCoreInfo/list.do?menuNo=200429",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "내부회계관리제도",
-      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=201174",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "외부감사인 지정",
-      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200457",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "감사인 등록",
-      "url": "https://www.fss.or.kr/fss/bbs/B0000142/list.do?menuNo=200462",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "과거제재내용 공시",
-      "url": "https://www.fss.or.kr/fss/bbs/B0000159/list.do?menuNo=200173",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
-    },
-    {
-      "source": "금융감독원",
-      "category": "회계기준",
-      "title": "제재관련 공시",
-      "url": "https://www.fss.or.kr/fss/job/openInfo/list.do?menuNo=200476",
-      "date": "2026-07-04",
-      "collected_at": "2026-07-04 04:52"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -167,7 +15,7 @@ window.POLICY_DATA = {
       "title": "조세특례제한법 (타법개정) · 2027-06-17 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=286937&type=HTML&mobileYn=&efYd=20270617",
       "date": "2026-06-16",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -175,7 +23,7 @@ window.POLICY_DATA = {
       "title": "국세징수법 (일부개정) · 2026-06-02 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=286427&type=HTML&mobileYn=&efYd=20260602",
       "date": "2026-06-02",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -183,7 +31,7 @@ window.POLICY_DATA = {
       "title": "국가재정법 (일부개정) · 2027-01-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=285521&type=HTML&mobileYn=&efYd=20270101",
       "date": "2026-04-21",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -191,7 +39,7 @@ window.POLICY_DATA = {
       "title": "국가재정법 (일부개정) · 2026-08-11 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=285521&type=HTML&mobileYn=&efYd=20260811",
       "date": "2026-04-21",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -199,7 +47,7 @@ window.POLICY_DATA = {
       "title": "국가재정법 (일부개정) · 2027-01-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=283845&type=HTML&mobileYn=&efYd=20270101",
       "date": "2026-03-10",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -207,7 +55,7 @@ window.POLICY_DATA = {
       "title": "국가재정법 (일부개정) · 2026-09-11 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=283845&type=HTML&mobileYn=&efYd=20260911",
       "date": "2026-03-10",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -215,7 +63,7 @@ window.POLICY_DATA = {
       "title": "국고금 관리법 (일부개정) · 2027-07-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=283409&type=HTML&mobileYn=&efYd=20270701",
       "date": "2026-02-19",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -223,7 +71,7 @@ window.POLICY_DATA = {
       "title": "국가재정법 (일부개정) · 2026-08-11 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=283171&type=HTML&mobileYn=&efYd=20260811",
       "date": "2026-02-10",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -231,7 +79,7 @@ window.POLICY_DATA = {
       "title": "법인세법 (일부개정) · 2026-07-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280349&type=HTML&mobileYn=&efYd=20260701",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -239,7 +87,7 @@ window.POLICY_DATA = {
       "title": "법인세법 (일부개정) · 2026-01-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280349&type=HTML&mobileYn=&efYd=20260101",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -247,7 +95,7 @@ window.POLICY_DATA = {
       "title": "소득세법 (일부개정) · 2027-01-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280405&type=HTML&mobileYn=&efYd=20270101",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -255,7 +103,7 @@ window.POLICY_DATA = {
       "title": "부가가치세법 (일부개정) · 2026-01-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280351&type=HTML&mobileYn=&efYd=20260101",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -263,7 +111,7 @@ window.POLICY_DATA = {
       "title": "국세기본법 (일부개정) · 2028-01-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280373&type=HTML&mobileYn=&efYd=20280101",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -271,7 +119,7 @@ window.POLICY_DATA = {
       "title": "국세징수법 (일부개정) · 2026-10-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280377&type=HTML&mobileYn=&efYd=20261001",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -279,7 +127,7 @@ window.POLICY_DATA = {
       "title": "국세징수법 (일부개정) · 2026-01-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280377&type=HTML&mobileYn=&efYd=20260101",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -287,7 +135,7 @@ window.POLICY_DATA = {
       "title": "상속세 및 증여세법 (일부개정) · 2026-01-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280353&type=HTML&mobileYn=&efYd=20260101",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -295,7 +143,7 @@ window.POLICY_DATA = {
       "title": "종합부동산세법 (일부개정) · 2026-01-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280417&type=HTML&mobileYn=&efYd=20260101",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -303,7 +151,7 @@ window.POLICY_DATA = {
       "title": "조세특례제한법 (일부개정) · 2027-01-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280409&type=HTML&mobileYn=&efYd=20270101",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -311,7 +159,7 @@ window.POLICY_DATA = {
       "title": "관세법 (일부개정) · 2026-07-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280363&type=HTML&mobileYn=&efYd=20260701",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -319,7 +167,7 @@ window.POLICY_DATA = {
       "title": "관세법 (일부개정) · 2026-04-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280363&type=HTML&mobileYn=&efYd=20260401",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -327,7 +175,7 @@ window.POLICY_DATA = {
       "title": "관세법 (일부개정) · 2026-01-02 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=280363&type=HTML&mobileYn=&efYd=20260102",
       "date": "2025-12-23",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -335,7 +183,7 @@ window.POLICY_DATA = {
       "title": "법인세법 (타법개정) · 2026-01-02 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=276111&type=HTML&mobileYn=&efYd=20260102",
       "date": "2025-10-01",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -343,7 +191,7 @@ window.POLICY_DATA = {
       "title": "부가가치세법 (타법개정) · 2026-01-02 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=276117&type=HTML&mobileYn=&efYd=20260102",
       "date": "2025-10-01",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -351,7 +199,7 @@ window.POLICY_DATA = {
       "title": "상속세 및 증여세법 (타법개정) · 2026-01-02 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=276123&type=HTML&mobileYn=&efYd=20260102",
       "date": "2025-10-01",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -359,7 +207,7 @@ window.POLICY_DATA = {
       "title": "상속세 및 증여세법 (타법개정) · 2025-10-01 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=276123&type=HTML&mobileYn=&efYd=20251001",
       "date": "2025-10-01",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -367,7 +215,7 @@ window.POLICY_DATA = {
       "title": "관세법 (타법개정) · 2026-01-02 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=276067&type=HTML&mobileYn=&efYd=20260102",
       "date": "2025-10-01",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     },
     {
       "source": "법제처",
@@ -375,7 +223,7 @@ window.POLICY_DATA = {
       "title": "국고금 관리법 (타법개정) · 2026-01-02 시행",
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=276079&type=HTML&mobileYn=&efYd=20260102",
       "date": "2025-10-01",
-      "collected_at": "2026-07-04 03:27"
+      "collected_at": "2026-07-04 06:13"
     }
   ]
 };
