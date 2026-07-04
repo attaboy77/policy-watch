@@ -15,9 +15,9 @@ RSS_TARGET = "https://www.korea.kr/rss/pressrelease.xml"
 
 # 공개 프록시들 (앞에서부터 시도). {url}에 대상 주소가 채워진다.
 PROXIES = [
+    "https://r.jina.ai/{raw}",
     "https://api.allorigins.win/raw?url={url}",
-    "https://corsproxy.io/?url={url}",
-    "https://thingproxy.freeboard.io/fetch/{url}",
+    "https://api.codetabs.com/v1/proxy/?quest={raw}",
 ]
 
 CATEGORY_RULES = [
@@ -57,15 +57,17 @@ def _parse_date(pub: str) -> str:
 
 def _fetch_via_proxy(session: requests.Session) -> bytes | None:
     for tpl in PROXIES:
-        url = tpl.format(url=quote(RSS_TARGET, safe=""))
+        url = tpl.format(url=quote(RSS_TARGET, safe=""), raw=RSS_TARGET)
+        host = tpl.split("/")[2]
         try:
-            resp = session.get(url, timeout=30)
+            resp = session.get(url, timeout=40)
             resp.raise_for_status()
             if b"<item" in resp.content or b"<rss" in resp.content:
-                print(f"  [korea_kr] 프록시 성공: {tpl.split('/')[2]}")
+                print(f"  [korea_kr] 프록시 성공: {host}")
                 return resp.content
+            print(f"  [korea_kr] 프록시 응답에 RSS 없음: {host}")
         except Exception as e:
-            print(f"  [korea_kr] 프록시 실패({tpl.split('/')[2]}): {e}")
+            print(f"  [korea_kr] 프록시 실패({host}): {str(e)[:80]}")
     return None
 
 
