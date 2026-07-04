@@ -11,14 +11,14 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
-from sources import law_api, kasb, fsc_fss, korea_kr  # noqa: E402
+from sources import law_api, fsc  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 DATA_FILE = ROOT / "data" / "items.json"
 SITE_DATA = ROOT / "site" / "data.js"
 
-# 법제처 API(가장 안정) → 회계기준원 → 금융위·금감원 → 정책브리핑
-SOURCES = [law_api, kasb, fsc_fss, korea_kr]
+# 법제처 API(정확) + 금융위 공식 RSS(안정) — 둘 다 실제 데이터만, 메뉴 오염 없음
+SOURCES = [law_api, fsc]
 HEADERS = {
     "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                    "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -27,11 +27,15 @@ HEADERS = {
     "Accept-Language": "ko-KR,ko;q=0.9",
 }
 KEEP_DAYS = 365  # 1년 이상 지난 항목은 정리
+# 현재 사용하는 소스만 유지 (과거 게시판 크롤링으로 쌓인 오염 데이터 제거)
+ALLOWED_SOURCES = {"법제처", "금융위원회"}
 
 
 def load_existing() -> list[dict]:
     if DATA_FILE.exists():
-        return json.loads(DATA_FILE.read_text(encoding="utf-8"))
+        data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
+        # 허용된 소스의 항목만 유지 → 이전에 잘못 수집된 메뉴/링크 자동 제거
+        return [it for it in data if it.get("source") in ALLOWED_SOURCES]
     return []
 
 
