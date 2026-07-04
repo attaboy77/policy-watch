@@ -1,0 +1,617 @@
+# 정책모니터 (Policy Watch)
+
+회계기준·세법·법령 개정 소식을 매일 자동 수집해 웹페이지로 보여주는 프로토타입입니다. 서버 없이 GitHub Actions와 GitHub Pages만으로 무료 운영이 가능합니다.
+
+## 구조
+
+```
+policy-watch/
+├── crawler/
+│   ├── main.py              # 전체 수집 실행 (중복 제거, 저장)
+│   └── sources/
+│       ├── moef.py          # 기획재정부 보도자료 RSS
+│       ├── kasb.py          # 회계기준원 게시판 크롤링
+│       ├── nts.py           # 국세청 보도자료 크롤링
+│       └── law_api.py       # 법제처 국가법령정보 Open API
+├── data/items.json          # 누적 수집 데이터
+├── site/
+│   ├── index.html           # 대시보드 (필터·검색 내장)
+│   └── data.js              # 사이트용 데이터 (main.py가 자동 생성)
+└── .github/workflows/crawl.yml  # 매일 오전 7시 자동 수집·배포
+```
+
+## 로컬 실행
+
+```bash
+pip install -r requirements.txt
+python crawler/main.py        # 수집 실행 → data/items.json, site/data.js 갱신
+open site/index.html          # 브라우저로 열기 (그냥 더블클릭해도 됨)
+```
+
+## GitHub으로 자동화하기
+
+1. 이 폴더를 GitHub 저장소로 푸시
+2. 저장소 Settings → Pages → Source를 **GitHub Actions**로 설정
+3. (선택) 법제처 API 사용 시: https://open.law.go.kr 에서 무료 API 신청 후,name: 정책 수집 및 배포
+
+on:
+  schedule:
+    - cron: "0 22 * * *"   # 매일 한국시간 오전 7시 (UTC 22시)
+  workflow_dispatch: {}      # 수동 실행 버튼
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: 수집 실행
+        env:
+          LAW_API_OC: ${{ secrets.LAW_API_OC }}   # 법제처 API ID (저장소 Secrets에 등록)
+        run: python crawler/main.py
+
+      - name: 변경사항 커밋
+        run: |
+          git config user.name "policy-watch-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/ site/data.js
+          git diff --cached --quiet || git commit -m "chore: 정책 데이터 갱신 $(date +'%Y-%m-%d')"
+          git push
+
+      - name: Pages 아티팩트 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: crawl
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+   Settings → Secrets → Actions에 `LAW_API_OC` 이름으로 발급 ID 등록
+4. Actions 탭에서 "정책 수집 및 배포"를 수동 실행해 첫 배포 확인
+
+이후 매일 오전 7시(KST)에 자동으로 수집·배포됩니다.
+"""정책모니터 수집기 — 모든 소스를 수집해 data/items.json 과 site/data.js 를 갱신.
+
+실행: python crawler/main.py
+"""
+import json
+import sys
+import time
+from datetime import datetime, timedelta
+from pathlib import Path
+
+import requests
+
+sys.path.insert(0, str(Path(__file__).parent))
+from sources import moef, kasb, nts, law_api  # noqa: E402
+
+ROOT = Path(__file__).parent.parent
+DATA_FILE = ROOT / "data" / "items.json"
+SITE_DATA = ROOT / "site" / "data.js"
+
+SOURCES = [moef, kasb, nts, law_api]
+HEADERS = {"User-Agent": "Mozilla/5.0 (PolicyWatch prototype; contact: you@example.com)"}
+KEEP_DAYS = 365  # 1년 이상 지난 항목은 정리
+
+
+def load_existing() -> list[dict]:
+    if DATA_FILE.exists():
+        return json.loads(DATA_FILE.read_text(encoding="utf-8"))
+    return []
+
+
+def main():
+    session = requests.Session()
+    session.headers.update(HEADERS)
+
+    existing = load_existing()
+    seen_urls = {it["url"] for it in existing}
+    new_items, failures = [], []
+
+    for mod in SOURCES:
+        name = mod.__name__.split(".")[-1]
+        try:
+            fetched = mod.fetch(session)
+            fresh = [it for it in fetched if it["url"] not in seen_urls]
+            for it in fresh:
+                it["collected_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")
+            new_items.extend(fresh)
+            print(f"[{name}] {len(fetched)}건 수집, 신규 {len(fresh)}건")
+        except Exception as e:
+            failures.append(f"{name}: {e}")
+            print(f"[{name}] 실패: {e}")
+        time.sleep(2)  # 서버 부담 최소화
+
+    merged = new_items + existing
+    cutoff = (datetime.today() - timedelta(days=KEEP_DAYS)).strftime("%Y-%m-%d")
+    merged = [it for it in merged if it.get("date", "") >= cutoff]
+    merged.sort(key=lambda x: x.get("date", ""), reverse=True)
+
+    DATA_FILE.parent.mkdir(exist_ok=True)
+    DATA_FILE.write_text(json.dumps(merged, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # 정적 사이트가 file:// 로도 열리도록 JS 파일로도 출력
+    payload = {
+        "updated": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "items": merged,
+    }
+    SITE_DATA.write_text(
+        "window.POLICY_DATA = " + json.dumps(payload, ensure_ascii=False, indent=2) + ";",
+        encoding="utf-8",
+    )
+
+    print(f"\n총 {len(merged)}건 저장 (신규 {len(new_items)}건)")
+    if failures:
+        print("파싱 실패 소스 — 사이트 구조 변경 여부를 확인하세요:")
+        for f in failures:
+            print("  -", f)
+        sys.exit(0)  # 일부 실패해도 배포는 진행
+
+
+if __name__ == "__main__":
+    main()
+
+## 반드시 확인할 것
+
+- **크롤링 URL과 셀렉터**: `kasb.py`, `nts.py`의 목록 URL과 CSS 셀렉터는 실제 사이트 구조에 맞게 조정해야 합니다. 각 파일에 `── 수정 ──` 표시를 해두었습니다. 브라우저 개발자도구(F12)로 게시판 목록의 HTML 구조를 확인하세요.
+- **robots.txt와 이용약관**: 각 기관 사이트의 크롤링 정책을 확인하고, 요청 간격(현재 2초)을 유지하세요.
+- **저작권**: 제목+링크만 수집·표시하는 현재 구조를 유지하는 것이 안전합니다. 원문 전체 복제는 피하세요.
+- **파싱 실패 알림**: 사이트 구조가 바뀌면 해당 소스만 실패하고 나머지는 계속 동"""국세청 보도자료 게시판 크롤링.
+
+주의: HTML 구조 변경 시 셀렉터 수정 필요. 목록 URL은 nts.go.kr 에서 확인하세요.
+"""
+import re
+from datetime import datetime
+from urllib.parse import urljoin
+
+import requests
+from bs4 import BeautifulSoup
+
+BASE = "https://www.nts.go.kr"
+# ── 사이트 확인 후 실제 보도자료 목록 URL로 교체 ──
+LIST_URL = BASE + "/nts/na/ntt/selectNttList.do?mi=2201&bbsId=1030"
+
+
+def fetch(session: requests.Session) -> list[dict]:
+    items = []
+    resp = session.get(LIST_URL, timeout=30)
+    resp.raise_for_status()
+    soup = BeautifulSoup(resp.text, "html.parser")
+
+    rows = soup.select("table tbody tr")  # ── 구조 변경 시 수정 ──
+    for row in rows:
+        a = row.select_one("a")
+        if not a:
+            continue
+        title = a.get_text(strip=True)
+        href = a.get("href", "")
+        m = re.search(r"nttSn=(\d+)|['\"](\d+)['\"]", href)
+        if href.startswith("javascript") and m:
+            seq = m.group(1) or m.group(2)
+            url = f"{BASE}/nts/na/ntt/selectNttInfo.do?mi=2201&bbsId=1030&nttSn={seq}"
+        else:
+            url = urljoin(BASE, href)
+
+        items.append({
+            "source": "국세청",
+            "category": "세법",
+            "title": title,
+            "url": url,
+            "date": _find_date(row),
+        })
+    return items
+
+
+def _find_date(row) -> str:
+    text = row.get_text(" ", strip=True)
+    m = re.search(r"(\d{4})[.\-/](\d{1,2})[.\-/](\d{1,2})", text)
+    if m:
+        return f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    return datetime.today().strftime("%Y-%m-%d")
+
+
+"""한국회계기준원(KASB) 기준서 제·개정 공고 게시판 크롤링.
+
+주의: 게시판 HTML 구조가 바뀌면 아래 CSS 셀렉터를 수정해야 합니다.
+실제 URL/파라미터는 www.kasb.or.kr 에서 '제·개정 공고' 게시판 주소를 확인해 넣으세요.
+"""
+import re
+from datetime import datetime
+from urllib.parse import urljoin
+
+import requests
+from bs4 import BeautifulSoup
+
+BASE = "https://www.kasb.or.kr"
+# ── 사이트 확인 후 실제 게시판 목록 URL로 교체 ──
+LIST_URL = BASE + "/fe/bbs/NR_list.do?bbsCd=1023"
+
+
+def fetch(session: requests.Session) -> list[dict]:
+    items = []
+    resp = session.get(LIST_URL, timeout=30)
+    resp.raise_for_status()
+    soup = BeautifulSoup(resp.text, "html.parser")
+
+    # ── 구조 변경 시 이 셀렉터 수정 ──
+    rows = soup.select("table tbody tr")
+    for row in rows:
+        a = row.select_one("a")
+        if not a:
+            continue
+        title = a.get_text(strip=True)
+        href = a.get("href", "")
+        # 자바스크립트 링크(예: goView('1234'))인 경우 게시글 번호 추출
+        m = re.search(r"['\"](\d+)['\"]", href)
+        if href.startswith("javascript") and m:
+            url = f"{BASE}/fe/bbs/NR_view.do?bbsCd=1023&bbsSeq={m.group(1)}"
+        else:
+            url = urljoin(BASE, href)
+
+        date = _find_date(row)
+        items.append({
+            "source": "회계기준원",
+            "category": "회계기준",
+            "title": title,
+            "url": url,
+            "date": date,
+        })
+    return items
+
+
+def _find_date(row) -> str:
+    text = row.get_text(" ", strip=True)
+    m = re.search(r"(\d{4})[.\-/](\d{1,2})[.\-/](\d{1,2})", text)
+    if m:
+        return f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    return datetime.today().strftime("%Y-%m-%d")
+
+"""법제처 국가법령정보 Open API — 세법·회계 관련 법령 개정 이력 조회.
+
+사용 전 준비:
+1. https://open.law.go.kr 에서 회원가입 후 API 활용 신청 (무료)
+2. 발급받은 이메일 ID(OC 값)를 환경변수 LAW_API_OC 에 설정
+   예) export LAW_API_OC=your_id
+"""
+import os
+import xml.etree.ElementTree as ET
+
+import requests
+
+API_URL = "http://www.law.go.kr/DRF/lawSearch.do"
+TARGET_LAWS = ["법인세법", "소득세법", "부가가치세법", "국세기본법", "주식회사 등의 외부감사에 관한 법률"]
+
+
+def fetch(session: requests.Session) -> list[dict]:
+    oc = os.environ.get("LAW_API_OC")
+    if not oc:
+        print("  [law_api] LAW_API_OC 환경변수 없음 — 건너뜀")
+        return []
+
+    items = []
+    for law in TARGET_LAWS:
+        resp = session.get(API_URL, params={
+            "OC": oc, "target": "law", "type": "XML",
+            "query": law, "display": 5, "sort": "ddes",  # 공포일 내림차순
+        }, timeout=30)
+        resp.raise_for_status()
+        root = ET.fromstring(resp.content)
+
+        for node in root.iter("law"):
+            name = (node.findtext("법령명한글") or "").strip()
+            date = (node.findtext("공포일자") or "").strip()   # YYYYMMDD
+            kind = (node.findtext("제개정구분명") or "").strip()  # 일부개정 등
+            link = (node.findtext("법령상세링크") or "").strip()
+            if not name:
+                continue
+            items.append({
+                "source": "법제처",
+                "category": "법령",
+                "title": f"{name} {kind}" if kind else name,
+                "url": "http://www.law.go.kr" + link if link.startswith("/") else link,
+                "date": f"{date[:4]}-{date[4:6]}-{date[6:8]}" if len(date) == 8 else date,
+            })
+    return items
+
+"""기획재정부 보도자료 RSS 수집 (세법개정안 등)."""
+import re
+import requests
+import xml.etree.ElementTree as ET
+from datetime import datetime
+
+RSS_URL = "https://www.moef.go.kr/com/detailRssTagService.do?bbsId=MOSFBBS_000000000028"
+KEYWORDS = ["세법", "개정", "법인세", "소득세", "부가가치세", "조세", "시행령", "시행규칙"]
+
+
+def fetch(session: requests.Session) -> list[dict]:
+    items = []
+    resp = session.get(RSS_URL, timeout=30)
+    resp.raise_for_status()
+    root = ET.fromstring(resp.content)
+
+    for node in root.iter("item"):
+        title = (node.findtext("title") or "").strip()
+        link = (node.findtext("link") or "").strip()
+        pub = (node.findtext("pubDate") or "").strip()
+
+        # 세법 관련 키워드가 포함된 건만 수집 (전체 수집을 원하면 이 필터 제거)
+        if not any(k in title for k in KEYWORDS):
+            continue
+
+        items.append({
+            "source": "기획재정부",
+            "category": "세법",
+            "title": title,
+            "url": link,
+            "date": _parse_date(pub),
+        })
+    return items
+
+
+def _parse_date(pub: str) -> str:
+    for fmt in ("%a, %d %b %Y %H:%M:%S %z", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(pub, fmt).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+    m = re.search(r"(\d{4})[.\-/](\d{1,2})[.\-/](<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정책모니터 — 회계기준·세법 개정 동향</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3f4f2;
+    --card: #ffffff;
+    --ink: #1c231f;
+    --ink-soft: #66706a;
+    --rule: #d5dad6;
+    --seal: #b6301f;        /* 세법 — 직인 주홍 */
+    --pine: #2f5d50;        /* 회계기준 — 관인 청록 */
+    --indigo: #3b4a6b;      /* 법령 — 남색 */
+    --font-serif: "Noto Serif KR", serif;
+    --font-sans: "Noto Sans KR", sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--font-sans); line-height: 1.55; }
+  a { color: inherit; text-decoration: none; }
+  a:hover .headline, a:hover.item-link { text-decoration: underline; text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--pine); outline-offset: 2px; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  /* ── 마스트헤드 ── */
+  header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .masthead h1 { font-family: var(--font-serif); font-weight: 900; font-size: clamp(28px, 5vw, 40px); letter-spacing: 0.16em; }
+  .masthead .sub { margin-top: 4px; font-size: 13px; color: var(--ink-soft); letter-spacing: 0.06em; }
+  .seal {
+    flex-shrink: 0; width: 58px; height: 58px;
+    border: 2.5px solid var(--seal); border-radius: 6px; color: var(--seal);
+    font-family: var(--font-serif); font-weight: 900; font-size: 18px; line-height: 1.15;
+    display: grid; place-items: center; text-align: center;
+    transform: rotate(-4deg); opacity: 0.88; user-select: none;
+  }
+  .double-rule { margin-top: 16px; border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); height: 6px; }
+  .meta-line {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    padding: 9px 2px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft);
+    border-bottom: 1px solid var(--rule);
+  }
+  .search-bar { display: flex; justify-content: flex-end; margin: 16px 0 6px; }
+  .search-bar input {
+    border: 1px solid var(--rule); background: var(--card); padding: 8px 16px;
+    border-radius: 999px; font-family: var(--font-sans); font-size: 13px; width: 240px; color: var(--ink);
+  }
+  .search-bar input::placeholder { color: #9aa39e; }
+
+  /* ── 톱 헤드라인 ── */
+  .hero {
+    background: var(--card); border: 1px solid var(--rule); border-top: 4px solid var(--ink);
+    padding: 26px 28px; margin-top: 14px;
+  }
+  .hero .kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .hero .headline {
+    font-family: var(--font-serif); font-weight: 700;
+    font-size: clamp(19px, 3.2vw, 26px); line-height: 1.4;
+  }
+  .hero .byline { margin-top: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); }
+
+  /* ── 카테고리 섹션 그리드 ── */
+  .sections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+  .section { background: var(--card); border: 1px solid var(--rule); display: flex; flex-direction: column; }
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px; border-bottom: 2px solid var(--c, var(--ink));
+  }
+  .section-head h2 { font-family: var(--font-serif); font-weight: 900; font-size: 17px; letter-spacing: 0.1em; color: var(--c, var(--ink)); }
+  .section-head .cnt { font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); }
+  .section[data-cat="세법"]      { --c: var(--seal); }
+  .section[data-cat="회계기준"]  { --c: var(--pine); }
+  .section[data-cat="법령"]      { --c: var(--indigo); }
+
+  .lead-item { padding: 16px 18px 14px; border-bottom: 1px solid var(--rule); }
+  .lead-item .headline { font-family: var(--font-serif); font-weight: 700; font-size: 15.5px; line-height: 1.45; }
+  .lead-item .byline { margin-top: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); }
+
+  .section ul { list-style: none; }
+  .section li { border-bottom: 1px solid var(--rule); }
+  .section li:last-child { border-bottom: none; }
+  .item-link { display: block; padding: 11px 18px; font-size: 13.5px; line-height: 1.5; }
+  .item-link .d { font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); margin-right: 8px; }
+
+  .tag {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+    color: var(--c, var(--ink-soft)); border: 1px solid currentColor;
+    padding: 1px 8px; border-radius: 3px;
+  }
+  .stamp-new {
+    display: inline-block; margin-left: 7px; border: 1.5px solid var(--seal); color: var(--seal);
+    font-family: var(--font-serif); font-weight: 900; font-size: 10.5px;
+    padding: 0 4px; border-radius: 3px; transform: rotate(-6deg); vertical-align: 2px;
+  }
+  .empty { padding: 28px 18px; text-align: center; color: var(--ink-soft); font-size: 13px; }
+  footer { margin-top: 32px; font-size: 12px; color: var(--ink-soft); }
+
+  @media (max-width: 900px) { .sections { grid-template-columns: 1fr; } }
+  @media (max-width: 620px) {
+    .search-bar input { width: 100%; }
+    .hero { padding: 20px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero, .section { animation: rise 0.4s ease both; }
+    .section:nth-child(2) { animation-delay: 0.07s; }
+    .section:nth-child(3) { animation-delay: 0.14s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; } }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="masthead">
+      <h1>정책모니터</h1>
+      <p class="sub">회계기준 · 세법 · 법령 개정 동향 자동 수집</p>
+    </div>
+    <div class="seal" aria-hidden="true">政策<br>監視</div>
+  </header>
+  <div class="double-rule"></div>
+  <div class="meta-line">
+    <span id="updated">최종 수집 —</span>
+    <span id="count">0건</span>
+  </div>
+
+  <div class="search-bar">
+    <input type="search" id="q" placeholder="키워드 검색 (예: 법인세, K-IFRS)" aria-label="키워드 검색">
+  </div>
+
+  <a class="hero" id="hero" href="#" target="_blank" rel="noopener" style="display:none"></a>
+
+  <main class="sections" id="sections"></main>
+
+  <footer>
+    각 항목은 원문 기관 사이트로 연결됩니다. 본 페이지는 제목·링크만 수집하며 원문 저작권은 각 기관에 있습니다.
+  </footer>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  const data = window.POLICY_DATA || { updated: "-", items: [] };
+  const CATEGORIES = ["세법", "회계기준", "법령"];
+  let query = "";
+
+  document.getElementById("updated").textContent = "최종 수집 " + data.updated;
+  document.getElementById("q").addEventListener("input", e => { query = e.target.value.trim(); render(); });
+
+  const SEVEN_DAYS = 7 * 24 * 3600 * 1000;
+  const isNew = d => (Date.now() - new Date(d).getTime()) < SEVEN_DAYS;
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const newStamp = d => isNew(d) ? '<span class="stamp-new">新</span>' : '';
+
+  function render() {
+    const items = data.items.filter(i => !query || i.title.includes(query) || i.source.includes(query));
+    document.getElementById("count").textContent = items.length + "건";
+
+    // 톱 헤드라인 = 전체에서 가장 최신 항목
+    const hero = document.getElementById("hero");
+    const top = items[0];
+    if (top && !query) {
+      hero.style.display = "block";
+      hero.href = top.url;
+      hero.style.setProperty("--c",
+        top.category === "세법" ? "var(--seal)" : top.category === "회계기준" ? "var(--pine)" : "var(--indigo)");
+      hero.innerHTML =
+        '<div class="kicker"><span class="tag">' + top.category + '</span>' + newStamp(top.date) + '</div>' +
+        '<div class="headline">' + esc(top.title) + '</div>' +
+        '<div class="byline">' + top.source + ' · ' + top.date + '</div>';
+    } else {
+      hero.style.display = "none";
+    }
+
+    // 카테고리별 섹션 (헤드라인으로 나간 항목은 제외)
+    const rest = (top && !query) ? items.slice(1) : items;
+    const sections = document.getElementById("sections");
+    sections.innerHTML = "";
+
+    CATEGORIES.forEach(cat => {
+      const catItems = rest.filter(i => i.category === cat);
+      const sec = document.createElement("section");
+      sec.className = "section";
+      sec.dataset.cat = cat;
+
+      let html = '<div class="section-head"><h2>' + cat + '</h2><span class="cnt">' + catItems.length + '건</span></div>';
+
+      if (!catItems.length) {
+        html += '<div class="empty">최근 소식이 없습니다.</div>';
+      } else {
+        const [lead, ...more] = catItems;
+        html += '<a class="lead-item" href="' + lead.url + '" target="_blank" rel="noopener">' +
+                '<div class="headline">' + esc(lead.title) + newStamp(lead.date) + '</div>' +
+                '<div class="byline">' + lead.source + ' · ' + lead.date + '</div></a>';
+        if (more.length) {
+          html += '<ul>' + more.slice(0, 6).map(i =>
+            '<li><a class="item-link" href="' + i.url + '" target="_blank" rel="noopener">' +
+            '<span class="d">' + i.date.slice(5) + '</span>' + esc(i.title) + newStamp(i.date) + '</a></li>'
+          ).join('') + '</ul>';
+        }
+      }
+      sec.innerHTML = html;
+      sections.appendChild(sec);
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
+
+window.POLICY_DATA = {
+  "updated": "2026-07-03 06:00",
+  "items": [
+    { "source": "기획재정부", "category": "세법", "title": "2026년 세법개정안 발표 — 법인세 과세표준 구간 조정 및 연구·인력개발비 세액공제 확대", "url": "https://www.moef.go.kr", "date": "2026-07-01" },
+    { "source": "회계기준원", "category": "회계기준", "title": "기업회계기준서 제1118호 '재무제표의 표시와 공시' 도입 관련 공개초안 의견조회", "url": "https://www.kasb.or.kr", "date": "2026-06-28" },
+    { "source": "법제처", "category": "법령", "title": "법인세법 시행령 일부개정 (대통령령 제34xxx호)", "url": "https://www.law.go.kr", "date": "2026-06-25" },
+    { "source": "국세청", "category": "세법", "title": "2026년 상반기 개정세법 후속 시행규칙 주요 내용 안내", "url": "https://www.nts.go.kr", "date": "2026-06-20" },
+    { "source": "회계기준원", "category": "회계기준", "title": "K-IFRS 제1109호 '금융상품' 개정 — 전력구매계약(PPA) 관련 요구사항 반영", "url": "https://www.kasb.or.kr", "date": "2026-06-12" },
+    { "source": "기획재정부", "category": "세법", "title": "부가가치세법 시행령 개정안 입법예고 — 전자세금계산서 발급 의무 확대", "url": "https://www.moef.go.kr", "date": "2026-05-30" },
+    { "source": "법제처", "category": "법령", "title": "주식회사 등의 외부감사에 관한 법률 일부개정", "url": "https://www.law.go.kr", "date": "2026-05-22" },
+    { "source": "국세청", "category": "세법", "title": "국제조세조정에 관한 법률 시행령 개정 관련 이전가격 문서화 안내", "url": "https://www.nts.go.kr", "date": "2026-05-15" }
+  ]
+};
+\d{1,2})", pub)
+    if m:
+        return f"{m.group(1)}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    return datetime.today().strftime("%Y-%m-%d")
+작합니다. Actions 로그에서 실패 소스를 확인할 수 있고, 필요하면 실패 시 이메일/슬랙 알림 스텝을 추가하세요.
+
+## 확장 아이디어
+
+- 키워드 알림: 신규 항목 중 "법인세" 등 관심 키워드 포함 시 이메일 발송 (Actions에서 `dawidd6/action-send-mail` 등 활용)
+- AI 요약: 신규 항목의 원문을 가져와 Claude API로 3줄 요약 추가
+- 동적 페이지 대응: JavaScript 렌더링이 필요한 게시판은 `playwright` 로 교체
+
+requests>=2.31
+beautifulsoup4>=4.12
