@@ -11,13 +11,13 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
-from sources import korea_kr, law_api  # noqa: E402
+from sources import law_api, korea_kr  # noqa: E402  (법제처 주력, 정책브리핑 보조)
 
 ROOT = Path(__file__).parent.parent
 DATA_FILE = ROOT / "data" / "items.json"
 SITE_DATA = ROOT / "site" / "data.js"
 
-SOURCES = [korea_kr, law_api]
+SOURCES = [law_api, korea_kr]
 HEADERS = {
     "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
                    "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -39,16 +39,26 @@ def main():
     session.headers.update(HEADERS)
 
     existing = load_existing()
-    seen_urls = {it["url"] for it in existing}
+
+    def dedup_key(it):
+        # 법령은 URL이 바뀔 수 있어 제목+날짜로 식별
+        return (it.get("title", ""), it.get("date", ""))
+
+    seen_keys = {dedup_key(it) for it in existing}
     new_items, failures = [], []
 
     for mod in SOURCES:
         name = mod.__name__.split(".")[-1]
         try:
             fetched = mod.fetch(session)
-            fresh = [it for it in fetched if it["url"] not in seen_urls]
-            for it in fresh:
+            fresh = []
+            for it in fetched:
+                k = dedup_key(it)
+                if k in seen_keys:
+                    continue
+                seen_keys.add(k)
                 it["collected_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")
+                fresh.append(it)
             new_items.extend(fresh)
             print(f"[{name}] {len(fetched)}건 수집, 신규 {len(fresh)}건")
         except Exception as e:
