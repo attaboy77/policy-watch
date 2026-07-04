@@ -1,6 +1,166 @@
 window.POLICY_DATA = {
-  "updated": "2026-07-04 03:28",
+  "updated": "2026-07-04 04:53",
   "items": [
+    {
+      "source": "금융감독원",
+      "category": "법령",
+      "title": "제도권금융회사조회",
+      "url": "https://fine.fss.or.kr/fine/fncco/systemFncCo/list.do?menuNo=900038",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "법령",
+      "title": "인허가등록신고시스템",
+      "url": "http://fcsc.kr",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "회계부정신고",
+      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200348",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "회계부정 익명신고",
+      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200351",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "법령",
+      "title": "국민검사청구제도",
+      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200104",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "투자매매 중개업자 공시",
+      "url": "https://www.fss.or.kr/fss/bbs/B0000310/list.do?menuNo=200403",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "집합투자기구공시",
+      "url": "http://fines.fss.or.kr/fssnew/index.jsp",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "신용평가공시",
+      "url": "https://www.fss.or.kr/fss/job/creditPolcy/list.do?menuNo=200600",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "보험회사종합공시",
+      "url": "https://www.fss.or.kr/fss/bbs/B0000116/list.do?menuNo=200413",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "지급여력제도 및 감독회계",
+      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200421",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "기업공시제도일반",
+      "url": "https://www.fss.or.kr/fss/bbs/B0000145/list.do?menuNo=200152",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "공시유의사항",
+      "url": "https://www.fss.or.kr/fss/bbs/B0000146/list.do?menuNo=200153",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "기업공시길라잡이",
+      "url": "https://dart.fss.or.kr/info/main.do",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "회계감독권역 소개",
+      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200427",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "회계법인 정보 통합조회",
+      "url": "https://www.fss.or.kr/fss/job/cprCoreInfo/list.do?menuNo=200429",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "내부회계관리제도",
+      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=201174",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "외부감사인 지정",
+      "url": "https://www.fss.or.kr/fss/main/contents.do?menuNo=200457",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "감사인 등록",
+      "url": "https://www.fss.or.kr/fss/bbs/B0000142/list.do?menuNo=200462",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "과거제재내용 공시",
+      "url": "https://www.fss.or.kr/fss/bbs/B0000159/list.do?menuNo=200173",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
+    {
+      "source": "금융감독원",
+      "category": "회계기준",
+      "title": "제재관련 공시",
+      "url": "https://www.fss.or.kr/fss/job/openInfo/list.do?menuNo=200476",
+      "date": "2026-07-04",
+      "collected_at": "2026-07-04 04:52"
+    },
     {
       "source": "법제처",
       "category": "세법",
