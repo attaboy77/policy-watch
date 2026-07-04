@@ -189,7 +189,7 @@
       let html = '<div class="section-head"><h2>' + cat + '</h2><span class="cnt">' + catItems.length + '건</span></div>';
 
       if (!catItems.length) {
-        html += '<div class="empty">최근 소식이 없습니다.</div>';
+        html += '<div class="empty">이 분야의 최근 수집 항목이 아직 없습니다.</div>';
       } else {
         const [lead, ...more] = catItems;
         html += '<a class="lead-item" href="' + lead.url + '" target="_blank" rel="noopener">' +

@@ -11,13 +11,13 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
-from sources import moef, kasb, nts, law_api  # noqa: E402
+from sources import korea_kr, law_api  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 DATA_FILE = ROOT / "data" / "items.json"
 SITE_DATA = ROOT / "site" / "data.js"
 
-SOURCES = [moef, kasb, nts, law_api]
+SOURCES = [korea_kr, law_api]
 HEADERS = {"User-Agent": "Mozilla/5.0 (PolicyWatch prototype; contact: you@example.com)"}
 KEEP_DAYS = 365  # 1년 이상 지난 항목은 정리
 
