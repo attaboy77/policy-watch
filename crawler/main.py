@@ -18,7 +18,13 @@ DATA_FILE = ROOT / "data" / "items.json"
 SITE_DATA = ROOT / "site" / "data.js"
 
 SOURCES = [korea_kr, law_api]
-HEADERS = {"User-Agent": "Mozilla/5.0 (PolicyWatch prototype; contact: you@example.com)"}
+HEADERS = {
+    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                   "AppleWebKit/537.36 (KHTML, like Gecko) "
+                   "Chrome/126.0 Safari/537.36"),
+    "Accept": "application/rss+xml, application/xml, text/xml, */*",
+    "Accept-Language": "ko-KR,ko;q=0.9",
+}
 KEEP_DAYS = 365  # 1년 이상 지난 항목은 정리
 
 
