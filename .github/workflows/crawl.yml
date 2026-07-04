@@ -1,0 +1,52 @@
+name: 정책 수집 및 배포
+
+on:
+  schedule:
+    - cron: "0 22 * * *"   # 매일 한국시간 오전 7시 (UTC 22시)
+  workflow_dispatch: {}      # 수동 실행 버튼
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: 수집 실행
+        env:
+          LAW_API_OC: ${{ secrets.LAW_API_OC }}
+        run: python crawler/main.py
+
+      - name: 변경사항 커밋
+        run: |
+          git config user.name "policy-watch-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/ site/data.js
+          git diff --cached --quiet || git commit -m "chore: 정책 데이터 갱신 $(date +'%Y-%m-%d')"
+          git push
+
+      - name: Pages 아티팩트 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: crawl
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
