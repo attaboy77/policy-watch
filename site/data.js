@@ -1,5 +1,5 @@
 window.POLICY_DATA = {
-  "updated": "2026-07-05 08:47",
+  "updated": "2026-07-06 12:43",
   "items": [
     {
       "source": "금융위원회",
