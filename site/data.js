@@ -1,6 +1,14 @@
 window.POLICY_DATA = {
-  "updated": "2026-07-21 07:57",
+  "updated": "2026-07-22 07:42",
   "items": [
+    {
+      "source": "금융위원회",
+      "category": "법령",
+      "title": "중소·벤처기업의 자금조달 절차 완화를 위한 자본시장법 시행령·감독규정 개정",
+      "url": "https://www.fsc.go.kr/no010101/87367",
+      "date": "2026-07-22",
+      "collected_at": "2026-07-22 07:42"
+    },
     {
       "source": "금융위원회",
       "category": "회계기준",
