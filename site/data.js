@@ -1,6 +1,22 @@
 window.POLICY_DATA = {
-  "updated": "2026-07-27 10:55",
+  "updated": "2026-07-28 07:47",
   "items": [
+    {
+      "source": "금융위원회",
+      "category": "회계기준",
+      "title": "외부감사 및 회계 등에 관한 규정 개정안 규정변경예고 실시",
+      "url": "https://www.fsc.go.kr/no010101/87401",
+      "date": "2026-07-28",
+      "collected_at": "2026-07-28 07:47"
+    },
+    {
+      "source": "금융위원회",
+      "category": "회계기준",
+      "title": "사업보고서 등에 대한 조사·감리결과 조치",
+      "url": "https://www.fsc.go.kr/no010101/87394",
+      "date": "2026-07-28",
+      "collected_at": "2026-07-28 07:47"
+    },
     {
       "source": "금융위원회",
       "category": "회계기준",
