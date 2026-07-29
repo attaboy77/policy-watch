@@ -59,9 +59,15 @@ def classify_strict(title: str):
 
 # ── 검색 쿼리 생성 ──
 def build_query(category: str) -> str:
-    """카테고리별 뉴스 검색 쿼리 문자열 반환 (구글/네이버 공통)."""
+    """카테고리별 뉴스 검색 쿼리 문자열 반환 (구글용, OR/AND 조합)."""
     kw = _config.CATEGORY_KEYWORDS.get(category, {})
     return kw.get("query", category)
+
+
+def build_naver_query(category: str) -> str:
+    """네이버용 단순 쿼리 반환 (네이버는 괄호 AND/OR 미지원)."""
+    kw = _config.CATEGORY_KEYWORDS.get(category, {})
+    return kw.get("naver_query", category)
 
 
 # ── 중복 제거 (제목 유사도) ──
