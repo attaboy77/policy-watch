@@ -99,6 +99,11 @@
   .badge.icfr { background: var(--c-icfr); } .badge.esg { background: var(--c-esg); }
   .badge-type { background: transparent; border: 1px solid var(--line); color: var(--ink-faint); font-weight: 600; }
   .badge-type.official { border-color: var(--c-ifrs); color: var(--c-ifrs); }
+  .badge-trust { font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 5px; }
+  .badge-trust.t1 { background: #e7f5ef; color: #0b7a5c; }   /* 공식기관 */
+  .badge-trust.t2 { background: #eaf0fb; color: #2456b8; }   /* 전문미디어 */
+  .badge-trust.t3 { background: #fff2e0; color: #b5731a; }   /* 회계법인 */
+  .badge-trust.t4 { background: #f0f2f5; color: #5a6675; }   /* 경제지 */
 
   /* 사이드바 */
   .sidebar { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 82px; }
@@ -307,6 +312,12 @@
         const cls = CLS[it.category] || "";
         const accent = ACCENT[cls] || "var(--line)";
         const isOfficial = it.source_type === "공식원문";
+        const trust = it.trust || 30;
+        let trustCls = "t4", trustLabel = "일반";
+        if (trust >= 95) { trustCls = "t1"; trustLabel = "공식기관"; }
+        else if (trust >= 80) { trustCls = "t2"; trustLabel = "전문미디어"; }
+        else if (trust >= 70) { trustCls = "t3"; trustLabel = "회계법인"; }
+        else if (trust >= 60) { trustCls = "t4"; trustLabel = "주요경제지"; }
         const officialBtns = (it.official || []).map(o =>
           `<a class="btn-official" href="${o.url}" target="_blank" rel="noopener" style="--accent:${accent}">🔗 ${esc(o.label)}</a>`
         ).join("");
@@ -315,6 +326,7 @@
           <div class="card-top">
             <span class="badge badge-cat ${cls}">${it.category}</span>
             <span class="badge badge-type ${isOfficial?'official':''}">${it.source_type || '뉴스'}</span>
+            <span class="badge badge-trust ${trustCls}">${trustLabel}</span>
           </div>
           <h3>${esc(it.title)}</h3>
           <p class="summary">${esc(summarize(it))}</p>
