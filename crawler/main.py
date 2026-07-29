@@ -12,11 +12,12 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
-from sources import law_api, fsc, google_news, naver_news, _common  # noqa: E402
+from sources import law_api, fsc, google_news, naver_news, _common, _summarize  # noqa: E402
 
 ROOT = Path(__file__).parent.parent
 DATA_FILE = ROOT / "data" / "items.json"
 SITE_DATA = ROOT / "site" / "data.js"
+SITE_JSON = ROOT / "site" / "data.json"   # 정적 fetch용 (요구사항: data.json)
 
 # 공식원문(정확) → 뉴스(속보성). 순서대로 수집.
 SOURCES = [law_api, fsc, google_news, naver_news]
@@ -117,10 +118,17 @@ def main():
     # 공식기관(100) > 전문미디어(80) > 회계법인(70) > 경제지(60) > 기타(30)
     merged.sort(key=lambda x: (x.get("trust", 30), x.get("date", "")), reverse=True)
 
+    # 요약(2줄) + 실무 영향 의견 생성 (요구사항 5)
+    for it in merged:
+        _summarize.make_summary(it)
+
     DATA_FILE.parent.mkdir(exist_ok=True)
     DATA_FILE.write_text(json.dumps(merged, ensure_ascii=False, indent=2), encoding="utf-8")
 
     payload = {"updated": datetime.now().strftime("%Y-%m-%d %H:%M"), "items": merged}
+    # 1) 정적 fetch용 data.json (프론트가 fetch로 읽음)
+    SITE_JSON.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    # 2) 하위호환용 data.js (window 변수) — file:// 로도 열리도록 유지
     SITE_DATA.write_text(
         "window.POLICY_DATA = " + json.dumps(payload, ensure_ascii=False, indent=2) + ";",
         encoding="utf-8",
