@@ -1,5 +1,5 @@
 window.POLICY_DATA = {
-  "updated": "2026-07-29 05:24",
+  "updated": "2026-07-29 05:31",
   "items": [
     {
       "source": "금융위원회",
@@ -43,6 +43,20 @@ window.POLICY_DATA = {
       "category": "세법",
       "title": "초고가 기준 어떻게…강남3구 세법 개정 앞두고 강남권 '술렁'",
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1aZUpJZ0xtZTAxVUNsbS00NkFpbmhaUXZQM2x1TVRCb2hRamtpdWNhcUJzRElkeWx3SDJack5vRXZvV0lhTklYam9pQ1ZaTG85ZU93Y0NZSzY2NDJ3elBRU9IBeEFVX3lxTE42YUQ1S0U4WWxCRUVxS1dOdDRoXzRlUEZib2VCdkp3MlI0MGgxMDZLbUNsNjFNenpVR2hjRjI4d3lZZHY0WjIxNV9tZlpjcTRGOHRlS05qMjZnVzdLWUhsOGdXNVlKWFp5bW1fT2FSN29tRmdNc1NCaA?oc=5",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "국가법령정보센터",
+          "url": "https://www.law.go.kr/"
+        }
+      ]
+    },
+    {
+      "source": "프레시안",
+      "source_type": "구글뉴스",
+      "category": "세법",
+      "title": "\"평택 세수는 경기도 비상금 아니다\"…평택시발전협의회, 법인지방소득세 공동세원화 중단 촉구",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1vNGNWM2hwUHU5bW50ZGRycWpfSVRVMTZfNm02d2VkejNwSXplSUc4QmRUX05hSl96Qk00N1I3c3ZORkk1X0xCYmpvOTBpYTVsZTlCM1RNbG9LR09Nd3IxVjBzVDltVGR6eWtR?oc=5",
       "date": "2026-07-29",
       "official": [
         {
@@ -516,20 +530,6 @@ window.POLICY_DATA = {
       ]
     },
     {
-      "source": "마켓인",
-      "source_type": "구글뉴스",
-      "category": "세법",
-      "title": "“1300만명 코인 과세 폐지”…오늘 국회 재경위 상정",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5Ddjd4MEoySE5Dal9HeHVIakxMcnVRRE0zQWdMMWR1SExXQTM1c0VocEktV3hobHMyS2ZiRW15YkdBT3owcGJZZ1lyajVCVktOSWJNOFZpbktuUWpZMWdua20ydmF2RHctQ0tQcnNydEFkV1E?oc=5",
-      "date": "2026-07-28",
-      "official": [
-        {
-          "label": "국가법령정보센터",
-          "url": "https://www.law.go.kr/"
-        }
-      ]
-    },
-    {
       "source": "intn.co.kr",
       "source_type": "구글뉴스",
       "category": "세법",
@@ -634,6 +634,24 @@ window.POLICY_DATA = {
       ]
     },
     {
+      "source": "임팩트온",
+      "source_type": "구글뉴스",
+      "category": "ESG",
+      "title": "EFRAG, 비EU기업 ESG 공시 초안 공개…기후는 글로벌, 인권·환경은 EU 영향만",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5OaXNpUWJmMW5zOWt6Vk5EaVpJS0NPejZjbTgtc2VvTlZBb2YyX0dteTI0bm9OM1VIRXM3a3B0YkdXRmdMdzAwakZhQU44dFY1cjhfMENGLUtacmw2ZjNNQnJsSzE4R0pWMFF2b9IBbEFVX3lxTE5OaXNpUWJmMW5zOWt6Vk5EaVpJS0NPejZjbTgtc2VvTlZBb2YyX0dteTI0bm9OM1VIRXM3a3B0YkdXRmdMdzAwakZhQU44dFY1cjhfMENGLUtacmw2ZjNNQnJsSzE4R0pWMFF2bw?oc=5",
+      "date": "2026-07-28",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
       "source": "네이트",
       "source_type": "구글뉴스",
       "category": "ESG",
@@ -652,20 +670,16 @@ window.POLICY_DATA = {
       ]
     },
     {
-      "source": "임팩트온",
+      "source": "마켓인",
       "source_type": "구글뉴스",
-      "category": "ESG",
-      "title": "EFRAG, 비EU기업 ESG 공시 초안 공개…기후는 글로벌, 인권·환경은 EU 영향만",
-      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5OaXNpUWJmMW5zOWt6Vk5EaVpJS0NPejZjbTgtc2VvTlZBb2YyX0dteTI0bm9OM1VIRXM3a3B0YkdXRmdMdzAwakZhQU44dFY1cjhfMENGLUtacmw2ZjNNQnJsSzE4R0pWMFF2b9IBbEFVX3lxTE5OaXNpUWJmMW5zOWt6Vk5EaVpJS0NPejZjbTgtc2VvTlZBb2YyX0dteTI0bm9OM1VIRXM3a3B0YkdXRmdMdzAwakZhQU44dFY1cjhfMENGLUtacmw2ZjNNQnJsSzE4R0pWMFF2bw?oc=5",
+      "category": "세법",
+      "title": "“1300만명 코인 과세 폐지”…오늘 국회 재경위 상정",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE5Ddjd4MEoySE5Dal9HeHVIakxMcnVRRE0zQWdMMWR1SExXQTM1c0VocEktV3hobHMyS2ZiRW15YkdBT3owcGJZZ1lyajVCVktOSWJNOFZpbktuUWpZMWdua20ydmF2RHctQ0tQcnNydEFkV1E?oc=5",
       "date": "2026-07-28",
       "official": [
         {
-          "label": "한국회계기준원",
-          "url": "https://www.kasb.or.kr/"
-        },
-        {
-          "label": "금융위원회",
-          "url": "https://www.fsc.go.kr/index"
+          "label": "국가법령정보센터",
+          "url": "https://www.law.go.kr/"
         }
       ]
     },
