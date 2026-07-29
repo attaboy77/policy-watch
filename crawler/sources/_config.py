@@ -66,4 +66,56 @@ AD_KEYWORDS = [
 
 
 # ══════════════════════════════════════════════════════════
-# 3.
+# 3. 출처별 신뢰 가중치 (Source Trust Score) — 높을수록 상위 노출
+# ══════════════════════════════════════════════════════════
+# (도메인 조각, 점수, 표시명)
+SOURCE_TRUST = [
+    # 1순위: 공식 기관
+    ("kasb.or.kr", 100, "한국회계기준원"),
+    ("fsc.go.kr", 100, "금융위원회"),
+    ("law.go.kr", 100, "국가법령정보센터"),
+    ("nts.go.kr", 100, "국세청"),
+    ("mof.go.kr", 100, "기획재정부"),
+    ("moef.go.kr", 100, "기획재정부"),
+    ("fss.or.kr", 95, "금융감독원"),
+    # 2순위: 전문 미디어
+    ("intn.co.kr", 80, "일간NTN"),
+    ("taxtimes.co.kr", 80, "한국세정신문"),
+    ("joseilbo.com", 80, "조세일보"),
+    ("impacton.net", 80, "임팩트온"),
+    ("esgeconomy.com", 80, "ESG경제"),
+    ("cpanews", 80, "CPA뉴스"),
+    # 3순위: 4대 회계법인
+    ("pwc.com", 70, "PwC(삼일)"),
+    ("kpmg.com", 70, "KPMG(삼정)"),
+    ("ey.com", 70, "EY(한영)"),
+    ("deloitte.com", 70, "Deloitte(안진)"),
+    # 4순위: 메이저 경제지
+    ("mk.co.kr", 60, "매일경제"),
+    ("hankyung.com", 60, "한국경제"),
+    ("sedaily.com", 60, "서울경제"),
+    ("mt.co.kr", 60, "머니투데이"),
+    ("edaily.co.kr", 60, "이데일리"),
+    ("fnnews.com", 60, "파이낸셜뉴스"),
+    ("yna.co.kr", 60, "연합뉴스"),
+]
+
+DEFAULT_TRUST = 30  # 목록에 없는 출처
+
+
+def trust_score(url: str) -> int:
+    """URL 도메인으로 신뢰 점수 산출."""
+    u = (url or "").lower()
+    for frag, score, _ in SOURCE_TRUST:
+        if frag in u:
+            return score
+    return DEFAULT_TRUST
+
+
+def trust_name(url: str) -> str | None:
+    """URL로 알려진 출처 표시명 반환 (없으면 None)."""
+    u = (url or "").lower()
+    for frag, _, name in SOURCE_TRUST:
+        if frag in u:
+            return name
+    return None
