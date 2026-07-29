@@ -1,8 +1,6 @@
-"""네이버 뉴스 검색 API — 카테고리별 키워드로 언론 기사 수집.
+"""네이버 뉴스 검색 API — 정밀 쿼리로 카테고리별 실무 뉴스만 수집.
 
-네이버 개발자센터 Client ID/Secret 필요 (GitHub Secrets):
-  NAVER_CLIENT_ID, NAVER_CLIENT_SECRET
-키가 없으면 조용히 건너뛴다. 하루 25,000회 무료.
+노이즈 차단 + 필수/조합 키워드 재검증 + 출처 가중치. 키 없으면 건너뜀.
 """
 import os
 import re
@@ -11,20 +9,13 @@ from html import unescape
 
 import requests
 
-from . import _common
+from . import _common, _config
 
 API = "https://openapi.naver.com/v1/search/news.json"
 
-QUERIES = {
-    "세법": "세법개정",
-    "K-IFRS": "회계기준 K-IFRS",
-    "내부회계": "내부회계관리제도",
-    "ESG": "ESG 공시",
-}
-
 
 def _strip_tags(t: str) -> str:
-    t = re.sub(r"<[^>]+>", "", t or "")       # <b> 등 제거
+    t = re.sub(r"<[^>]+>", "", t or "")
     return unescape(re.sub(r"\s+", " ", t)).strip()
 
 
@@ -33,14 +24,6 @@ def _parse_date(pub: str) -> str:
         return datetime.strptime(pub.strip(), "%a, %d %b %Y %H:%M:%S %z").strftime("%Y-%m-%d")
     except ValueError:
         return datetime.today().strftime("%Y-%m-%d")
-
-
-def _press_from_url(url: str) -> str:
-    # 네이버 뉴스는 원문 링크 도메인으로 언론사 추정이 어려워 일반 표기
-    if "naver.com" in url:
-        return "네이버뉴스"
-    m = re.search(r"https?://(?:www\.)?([^./]+)", url)
-    return m.group(1) if m else "네이버뉴스"
 
 
 def fetch(session: requests.Session) -> list[dict]:
@@ -52,10 +35,11 @@ def fetch(session: requests.Session) -> list[dict]:
 
     headers = {"X-Naver-Client-Id": cid, "X-Naver-Client-Secret": csec}
     items = []
-    for category, query in QUERIES.items():
+    for category in _config.CATEGORY_KEYWORDS:
+        query = _common.build_query(category)
         try:
             resp = session.get(API, headers=headers, params={
-                "query": query, "display": 10, "sort": "date",
+                "query": query, "display": 20, "sort": "date",
             }, timeout=30)
             resp.raise_for_status()
             data = resp.json()
@@ -69,20 +53,24 @@ def fetch(session: requests.Session) -> list[dict]:
             link = art.get("originallink") or art.get("link", "")
             if not title or not link:
                 continue
-            press = _press_from_url(link)
-            if _common.is_ad(title, press):
+            if _common.should_exclude(title):
                 continue
+            if not _common.match_category(title, category):
+                continue
+
+            press = _common.trust_name(link) or "네이버뉴스"
             items.append({
                 "source": press,
-                "source_type": "네이버뉴스",
+                "source_type": "뉴스",
                 "category": category,
                 "title": title,
                 "url": link,
                 "date": _parse_date(art.get("pubDate", "")),
+                "trust": _common.trust_score(link),
                 "official": _common.official_links(category),
             })
             cnt += 1
-            if cnt >= 6:
+            if cnt >= 8:
                 break
         print(f"  [naver/{category}] {cnt}건")
     return items
