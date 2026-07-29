@@ -1,65 +1,81 @@
-"""공용 유틸 — 카테고리별 공식 원문 링크 매칭, 광고·중복 필터."""
+"""공용 유틸 — 공식원문 링크 매칭, 노이즈/광고/중복 필터, 정밀 분류, 쿼리 생성."""
 import re
 
-# 카테고리별 공식 원문 링크 (요구사항 매칭 기준)
+from . import _config
+
+# 카테고리별 공식 원문 링크 (프론트 '공식 원문 보기' 버튼용)
 OFFICIAL_SOURCES = {
-    "K-IFRS": [
-        ("한국회계기준원", "https://www.kasb.or.kr/"),
-        ("금융위원회", "https://www.fsc.go.kr/index"),
-    ],
-    "세법": [
-        ("국가법령정보센터", "https://www.law.go.kr/"),
-    ],
-    "내부회계": [
-        ("한국회계기준원", "https://www.kasb.or.kr/"),
-        ("금융위원회", "https://www.fsc.go.kr/index"),
-    ],
-    "ESG": [
-        ("한국회계기준원", "https://www.kasb.or.kr/"),
-        ("금융위원회", "https://www.fsc.go.kr/index"),
-    ],
+    "K-IFRS": [("한국회계기준원", "https://www.kasb.or.kr/"), ("금융위원회", "https://www.fsc.go.kr/index")],
+    "세법": [("국가법령정보센터", "https://www.law.go.kr/"), ("국세청", "https://www.nts.go.kr/")],
+    "내부회계": [("한국회계기준원", "https://www.kasb.or.kr/"), ("금융위원회", "https://www.fsc.go.kr/index")],
+    "ESG": [("한국회계기준원", "https://www.kasb.or.kr/"), ("금융위원회", "https://www.fsc.go.kr/index")],
 }
 
 
 def official_links(category: str):
-    """카테고리에 맞는 공식 원문 링크 목록 반환."""
-    return [{"label": name, "url": url} for name, url in OFFICIAL_SOURCES.get(category, [])]
+    return [{"label": n, "url": u} for n, u in OFFICIAL_SOURCES.get(category, [])]
 
 
-# ── 광고성/저품질 기사 필터 ──
-AD_KEYWORDS = [
-    "제휴", "광고", "분양", "이벤트", "할인", "쿠폰", "특가", "무료체험",
-    "카드혜택", "적립", "사은품", "프로모션", "협찬", "[AD]", "(광고)",
-    "바로가기", "무료상담", "가입혜택", "최저가", "핫딜",
-]
-# 언론사가 아닌 저품질 출처(보도자료 배포처 등)
-LOW_QUALITY_SOURCES = ["뉴스와이어", "보도자료", "블로그", "카페"]
+# ── 노이즈/광고 필터 ──
+def is_noise(title: str) -> bool:
+    """주식 시황·재테크 등 실무 무관 찌라시 기사 판별."""
+    return any(k in title for k in _config.NOISE_KEYWORDS)
 
 
 def is_ad(title: str, source: str = "") -> bool:
-    if any(k in title for k in AD_KEYWORDS):
+    if any(k in title for k in _config.AD_KEYWORDS):
         return True
-    if any(s in source for s in LOW_QUALITY_SOURCES):
+    if any(s in source for s in ["뉴스와이어", "보도자료", "블로그", "카페"]):
         return True
     return False
 
 
-# ── 중복 기사 제거 (제목 유사도) ──
+def should_exclude(title: str, source: str = "") -> bool:
+    """수집 제외 여부 통합 판정 (노이즈 OR 광고)."""
+    return is_noise(title) or is_ad(title, source)
+
+
+# ── 정밀 카테고리 매칭 (필수 AND 조합) ──
+def match_category(title: str, category: str) -> bool:
+    """제목이 해당 카테고리의 [필수 키워드] AND [조합 키워드]를 만족하는지.
+
+    뉴스는 정밀도가 중요하므로 must 하나 + combine 하나를 모두 요구한다.
+    """
+    kw = _config.CATEGORY_KEYWORDS.get(category)
+    if not kw:
+        return False
+    has_must = any(m in title for m in kw["must"])
+    has_combine = any(c in title for c in kw["combine"])
+    return has_must and has_combine
+
+
+def classify_strict(title: str):
+    """어느 카테고리에 정밀 매칭되는지 반환 (없으면 None)."""
+    for cat in _config.CATEGORY_KEYWORDS:
+        if match_category(title, cat):
+            return cat
+    return None
+
+
+# ── 검색 쿼리 생성 ──
+def build_query(category: str) -> str:
+    """카테고리별 뉴스 검색 쿼리 문자열 반환 (구글/네이버 공통)."""
+    kw = _config.CATEGORY_KEYWORDS.get(category, {})
+    return kw.get("query", category)
+
+
+# ── 중복 제거 (제목 유사도) ──
 def _normalize(title: str) -> str:
-    # 대괄호 태그, 특수문자, 공백 제거 후 비교용 키 생성
-    t = re.sub(r"\[[^\]]*\]", "", title)      # [속보] 등 제거
-    t = re.sub(r"[^가-힣a-zA-Z0-9]", "", t)    # 특수문자·공백 제거
+    t = re.sub(r"\[[^\]]*\]", "", title)
+    t = re.sub(r"[^가-힣a-zA-Z0-9]", "", t)
     return t.lower()
 
 
 def dedup_key(title: str) -> str:
-    """중복 판정용 키. 앞부분 위주로 잘라 유사 제목을 같은 키로."""
-    norm = _normalize(title)
-    return norm[:24]  # 앞 24자 같으면 같은 기사로 간주
+    return _normalize(title)[:24]
 
 
 def dedup(items: list[dict]) -> list[dict]:
-    """제목 유사도 기반 중복 제거. 먼저 온 것을 유지."""
     seen, out = set(), []
     for it in items:
         k = dedup_key(it.get("title", ""))
@@ -68,3 +84,12 @@ def dedup(items: list[dict]) -> list[dict]:
         seen.add(k)
         out.append(it)
     return out
+
+
+# ── 출처 가중치 ──
+def trust_score(url: str) -> int:
+    return _config.trust_score(url)
+
+
+def trust_name(url: str):
+    return _config.trust_name(url)
