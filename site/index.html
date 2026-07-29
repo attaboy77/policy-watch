@@ -1,408 +1,766 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Policy Watch — 회계·세법·ESG 규제 동향</title>
+<title>Policy Watch — 회계·세법·ESG 규제 인텔리전스</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy: #14264a;
-    --navy-2: #1e3a8a;
-    --bg: #f7f8fa;
-    --card: #ffffff;
-    --ink: #16233d;
-    --ink-soft: #586173;
-    --ink-faint: #8c96a6;
-    --line: #e5e9f0;
-    --line-soft: #eef1f6;
-
-    --c-tax:  #2563c9;   /* 세법 */
-    --c-ifrs: #0e9d76;   /* K-IFRS */
-    --c-icfr: #7c5cff;   /* 내부회계 */
-    --c-esg:  #d4881c;   /* ESG */
-
-    --font-display: "Libre Franklin", "Noto Sans KR", sans-serif;
-    --font-body: "Noto Sans KR", sans-serif;
+    --navy: #14264a; --navy-2: #1e3a8a;
+    --bg: #f6f7f9; --card: #ffffff; --card-2: #fbfcfd;
+    --ink: #16233d; --ink-soft: #586173; --ink-faint: #8c96a6;
+    --line: #e5e9f0; --line-soft: #eef1f6;
+    --c-tax: #2563c9; --c-ifrs: #0e9d76; --c-icfr: #7c5cff; --c-esg: #d4881c;
+    --emerald: #0f9d76; --emerald-dk: #0b7a5c;
+    --mark: #fde68a;
+    --shadow: 0 10px 24px -12px rgba(20,38,74,0.18);
+    --font-display: "Libre Franklin", "Pretendard", sans-serif;
+    --font-body: "Pretendard", "Noto Sans KR", sans-serif;
     --font-mono: "IBM Plex Mono", monospace;
+  }
+  [data-theme="dark"] {
+    --navy: #0d1526; --navy-2: #2f5fd0;
+    --bg: #0f1420; --card: #171d2b; --card-2: #1c2333;
+    --ink: #e7ebf2; --ink-soft: #a3adbf; --ink-faint: #6b7688;
+    --line: #29303f; --line-soft: #222836;
+    --mark: #7a5c12;
+    --shadow: 0 10px 28px -12px rgba(0,0,0,0.5);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--ink); font-family: var(--font-body); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--font-body); line-height: 1.6;
+    letter-spacing: -0.02em; -webkit-font-smoothing: antialiased;
+    transition: background 0.3s, color 0.3s;
+  }
   a { color: inherit; text-decoration: none; }
+  mark { background: var(--mark); color: inherit; padding: 0 1px; border-radius: 2px; }
 
   /* 네비게이션 */
   .nav { position: sticky; top: 0; z-index: 100; background: var(--navy); }
-  .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 28px; height: 62px; display: flex; align-items: center; gap: 28px; }
-  .brand { display: flex; align-items: center; gap: 11px; }
-  .brand .mark { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #17b088, #0e9d76); display: grid; place-items: center; color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 15px; }
+  .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 28px; height: 62px; display: flex; align-items: center; gap: 26px; }
+  .brand { display: flex; align-items: center; gap: 11px; flex-shrink: 0; }
+  .brand .mark-logo { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, #17b088, #0e9d76); display: grid; place-items: center; color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 15px; }
   .brand .name { color: #fff; font-family: var(--font-display); font-weight: 700; font-size: 17px; }
   .brand .name span { color: #35d6a8; }
-  .nav-tabs { display: flex; gap: 3px; }
-  .nav-tabs button { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.6); font-family: var(--font-body); font-size: 13.5px; font-weight: 500; padding: 7px 14px; border-radius: 7px; transition: 0.16s; }
-  .nav-tabs button:hover { color: #fff; background: rgba(255,255,255,0.07); }
-  .nav-tabs button.active { color: #fff; background: rgba(255,255,255,0.12); }
-  .nav-updated { margin-left: auto; color: rgba(255,255,255,0.45); font-family: var(--font-mono); font-size: 11.5px; }
+  .nav-menu { display: flex; gap: 2px; }
+  .nav-menu button { background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.62); font-family: var(--font-body); font-size: 14px; font-weight: 500; padding: 8px 14px; border-radius: 7px; transition: 0.16s; letter-spacing: -0.02em; }
+  .nav-menu button:hover { color: #fff; background: rgba(255,255,255,0.07); }
+  .nav-menu button.active { color: #fff; background: rgba(255,255,255,0.13); }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .nav-updated { color: rgba(255,255,255,0.4); font-family: var(--font-mono); font-size: 11px; }
+  .theme-toggle { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 20px; width: 46px; height: 26px; cursor: pointer; position: relative; transition: 0.2s; flex-shrink: 0; }
+  .theme-toggle::after { content: "☀"; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 11px; transition: 0.25s; }
+  [data-theme="dark"] .theme-toggle::after { content: "☾"; transform: translateX(20px); background: #2b3346; color: #ffd97a; }
 
   /* 히어로 */
-  .hero { background: var(--navy); color: #fff; padding: 34px 0 40px; }
+  .hero { background: var(--navy); color: #fff; padding: 32px 0 38px; }
   .hero-inner { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
   .hero .eyebrow { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #35d6a8; margin-bottom: 12px; }
-  .hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(24px, 3.6vw, 36px); line-height: 1.2; letter-spacing: -0.02em; max-width: 720px; }
-  .hero p { margin-top: 14px; color: rgba(255,255,255,0.68); font-size: 14.5px; max-width: 640px; }
-  .hero-stats { display: flex; gap: 36px; margin-top: 26px; }
-  .hero-stat .n { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1; }
+  .hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(23px, 3.4vw, 34px); line-height: 1.2; letter-spacing: -0.03em; max-width: 720px; }
+  .hero p { margin-top: 13px; color: rgba(255,255,255,0.68); font-size: 14.5px; max-width: 640px; }
+  .hero-stats { display: flex; gap: 34px; margin-top: 24px; }
+  .hero-stat .n { font-family: var(--font-display); font-weight: 700; font-size: 25px; line-height: 1; }
   .hero-stat .l { font-size: 11.5px; color: rgba(255,255,255,0.5); margin-top: 5px; font-family: var(--font-mono); }
 
-  /* 메인 2단 */
-  .main { max-width: 1280px; margin: 0 auto; padding: 32px 28px 80px; display: grid; grid-template-columns: 1fr 320px; gap: 36px; align-items: start; }
+  /* 레이아웃 */
+  .main { max-width: 1280px; margin: 0 auto; padding: 30px 28px 40px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 330px; gap: 34px; align-items: start; }
+  .view { display: none; }
+  .view.active { display: block; }
 
   /* 필터 바 */
-  .filter-bar { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 22px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
-  .filter-bar .grp { display: flex; align-items: center; gap: 7px; }
-  .filter-bar label { font-size: 12px; color: var(--ink-faint); font-family: var(--font-mono); }
-  .filter-bar input[type=date] { border: 1px solid var(--line); border-radius: 7px; padding: 6px 10px; font-family: var(--font-body); font-size: 13px; color: var(--ink); }
-  .filter-bar input[type=search] { border: 1px solid var(--line); border-radius: 7px; padding: 7px 12px; font-family: var(--font-body); font-size: 13px; width: 180px; }
-  .filter-bar .btn-search { background: var(--navy-2); color: #fff; border: none; border-radius: 7px; padding: 8px 18px; font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.16s; }
-  .filter-bar .btn-search:hover { background: #16307a; }
-  .filter-bar .btn-reset { background: none; border: 1px solid var(--line); color: var(--ink-soft); border-radius: 7px; padding: 8px 14px; font-size: 13px; cursor: pointer; }
-  .filter-bar .btn-reset:hover { border-color: var(--ink-faint); }
+  .filter-bar { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-bottom: 22px; box-shadow: var(--shadow); }
+  .filter-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .filter-row + .filter-row { margin-top: 13px; }
+  .quick-btns { display: flex; gap: 7px; flex-wrap: wrap; }
+  .quick-btns button { background: var(--card-2); border: 1px solid var(--line); color: var(--ink-soft); font-family: var(--font-body); font-size: 12.5px; font-weight: 500; padding: 7px 13px; border-radius: 8px; cursor: pointer; transition: 0.15s; letter-spacing: -0.02em; }
+  .quick-btns button:hover { border-color: var(--emerald); color: var(--emerald); }
+  .quick-btns button.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .date-grp { display: flex; align-items: center; gap: 6px; }
+  .date-grp label { font-size: 12px; color: var(--ink-faint); font-family: var(--font-mono); }
+  input[type=date] { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-family: var(--font-body); font-size: 13px; color: var(--ink); color-scheme: light; }
+  [data-theme="dark"] input[type=date] { color-scheme: dark; }
+  .search-wrap { flex: 1; min-width: 180px; display: flex; gap: 8px; }
+  input[type=search] { flex: 1; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px 13px; font-family: var(--font-body); font-size: 13px; color: var(--ink); letter-spacing: -0.02em; }
+  input[type=search]:focus, input[type=date]:focus { outline: none; border-color: var(--emerald); }
+  .btn-primary { background: var(--navy-2); color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-family: var(--font-body); font-size: 13px; font-weight: 600; cursor: pointer; letter-spacing: -0.02em; }
+  .btn-ghost { background: none; border: 1px solid var(--line); color: var(--ink-soft); border-radius: 8px; padding: 8px 14px; font-size: 13px; cursor: pointer; letter-spacing: -0.02em; }
+
+  /* 카테고리 칩 (다중선택) */
+  .cat-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .cat-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--card-2); border: 1.5px solid var(--line); color: var(--ink-soft); font-size: 12.5px; font-weight: 600; padding: 6px 13px; border-radius: 20px; cursor: pointer; transition: 0.15s; letter-spacing: -0.02em; user-select: none; }
+  .cat-chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .cat-chip.tax .dot { background: var(--c-tax); } .cat-chip.ifrs .dot { background: var(--c-ifrs); }
+  .cat-chip.icfr .dot { background: var(--c-icfr); } .cat-chip.esg .dot { background: var(--c-esg); }
+  .cat-chip.on { border-color: currentColor; }
+  .cat-chip.tax.on { color: var(--c-tax); background: color-mix(in srgb, var(--c-tax) 8%, var(--card)); }
+  .cat-chip.ifrs.on { color: var(--c-ifrs); background: color-mix(in srgb, var(--c-ifrs) 8%, var(--card)); }
+  .cat-chip.icfr.on { color: var(--c-icfr); background: color-mix(in srgb, var(--c-icfr) 8%, var(--card)); }
+  .cat-chip.esg.on { color: var(--c-esg); background: color-mix(in srgb, var(--c-esg) 8%, var(--card)); }
 
   .section-label { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
-  .section-label h2 { font-family: var(--font-display); font-weight: 700; font-size: 18px; }
+  .section-label h2 { font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -0.02em; }
   .section-label .meta { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
 
   /* 카드 */
   .feed { display: flex; flex-direction: column; gap: 14px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s; position: relative; overflow: hidden; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 13px; padding: 20px 22px; transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s; position: relative; overflow: hidden; }
   .card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent, var(--line)); opacity: 0; transition: opacity 0.18s; }
-  .card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px -12px rgba(20,38,74,0.18); border-color: var(--accent, var(--line)); }
+  .card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--accent, var(--line)); }
   .card:hover::before { opacity: 1; }
-  .card-top { display: flex; align-items: center; gap: 7px; margin-bottom: 11px; flex-wrap: wrap; }
-  .card h3 { font-family: var(--font-display); font-weight: 700; font-size: 16px; line-height: 1.4; margin-bottom: 8px; letter-spacing: -0.01em; }
-  .card .summary { font-size: 13.5px; color: var(--ink-soft); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-  .card-src { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); margin-top: 10px; }
+  .card-top { display: flex; align-items: center; gap: 7px; margin-bottom: 11px; flex-wrap: wrap; padding-right: 34px; }
+  .card h3 { font-family: var(--font-display); font-weight: 700; font-size: 16px; line-height: 1.4; margin-bottom: 8px; letter-spacing: -0.02em; }
+  .card .summary { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; }
+  .card .impact { margin-top: 10px; padding: 9px 12px; background: color-mix(in srgb, var(--emerald) 7%, var(--card)); border-left: 3px solid var(--emerald); border-radius: 0 7px 7px 0; font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; }
+  .card .impact b { color: var(--emerald-dk); font-weight: 600; }
+  [data-theme="dark"] .card .impact b { color: #35d6a8; }
+  .card-src { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); margin-top: 12px; }
   .card-src b { color: var(--ink-soft); font-weight: 500; }
-  .card-btns { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-  .card-btns a { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; padding: 7px 13px; border-radius: 7px; transition: 0.16s; font-family: var(--font-body); }
+  .card-btns { display: flex; gap: 8px; margin-top: 13px; flex-wrap: wrap; }
+  .card-btns a { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; padding: 7px 13px; border-radius: 8px; transition: 0.15s; letter-spacing: -0.02em; }
   .btn-news { background: var(--navy); color: #fff; }
-  .btn-news:hover { background: #1d3866; }
-  .btn-official { background: #fff; color: var(--accent, var(--navy-2)); border: 1px solid var(--accent, var(--line)); }
+  .btn-official { background: var(--card); color: var(--accent, var(--navy-2)); border: 1px solid var(--accent, var(--line)); }
   .btn-official:hover { background: var(--accent, var(--navy-2)); color: #fff; }
 
+  /* 북마크 버튼 */
+  .bookmark-btn { position: absolute; top: 16px; right: 16px; background: none; border: none; cursor: pointer; font-size: 19px; line-height: 1; color: var(--ink-faint); transition: 0.15s; padding: 2px; }
+  .bookmark-btn:hover { color: var(--c-esg); transform: scale(1.15); }
+  .bookmark-btn.on { color: var(--c-esg); }
+
   /* 뱃지 */
-  .badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 6px; font-family: var(--font-body); }
+  .badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 6px; letter-spacing: -0.01em; }
   .badge-cat { color: #fff; }
   .badge.tax { background: var(--c-tax); } .badge.ifrs { background: var(--c-ifrs); }
   .badge.icfr { background: var(--c-icfr); } .badge.esg { background: var(--c-esg); }
   .badge-type { background: transparent; border: 1px solid var(--line); color: var(--ink-faint); font-weight: 600; }
   .badge-type.official { border-color: var(--c-ifrs); color: var(--c-ifrs); }
   .badge-trust { font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 5px; }
-  .badge-trust.t1 { background: #e7f5ef; color: #0b7a5c; }   /* 공식기관 */
-  .badge-trust.t2 { background: #eaf0fb; color: #2456b8; }   /* 전문미디어 */
-  .badge-trust.t3 { background: #fff2e0; color: #b5731a; }   /* 회계법인 */
-  .badge-trust.t4 { background: #f0f2f5; color: #5a6675; }   /* 경제지 */
+  .badge-trust.t1 { background: color-mix(in srgb, var(--c-ifrs) 15%, var(--card)); color: var(--emerald-dk); }
+  .badge-trust.t2 { background: color-mix(in srgb, var(--c-tax) 12%, var(--card)); color: var(--c-tax); }
+  .badge-trust.t3 { background: color-mix(in srgb, var(--c-icfr) 12%, var(--card)); color: var(--c-icfr); }
+  .badge-trust.t4 { background: var(--line-soft); color: var(--ink-soft); }
+  [data-theme="dark"] .badge-trust.t1 { color: #35d6a8; }
 
   /* 사이드바 */
   .sidebar { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 82px; }
-  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
   .panel-head { padding: 15px 18px; border-bottom: 1px solid var(--line-soft); display: flex; align-items: center; justify-content: space-between; }
-  .panel-head h3 { font-family: var(--font-display); font-weight: 700; font-size: 14.5px; }
+  .panel-head h3 { font-family: var(--font-display); font-weight: 700; font-size: 14.5px; letter-spacing: -0.02em; }
 
-  /* 미니 캘린더 */
-  .cal-nav { display: flex; align-items: center; gap: 10px; }
-  .cal-nav button { background: none; border: 1px solid var(--line); border-radius: 6px; width: 26px; height: 26px; cursor: pointer; color: var(--ink-soft); font-size: 13px; display: grid; place-items: center; transition: 0.16s; }
+  /* 캘린더 */
+  .cal-nav { display: flex; align-items: center; gap: 8px; }
+  .cal-nav button { background: none; border: 1px solid var(--line); border-radius: 6px; width: 26px; height: 26px; cursor: pointer; color: var(--ink-soft); font-size: 13px; display: grid; place-items: center; transition: 0.15s; }
   .cal-nav button:hover { border-color: var(--navy-2); color: var(--navy-2); }
-  .cal-nav .month { font-family: var(--font-mono); font-size: 13px; font-weight: 500; min-width: 96px; text-align: center; }
+  .cal-nav .month { font-family: var(--font-mono); font-size: 13px; font-weight: 500; min-width: 92px; text-align: center; }
   .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; padding: 12px; }
   .cal-grid .dow { text-align: center; font-size: 10.5px; color: var(--ink-faint); font-family: var(--font-mono); padding: 4px 0; }
-  .cal-cell { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; color: var(--ink-soft); border-radius: 6px; position: relative; }
+  .cal-cell { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; color: var(--ink-soft); border-radius: 7px; position: relative; cursor: default; transition: background 0.12s; }
+  .cal-cell.has-event { cursor: pointer; }
+  .cal-cell.has-event:hover { background: var(--line-soft); }
   .cal-cell.other { color: var(--line); }
   .cal-cell.today { background: var(--navy); color: #fff; font-weight: 700; }
-  .cal-cell .dots { display: flex; gap: 2px; margin-top: 2px; height: 4px; }
-  .cal-cell .dot { width: 4px; height: 4px; border-radius: 50%; }
-  .dot.tax { background: var(--c-tax); } .dot.ifrs { background: var(--c-ifrs); }
-  .dot.icfr { background: var(--c-icfr); } .dot.esg { background: var(--c-esg); }
-
-  .cal-legend { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 14px 14px; }
+  .cal-cell.selected { outline: 2px solid var(--emerald); }
+  .cal-cell .dots { display: flex; gap: 2px; margin-top: 2px; height: 5px; }
+  .cal-cell .cdot { width: 5px; height: 5px; border-radius: 50%; cursor: pointer; }
+  .cdot.tax { background: var(--c-tax); } .cdot.ifrs { background: var(--c-ifrs); }
+  .cdot.icfr { background: var(--c-icfr); } .cdot.esg { background: var(--c-esg); }
+  .cal-legend { display: flex; flex-wrap: wrap; gap: 9px; padding: 0 14px 12px; }
   .cal-legend span { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--ink-soft); }
-  .cal-legend .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .cal-legend .cdot { width: 7px; height: 7px; }
 
-  /* D-Day 리스트 */
+  /* 캘린더 클릭 상세 팝업 */
+  .cal-detail { margin: 0 12px 12px; padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s; background: var(--card-2); border-radius: 9px; }
+  .cal-detail.open { max-height: 300px; padding: 12px 14px; border: 1px solid var(--line); }
+  .cal-detail .cd-date { font-family: var(--font-mono); font-size: 11.5px; color: var(--emerald-dk); font-weight: 600; margin-bottom: 8px; }
+  [data-theme="dark"] .cal-detail .cd-date { color: #35d6a8; }
+  .cal-detail .cd-item { font-size: 12.5px; color: var(--ink-soft); padding: 5px 0; border-top: 1px solid var(--line-soft); line-height: 1.45; }
+  .cal-detail .cd-item:first-of-type { border-top: none; }
+  .cal-detail .cd-item b { color: var(--ink); font-weight: 600; }
+
+  /* 호버 툴팁 */
+  .cal-tooltip { position: fixed; z-index: 200; background: var(--navy); color: #fff; font-size: 11.5px; padding: 6px 10px; border-radius: 7px; pointer-events: none; opacity: 0; transition: opacity 0.15s; max-width: 220px; box-shadow: 0 6px 18px rgba(0,0,0,0.25); letter-spacing: -0.01em; }
+  .cal-tooltip.show { opacity: 1; }
+
+  /* D-Day */
   .dday-item { display: flex; gap: 12px; padding: 12px 18px; border-bottom: 1px solid var(--line-soft); align-items: center; }
   .dday-item:last-child { border-bottom: none; }
-  .dday-badge { flex-shrink: 0; min-width: 48px; text-align: center; font-family: var(--font-mono); font-size: 12px; font-weight: 600; padding: 4px 6px; border-radius: 6px; background: var(--bg); color: var(--navy-2); }
-  .dday-badge.soon { background: #fdeede; color: #c47f16; }
+  .dday-badge { flex-shrink: 0; min-width: 46px; text-align: center; font-family: var(--font-mono); font-size: 12px; font-weight: 600; padding: 4px 6px; border-radius: 6px; background: var(--card-2); color: var(--navy-2); }
+  .dday-badge.soon { background: color-mix(in srgb, var(--c-esg) 18%, var(--card)); color: #b5731a; }
+  [data-theme="dark"] .dday-badge.soon { color: #ffcb6b; }
   .dday-txt { font-size: 12.5px; color: var(--ink-soft); line-height: 1.4; }
   .dday-txt b { color: var(--ink); font-weight: 600; }
   .dday-cat { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 4px; }
 
-  .empty { padding: 40px 20px; text-align: center; color: var(--ink-faint); font-size: 13.5px; background: var(--card); border: 1px dashed var(--line); border-radius: 12px; }
-  .disclaimer { max-width: 1280px; margin: 0 auto; padding: 0 28px 44px; font-size: 11.5px; color: var(--ink-faint); line-height: 1.6; }
+  /* 스켈레톤 */
+  .skeleton-card { background: var(--card); border: 1px solid var(--line); border-radius: 13px; padding: 20px 22px; }
+  .sk { background: linear-gradient(90deg, var(--line-soft) 25%, var(--line) 50%, var(--line-soft) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  .sk-line { height: 13px; margin-bottom: 9px; }
+
+  /* 에러/빈 상태 */
+  .state-box { padding: 48px 24px; text-align: center; background: var(--card); border: 1px dashed var(--line); border-radius: 13px; }
+  .state-box .ico { font-size: 32px; margin-bottom: 12px; }
+  .state-box .msg { font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+  .state-box .btn-primary { margin-top: 16px; }
+
+  /* 오늘의 정책 동향 (카드뉴스) */
+  .today-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .today-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; box-shadow: var(--shadow); position: relative; overflow: hidden; transition: transform 0.18s; }
+  .today-card:hover { transform: translateY(-3px); }
+  .today-card .accent-bar { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent); }
+  .today-card h3 { font-family: var(--font-display); font-weight: 700; font-size: 16px; line-height: 1.4; margin: 8px 0 12px; letter-spacing: -0.02em; }
+  .today-card .t-sum { font-size: 13.5px; color: var(--ink-soft); line-height: 1.65; }
+  .today-card .t-impact { margin-top: 14px; padding: 12px 14px; background: color-mix(in srgb, var(--emerald) 8%, var(--card)); border-radius: 9px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.55; }
+  .today-card .t-impact .lbl { display: block; font-family: var(--font-mono); font-size: 10.5px; color: var(--emerald-dk); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
+  [data-theme="dark"] .today-card .t-impact .lbl { color: #35d6a8; }
+  .today-card .t-foot { margin-top: 14px; display: flex; align-items: center; justify-content: space-between; }
+  .today-card .t-src { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); }
+
+  /* 캘린더 전체보기 뷰 */
+  .cal-full { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start; }
+  .cal-big { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+  .cal-big .cal-grid { padding: 18px; gap: 4px; }
+  .cal-big .cal-cell { font-size: 14px; border-radius: 9px; }
+  .cal-big .cal-cell .cdot { width: 6px; height: 6px; }
+  .cal-list-box { background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+
+  /* 하단 기관 링크 */
+  footer { background: var(--navy); color: #fff; margin-top: 20px; }
+  .footer-inner { max-width: 1280px; margin: 0 auto; padding: 32px 28px; }
+  .footer-inner h4 { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.55); margin-bottom: 14px; letter-spacing: 0.02em; }
+  .org-links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .org-links a { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 9px; padding: 9px 15px; font-size: 13px; color: rgba(255,255,255,0.85); transition: 0.15s; letter-spacing: -0.02em; }
+  .org-links a:hover { background: rgba(255,255,255,0.13); color: #fff; border-color: var(--emerald); }
+  .footer-note { margin-top: 24px; font-size: 11.5px; color: rgba(255,255,255,0.4); line-height: 1.6; }
 
   @media (max-width: 960px) {
-    .main { grid-template-columns: 1fr; gap: 28px; }
+    .grid2, .cal-full { grid-template-columns: 1fr; gap: 26px; }
     .sidebar { position: static; }
-    .nav-tabs, .nav-updated { display: none; }
+    .nav-menu { display: none; }
+    .nav-updated { display: none; }
   }
   @media (max-width: 600px) {
-    .nav-inner, .hero-inner, .main, .disclaimer { padding-left: 18px; padding-right: 18px; }
-    .filter-bar { flex-direction: column; align-items: stretch; }
-    .filter-bar input[type=search] { width: 100%; }
+    .nav-inner, .hero-inner, .main, .footer-inner { padding-left: 18px; padding-right: 18px; }
+    .search-wrap { min-width: 100%; }
     .hero-stats { gap: 22px; flex-wrap: wrap; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
-  @media (prefers-reduced-motion: no-preference) {
-    .card { animation: fade 0.35s ease both; }
-    @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; } }
-  }
 </style>
 </head>
 <body>
-
 <nav class="nav">
   <div class="nav-inner">
-    <a class="brand" href="#top"><div class="mark">PW</div><div class="name">Policy<span>Watch</span></div></a>
-    <div class="nav-tabs" id="tabs"></div>
-    <span class="nav-updated" id="nav-updated"></span>
+    <a class="brand" href="#" onclick="PW.go('feed');return false"><div class="mark-logo">PW</div><div class="name">Policy<span>Watch</span></div></a>
+    <div class="nav-menu" id="nav-menu">
+      <button data-view="today" class="active">오늘의 정책 동향</button>
+      <button data-view="feed">전체 동향</button>
+      <button data-view="calendar">시행일 캘린더</button>
+      <button data-view="saved">내가 찜한 문서</button>
+    </div>
+    <div class="nav-right">
+      <span class="nav-updated" id="nav-updated"></span>
+      <button class="theme-toggle" id="theme-toggle" aria-label="다크 모드 전환"></button>
+    </div>
   </div>
 </nav>
 
-<header class="hero" id="top">
+<header class="hero">
   <div class="hero-inner">
-    <div class="eyebrow">Regulatory Intelligence</div>
-    <h1>회계·세법·ESG 규제 동향을 매일, 공식 원문과 함께.</h1>
-    <p>법제처·금융위원회 공식 발표와 주요 언론 보도를 자동 수집해 K-IFRS·세법·내부회계·ESG로 정리하고, 각 항목을 관련 기관 공식 원문으로 연결합니다.</p>
+    <div class="eyebrow">Regulatory Intelligence for Finance Teams</div>
+    <h1 id="hero-title">오늘의 회계·세법·ESG 규제 동향</h1>
+    <p id="hero-desc">법제처·금융위원회 공식 발표와 주요 언론 보도를 매일 자동 수집해 실무에 필요한 것만 정리합니다.</p>
     <div class="hero-stats" id="hero-stats"></div>
   </div>
 </header>
 
 <div class="main">
-  <section>
-    <!-- 필터 바 -->
-    <div class="filter-bar">
-      <div class="grp"><label>기간</label>
-        <input type="date" id="date-from" aria-label="시작일"><span style="color:var(--ink-faint)">~</span>
-        <input type="date" id="date-to" aria-label="종료일">
-      </div>
-      <div class="grp"><input type="search" id="search" placeholder="키워드 검색" aria-label="검색"></div>
-      <button class="btn-search" id="btn-search">조회</button>
-      <button class="btn-reset" id="btn-reset">초기화</button>
-    </div>
-
-    <div class="section-label">
-      <h2 id="feed-title">최신 업데이트 동향</h2>
-      <span class="meta" id="feed-count"></span>
-    </div>
-    <div class="feed" id="feed"></div>
+  <section class="view active" id="view-today">
+    <div class="section-label"><h2 id="today-title">오늘 수집된 정책 동향</h2><span class="meta" id="today-count"></span></div>
+    <div id="today-body"></div>
   </section>
 
-  <aside class="sidebar">
-    <!-- 미니 캘린더 -->
-    <div class="panel">
-      <div class="panel-head">
-        <h3>제도 시행일 캘린더</h3>
-        <div class="cal-nav">
-          <button id="cal-prev" aria-label="이전 달">‹</button>
-          <span class="month" id="cal-month"></span>
-          <button id="cal-next" aria-label="다음 달">›</button>
+  <section class="view" id="view-feed">
+    <div class="grid2">
+      <div>
+        <div class="filter-bar">
+          <div class="filter-row">
+            <div class="quick-btns" id="quick-btns">
+              <button data-range="today">오늘</button>
+              <button data-range="week">최근 1주일</button>
+              <button data-range="month">이번 달</button>
+              <button data-range="year">올해 전체</button>
+            </div>
+          </div>
+          <div class="filter-row">
+            <div class="date-grp"><label>기간</label><input type="date" id="date-from"><span style="color:var(--ink-faint)">~</span><input type="date" id="date-to"></div>
+            <div class="search-wrap">
+              <input type="search" id="search" placeholder="제목·요약·출처 검색">
+              <button class="btn-primary" id="btn-search">조회</button>
+              <button class="btn-ghost" id="btn-reset">초기화</button>
+            </div>
+          </div>
+          <div class="filter-row">
+            <div class="cat-chips" id="cat-chips"></div>
+          </div>
         </div>
+        <div class="section-label"><h2>최신 업데이트 동향</h2><span class="meta" id="feed-count"></span></div>
+        <div class="feed" id="feed"></div>
       </div>
-      <div class="cal-grid" id="cal-grid"></div>
-      <div class="cal-legend">
-        <span><i class="dot tax"></i>세법</span>
-        <span><i class="dot ifrs"></i>K-IFRS</span>
-        <span><i class="dot icfr"></i>내부회계</span>
-        <span><i class="dot esg"></i>ESG</span>
-      </div>
+      <aside class="sidebar" id="sidebar-mini"></aside>
     </div>
+  </section>
 
-    <!-- D-Day 리스트 -->
-    <div class="panel">
-      <div class="panel-head"><h3>시행 예정 주요 일정</h3></div>
-      <div id="dday-list"></div>
+  <section class="view" id="view-calendar">
+    <div class="section-label"><h2>제도 시행일 캘린더</h2><span class="meta">법령·기준 시행 예정일</span></div>
+    <div class="cal-full">
+      <div class="cal-big" id="cal-big"></div>
+      <div class="cal-list-box">
+        <div class="panel-head"><h3>시행 예정 일정 (임박순)</h3></div>
+        <div id="cal-full-list"></div>
+      </div>
     </div>
-  </aside>
+  </section>
+
+  <section class="view" id="view-saved">
+    <div class="section-label"><h2>내가 찜한 문서</h2><span class="meta" id="saved-count"></span></div>
+    <div class="feed" id="saved-feed"></div>
+  </section>
 </div>
 
-<p class="disclaimer">
-  각 카드의 [공식 원문 보기]는 법제처·한국회계기준원·금융위원회 등 관련 기관 사이트로 연결됩니다. 뉴스 항목은 언론 보도의 제목·링크만 표시하며 저작권은 각 매체에 있습니다. 시행 일정은 공개 법령 정보 기반의 참고용이며, 실제 적용은 원문 확인이 필요합니다.
-</p>
+<footer>
+  <div class="footer-inner">
+    <h4>주요 기관 바로가기</h4>
+    <div class="org-links">
+      <a href="https://www.kasb.or.kr/" target="_blank" rel="noopener">🏛 한국회계기준원</a>
+      <a href="https://www.fsc.go.kr/index" target="_blank" rel="noopener">🏛 금융위원회</a>
+      <a href="https://www.fss.or.kr/" target="_blank" rel="noopener">🏛 금융감독원</a>
+      <a href="https://www.nts.go.kr/" target="_blank" rel="noopener">🏛 국세청</a>
+      <a href="https://www.law.go.kr/" target="_blank" rel="noopener">🏛 국가법령정보센터</a>
+      <a href="https://www.moef.go.kr/" target="_blank" rel="noopener">🏛 기획재정부</a>
+      <a href="https://www.kaicpa.or.kr/" target="_blank" rel="noopener">🏛 한국공인회계사회</a>
+    </div>
+    <p class="footer-note">Policy Watch는 공개된 공식 원문과 언론 보도의 서지 정보를 수집·정리합니다. 요약과 실무 의견은 참고용 자동 생성 정보이며, 실제 적용은 원문과 전문가 확인이 필요합니다. 원문 저작권은 각 기관·매체에 있습니다.</p>
+  </div>
+</footer>
 
-<script src="data.js"></script>
+<div class="cal-tooltip" id="cal-tooltip"></div>
+
 <script>
-(function () {
-  const data = window.POLICY_DATA || { updated: "-", items: [] };
+const PW = (function () {
+  "use strict";
   const CATS = [
-    { key: "전체", label: "전체" }, { key: "세법", label: "세법" },
-    { key: "K-IFRS", label: "K-IFRS" }, { key: "내부회계", label: "내부회계" }, { key: "ESG", label: "ESG" },
+    { key: "세법", cls: "tax" }, { key: "K-IFRS", cls: "ifrs" },
+    { key: "내부회계", cls: "icfr" }, { key: "ESG", cls: "esg" },
   ];
   const CLS = { "세법":"tax", "K-IFRS":"ifrs", "내부회계":"icfr", "ESG":"esg" };
   const ACCENT = { tax:"var(--c-tax)", ifrs:"var(--c-ifrs)", icfr:"var(--c-icfr)", esg:"var(--c-esg)" };
-  let active = "전체", query = "", dateFrom = "", dateTo = "";
+  const MON_KR = ["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"];
+
+  let DATA = { updated: "-", items: [] };
+  let state = { view: "today", query: "", dateFrom: "", dateTo: "", cats: new Set(), quick: "" };
   let calDate = new Date();
+  let calBigDate = new Date();
+  let selectedDay = null;
+  let bookmarks = loadBookmarks();
 
-  document.getElementById("nav-updated").textContent = "최종 수집 " + data.updated;
+  function loadBookmarks() {
+    try { return new Set(JSON.parse(localStorage.getItem("pw_bookmarks") || "[]")); }
+    catch { return new Set(); }
+  }
+  function saveBookmarks() {
+    try { localStorage.setItem("pw_bookmarks", JSON.stringify([...bookmarks])); } catch {}
+  }
+  function itemId(it) { return (it.url || "") + "|" + (it.title || ""); }
 
-  const tabs = document.getElementById("tabs");
-  CATS.forEach(c => {
-    const b = document.createElement("button");
-    b.textContent = c.label; b.className = c.key === "전체" ? "active" : "";
-    b.onclick = () => { active = c.key; [...tabs.children].forEach(x => x.classList.toggle("active", x.textContent === c.label)); render(); };
-    tabs.appendChild(b);
-  });
-
-  document.getElementById("btn-search").onclick = () => {
-    query = document.getElementById("search").value.trim();
-    dateFrom = document.getElementById("date-from").value;
-    dateTo = document.getElementById("date-to").value;
-    render();
-  };
-  document.getElementById("btn-reset").onclick = () => {
-    query = dateFrom = dateTo = "";
-    document.getElementById("search").value = "";
-    document.getElementById("date-from").value = "";
-    document.getElementById("date-to").value = "";
-    active = "전체"; [...tabs.children].forEach(x => x.classList.toggle("active", x.textContent === "전체"));
-    render();
-  };
-  document.getElementById("search").addEventListener("keydown", e => { if (e.key === "Enter") document.getElementById("btn-search").click(); });
+  function initTheme() {
+    const saved = localStorage.getItem("pw_theme");
+    if (saved) document.documentElement.setAttribute("data-theme", saved);
+    document.getElementById("theme-toggle").onclick = () => {
+      const cur = document.documentElement.getAttribute("data-theme");
+      const next = cur === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try { localStorage.setItem("pw_theme", next); } catch {}
+      if (state.view === "calendar") renderCalBig();
+    };
+  }
 
   const esc = s => (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-
-  function summarize(it) {
-    if (it.source_type === "공식원문") {
-      const name = it.title.split(/[(·]/)[0].trim();
-      const enfM = it.title.match(/(\d{4}-\d{2}-\d{2})\s*시행/);
-      let s = `「${name}」 관련 ${it.category} 개정 사항입니다.`;
-      if (enfM) s += ` ${enfM[1]}부터 시행됩니다.`;
-      return s + " 아래 공식 원문에서 상세 내용을 확인하세요.";
-    }
-    return `${it.source}의 ${it.category} 관련 보도입니다. 기사 원문과 함께, 관련 기관 공식 자료를 나란히 확인할 수 있습니다.`;
+  function highlight(text, q) {
+    const safe = esc(text);
+    if (!q) return safe;
+    const re = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + ")", "gi");
+    return safe.replace(re, "<mark>$1</mark>");
   }
+  function todayStr() { return new Date().toISOString().slice(0,10); }
 
-  function render() {
-    let items = data.items.filter(i => {
-      if (active !== "전체" && i.category !== active) return false;
-      if (query && !(i.title.includes(query) || (i.source||"").includes(query))) return false;
-      if (dateFrom && (i.date||"") < dateFrom) return false;
-      if (dateTo && (i.date||"") > dateTo) return false;
-      return true;
-    });
-    items.sort((a,b) => (b.date||"").localeCompare(a.date||""));
-
-    // 히어로 통계
-    const byCat = {};
-    data.items.forEach(i => byCat[i.category] = (byCat[i.category]||0)+1);
-    const official = data.items.filter(i => i.source_type === "공식원문").length;
-    document.getElementById("hero-stats").innerHTML =
-      stat(data.items.length, "총 항목") + stat(official, "공식 원문") +
-      stat(data.items.length - official, "뉴스") + stat(Object.keys(byCat).length, "카테고리");
-
-    document.getElementById("feed-title").textContent = active === "전체" ? "최신 업데이트 동향" : active + " 동향";
-    document.getElementById("feed-count").textContent = items.length + "건";
-
-    const feed = document.getElementById("feed");
-    if (!items.length) {
-      feed.innerHTML = '<div class="empty">조건에 맞는 항목이 없습니다. 기간이나 검색어를 조정해 보세요.</div>';
-    } else {
-      feed.innerHTML = items.map((it, idx) => {
-        const cls = CLS[it.category] || "";
-        const accent = ACCENT[cls] || "var(--line)";
-        const isOfficial = it.source_type === "공식원문";
-        const trust = it.trust || 30;
-        let trustCls = "t4", trustLabel = "일반";
-        if (trust >= 95) { trustCls = "t1"; trustLabel = "공식기관"; }
-        else if (trust >= 80) { trustCls = "t2"; trustLabel = "전문미디어"; }
-        else if (trust >= 70) { trustCls = "t3"; trustLabel = "회계법인"; }
-        else if (trust >= 60) { trustCls = "t4"; trustLabel = "주요경제지"; }
-        const officialBtns = (it.official || []).map(o =>
-          `<a class="btn-official" href="${o.url}" target="_blank" rel="noopener" style="--accent:${accent}">🔗 ${esc(o.label)}</a>`
-        ).join("");
-        return `
-        <article class="card" style="--accent:${accent}; animation-delay:${Math.min(idx*0.03,0.3)}s">
-          <div class="card-top">
-            <span class="badge badge-cat ${cls}">${it.category}</span>
-            <span class="badge badge-type ${isOfficial?'official':''}">${it.source_type || '뉴스'}</span>
-            <span class="badge badge-trust ${trustCls}">${trustLabel}</span>
-          </div>
-          <h3>${esc(it.title)}</h3>
-          <p class="summary">${esc(summarize(it))}</p>
-          <div class="card-src">출처: <b>${esc(it.source)}</b> · ${it.date}</div>
-          <div class="card-btns">
-            ${!isOfficial ? `<a class="btn-news" href="${it.url}" target="_blank" rel="noopener">뉴스 기사 보기</a>` :
-                            `<a class="btn-news" href="${it.url}" target="_blank" rel="noopener">법령 원문 보기</a>`}
-            ${officialBtns}
-          </div>
-        </article>`;
-      }).join("");
-    }
-    renderCalendar();
-    renderDday();
-  }
-
-  function stat(n, l) { return `<div class="hero-stat"><div class="n">${n}</div><div class="l">${l}</div></div>`; }
-
-  // 시행일 추출 (제목에서 YYYY-MM-DD 시행)
   function enforcements() {
     const list = [];
-    data.items.forEach(it => {
-      const m = it.title.match(/(\d{4})-(\d{2})-(\d{2})\s*시행/);
+    DATA.items.forEach(it => {
+      const m = (it.title||"").match(/(\d{4})-(\d{2})-(\d{2})\s*시행/);
       if (m) list.push({ y:+m[1], mo:+m[2], d:+m[3], date:new Date(+m[1],+m[2]-1,+m[3]),
-        name: it.title.split(/[(·]/)[0].trim(), cat: it.category, cls: CLS[it.category] });
+        name: it.title.split(/[(·]/)[0].trim(), cat: it.category, cls: CLS[it.category], url: it.url });
     });
     return list;
   }
 
-  function renderCalendar() {
-    const y = calDate.getFullYear(), m = calDate.getMonth();
-    document.getElementById("cal-month").textContent = `${y}. ${String(m+1).padStart(2,'0')}`;
-    const first = new Date(y, m, 1), startDow = first.getDay();
-    const daysInMonth = new Date(y, m+1, 0).getDate();
-    const today = new Date(); today.setHours(0,0,0,0);
-    const enf = enforcements();
-
-    const DOW = ["일","월","화","수","목","금","토"];
-    let html = DOW.map(d => `<div class="dow">${d}</div>`).join("");
-    for (let i = 0; i < startDow; i++) html += `<div class="cal-cell other"></div>`;
-    for (let d = 1; d <= daysInMonth; d++) {
-      const cur = new Date(y, m, d);
-      const isToday = cur.getTime() === today.getTime();
-      const dots = enf.filter(e => e.y===y && e.mo===m+1 && e.d===d);
-      const dotHtml = [...new Set(dots.map(e => e.cls))].map(c => `<span class="dot ${c}"></span>`).join("");
-      html += `<div class="cal-cell ${isToday?'today':''}">${d}<div class="dots">${dotHtml}</div></div>`;
+  async function load() {
+    renderSkeleton();
+    try {
+      const res = await fetch("./data.json?_=" + Date.now());
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      DATA = await res.json();
+    } catch (e) {
+      if (window.POLICY_DATA) { DATA = window.POLICY_DATA; }
+      else { renderError(); return; }
     }
-    document.getElementById("cal-grid").innerHTML = html;
+    if (!DATA.items) DATA.items = [];
+    boot();
   }
 
-  function renderDday() {
-    const today = new Date(); today.setHours(0,0,0,0);
-    const in3mo = new Date(today); in3mo.setMonth(in3mo.getMonth()+3);
-    const upcoming = enforcements()
-      .filter(e => e.date >= today && e.date <= in3mo)
-      .sort((a,b) => a.date - b.date).slice(0, 6);
-    const list = document.getElementById("dday-list");
-    if (!upcoming.length) {
-      list.innerHTML = '<div style="padding:22px 18px;text-align:center;color:var(--ink-faint);font-size:12.5px">향후 3개월 내 시행 예정 일정이 없습니다.</div>';
+  function renderSkeleton() {
+    const sk = Array(4).fill(0).map(() =>
+      `<div class="skeleton-card"><div class="sk sk-line" style="width:30%"></div>
+       <div class="sk sk-line" style="width:85%;height:18px"></div>
+       <div class="sk sk-line" style="width:100%"></div>
+       <div class="sk sk-line" style="width:60%"></div></div>`).join("");
+    document.getElementById("today-body").innerHTML = `<div class="today-grid">${sk}</div>`;
+  }
+  function renderError() {
+    const html = `<div class="state-box"><div class="ico">⚠️</div>
+      <div class="msg">최신 정책 데이터를 불러올 수 없습니다.<br>잠시 후 다시 시도해 주세요.</div>
+      <button class="btn-primary" onclick="PW.reload()">다시 시도</button></div>`;
+    document.getElementById("today-body").innerHTML = html;
+  }
+
+  function boot() {
+    document.getElementById("nav-updated").textContent = "최종 수집 " + (DATA.updated || "-");
+    buildStats(); buildChips();
+    renderToday(); renderSidebarMini();
+    bindEvents();
+  }
+
+  function buildStats() {
+    const byCat = {}; DATA.items.forEach(i => byCat[i.category]=(byCat[i.category]||0)+1);
+    const official = DATA.items.filter(i => i.source_type === "공식원문").length;
+    document.getElementById("hero-stats").innerHTML =
+      stat(DATA.items.length,"총 항목") + stat(official,"공식 원문") +
+      stat(DATA.items.length-official,"뉴스") + stat(bookmarks.size,"찜한 문서");
+  }
+  function stat(n,l){ return `<div class="hero-stat"><div class="n">${n}</div><div class="l">${l}</div></div>`; }
+
+  function buildChips() {
+    document.getElementById("cat-chips").innerHTML = CATS.map(c =>
+      `<span class="cat-chip ${c.cls}" data-cat="${c.key}"><span class="dot"></span>${c.key}</span>`).join("");
+    document.querySelectorAll(".cat-chip").forEach(chip => {
+      chip.onclick = () => {
+        const k = chip.dataset.cat;
+        if (state.cats.has(k)) { state.cats.delete(k); chip.classList.remove("on"); }
+        else { state.cats.add(k); chip.classList.add("on"); }
+        renderFeed();
+      };
+    });
+  }
+
+  function trustBadge(trust) {
+    let cls="t4", label="일반";
+    if (trust>=95){cls="t1";label="공식기관";} else if(trust>=80){cls="t2";label="전문미디어";}
+    else if(trust>=70){cls="t3";label="회계법인";} else if(trust>=60){cls="t4";label="주요경제지";}
+    return `<span class="badge badge-trust ${cls}">${label}</span>`;
+  }
+  function cardHtml(it, q) {
+    const cls = CLS[it.category] || "";
+    const accent = ACCENT[cls] || "var(--line)";
+    const isOfficial = it.source_type === "공식원문";
+    const id = itemId(it);
+    const marked = bookmarks.has(id);
+    const officialBtns = (it.official||[]).map(o =>
+      `<a class="btn-official" href="${o.url}" target="_blank" rel="noopener" style="--accent:${accent}">🔗 ${esc(o.label)}</a>`).join("");
+    const summary = it.summary_lines ? it.summary_lines.join(" ") :
+      (isOfficial ? "공식 원문에서 상세 내용을 확인하세요." : `${it.source} 보도 내용입니다.`);
+    const impact = it.impact ? `<div class="impact"><b>실무 체크</b> · ${highlight(it.impact, q)}</div>` : "";
+    return `<article class="card" style="--accent:${accent}">
+      <button class="bookmark-btn ${marked?'on':''}" title="${marked?'찜 해제':'찜하기'}" data-bm="${esc(id)}">${marked?'★':'☆'}</button>
+      <div class="card-top">
+        <span class="badge badge-cat ${cls}">${it.category}</span>
+        <span class="badge badge-type ${isOfficial?'official':''}">${it.source_type||'뉴스'}</span>
+        ${trustBadge(it.trust||30)}
+      </div>
+      <h3>${highlight(it.title, q)}</h3>
+      <p class="summary">${highlight(summary, q)}</p>
+      ${impact}
+      <div class="card-src">출처: <b>${esc(it.source)}</b> · ${it.date}</div>
+      <div class="card-btns">
+        <a class="btn-news" href="${it.url}" target="_blank" rel="noopener">${isOfficial?'법령 원문 보기':'뉴스 기사 보기'}</a>
+        ${officialBtns}
+      </div>
+    </article>`;
+  }
+  function bindBookmarks(container) {
+    container.querySelectorAll(".bookmark-btn").forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.bm;
+        if (bookmarks.has(id)) bookmarks.delete(id); else bookmarks.add(id);
+        saveBookmarks(); buildStats();
+        if (state.view === "saved") renderSaved();
+        else { btn.classList.toggle("on"); btn.textContent = bookmarks.has(id)?'★':'☆'; btn.title = bookmarks.has(id)?'찜 해제':'찜하기'; }
+      };
+    });
+  }
+
+  function renderToday() {
+    const today = todayStr();
+    let items = DATA.items.filter(i => i.date === today);
+    let fallback = false;
+    if (!items.length) { items = DATA.items.slice(0, 6); fallback = true; }
+    document.getElementById("today-title").textContent = fallback ? "최근 주요 정책 동향" : "오늘 수집된 정책 동향";
+    document.getElementById("today-count").textContent = items.length + "건";
+    const body = document.getElementById("today-body");
+    if (!items.length) {
+      body.innerHTML = `<div class="state-box"><div class="ico">📭</div><div class="msg">오늘 수집된 새 동향이 아직 없습니다.<br>[전체 동향]에서 지금까지의 자료를 확인하세요.</div></div>`;
       return;
     }
-    list.innerHTML = upcoming.map(e => {
-      const dday = Math.ceil((e.date - today) / 86400000);
-      const soon = dday <= 30;
-      return `<div class="dday-item">
-        <div class="dday-badge ${soon?'soon':''}">D-${dday}</div>
-        <div class="dday-txt"><span class="dday-cat" style="background:${ACCENT[e.cls]}"></span><b>${esc(e.name)}</b><br>${e.y}.${String(e.mo).padStart(2,'0')}.${String(e.d).padStart(2,'0')} 시행</div>
+    body.innerHTML = `<div class="today-grid">${items.map(it => {
+      const cls = CLS[it.category]||""; const accent = ACCENT[cls]||"var(--line)";
+      const sum = it.summary_lines ? it.summary_lines.join("<br>") : "요약 준비 중입니다.";
+      return `<div class="today-card" style="--accent:${accent}">
+        <div class="accent-bar"></div>
+        <div class="card-top"><span class="badge badge-cat ${cls}">${it.category}</span>${trustBadge(it.trust||30)}</div>
+        <h3>${esc(it.title)}</h3>
+        <div class="t-sum">${sum}</div>
+        <div class="t-impact"><span class="lbl">회사 영향 · 준비사항</span>${esc(it.impact||"실무 검토가 필요합니다.")}</div>
+        <div class="t-foot"><span class="t-src">${esc(it.source)} · ${it.date}</span>
+          <a class="btn-official" href="${it.url}" target="_blank" rel="noopener" style="--accent:${accent};padding:5px 11px;border-radius:7px;font-size:12px">원문 →</a></div>
       </div>`;
-    }).join("");
+    }).join("")}</div>`;
   }
 
-  document.getElementById("cal-prev").onclick = () => { calDate.setMonth(calDate.getMonth()-1); renderCalendar(); };
-  document.getElementById("cal-next").onclick = () => { calDate.setMonth(calDate.getMonth()+1); renderCalendar(); };
+  function filtered() {
+    return DATA.items.filter(i => {
+      if (state.cats.size && !state.cats.has(i.category)) return false;
+      if (state.query) {
+        const hay = (i.title+" "+(i.summary_lines||[]).join(" ")+" "+(i.source||"")+" "+(i.impact||"")).toLowerCase();
+        if (!hay.includes(state.query.toLowerCase())) return false;
+      }
+      if (state.dateFrom && (i.date||"") < state.dateFrom) return false;
+      if (state.dateTo && (i.date||"") > state.dateTo) return false;
+      return true;
+    }).sort((a,b) => (b.trust||30)-(a.trust||30) || (b.date||"").localeCompare(a.date||""));
+  }
+  function renderFeed() {
+    const items = filtered();
+    document.getElementById("feed-count").textContent = items.length + "건";
+    const feed = document.getElementById("feed");
+    if (!items.length) {
+      feed.innerHTML = `<div class="state-box"><div class="ico">🔍</div><div class="msg">조건에 맞는 문서가 없습니다.<br>기간·카테고리·검색어를 조정해 보세요.</div></div>`;
+      return;
+    }
+    feed.innerHTML = items.map(it => cardHtml(it, state.query)).join("");
+    bindBookmarks(feed);
+  }
 
-  render();
+  function renderSidebarMini() {
+    document.getElementById("sidebar-mini").innerHTML = `
+      <div class="panel">
+        <div class="panel-head"><h3>제도 시행일 캘린더</h3>
+          <div class="cal-nav"><button id="cal-prev">‹</button><span class="month" id="cal-month"></span><button id="cal-next">›</button></div>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-detail" id="cal-detail"></div>
+        <div class="cal-legend">${CATS.map(c=>`<span><i class="cdot ${c.cls}"></i>${c.key}</span>`).join("")}</div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>시행 예정 (임박순)</h3></div>
+        <div id="dday-list"></div>
+      </div>`;
+    document.getElementById("cal-prev").onclick = () => { calDate.setMonth(calDate.getMonth()-1); selectedDay=null; renderMiniCal(); };
+    document.getElementById("cal-next").onclick = () => { calDate.setMonth(calDate.getMonth()+1); selectedDay=null; renderMiniCal(); };
+    renderMiniCal(); renderDday();
+  }
+
+  function calGridHtml(baseDate) {
+    const y = baseDate.getFullYear(), m = baseDate.getMonth();
+    const startDow = new Date(y,m,1).getDay();
+    const days = new Date(y,m+1,0).getDate();
+    const today = new Date(); today.setHours(0,0,0,0);
+    const enf = enforcements();
+    const DOW = ["일","월","화","수","목","금","토"];
+    let html = DOW.map(d=>`<div class="dow">${d}</div>`).join("");
+    for (let i=0;i<startDow;i++) html += `<div class="cal-cell other"></div>`;
+    for (let d=1; d<=days; d++) {
+      const cur = new Date(y,m,d);
+      const isToday = cur.getTime()===today.getTime();
+      const evs = enf.filter(e=>e.y===y&&e.mo===m+1&&e.d===d);
+      const sel = selectedDay===`${y}-${m+1}-${d}`;
+      const dots = [...new Set(evs.map(e=>e.cls))].map(c=>{
+        const names = evs.filter(e=>e.cls===c).map(e=>e.name).join(", ");
+        return `<span class="cdot ${c}" data-tip="${esc(names)} 시행"></span>`;
+      }).join("");
+      html += `<div class="cal-cell ${isToday?'today':''} ${evs.length?'has-event':''} ${sel?'selected':''}" data-day="${y}-${m+1}-${d}">${d}<div class="dots">${dots}</div></div>`;
+    }
+    return html;
+  }
+  function renderMiniCal() {
+    const y=calDate.getFullYear(), m=calDate.getMonth();
+    document.getElementById("cal-month").textContent = `${y}. ${String(m+1).padStart(2,'0')}`;
+    const grid = document.getElementById("cal-grid");
+    grid.innerHTML = calGridHtml(calDate);
+    attachCalEvents(grid, "cal-detail");
+  }
+
+  function attachCalEvents(grid, detailId) {
+    grid.querySelectorAll(".cal-cell.has-event").forEach(cell => {
+      cell.onclick = () => {
+        const key = cell.dataset.day;
+        const [y,mo,d] = key.split("-").map(Number);
+        const evs = enforcements().filter(e=>e.y===y&&e.mo===mo&&e.d===d);
+        const detail = document.getElementById(detailId);
+        if (selectedDay === key) { selectedDay=null; detail.classList.remove("open"); refreshCalSelection(grid); return; }
+        selectedDay = key;
+        detail.innerHTML = `<div class="cd-date">${y}. ${String(mo).padStart(2,'0')}. ${String(d).padStart(2,'0')} 시행 예정</div>` +
+          evs.map(e=>`<div class="cd-item"><span class="dday-cat" style="background:${ACCENT[e.cls]}"></span><b>${esc(e.name)}</b> (${e.cat})</div>`).join("");
+        detail.classList.add("open");
+        refreshCalSelection(grid);
+      };
+    });
+    grid.querySelectorAll(".cdot[data-tip]").forEach(dot => {
+      dot.onmouseenter = (e) => showTip(e, dot.dataset.tip);
+      dot.onmousemove = (e) => moveTip(e);
+      dot.onmouseleave = hideTip;
+    });
+  }
+  function refreshCalSelection(grid) {
+    grid.querySelectorAll(".cal-cell").forEach(c => c.classList.toggle("selected", c.dataset.day===selectedDay));
+  }
+  const tip = document.getElementById("cal-tooltip");
+  function showTip(e, text){ tip.textContent=text; tip.classList.add("show"); moveTip(e); }
+  function moveTip(e){ tip.style.left=(e.clientX+12)+"px"; tip.style.top=(e.clientY+12)+"px"; }
+  function hideTip(){ tip.classList.remove("show"); }
+
+  function upcomingSorted(months) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const limit = new Date(today); limit.setMonth(limit.getMonth()+months);
+    return enforcements().filter(e=>e.date>=today && e.date<=limit)
+      .map(e => ({...e, dday: Math.ceil((e.date-today)/86400000)}))
+      .sort((a,b) => a.dday - b.dday);
+  }
+  function renderDday() {
+    const list = upcomingSorted(3).slice(0,6);
+    const box = document.getElementById("dday-list");
+    if (!list.length) { box.innerHTML = `<div style="padding:22px 18px;text-align:center;color:var(--ink-faint);font-size:12.5px">향후 3개월 내 시행 예정 일정이 없습니다.</div>`; return; }
+    box.innerHTML = list.map(e => `<div class="dday-item">
+      <div class="dday-badge ${e.dday<=30?'soon':''}">D-${e.dday}</div>
+      <div class="dday-txt"><span class="dday-cat" style="background:${ACCENT[e.cls]}"></span><b>${esc(e.name)}</b><br>${e.y}.${String(e.mo).padStart(2,'0')}.${String(e.d).padStart(2,'0')} 시행 (${e.cat})</div></div>`).join("");
+  }
+
+  function renderCalBig() {
+    const y=calBigDate.getFullYear(), m=calBigDate.getMonth();
+    document.getElementById("cal-big").innerHTML = `
+      <div class="panel-head"><h3>${y}년 ${MON_KR[m]}</h3>
+        <div class="cal-nav"><button id="calbig-prev">‹</button><span class="month">${y}.${String(m+1).padStart(2,'0')}</span><button id="calbig-next">›</button></div>
+      </div>
+      <div class="cal-grid" id="cal-big-grid"></div>
+      <div class="cal-detail" id="cal-big-detail"></div>
+      <div class="cal-legend">${CATS.map(c=>`<span><i class="cdot ${c.cls}"></i>${c.key}</span>`).join("")}</div>`;
+    const grid = document.getElementById("cal-big-grid");
+    grid.innerHTML = calGridHtml(calBigDate);
+    attachCalEvents(grid, "cal-big-detail");
+    document.getElementById("calbig-prev").onclick = () => { calBigDate.setMonth(calBigDate.getMonth()-1); selectedDay=null; renderCalBig(); };
+    document.getElementById("calbig-next").onclick = () => { calBigDate.setMonth(calBigDate.getMonth()+1); selectedDay=null; renderCalBig(); };
+    const all = upcomingSorted(12);
+    const listBox = document.getElementById("cal-full-list");
+    if (!all.length) { listBox.innerHTML = `<div style="padding:22px 18px;text-align:center;color:var(--ink-faint);font-size:12.5px">예정된 시행 일정이 없습니다.</div>`; return; }
+    listBox.innerHTML = all.map(e => `<div class="dday-item">
+      <div class="dday-badge ${e.dday<=30?'soon':''}">D-${e.dday}</div>
+      <div class="dday-txt"><span class="dday-cat" style="background:${ACCENT[e.cls]}"></span><b>${esc(e.name)}</b><br>${e.y}.${String(e.mo).padStart(2,'0')}.${String(e.d).padStart(2,'0')} 시행 (${e.cat})</div></div>`).join("");
+  }
+
+  function renderSaved() {
+    const items = DATA.items.filter(i => bookmarks.has(itemId(i)));
+    document.getElementById("saved-count").textContent = items.length + "건";
+    const feed = document.getElementById("saved-feed");
+    if (!items.length) {
+      feed.innerHTML = `<div class="state-box"><div class="ico">☆</div><div class="msg">아직 찜한 문서가 없습니다.<br>카드 우측 상단의 별(☆)을 눌러 중요 문서를 저장하세요.</div></div>`;
+      return;
+    }
+    feed.innerHTML = items.map(it => cardHtml(it, "")).join("");
+    bindBookmarks(feed);
+  }
+
+  function go(view) {
+    state.view = view;
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    document.getElementById("view-"+view).classList.add("active");
+    document.querySelectorAll("#nav-menu button").forEach(b => b.classList.toggle("active", b.dataset.view===view));
+    const titles = {
+      today: ["오늘의 회계·세법·ESG 규제 동향","오늘 수집된 정책을 카드뉴스로 요약합니다."],
+      feed: ["전체 규제 동향 아카이브","기간·카테고리·키워드로 원하는 정책만 골라 보세요."],
+      calendar: ["제도 시행일 캘린더","시행 예정 법령·기준을 한눈에 확인하세요."],
+      saved: ["내가 찜한 문서","중요 문서를 모아 다시 확인하세요."],
+    };
+    document.getElementById("hero-title").textContent = titles[view][0];
+    document.getElementById("hero-desc").textContent = titles[view][1];
+    if (view==="feed") renderFeed();
+    if (view==="calendar") { calBigDate = new Date(); renderCalBig(); }
+    if (view==="saved") renderSaved();
+    if (view==="today") renderToday();
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  function bindEvents() {
+    document.querySelectorAll("#nav-menu button").forEach(b => b.onclick = () => go(b.dataset.view));
+    document.querySelectorAll("#quick-btns button").forEach(b => {
+      b.onclick = () => {
+        const r = b.dataset.range;
+        const on = state.quick === r;
+        document.querySelectorAll("#quick-btns button").forEach(x=>x.classList.remove("active"));
+        const df = document.getElementById("date-from"), dt = document.getElementById("date-to");
+        if (on) { state.quick=""; state.dateFrom=state.dateTo=""; df.value=dt.value=""; }
+        else {
+          state.quick = r; b.classList.add("active");
+          const now = new Date(); const to = todayStr(); let from = to;
+          if (r==="today") from = to;
+          else if (r==="week") { const d=new Date(now); d.setDate(d.getDate()-6); from=d.toISOString().slice(0,10); }
+          else if (r==="month") { from = to.slice(0,8)+"01"; }
+          else if (r==="year") { from = to.slice(0,4)+"-01-01"; }
+          state.dateFrom=from; state.dateTo=to; df.value=from; dt.value=to;
+        }
+        renderFeed();
+      };
+    });
+    document.getElementById("btn-search").onclick = applyFilter;
+    document.getElementById("search").addEventListener("keydown", e => { if(e.key==="Enter") applyFilter(); });
+    document.getElementById("search").addEventListener("input", e => { state.query=e.target.value.trim(); renderFeed(); });
+    document.getElementById("date-from").onchange = applyFilter;
+    document.getElementById("date-to").onchange = applyFilter;
+    document.getElementById("btn-reset").onclick = () => {
+      state.query=state.dateFrom=state.dateTo=state.quick=""; state.cats.clear();
+      document.getElementById("search").value=""; document.getElementById("date-from").value=""; document.getElementById("date-to").value="";
+      document.querySelectorAll("#quick-btns button").forEach(x=>x.classList.remove("active"));
+      document.querySelectorAll(".cat-chip").forEach(x=>x.classList.remove("on"));
+      renderFeed();
+    };
+  }
+  function applyFilter() {
+    state.query = document.getElementById("search").value.trim();
+    state.dateFrom = document.getElementById("date-from").value;
+    state.dateTo = document.getElementById("date-to").value;
+    renderFeed();
+  }
+
+  return {
+    init() { initTheme(); load(); },
+    go, reload() { load(); },
+  };
 })();
+PW.init();
 </script>
 </body>
 </html>
