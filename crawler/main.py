@@ -46,13 +46,27 @@ def load_existing() -> list[dict]:
             cat = it.get("category")
             if cat in CATEGORY_MIGRATION:
                 it["category"] = CATEGORY_MIGRATION[cat]
-            if it.get("category") in ALLOWED_CATEGORIES:
-                # official 필드 없는 옛 항목 보강
-                if "official" not in it:
-                    it["official"] = _common.official_links(it["category"])
-                if "source_type" not in it:
-                    it["source_type"] = "공식원문" if it.get("source") in OFFICIAL_SOURCES else "뉴스"
-                cleaned.append(it)
+            if it.get("category") not in ALLOWED_CATEGORIES:
+                continue
+
+            is_official = it.get("source") in OFFICIAL_SOURCES or it.get("source_type") == "공식원문"
+
+            # 뉴스 항목은 새 기준으로 소급 재검증: 노이즈·광고 제거 + 정밀 키워드
+            if not is_official:
+                title = it.get("title", "")
+                if _common.should_exclude(title):
+                    continue  # 이전에 수집된 시황·재테크 기사 제거
+                if not _common.match_category(title, it["category"]):
+                    continue  # 정밀 키워드 미달 항목 제거
+
+            # 누락 필드 보강
+            if "official" not in it:
+                it["official"] = _common.official_links(it["category"])
+            if "source_type" not in it:
+                it["source_type"] = "공식원문" if is_official else "뉴스"
+            if "trust" not in it:
+                it["trust"] = 100 if is_official else _common.trust_score(it.get("url", ""))
+            cleaned.append(it)
         return cleaned
     return []
 
@@ -99,7 +113,9 @@ def main():
     merged = [it for it in merged
               if it.get("source_type") == "공식원문" or it.get("date", "") >= cutoff]
 
-    merged.sort(key=lambda x: x.get("date", ""), reverse=True)
+    # 정렬: ① 신뢰 가중치(trust) 높은 순 → ② 최신 날짜 순
+    # 공식기관(100) > 전문미디어(80) > 회계법인(70) > 경제지(60) > 기타(30)
+    merged.sort(key=lambda x: (x.get("trust", 30), x.get("date", "")), reverse=True)
 
     DATA_FILE.parent.mkdir(exist_ok=True)
     DATA_FILE.write_text(json.dumps(merged, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -119,8 +135,3 @@ def main():
         print("실패 소스:")
         for f in failures:
             print("  -", f)
-    sys.exit(0)
-
-
-if __name__ == "__main__":
-    main()
