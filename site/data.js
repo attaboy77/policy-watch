@@ -1,5 +1,5 @@
 window.POLICY_DATA = {
-  "updated": "2026-07-29 05:31",
+  "updated": "2026-07-29 08:02",
   "items": [
     {
       "source": "금융위원회",
@@ -38,6 +38,20 @@ window.POLICY_DATA = {
       ]
     },
     {
+      "source": "v.daum.net",
+      "source_type": "구글뉴스",
+      "category": "세법",
+      "title": "평택시발전협의회, 법인지방소득세 공동세원화에 반발",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFAyYWw4OWtCUVliZ2RzOTIwXzRNWlRpaDRmbjhaVUxqUG81R0ZLN3puakpwYWowc0NGdGFtamRRaDhRa01Nd2M3SVdDRlctMVk?oc=5",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "국가법령정보센터",
+          "url": "https://www.law.go.kr/"
+        }
+      ]
+    },
+    {
       "source": "뉴시스",
       "source_type": "구글뉴스",
       "category": "세법",
@@ -66,6 +80,34 @@ window.POLICY_DATA = {
       ]
     },
     {
+      "source": "이뉴스투데이",
+      "source_type": "구글뉴스",
+      "category": "세법",
+      "title": "[기고] 현대판 연좌제, '세대별 주택 수 합산 양도소득세 중과세' 폐지해야",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9JdGpvelZxRzQ3Ty16c3EzV3VneU5DRE9LU1QxS29IbWFrUHhORTZzUm0tdW16SzRkUUpjZWJZZUxEMjY1Y05rVHRBeElqYm1VUlNIMWlvNkdyY29UdFg5OUp5bEJuYXpFdGNIUVBlRnLSAXRBVV95cUxNM21OdmZRR0ZxenFJVTRDbWE2aGI4M21rMnkxQXlzMUM1SGt1cExfNHVlNG91YjVzNU0tcDlrbzk4SnFZT251bWNQNml6VnFfMVRvOUlnVngwcF91RXh3OWIyVlVhVVRGSzUzTWJDbE44Q1NNVA?oc=5",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "국가법령정보센터",
+          "url": "https://www.law.go.kr/"
+        }
+      ]
+    },
+    {
+      "source": "아주경제",
+      "source_type": "구글뉴스",
+      "category": "세법",
+      "title": "SK하이닉스 세전이익 122조 사상 최대…법인세만 28.7조 낸다",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBxVVRmd2RoXy1tZGFlRWdkNEUyWDhxNjhTcC1jTmViYmxkdXVha3U5Y2dTc1VzdXdycGFVdXdraHhhbVlJNTJHQlJTTWljY3Z6S0RLZ3NMWmx2QdIBWEFVX3lxTFBzaXdYUkFjSm9DTzRoYUFqSkV0NkFKbXRMQzhMSGwxd09ad1VJOFpMNG96U1FLUUlydlhIS011Mk9pXzFoVE5tb3VXOG43MmQ5QmZXcUtrOFk?oc=5",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "국가법령정보센터",
+          "url": "https://www.law.go.kr/"
+        }
+      ]
+    },
+    {
       "source": "ESG경제",
       "source_type": "구글뉴스",
       "category": "ESG",
@@ -80,6 +122,34 @@ window.POLICY_DATA = {
         {
           "label": "금융위원회",
           "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "edaily",
+      "source_type": "네이버뉴스",
+      "category": "세법",
+      "title": "가상자산 과세 5개월 앞인데…국회 “정부 인프라 여전히 미흡”",
+      "url": "https://www.edaily.co.kr/news/newspath.asp?newsid=05405446645519440",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "국가법령정보센터",
+          "url": "https://www.law.go.kr/"
+        }
+      ]
+    },
+    {
+      "source": "newdaily",
+      "source_type": "네이버뉴스",
+      "category": "세법",
+      "title": "그린벨트 지우고 빵처럼 짓고… 동요 속 '파란 나라'에 허우적대는 '李...",
+      "url": "https://www.newdaily.co.kr/site/data/html/2026/07/28/2026072800016.html",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "국가법령정보센터",
+          "url": "https://www.law.go.kr/"
         }
       ]
     },
@@ -122,6 +192,312 @@ window.POLICY_DATA = {
         {
           "label": "국가법령정보센터",
           "url": "https://www.law.go.kr/"
+        }
+      ]
+    },
+    {
+      "source": "xportsnews",
+      "source_type": "네이버뉴스",
+      "category": "K-IFRS",
+      "title": "크래프톤, 26년 상반기 매출 2.6조 원 돌파…반기 기준 역대 최고치",
+      "url": "https://www.xportsnews.com/article/2177467",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "thebigdata",
+      "source_type": "네이버뉴스",
+      "category": "K-IFRS",
+      "title": "크래프톤, 상반기 역대 최대 실적... 배그·서브노티카2 '쌍끌이'",
+      "url": "http://www.thebigdata.co.kr/view.php?ud=2026072916441733140a47484cf8_23",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "efnews",
+      "source_type": "네이버뉴스",
+      "category": "K-IFRS",
+      "title": "크래프톤, 상반기 매출 2조6천616억원 '사상 최대'…영업이익 1조 육박",
+      "url": "http://www.efnews.co.kr/news/articleView.html?idxno=131311",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "ezyeconomy",
+      "source_type": "네이버뉴스",
+      "category": "K-IFRS",
+      "title": "크래프톤, 상반기 매출 2조6616억원…역대 최대 실적 달성",
+      "url": "https://www.ezyeconomy.com/news/articleView.html?idxno=238148",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "cbci",
+      "source_type": "네이버뉴스",
+      "category": "K-IFRS",
+      "title": "[속보] 주성엔지니어링, 2분기 영업이익 14억원…전분기 대비 흑자전환",
+      "url": "https://www.cbci.co.kr/news/articleView.html?idxno=592956",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "nocutnews",
+      "source_type": "네이버뉴스",
+      "category": "K-IFRS",
+      "title": "크래프톤, 2026년 상반기 매출·영업이익 '역대 최대'",
+      "url": "https://www.nocutnews.co.kr/news/6555423?utm_source=naver&utm_medium=article&utm_campaign=20260729044211",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "doctorstimes",
+      "source_type": "네이버뉴스",
+      "category": "내부회계",
+      "title": "[병원계 소식] 7월 29일",
+      "url": "http://www.doctorstimes.com/news/articleView.html?idxno=239277",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "hansbiz",
+      "source_type": "네이버뉴스",
+      "category": "내부회계",
+      "title": "코오롱베니트, 자체 솔루션으로 기업 AX 공략",
+      "url": "http://www.hansbiz.co.kr/news/articleView.html?idxno=853254",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "fntimes",
+      "source_type": "네이버뉴스",
+      "category": "내부회계",
+      "title": "한미약품 “북경한미 매출채권 전액 회수 가능”",
+      "url": "https://www.fntimes.com/html/view.php?ud=202607291606337372923defd0cc_18",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "hankyung",
+      "source_type": "네이버뉴스",
+      "category": "내부회계",
+      "title": "코오롱베니트, 자체 개발 솔루션 기반 경영·재무·제조 DX 지원 강화",
+      "url": "https://www.hankyung.com/article/202607293381O",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "esgeconomy",
+      "source_type": "네이버뉴스",
+      "category": "내부회계",
+      "title": "AI 도입은 속도전, 거버넌스는 뒷전…이사회 규칙 없는 기업 51%",
+      "url": "https://www.esgeconomy.com/news/articleView.html?idxno=16201",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "greenpostkorea",
+      "source_type": "네이버뉴스",
+      "category": "ESG",
+      "title": "GS리테일 상생펀드 협력사·가맹점 560곳 혜택··· \"진정한 상생\"",
+      "url": "https://www.greenpostkorea.co.kr/news/articleView.html?idxno=307189",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "thefirstmedia",
+      "source_type": "네이버뉴스",
+      "category": "ESG",
+      "title": "NH투자증권, 지속가능보고서 발간... 책임투자·기후대응 전략 공개",
+      "url": "http://www.thefirstmedia.net/news/articleView.html?idxno=204922",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "enewstoday",
+      "source_type": "네이버뉴스",
+      "category": "ESG",
+      "title": "락앤락, ESG 성과 공개···\"온실가스 최대 41% 감축\"",
+      "url": "http://www.enewstoday.co.kr/news/articleView.html?idxno=2453798",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "press9",
+      "source_type": "네이버뉴스",
+      "category": "ESG",
+      "title": "[한국투자증권 ESG-E] 기후금융 확대…2050 탄소중립 향한 ESG 경영 강화",
+      "url": "http://www.press9.kr/news/articleView.html?idxno=80252",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "press9",
+      "source_type": "네이버뉴스",
+      "category": "ESG",
+      "title": "[미래에셋증권 ESG-G] 책임·투명경영…이사회 중심 거버넌스 고도화",
+      "url": "http://www.press9.kr/news/articleView.html?idxno=80254",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "etnews",
+      "source_type": "네이버뉴스",
+      "category": "ESG",
+      "title": "[ET시론]출근하고 싶은 일터, 국민 체감 성과로 이어진다",
+      "url": "https://www.etnews.com/20260729000138",
+      "date": "2026-07-29",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
         }
       ]
     },
@@ -530,25 +906,11 @@ window.POLICY_DATA = {
       ]
     },
     {
-      "source": "intn.co.kr",
-      "source_type": "구글뉴스",
-      "category": "세법",
-      "title": "오상훈 부산지방국세청장, 부가가치세 신고 현장 방문",
-      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE82aDNhV1FkT0dSd3JxNEhHeEZDdzlUZXhFV0lRcV9mVXlFWGdQcEVrbVBGdEVWaGNPQTFSVkVNTUszd2xJNmlkT2VTcFBJQTRMcmFkTXF2MkNKREc1bHBycmh4dUtfWV9RUUE?oc=5",
-      "date": "2026-07-28",
-      "official": [
-        {
-          "label": "국가법령정보센터",
-          "url": "https://www.law.go.kr/"
-        }
-      ]
-    },
-    {
-      "source": "매일경제 마켓",
+      "source": "네이트",
       "source_type": "구글뉴스",
       "category": "K-IFRS",
-      "title": "페이팔, 2분기 매출 87억 달러·EPS 1.25달러..연간 가이던스 상향",
-      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE41bmh0VVFtRm5VUy1iMVc3YmRjS2JHcEp3aUNpRUUxdDE5MEI1aktMUjF4X1ZaNm05cFdBbmc1YWlPTDR3akE2dEl0NF9MbTRfWkE?oc=5",
+      "title": "[Invest&Law]K-IFRS 적용 후 달라진 피투자사 실적…VC 원금회수는 막혀",
+      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE8yN2JqcDI5UDZkSmhSeWlTakwxTUFxN2dxbDZHSzg5SDNSWXRLM0I1bjA0YUZXai1SRHR2LWxubzFDcDJYeFRvNExPYW9xOXBQYUVJZTZ1dVYxLWZjTVJOWmlzTXZBbGwyTzJYdG1OSHFydkY4S2xQZw?oc=5",
       "date": "2026-07-28",
       "official": [
         {
@@ -562,11 +924,11 @@ window.POLICY_DATA = {
       ]
     },
     {
-      "source": "네이트",
+      "source": "매일경제 마켓",
       "source_type": "구글뉴스",
       "category": "K-IFRS",
-      "title": "[Invest&Law]K-IFRS 적용 후 달라진 피투자사 실적…VC 원금회수는 막혀",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE8yN2JqcDI5UDZkSmhSeWlTakwxTUFxN2dxbDZHSzg5SDNSWXRLM0I1bjA0YUZXai1SRHR2LWxubzFDcDJYeFRvNExPYW9xOXBQYUVJZTZ1dVYxLWZjTVJOWmlzTXZBbGwyTzJYdG1OSHFydkY4S2xQZw?oc=5",
+      "title": "페이팔, 2분기 매출 87억 달러·EPS 1.25달러..연간 가이던스 상향",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE41bmh0VVFtRm5VUy1iMVc3YmRjS2JHcEp3aUNpRUUxdDE5MEI1aktMUjF4X1ZaNm05cFdBbmc1YWlPTDR3akE2dEl0NF9MbTRfWkE?oc=5",
       "date": "2026-07-28",
       "official": [
         {
@@ -634,6 +996,24 @@ window.POLICY_DATA = {
       ]
     },
     {
+      "source": "쿠키뉴스",
+      "source_type": "구글뉴스",
+      "category": "ESG",
+      "title": "제약바이오업계, ESG 공시 강화…그룹 통합 관리·글로벌 기준 적용",
+      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9FMTNOaUlOZkQtQzhrWWtQbmtrRkNzU0NXOVA3SUNEenNEVDltQjFrcFJuNkNxSnBfT1drWHk5VUxJWENrb3FzNWQzQ1JUWEJGY2ZhUjZtNkJfZ0FicTFjVGhrMA?oc=5",
+      "date": "2026-07-28",
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
       "source": "임팩트온",
       "source_type": "구글뉴스",
       "category": "ESG",
@@ -666,6 +1046,20 @@ window.POLICY_DATA = {
         {
           "label": "금융위원회",
           "url": "https://www.fsc.go.kr/index"
+        }
+      ]
+    },
+    {
+      "source": "intn.co.kr",
+      "source_type": "구글뉴스",
+      "category": "세법",
+      "title": "오상훈 부산지방국세청장, 부가가치세 신고 현장 방문",
+      "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE82aDNhV1FkT0dSd3JxNEhHeEZDdzlUZXhFV0lRcV9mVXlFWGdQcEVrbVBGdEVWaGNPQTFSVkVNTUszd2xJNmlkT2VTcFBJQTRMcmFkTXF2MkNKREc1bHBycmh4dUtfWV9RUUE?oc=5",
+      "date": "2026-07-28",
+      "official": [
+        {
+          "label": "국가법령정보센터",
+          "url": "https://www.law.go.kr/"
         }
       ]
     },
