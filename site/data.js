@@ -1,5 +1,5 @@
 window.POLICY_DATA = {
-  "updated": "2026-07-29 09:05",
+  "updated": "2026-07-29 09:14",
   "items": [
     {
       "source": "금융위원회",
@@ -978,25 +978,6 @@ window.POLICY_DATA = {
       "url": "https://www.law.go.kr/DRF/lawService.do?OC=epsillon&target=eflaw&MST=91270&type=HTML&mobileYn=&efYd=20280101",
       "date": "2009-01-30",
       "trust": 100,
-      "official": [
-        {
-          "label": "국가법령정보센터",
-          "url": "https://www.law.go.kr/"
-        },
-        {
-          "label": "국세청",
-          "url": "https://www.nts.go.kr/"
-        }
-      ]
-    },
-    {
-      "source": "뉴시스",
-      "source_type": "뉴스",
-      "category": "세법",
-      "title": "초고가 기준 어떻게…강남3구 세법 개정 앞두고 강남권 '술렁'",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1aZUpJZ0xtZTAxVUNsbS00NkFpbmhaUXZQM2x1TVRCb2hRamtpdWNhcUJzRElkeWx3SDJack5vRXZvV0lhTklYam9pQ1ZaTG85ZU93Y0NZSzY2NDJ3elBRU9IBeEFVX3lxTE42YUQ1S0U4WWxCRUVxS1dOdDRoXzRlUEZib2VCdkp3MlI0MGgxMDZLbUNsNjFNenpVR2hjRjI4d3lZZHY0WjIxNV9tZlpjcTRGOHRlS05qMjZnVzdLWUhsOGdXNVlKWFp5bW1fT2FSN29tRmdNc1NCaA?oc=5",
-      "date": "2026-07-29",
-      "trust": 30,
       "official": [
         {
           "label": "국가법령정보센터",
