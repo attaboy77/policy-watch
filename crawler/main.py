@@ -135,3 +135,8 @@ def main():
         print("실패 소스:")
         for f in failures:
             print("  -", f)
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
