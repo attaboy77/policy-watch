@@ -13,14 +13,16 @@ from datetime import datetime
 from urllib.parse import urlencode
 
 from . import _http
+from . import _common
 
 BASE = "https://www.law.go.kr/DRF/lawSearch.do"
 
 LAW_GROUPS = {
     "세법": ["법인세법", "소득세법", "부가가치세법", "국세기본법", "국세징수법",
            "상속세 및 증여세법", "종합부동산세법", "조세특례제한법", "관세법"],
-    "회계기준": ["주식회사 등의 외부감사에 관한 법률"],
-    "법령": ["국가재정법", "국고금 관리법"],
+    "K-IFRS": ["주식회사 등의 외부감사에 관한 법률"],
+    "내부회계": [],  # 내부회계관리제도는 외감법 하위 규정 — 금융위 RSS에서 주로 수집
+    "ESG": [],       # 지속가능성 공시 — 금융위 RSS에서 주로 수집
 }
 
 NAME_TAGS = ["법령명한글", "법령명"]
@@ -98,9 +100,11 @@ def fetch(session):
                     label += f" · {enf} 시행"
 
                 items.append({
-                    "source": "법제처", "category": category,
+                    "source": "법제처", "source_type": "공식원문",
+                    "category": category,
                     "title": label, "url": url_detail,
                     "date": pub or enf or datetime.today().strftime("%Y-%m-%d"),
+                    "official": _common.official_links(category),
                 })
 
     print(f"  [law_api] 법령 {len(items)}건 수집")

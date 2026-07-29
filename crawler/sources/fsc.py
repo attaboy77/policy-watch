@@ -1,5 +1,6 @@
 """금융위원회(FSC) 공식 RSS — 회계·감사·공시·세제 관련 보도자료만 선별.
 
+4개 카테고리로 분류: 세법 / K-IFRS / 내부회계 / ESG
 공식 RSS라 실제 보도자료 item만 들어온다(사이트 메뉴가 섞이지 않음).
 XML이므로 원본보존 프록시(_http)를 경유한다.
 """
@@ -9,22 +10,24 @@ from datetime import datetime
 from html import unescape
 
 from . import _http
+from . import _common
 
 FSC_RSS = "http://www.fsc.go.kr/about/fsc_bbs_rss/?fid=0111"
 
-# 회계·감사·공시 관련 → 회계기준
-ACCT_KEYWORDS = ["회계기준", "회계처리", "외부감사", "감사인", "내부회계",
-                 "재무제표", "IFRS", "K-IFRS", "지속가능성 공시", "ESG 공시",
-                 "회계감독", "공시서식", "사업보고서"]
-# 세제 관련 → 세법
-TAX_KEYWORDS = ["세제", "세법", "과세", "비과세", "세액공제", "증권거래세", "금융세제"]
-# 제도·규정 개정 관련 → 법령
-LAW_KEYWORDS = ["감독규정", "시행세칙", "규정변경예고", "규정 개정", "입법예고",
-                "시행령 개정", "고시 개정", "감독규정 개정"]
+# 위에서부터 우선 매칭 (구체적인 것 먼저)
+CATEGORY_RULES = [
+    ("내부회계", ["내부회계", "내부통제", "내부회계관리제도"]),
+    ("ESG", ["지속가능성", "ESG", "기후", "지속가능경영", "탄소"]),
+    ("K-IFRS", ["회계기준", "회계처리", "외부감사", "감사인", "재무제표",
+              "IFRS", "K-IFRS", "회계감독", "공시서식", "사업보고서",
+              "감사보고서", "회계"]),
+    ("세법", ["세제", "세법", "과세", "비과세", "세액공제", "증권거래세",
+            "금융세제", "양도소득세", "배당소득"]),
+]
 
-# 회계·세법·법령과 무관하면 아예 제외 (아래 중 하나도 없으면 버림)
+# 회계·세법과 무관하면 제외
 EXCLUDE_HINTS = ["채용", "인사", "포상", "공모", "세미나", "간담회", "행사",
-                 "정부포상", "후보자", "부고", "일정", "안내"]
+                 "정부포상", "후보자", "부고", "일정", "안내", "briefing"]
 
 
 def _clean(t: str) -> str:
@@ -32,12 +35,9 @@ def _clean(t: str) -> str:
 
 
 def _classify(title: str):
-    if any(k in title for k in ACCT_KEYWORDS):
-        return "회계기준"
-    if any(k in title for k in TAX_KEYWORDS):
-        return "세법"
-    if any(k in title for k in LAW_KEYWORDS):
-        return "법령"
+    for cat, keywords in CATEGORY_RULES:
+        if any(k in title for k in keywords):
+            return cat
     return None
 
 
@@ -76,8 +76,10 @@ def fetch(session):
         if category is None:
             continue
         items.append({
-            "source": "금융위원회", "category": category,
+            "source": "금융위원회", "source_type": "공식원문",
+            "category": category,
             "title": title, "url": link, "date": _parse_date(pub),
+            "official": _common.official_links(category),
         })
         matched += 1
     print(f"  [fsc] {matched}건 분류됨")
