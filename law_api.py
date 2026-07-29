@@ -1,84 +1,111 @@
-"""구글 뉴스 RSS — 카테고리별 키워드로 언론 기사 수집.
+"""법제처 국가법령정보 Open API — 세법·회계 관련 법령의 최근 시행/개정 조회.
 
-구글 뉴스 RSS는 인증 불필요, 해외 IP에서도 열림. Worker 없이 직접 접속.
+데이터 품질이 가장 정확한 소스(실제 법령 개정 이력).
+law.go.kr이 해외 IP를 차단하므로 공용 프록시(_http)를 경유한다.
+
+API 키(OC): https://open.law.go.kr 가입 → OPEN API 활용신청(무료) → 이메일 ID가 OC.
+GitHub Secrets에 LAW_API_OC로 등록. 미설정 시 'test' 계정 사용(트래픽 제한 있음).
 """
+import os
 import re
 import xml.etree.ElementTree as ET
 from datetime import datetime
-from html import unescape
-from urllib.parse import quote
+from urllib.parse import urlencode
 
-import requests
-
+from . import _http
 from . import _common
 
-# 카테고리별 검색 키워드 (구글 뉴스 검색 쿼리)
-QUERIES = {
-    "세법": '세법개정 OR 법인세 OR 소득세 OR 부가가치세',
-    "K-IFRS": 'K-IFRS OR 회계기준 OR 외부감사',
-    "내부회계": '내부회계관리제도',
-    "ESG": 'ESG공시 OR 지속가능성공시',
+BASE = "https://www.law.go.kr/DRF/lawSearch.do"
+
+LAW_GROUPS = {
+    "세법": ["법인세법", "소득세법", "부가가치세법", "국세기본법", "국세징수법",
+           "상속세 및 증여세법", "종합부동산세법", "조세특례제한법", "관세법"],
+    "K-IFRS": ["주식회사 등의 외부감사에 관한 법률"],
+    "내부회계": [],  # 내부회계관리제도는 외감법 하위 규정 — 금융위 RSS에서 주로 수집
+    "ESG": [],       # 지속가능성 공시 — 금융위 RSS에서 주로 수집
 }
 
-BASE = "https://news.google.com/rss/search?q={q}&hl=ko&gl=KR&ceid=KR:ko"
+NAME_TAGS = ["법령명한글", "법령명"]
+PUBDATE_TAGS = ["공포일자"]
+ENFDATE_TAGS = ["시행일자"]
+KIND_TAGS = ["제개정구분명", "제개정구분"]
+LINK_TAGS = ["법령상세링크"]
 
 
-def _clean(t: str) -> str:
-    return unescape(re.sub(r"\s+", " ", t or "")).strip()
+def _first(node, tags):
+    for t in tags:
+        v = node.findtext(t)
+        if v and v.strip():
+            return v.strip()
+    return ""
 
 
-def _parse_date(pub: str) -> str:
-    for fmt in ("%a, %d %b %Y %H:%M:%S %Z", "%a, %d %b %Y %H:%M:%S %z"):
-        try:
-            return datetime.strptime(pub.strip(), fmt).strftime("%Y-%m-%d")
-        except ValueError:
-            continue
-    return datetime.today().strftime("%Y-%m-%d")
+def _fmt_date(raw: str) -> str:
+    raw = re.sub(r"[.\-\s]", "", raw or "")
+    if len(raw) == 8 and raw.isdigit():
+        return f"{raw[:4]}-{raw[4:6]}-{raw[6:8]}"
+    return raw
 
 
-def _extract_source(title: str):
-    # 구글 뉴스 제목은 "기사제목 - 언론사" 형태
-    if " - " in title:
-        parts = title.rsplit(" - ", 1)
-        return parts[0].strip(), parts[1].strip()
-    return title, "구글뉴스"
+def fetch(session):
+    oc = os.environ.get("LAW_API_OC", "test")
+    items, seen = [], set()
+    debug_shown = False
 
-
-def fetch(session: requests.Session) -> list[dict]:
-    items = []
-    for category, query in QUERIES.items():
-        url = BASE.format(q=quote(query))
-        try:
-            resp = session.get(url, timeout=30)
-            resp.raise_for_status()
-            root = ET.fromstring(resp.content)
-        except Exception as e:
-            print(f"  [google/{category}] 실패: {str(e)[:50]}")
-            continue
-
-        cnt = 0
-        for node in root.iter("item"):
-            raw_title = _clean(node.findtext("title"))
-            link = _clean(node.findtext("link"))
-            pub = node.findtext("pubDate") or ""
-            if not raw_title or not link:
+    for category, laws in LAW_GROUPS.items():
+        for law in laws:
+            qs = urlencode({"OC": oc, "target": "eflaw", "type": "XML",
+                            "query": law, "display": 5})
+            url = f"{BASE}?{qs}"
+            content = _http.fetch_bytes(session, url, tag=f"law/{law[:6]}")
+            if not content:
+                continue
+            try:
+                root = ET.fromstring(content)
+            except Exception as e:
+                print(f"  [law/{law[:6]}] XML 파싱 실패: {str(e)[:40]}")
                 continue
 
-            title, press = _extract_source(raw_title)
-            if _common.is_ad(title, press):
-                continue
+            if not debug_shown:
+                tags = sorted({c.tag for c in root.iter()})[:12]
+                print(f"  [law_api] 응답 태그 샘플: {tags}")
+                debug_shown = True
 
-            items.append({
-                "source": press,
-                "source_type": "구글뉴스",
-                "category": category,
-                "title": title,
-                "url": link,
-                "date": _parse_date(pub),
-                "official": _common.official_links(category),
-            })
-            cnt += 1
-            if cnt >= 8:  # 카테고리당 최대 8건
-                break
-        print(f"  [google/{category}] {cnt}건")
+            law_nodes = list(root.iter("law"))
+            if not law_nodes:
+                for child in root:
+                    if any(child.findtext(t) for t in NAME_TAGS):
+                        law_nodes.append(child)
+
+            for node in law_nodes:
+                name = _first(node, NAME_TAGS)
+                if not name or law.replace(" ", "") not in name.replace(" ", ""):
+                    continue
+                pub = _fmt_date(_first(node, PUBDATE_TAGS))
+                enf = _fmt_date(_first(node, ENFDATE_TAGS))
+                kind = _first(node, KIND_TAGS)
+                link = _first(node, LINK_TAGS)
+
+                key = (name, pub, enf)
+                if key in seen:
+                    continue
+                seen.add(key)
+
+                url_detail = ("https://www.law.go.kr" + link) if link.startswith("/") \
+                    else (link or f"https://www.law.go.kr/법령/{name}")
+                label = name
+                if kind:
+                    label += f" ({kind})"
+                if enf:
+                    label += f" · {enf} 시행"
+
+                items.append({
+                    "source": "법제처", "source_type": "공식원문",
+                    "category": category,
+                    "title": label, "url": url_detail,
+                    "date": pub or enf or datetime.today().strftime("%Y-%m-%d"),
+                    "official": _common.official_links(category),
+                })
+
+    print(f"  [law_api] 법령 {len(items)}건 수집")
     return items

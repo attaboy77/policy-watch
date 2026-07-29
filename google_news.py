@@ -1,126 +1,84 @@
-"""정책모니터 수집기 — 모든 소스를 수집해 data/items.json 과 site/data.js 를 갱신.
+"""구글 뉴스 RSS — 카테고리별 키워드로 언론 기사 수집.
 
-소스: 법제처 API·금융위 RSS(공식원문, Worker 경유) + 구글/네이버 뉴스(언론).
-실행: python crawler/main.py
+구글 뉴스 RSS는 인증 불필요, 해외 IP에서도 열림. Worker 없이 직접 접속.
 """
-import json
-import sys
-import time
-from datetime import datetime, timedelta
-from pathlib import Path
+import re
+import xml.etree.ElementTree as ET
+from datetime import datetime
+from html import unescape
+from urllib.parse import quote
 
 import requests
 
-sys.path.insert(0, str(Path(__file__).parent))
-from sources import law_api, fsc, google_news, naver_news, _common  # noqa: E402
+from . import _common
 
-ROOT = Path(__file__).parent.parent
-DATA_FILE = ROOT / "data" / "items.json"
-SITE_DATA = ROOT / "site" / "data.js"
-
-# 공식원문(정확) → 뉴스(속보성). 순서대로 수집.
-SOURCES = [law_api, fsc, google_news, naver_news]
-HEADERS = {
-    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                   "AppleWebKit/537.36 (KHTML, like Gecko) "
-                   "Chrome/126.0 Safari/537.36"),
-    "Accept": "application/rss+xml, application/xml, text/xml, application/json, */*",
-    "Accept-Language": "ko-KR,ko;q=0.9",
+# 카테고리별 검색 키워드 (구글 뉴스 검색 쿼리)
+QUERIES = {
+    "세법": '세법개정 OR 법인세 OR 소득세 OR 부가가치세',
+    "K-IFRS": 'K-IFRS OR 회계기준 OR 외부감사',
+    "내부회계": '내부회계관리제도',
+    "ESG": 'ESG공시 OR 지속가능성공시',
 }
-KEEP_DAYS = 180  # 뉴스는 최근 6개월만 유지
-ALLOWED_CATEGORIES = {"세법", "K-IFRS", "내부회계", "ESG"}
-# 옛 카테고리로 저장된 공식원문 항목 변환
-CATEGORY_MIGRATION = {"회계기준": "K-IFRS", "법령": "세법"}
-# 공식원문은 오래 유지, 뉴스만 6개월 컷
-OFFICIAL_SOURCES = {"법제처", "금융위원회"}
+
+BASE = "https://news.google.com/rss/search?q={q}&hl=ko&gl=KR&ceid=KR:ko"
 
 
-def load_existing() -> list[dict]:
-    if DATA_FILE.exists():
+def _clean(t: str) -> str:
+    return unescape(re.sub(r"\s+", " ", t or "")).strip()
+
+
+def _parse_date(pub: str) -> str:
+    for fmt in ("%a, %d %b %Y %H:%M:%S %Z", "%a, %d %b %Y %H:%M:%S %z"):
         try:
-            data = json.loads(DATA_FILE.read_text(encoding="utf-8"))
-        except Exception:
-            return []
-        cleaned = []
-        for it in data:
-            cat = it.get("category")
-            if cat in CATEGORY_MIGRATION:
-                it["category"] = CATEGORY_MIGRATION[cat]
-            if it.get("category") in ALLOWED_CATEGORIES:
-                # official 필드 없는 옛 항목 보강
-                if "official" not in it:
-                    it["official"] = _common.official_links(it["category"])
-                if "source_type" not in it:
-                    it["source_type"] = "공식원문" if it.get("source") in OFFICIAL_SOURCES else "뉴스"
-                cleaned.append(it)
-        return cleaned
-    return []
-
-
-def main():
-    session = requests.Session()
-    session.headers.update(HEADERS)
-
-    existing = load_existing()
-    new_items, failures = [], []
-
-    for mod in SOURCES:
-        name = mod.__name__.split(".")[-1]
-        try:
-            fetched = mod.fetch(session)
-            new_items.extend(fetched)
-            print(f"[{name}] {len(fetched)}건 수집")
-        except Exception as e:
-            failures.append(f"{name}: {e}")
-            print(f"[{name}] 실패: {e}")
-        time.sleep(1)
-
-    # 전체 병합 후 중복 제거 (공식원문 우선 → 뉴스)
-    # 공식원문을 앞에 두어 같은 주제면 공식원문이 살아남도록
-    official = [it for it in (new_items + existing) if it.get("source_type") == "공식원문"]
-    news = [it for it in (new_items + existing) if it.get("source_type") != "공식원문"]
-
-    # 공식원문은 제목+날짜로 중복 제거
-    seen, official_dedup = set(), []
-    for it in official:
-        k = (it.get("title", ""), it.get("date", ""))
-        if k in seen:
+            return datetime.strptime(pub.strip(), fmt).strftime("%Y-%m-%d")
+        except ValueError:
             continue
-        seen.add(k)
-        official_dedup.append(it)
-
-    # 뉴스는 제목 유사도로 중복 제거
-    news_dedup = _common.dedup(news)
-
-    merged = official_dedup + news_dedup
-
-    # 날짜 컷: 뉴스만 6개월, 공식원문은 유지
-    cutoff = (datetime.today() - timedelta(days=KEEP_DAYS)).strftime("%Y-%m-%d")
-    merged = [it for it in merged
-              if it.get("source_type") == "공식원문" or it.get("date", "") >= cutoff]
-
-    merged.sort(key=lambda x: x.get("date", ""), reverse=True)
-
-    DATA_FILE.parent.mkdir(exist_ok=True)
-    DATA_FILE.write_text(json.dumps(merged, ensure_ascii=False, indent=2), encoding="utf-8")
-
-    payload = {"updated": datetime.now().strftime("%Y-%m-%d %H:%M"), "items": merged}
-    SITE_DATA.write_text(
-        "window.POLICY_DATA = " + json.dumps(payload, ensure_ascii=False, indent=2) + ";",
-        encoding="utf-8",
-    )
-
-    # 카테고리별 집계
-    by_cat = {}
-    for it in merged:
-        by_cat[it["category"]] = by_cat.get(it["category"], 0) + 1
-    print(f"\n총 {len(merged)}건 저장  {by_cat}")
-    if failures:
-        print("실패 소스:")
-        for f in failures:
-            print("  -", f)
-    sys.exit(0)
+    return datetime.today().strftime("%Y-%m-%d")
 
 
-if __name__ == "__main__":
-    main()
+def _extract_source(title: str):
+    # 구글 뉴스 제목은 "기사제목 - 언론사" 형태
+    if " - " in title:
+        parts = title.rsplit(" - ", 1)
+        return parts[0].strip(), parts[1].strip()
+    return title, "구글뉴스"
+
+
+def fetch(session: requests.Session) -> list[dict]:
+    items = []
+    for category, query in QUERIES.items():
+        url = BASE.format(q=quote(query))
+        try:
+            resp = session.get(url, timeout=30)
+            resp.raise_for_status()
+            root = ET.fromstring(resp.content)
+        except Exception as e:
+            print(f"  [google/{category}] 실패: {str(e)[:50]}")
+            continue
+
+        cnt = 0
+        for node in root.iter("item"):
+            raw_title = _clean(node.findtext("title"))
+            link = _clean(node.findtext("link"))
+            pub = node.findtext("pubDate") or ""
+            if not raw_title or not link:
+                continue
+
+            title, press = _extract_source(raw_title)
+            if _common.is_ad(title, press):
+                continue
+
+            items.append({
+                "source": press,
+                "source_type": "구글뉴스",
+                "category": category,
+                "title": title,
+                "url": link,
+                "date": _parse_date(pub),
+                "official": _common.official_links(category),
+            })
+            cnt += 1
+            if cnt >= 8:  # 카테고리당 최대 8건
+                break
+        print(f"  [google/{category}] {cnt}건")
+    return items
