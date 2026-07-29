@@ -104,6 +104,7 @@ def fetch(session):
                     "category": category,
                     "title": label, "url": url_detail,
                     "date": pub or enf or datetime.today().strftime("%Y-%m-%d"),
+                    "trust": 100,
                     "official": _common.official_links(category),
                 })
 
