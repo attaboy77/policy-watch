@@ -1,6 +1,6 @@
-"""구글 뉴스 RSS — 카테고리별 키워드로 언론 기사 수집.
+"""구글 뉴스 RSS — 정밀 검색 쿼리로 카테고리별 실무 뉴스만 수집.
 
-구글 뉴스 RSS는 인증 불필요, 해외 IP에서도 열림. Worker 없이 직접 접속.
+노이즈(시황·재테크) 차단 + 필수/조합 키워드 재검증 + 출처 가중치 부여.
 """
 import re
 import xml.etree.ElementTree as ET
@@ -10,15 +10,7 @@ from urllib.parse import quote
 
 import requests
 
-from . import _common
-
-# 카테고리별 검색 키워드 (구글 뉴스 검색 쿼리)
-QUERIES = {
-    "세법": '세법개정 OR 법인세 OR 소득세 OR 부가가치세',
-    "K-IFRS": 'K-IFRS OR 회계기준 OR 외부감사',
-    "내부회계": '내부회계관리제도',
-    "ESG": 'ESG공시 OR 지속가능성공시',
-}
+from . import _common, _config
 
 BASE = "https://news.google.com/rss/search?q={q}&hl=ko&gl=KR&ceid=KR:ko"
 
@@ -37,7 +29,6 @@ def _parse_date(pub: str) -> str:
 
 
 def _extract_source(title: str):
-    # 구글 뉴스 제목은 "기사제목 - 언론사" 형태
     if " - " in title:
         parts = title.rsplit(" - ", 1)
         return parts[0].strip(), parts[1].strip()
@@ -46,7 +37,8 @@ def _extract_source(title: str):
 
 def fetch(session: requests.Session) -> list[dict]:
     items = []
-    for category, query in QUERIES.items():
+    for category in _config.CATEGORY_KEYWORDS:
+        query = _common.build_query(category)          # 정밀 쿼리 생성
         url = BASE.format(q=quote(query))
         try:
             resp = session.get(url, timeout=30)
@@ -65,20 +57,27 @@ def fetch(session: requests.Session) -> list[dict]:
                 continue
 
             title, press = _extract_source(raw_title)
-            if _common.is_ad(title, press):
+
+            # 1) 노이즈·광고 차단
+            if _common.should_exclude(title, press):
+                continue
+            # 2) 정밀 키워드 재검증 (필수 AND 조합) — 쿼리가 느슨해도 여기서 거름
+            if not _common.match_category(title, category):
                 continue
 
+            press_name = _common.trust_name(link) or press
             items.append({
-                "source": press,
-                "source_type": "구글뉴스",
+                "source": press_name,
+                "source_type": "뉴스",
                 "category": category,
                 "title": title,
                 "url": link,
                 "date": _parse_date(pub),
+                "trust": _common.trust_score(link),
                 "official": _common.official_links(category),
             })
             cnt += 1
-            if cnt >= 8:  # 카테고리당 최대 8건
+            if cnt >= 10:
                 break
         print(f"  [google/{category}] {cnt}건")
     return items
