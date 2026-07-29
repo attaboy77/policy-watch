@@ -49,6 +49,18 @@ def match_category(title: str, category: str) -> bool:
     return has_must and has_combine
 
 
+def match_loose(title: str, category: str) -> bool:
+    """완화된 매칭 — 필수 키워드만 확인 (네이버용).
+
+    네이버는 이미 키워드로 검색해 가져온 결과라, 조합 조건 없이
+    필수 키워드 하나만 있으면 통과시킨다. 노이즈 차단은 별도로 적용.
+    """
+    kw = _config.CATEGORY_KEYWORDS.get(category)
+    if not kw:
+        return False
+    return any(m in title for m in kw["must"])
+
+
 def classify_strict(title: str):
     """어느 카테고리에 정밀 매칭되는지 반환 (없으면 None)."""
     for cat in _config.CATEGORY_KEYWORDS:
