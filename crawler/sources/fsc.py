@@ -79,6 +79,7 @@ def fetch(session):
             "source": "금융위원회", "source_type": "공식원문",
             "category": category,
             "title": title, "url": link, "date": _parse_date(pub),
+            "trust": 100,
             "official": _common.official_links(category),
         })
         matched += 1
