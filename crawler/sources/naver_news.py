@@ -1,6 +1,7 @@
 """네이버 뉴스 검색 API — 정밀 쿼리로 카테고리별 실무 뉴스만 수집.
 
 노이즈 차단 + 필수/조합 키워드 재검증 + 출처 가중치. 키 없으면 건너뜀.
+네이버는 괄호 AND/OR 미지원이라 단순 쿼리를 쓰고, 받은 뒤 정밀 필터로 거른다.
 """
 import os
 import re
@@ -36,7 +37,7 @@ def fetch(session: requests.Session) -> list[dict]:
     headers = {"X-Naver-Client-Id": cid, "X-Naver-Client-Secret": csec}
     items = []
     for category in _config.CATEGORY_KEYWORDS:
-        query = _common.build_query(category)
+        query = _common.build_naver_query(category)   # 네이버용 단순 쿼리
         try:
             resp = session.get(API, headers=headers, params={
                 "query": query, "display": 20, "sort": "date",
