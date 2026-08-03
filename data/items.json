@@ -1464,12 +1464,12 @@
     "impact": "세무팀은 개정 시행일 기준으로 내부 프로세스 업데이트를 검토하세요."
   },
   {
-    "source": "일간NTN",
+    "source": "조세일보",
     "source_type": "뉴스",
     "category": "세법",
-    "title": "'2026 세제개편안에 세무사회 건의사항 대폭 반영",
-    "url": "http://www.intn.co.kr/news/articleView.html?idxno=2052319",
-    "date": "2026-08-03",
+    "title": "\"조세 철학 부재...더 과감해야\" vs \"고가 1주택자엔 핵폭탄\" [2026 세제개...",
+    "url": "http://www.joseilbo.com/news/news_read.php?uid=573183&class=7&grp=",
+    "date": "2026-08-04",
     "trust": 80,
     "official": [
       {
@@ -1482,18 +1482,18 @@
       }
     ],
     "summary_lines": [
-      "일간NTN가 보도한 세법 분야 동향입니다.",
+      "조세일보가 보도한 세법 분야 동향입니다.",
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "법인·소득 신고 시 개정 내용 적용 여부를 사전에 확인해야 합니다."
   },
   {
-    "source": "일간NTN",
+    "source": "조세일보",
     "source_type": "뉴스",
     "category": "세법",
-    "title": "'2026 세제개편안' 한국세무사회 논평 [전문]",
-    "url": "http://www.intn.co.kr/news/articleView.html?idxno=2052318",
-    "date": "2026-08-03",
+    "title": "\"방향은 맞지만 효과는 글쎄\"… 세제개편안에 쏟아진 물음표 [2026년 세제...",
+    "url": "http://www.joseilbo.com/news/news_read.php?uid=573181&class=7&grp=",
+    "date": "2026-08-04",
     "trust": 80,
     "official": [
       {
@@ -1506,7 +1506,7 @@
       }
     ],
     "summary_lines": [
-      "일간NTN가 보도한 세법 분야 동향입니다.",
+      "조세일보가 보도한 세법 분야 동향입니다.",
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "법인·소득 신고 시 개정 내용 적용 여부를 사전에 확인해야 합니다."
@@ -1531,6 +1531,30 @@
     ],
     "summary_lines": [
       "임팩트온가 보도한 ESG 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "공시 의무화 일정에 맞춰 내부 데이터 관리 체계를 준비해야 합니다."
+  },
+  {
+    "source": "이데일리",
+    "source_type": "뉴스",
+    "category": "ESG",
+    "title": "\"ESG 공시, 기업 면책 조항 충분…5개월 뒤 시행 빠른 것 아냐\"[만났습니...",
+    "url": "https://www.edaily.co.kr/news/newspath.asp?newsid=01859766645544040",
+    "date": "2026-08-04",
+    "trust": 60,
+    "official": [
+      {
+        "label": "한국회계기준원",
+        "url": "https://www.kasb.or.kr/"
+      },
+      {
+        "label": "금융위원회",
+        "url": "https://www.fsc.go.kr/index"
+      }
+    ],
+    "summary_lines": [
+      "이데일리가 보도한 ESG 분야 동향입니다.",
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "공시 의무화 일정에 맞춰 내부 데이터 관리 체계를 준비해야 합니다."
@@ -1584,6 +1608,150 @@
     "impact": "공급망·배출량 데이터 수집 체계를 사전에 점검하세요."
   },
   {
+    "source": "네이버뉴스",
+    "source_type": "뉴스",
+    "category": "세법",
+    "title": "[2026 세법개정안] \"서울 아파트 임대사업자, 집 팔아라\"…양도세 혜택...",
+    "url": "https://www.dailian.co.kr/news/view/1674049/?sc=Naver",
+    "date": "2026-08-04",
+    "trust": 30,
+    "official": [
+      {
+        "label": "국가법령정보센터",
+        "url": "https://www.law.go.kr/"
+      },
+      {
+        "label": "국세청",
+        "url": "https://www.nts.go.kr/"
+      }
+    ],
+    "summary_lines": [
+      "네이버뉴스가 보도한 세법 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
+  },
+  {
+    "source": "intn.co.kr",
+    "source_type": "뉴스",
+    "category": "세법",
+    "title": "2026 세법개정안 발표…초고가·비거주주택 종부세 인상, 장특공제 10억원 한도",
+    "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBVbElGdFkwaFVYWmZEalp0QTJCRWZqYjdva0NBZk15anhrbEkyNEdEMzlVMFV2c3hyMXdEbl8wZGdjLWllQk9TaXpyc1lCazlHOVJJS1Z6cmpia2w0NDlKaWlRbTBSZVBEYXc?oc=5",
+    "date": "2026-08-03",
+    "trust": 30,
+    "official": [
+      {
+        "label": "국가법령정보센터",
+        "url": "https://www.law.go.kr/"
+      },
+      {
+        "label": "국세청",
+        "url": "https://www.nts.go.kr/"
+      }
+    ],
+    "summary_lines": [
+      "intn.co.kr가 보도한 세법 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "법인·소득 신고 시 개정 내용 적용 여부를 사전에 확인해야 합니다."
+  },
+  {
+    "source": "네이버뉴스",
+    "source_type": "뉴스",
+    "category": "세법",
+    "title": "[세법개정안] 종부세는 초고가 겨냥, 장특공제는 실거주 중심…다주택자...",
+    "url": "https://www.econovill.com/news/articleView.html?idxno=747011",
+    "date": "2026-08-03",
+    "trust": 30,
+    "official": [
+      {
+        "label": "국가법령정보센터",
+        "url": "https://www.law.go.kr/"
+      },
+      {
+        "label": "국세청",
+        "url": "https://www.nts.go.kr/"
+      }
+    ],
+    "summary_lines": [
+      "네이버뉴스가 보도한 세법 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
+  },
+  {
+    "source": "네이버뉴스",
+    "source_type": "뉴스",
+    "category": "세법",
+    "title": "[세법개정안] 미래 성장산업 세제지원 확대…AI·반도체 등 6대 분야 국...",
+    "url": "https://www.econovill.com/news/articleView.html?idxno=747010",
+    "date": "2026-08-03",
+    "trust": 30,
+    "official": [
+      {
+        "label": "국가법령정보센터",
+        "url": "https://www.law.go.kr/"
+      },
+      {
+        "label": "국세청",
+        "url": "https://www.nts.go.kr/"
+      }
+    ],
+    "summary_lines": [
+      "네이버뉴스가 보도한 세법 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
+  },
+  {
+    "source": "네이버뉴스",
+    "source_type": "뉴스",
+    "category": "ESG",
+    "title": "애큐온저축銀, ESG 경영 고도화… 지속가능경영보고서 2025 발간",
+    "url": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065575659526708",
+    "date": "2026-08-03",
+    "trust": 30,
+    "official": [
+      {
+        "label": "한국회계기준원",
+        "url": "https://www.kasb.or.kr/"
+      },
+      {
+        "label": "금융위원회",
+        "url": "https://www.fsc.go.kr/index"
+      }
+    ],
+    "summary_lines": [
+      "네이버뉴스가 보도한 ESG 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "지속가능성 공시 대응 로드맵에 반영해 단계별 준비가 필요합니다."
+  },
+  {
+    "source": "네이버뉴스",
+    "source_type": "뉴스",
+    "category": "내부회계",
+    "title": "[NH투자증권 ESG-G] 내부통제위원회 신설…'책무구조도' 기반 책임경영...",
+    "url": "http://www.press9.kr/news/articleView.html?idxno=80531",
+    "date": "2026-08-03",
+    "trust": 30,
+    "official": [
+      {
+        "label": "한국회계기준원",
+        "url": "https://www.kasb.or.kr/"
+      },
+      {
+        "label": "금융위원회",
+        "url": "https://www.fsc.go.kr/index"
+      }
+    ],
+    "summary_lines": [
+      "네이버뉴스가 보도한 내부회계 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "감사 대응 및 미비점 개선 계획에 본 개정 사항을 포함하세요."
+  },
+  {
     "source": "intn.co.kr",
     "source_type": "뉴스",
     "category": "세법",
@@ -1613,54 +1781,6 @@
     "category": "세법",
     "title": "[세법개정안] 청년 ISA 신설·근로장려금 확대…청년·서민 지원 세제 대...",
     "url": "https://www.econovill.com/news/articleView.html?idxno=746991",
-    "date": "2026-08-03",
-    "trust": 30,
-    "official": [
-      {
-        "label": "국가법령정보센터",
-        "url": "https://www.law.go.kr/"
-      },
-      {
-        "label": "국세청",
-        "url": "https://www.nts.go.kr/"
-      }
-    ],
-    "summary_lines": [
-      "네이버뉴스가 보도한 세법 분야 동향입니다.",
-      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
-    ],
-    "impact": "세무팀은 개정 시행일 기준으로 내부 프로세스 업데이트를 검토하세요."
-  },
-  {
-    "source": "네이버뉴스",
-    "source_type": "뉴스",
-    "category": "세법",
-    "title": "세금으로 승부 건 이재명 정부…세제개편, 부동산 넘어 '이념전쟁' 불붙...",
-    "url": "https://www.ilyoseoul.co.kr/news/articleView.html?idxno=520736",
-    "date": "2026-08-03",
-    "trust": 30,
-    "official": [
-      {
-        "label": "국가법령정보센터",
-        "url": "https://www.law.go.kr/"
-      },
-      {
-        "label": "국세청",
-        "url": "https://www.nts.go.kr/"
-      }
-    ],
-    "summary_lines": [
-      "네이버뉴스가 보도한 세법 분야 동향입니다.",
-      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
-    ],
-    "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
-  },
-  {
-    "source": "네이버뉴스",
-    "source_type": "뉴스",
-    "category": "세법",
-    "title": "[세제개편] 국내생산 세액공제 신설…반도체·AI로봇 등 공급망 지원",
-    "url": "http://www.4th.kr/news/articleView.html?idxno=2115736",
     "date": "2026-08-03",
     "trust": 30,
     "official": [
@@ -1752,36 +1872,12 @@
     "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
   },
   {
-    "source": "네이버뉴스",
-    "source_type": "뉴스",
-    "category": "ESG",
-    "title": "애큐온저축銀, ESG 경영 고도화… 지속가능경영보고서 2025 발간",
-    "url": "https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065575659526708",
-    "date": "2026-08-03",
-    "trust": 30,
-    "official": [
-      {
-        "label": "한국회계기준원",
-        "url": "https://www.kasb.or.kr/"
-      },
-      {
-        "label": "금융위원회",
-        "url": "https://www.fsc.go.kr/index"
-      }
-    ],
-    "summary_lines": [
-      "네이버뉴스가 보도한 ESG 분야 동향입니다.",
-      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
-    ],
-    "impact": "지속가능성 공시 대응 로드맵에 반영해 단계별 준비가 필요합니다."
-  },
-  {
-    "source": "네이버뉴스",
+    "source": "에너지데일리",
     "source_type": "뉴스",
     "category": "내부회계",
-    "title": "[NH투자증권 ESG-G] 내부통제위원회 신설…'책무구조도' 기반 책임경영...",
-    "url": "http://www.press9.kr/news/articleView.html?idxno=80531",
-    "date": "2026-08-03",
+    "title": "광해광업공단-기술보증기금, 감사업무 협력 강화…내부통제·AI 감사역량 고도화",
+    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFAxcVJXdFRsdmVJSlZPTDh2X1dCSjV2aWs0OVl0eGo2YUhGMnUycDNJdUhlTnlxWDRVMS1kaGVpQVdQYy1udnF5TF92aXRKazNacmlRbjRmdjZGSllydXA5MkF4VXkzeDFGcjc5dVdzVXlFUQ?oc=5",
+    "date": "2026-08-02",
     "trust": 30,
     "official": [
       {
@@ -1794,10 +1890,10 @@
       }
     ],
     "summary_lines": [
-      "네이버뉴스가 보도한 내부회계 분야 동향입니다.",
+      "에너지데일리가 보도한 내부회계 분야 동향입니다.",
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
-    "impact": "감사 대응 및 미비점 개선 계획에 본 개정 사항을 포함하세요."
+    "impact": "내부통제 문서화·평가 일정에 영향이 있는지 점검이 필요합니다."
   },
   {
     "source": "국토일보",
@@ -1822,30 +1918,6 @@
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "내부회계관리제도 운영·평가 절차에 반영이 필요합니다."
-  },
-  {
-    "source": "에너지데일리",
-    "source_type": "뉴스",
-    "category": "내부회계",
-    "title": "광해광업공단-기술보증기금, 감사업무 협력 강화…내부통제·AI 감사역량 고도화",
-    "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFAxcVJXdFRsdmVJSlZPTDh2X1dCSjV2aWs0OVl0eGo2YUhGMnUycDNJdUhlTnlxWDRVMS1kaGVpQVdQYy1udnF5TF92aXRKazNacmlRbjRmdjZGSllydXA5MkF4VXkzeDFGcjc5dVdzVXlFUQ?oc=5",
-    "date": "2026-08-02",
-    "trust": 30,
-    "official": [
-      {
-        "label": "한국회계기준원",
-        "url": "https://www.kasb.or.kr/"
-      },
-      {
-        "label": "금융위원회",
-        "url": "https://www.fsc.go.kr/index"
-      }
-    ],
-    "summary_lines": [
-      "에너지데일리가 보도한 내부회계 분야 동향입니다.",
-      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
-    ],
-    "impact": "내부통제 문서화·평가 일정에 영향이 있는지 점검이 필요합니다."
   },
   {
     "source": "데일리안",
@@ -1896,7 +1968,7 @@
     "impact": "감사 대응 및 미비점 개선 계획에 본 개정 사항을 포함하세요."
   },
   {
-    "source": "cstimes.com",
+    "source": "컨슈머타임스",
     "source_type": "뉴스",
     "category": "내부회계",
     "title": "광해광업공단, 기보와 감사업무협약 체결…\"내부통제 강화·청렴도 제고\"",
@@ -1914,7 +1986,7 @@
       }
     ],
     "summary_lines": [
-      "cstimes.com가 보도한 내부회계 분야 동향입니다.",
+      "컨슈머타임스가 보도한 내부회계 분야 동향입니다.",
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "내부통제 문서화·평가 일정에 영향이 있는지 점검이 필요합니다."
@@ -1966,30 +2038,6 @@
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "내부통제 문서화·평가 일정에 영향이 있는지 점검이 필요합니다."
-  },
-  {
-    "source": "에이블뉴스",
-    "source_type": "뉴스",
-    "category": "세법",
-    "title": "세법 개정된 조합출자금과 조합예탁금 제도",
-    "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1jZ3I0dGZHLU1HbG5SOE5zZllyZlVpOEloTDFmWWZ1Y19UMHpjUEZWdGxmUDczdTZIaFN0NXhsY1U0MXliZnk1dTFYeU9UYlBUb2daVFlXWkgxMGZwbEpUWGNDRmF0ZlRlM0FQamRR0gFyQVVfeXFMT1k5WldRbjNVaFJ0UnpFcm9rMGpaT2dvRndpTjliaU5LcGpjaWc1Yk55dy1OWkFOTTl4RG5vTTJ3Q0JNZlBEeDNWYWxMMnlFYXNVVTVoNy1neHhqUHFSeFhNck9WeXpXNTd3cDQtMkNMNVd3?oc=5",
-    "date": "2026-07-31",
-    "trust": 30,
-    "official": [
-      {
-        "label": "국가법령정보센터",
-        "url": "https://www.law.go.kr/"
-      },
-      {
-        "label": "국세청",
-        "url": "https://www.nts.go.kr/"
-      }
-    ],
-    "summary_lines": [
-      "에이블뉴스가 보도한 세법 분야 동향입니다.",
-      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
-    ],
-    "impact": "세무팀은 개정 시행일 기준으로 내부 프로세스 업데이트를 검토하세요."
   },
   {
     "source": "메트로신문",
@@ -2064,30 +2112,6 @@
     "impact": "내부회계관리제도 운영·평가 절차에 반영이 필요합니다."
   },
   {
-    "source": "뉴스로드",
-    "source_type": "뉴스",
-    "category": "내부회계",
-    "title": "기보, 광해광업공단과 ESG 감사역량·내부통제 시너지 낸다",
-    "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBENVg3TFQ1ZnA1UGVuaWx5d3BXMVluV0hjbzd5TWN0aVlIN0MtdjZ0RXFnaUx3VVFtcmhHQ0g4MjhKbmthVHhRQVY1RWpqRXdzYnllSlA5THl1T1Uwbi02LWYxVi1YU2pTWk9r0gFvQVVfeXFMUFYzLW00d3VVS21OMzBKT015ZGNOSXRQYjRFZVhWdWE0NUp0R2pWbTVCUHVhSVY1TzhOdExyZGRMZ1BRWk9qZHdNRktaV3FCemxBX19CWkJUN1k5Y2doeThma2FhMF9VR3lUbFdFUjhB?oc=5",
-    "date": "2026-07-31",
-    "trust": 30,
-    "official": [
-      {
-        "label": "한국회계기준원",
-        "url": "https://www.kasb.or.kr/"
-      },
-      {
-        "label": "금융위원회",
-        "url": "https://www.fsc.go.kr/index"
-      }
-    ],
-    "summary_lines": [
-      "뉴스로드가 보도한 내부회계 분야 동향입니다.",
-      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
-    ],
-    "impact": "내부통제 문서화·평가 일정에 영향이 있는지 점검이 필요합니다."
-  },
-  {
     "source": "뉴스드림",
     "source_type": "뉴스",
     "category": "내부회계",
@@ -2131,6 +2155,54 @@
     ],
     "summary_lines": [
       "gfr.co.kr가 보도한 내부회계 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "내부통제 문서화·평가 일정에 영향이 있는지 점검이 필요합니다."
+  },
+  {
+    "source": "에이블뉴스",
+    "source_type": "뉴스",
+    "category": "세법",
+    "title": "세법 개정된 조합출자금과 조합예탁금 제도",
+    "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1jZ3I0dGZHLU1HbG5SOE5zZllyZlVpOEloTDFmWWZ1Y19UMHpjUEZWdGxmUDczdTZIaFN0NXhsY1U0MXliZnk1dTFYeU9UYlBUb2daVFlXWkgxMGZwbEpUWGNDRmF0ZlRlM0FQamRR0gFyQVVfeXFMT1k5WldRbjNVaFJ0UnpFcm9rMGpaT2dvRndpTjliaU5LcGpjaWc1Yk55dy1OWkFOTTl4RG5vTTJ3Q0JNZlBEeDNWYWxMMnlFYXNVVTVoNy1neHhqUHFSeFhNck9WeXpXNTd3cDQtMkNMNVd3?oc=5",
+    "date": "2026-07-31",
+    "trust": 30,
+    "official": [
+      {
+        "label": "국가법령정보센터",
+        "url": "https://www.law.go.kr/"
+      },
+      {
+        "label": "국세청",
+        "url": "https://www.nts.go.kr/"
+      }
+    ],
+    "summary_lines": [
+      "에이블뉴스가 보도한 세법 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "세무팀은 개정 시행일 기준으로 내부 프로세스 업데이트를 검토하세요."
+  },
+  {
+    "source": "뉴스로드",
+    "source_type": "뉴스",
+    "category": "내부회계",
+    "title": "기보, 광해광업공단과 ESG 감사역량·내부통제 시너지 낸다",
+    "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFBENVg3TFQ1ZnA1UGVuaWx5d3BXMVluV0hjbzd5TWN0aVlIN0MtdjZ0RXFnaUx3VVFtcmhHQ0g4MjhKbmthVHhRQVY1RWpqRXdzYnllSlA5THl1T1Uwbi02LWYxVi1YU2pTWk9r0gFvQVVfeXFMUFYzLW00d3VVS21OMzBKT015ZGNOSXRQYjRFZVhWdWE0NUp0R2pWbTVCUHVhSVY1TzhOdExyZGRMZ1BRWk9qZHdNRktaV3FCemxBX19CWkJUN1k5Y2doeThma2FhMF9VR3lUbFdFUjhB?oc=5",
+    "date": "2026-07-31",
+    "trust": 30,
+    "official": [
+      {
+        "label": "한국회계기준원",
+        "url": "https://www.kasb.or.kr/"
+      },
+      {
+        "label": "금융위원회",
+        "url": "https://www.fsc.go.kr/index"
+      }
+    ],
+    "summary_lines": [
+      "뉴스로드가 보도한 내부회계 분야 동향입니다.",
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "내부통제 문서화·평가 일정에 영향이 있는지 점검이 필요합니다."
@@ -2400,30 +2472,6 @@
     "impact": "내부회계관리제도 운영·평가 절차에 반영이 필요합니다."
   },
   {
-    "source": "데일리굿뉴스",
-    "source_type": "뉴스",
-    "category": "세법",
-    "title": "해외 선교헌금도 과세?…교계, 세법 시행령 개정에 공동 대응 나선다",
-    "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBETlRBVDJEX3k2YVNFZnRsS3UxVGQwb0c3U0Q0Y3BiTVhrWURVdFJGZTc0aWFTZ2d5b1V5RlI2U1QxckRtZjI4YWR4LTgwQ0g4d1FTWGpGeGVDTXlHQ3RKRmlMNHh4MnN6WGR3bNIBcEFVX3lxTFB6cGJ2YVV3MUUxdkx4V1FwWWU0d08yR1A0RkxhWC1TTGp2cHFCMjNqWGhlQWpBeEFtLTU4X2VlbGY4SkdIZzNnalAyN21zcVNXVVgtanhwTDBqUzRva3I2VFFDWjF4LWdQYklFdnJLQnA?oc=5",
-    "date": "2026-07-24",
-    "trust": 30,
-    "official": [
-      {
-        "label": "국가법령정보센터",
-        "url": "https://www.law.go.kr/"
-      },
-      {
-        "label": "국세청",
-        "url": "https://www.nts.go.kr/"
-      }
-    ],
-    "summary_lines": [
-      "데일리굿뉴스가 보도한 세법 분야 동향입니다.",
-      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
-    ],
-    "impact": "법인·소득 신고 시 개정 내용 적용 여부를 사전에 확인해야 합니다."
-  },
-  {
     "source": "인베스트조선",
     "source_type": "뉴스",
     "category": "세법",
@@ -2446,6 +2494,30 @@
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
+  },
+  {
+    "source": "데일리굿뉴스",
+    "source_type": "뉴스",
+    "category": "세법",
+    "title": "해외 선교헌금도 과세?…교계, 세법 시행령 개정에 공동 대응 나선다",
+    "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBETlRBVDJEX3k2YVNFZnRsS3UxVGQwb0c3U0Q0Y3BiTVhrWURVdFJGZTc0aWFTZ2d5b1V5RlI2U1QxckRtZjI4YWR4LTgwQ0g4d1FTWGpGeGVDTXlHQ3RKRmlMNHh4MnN6WGR3bNIBcEFVX3lxTFB6cGJ2YVV3MUUxdkx4V1FwWWU0d08yR1A0RkxhWC1TTGp2cHFCMjNqWGhlQWpBeEFtLTU4X2VlbGY4SkdIZzNnalAyN21zcVNXVVgtanhwTDBqUzRva3I2VFFDWjF4LWdQYklFdnJLQnA?oc=5",
+    "date": "2026-07-24",
+    "trust": 30,
+    "official": [
+      {
+        "label": "국가법령정보센터",
+        "url": "https://www.law.go.kr/"
+      },
+      {
+        "label": "국세청",
+        "url": "https://www.nts.go.kr/"
+      }
+    ],
+    "summary_lines": [
+      "데일리굿뉴스가 보도한 세법 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "법인·소득 신고 시 개정 내용 적용 여부를 사전에 확인해야 합니다."
   },
   {
     "source": "서울Pn",
@@ -2688,7 +2760,7 @@
     "impact": "내부통제 문서화·평가 일정에 영향이 있는지 점검이 필요합니다."
   },
   {
-    "source": "news.einfomax.co.kr",
+    "source": "연합인포맥스",
     "source_type": "뉴스",
     "category": "ESG",
     "title": "\"ESG 공시, 홍보가 아니라 책임\"…2028년 의무화에 재계 '긴장'",
@@ -2706,7 +2778,7 @@
       }
     ],
     "summary_lines": [
-      "news.einfomax.co.kr가 보도한 ESG 분야 동향입니다.",
+      "연합인포맥스가 보도한 ESG 분야 동향입니다.",
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "공시 의무화 일정에 맞춰 내부 데이터 관리 체계를 준비해야 합니다."
@@ -2808,7 +2880,7 @@
     "impact": "공시 의무화 일정에 맞춰 내부 데이터 관리 체계를 준비해야 합니다."
   },
   {
-    "source": "프라임경제",
+    "source": "newsprime.co.kr",
     "source_type": "뉴스",
     "category": "세법",
     "title": "서울 부동산, 거래보다 버티기 위주 \"세법 개정 기다리나\"",
@@ -2826,7 +2898,7 @@
       }
     ],
     "summary_lines": [
-      "프라임경제가 보도한 세법 분야 동향입니다.",
+      "newsprime.co.kr가 보도한 세법 분야 동향입니다.",
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "세무팀은 개정 시행일 기준으로 내부 프로세스 업데이트를 검토하세요."
@@ -3067,6 +3139,30 @@
     ],
     "summary_lines": [
       "아시아경제가 보도한 세법 분야 동향입니다.",
+      "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+    ],
+    "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
+  },
+  {
+    "source": "법조신문",
+    "source_type": "뉴스",
+    "category": "세법",
+    "title": "[국회단상] 세법 개정과 이른바 ‘소소위’의 문제",
+    "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9HODlOYlBrWGIyM3lpQWQwelppNERpMGlRazA0MXg4Xzl6Q1RzTFN0cExuS2RFMFExQkdoSVlRWDhZSlM4S0xuVVo3elBKbDNQYTRaTW1hYUdPbmJ3eTFZd3Q0b2RhWHBUN0pFVmt1WQ?oc=5",
+    "date": "2026-04-13",
+    "trust": 30,
+    "official": [
+      {
+        "label": "국가법령정보센터",
+        "url": "https://www.law.go.kr/"
+      },
+      {
+        "label": "국세청",
+        "url": "https://www.nts.go.kr/"
+      }
+    ],
+    "summary_lines": [
+      "법조신문가 보도한 세법 분야 동향입니다.",
       "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
     ],
     "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
