@@ -1,0 +1,24 @@
+# 수동 관리 시행일정 (자동수집 보완용)
+#
+# 자동 수집만으로 놓치기 쉬운 확정 시행일정(법령 시행일, 제도 의무화 시점 등)을
+# 여기에 수동으로 추가하면 sources/schedules.py가 읽어 site/data.json의
+# `schedules` 배열에 병합한다.
+#
+# STATUS: Phase 0 스캐폴딩 placeholder — 항목 스키마는 Phase 4(schedules.py)에서 확정.
+# 예시 형태(잠정, SPEC.md §4 schedules 스키마를 따름):
+#
+# - id: sch_2027_icfr_consol
+#   category: icfr
+#   title: 연결 내부회계관리제도 감사 의무 적용 (자산 5천억~2조)
+#   effective_date: 2027-01-01
+#   importance: high
+#   description: 해당 규모 상장사는 연결 기준 내부회계관리제도에 대한 외부감사를 받아야 한다.
+#   source:
+#     name: 금융위원회
+#     domain: fsc.go.kr
+#     tier: 1
+#   urls:
+#     news: null
+#     official: null
+
+[]
