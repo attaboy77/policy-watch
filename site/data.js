@@ -1,5 +1,5 @@
 window.POLICY_DATA = {
-  "updated": "2026-08-21 22:15",
+  "updated": "2026-08-22 22:12",
   "items": [
     {
       "source": "법제처",
@@ -1850,6 +1850,30 @@ window.POLICY_DATA = {
       "impact": "법인·소득 신고 시 개정 내용 적용 여부를 사전에 확인해야 합니다."
     },
     {
+      "source": "한국경제",
+      "source_type": "뉴스",
+      "category": "세법",
+      "title": "2026 세제개편안, 다주택자 양도세·용도변경 뭐가 달라지나",
+      "url": "https://www.hankyung.com/article/202608214328O",
+      "date": "2026-08-22",
+      "trust": 60,
+      "official": [
+        {
+          "label": "국가법령정보센터",
+          "url": "https://www.law.go.kr/"
+        },
+        {
+          "label": "국세청",
+          "url": "https://www.nts.go.kr/"
+        }
+      ],
+      "summary_lines": [
+        "한국경제가 보도한 세법 분야 동향입니다.",
+        "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+      ],
+      "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
+    },
+    {
       "source": "파이낸셜뉴스",
       "source_type": "뉴스",
       "category": "세법",
@@ -1898,6 +1922,30 @@ window.POLICY_DATA = {
       "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
     },
     {
+      "source": "JTBC",
+      "source_type": "뉴스",
+      "category": "세법",
+      "title": "\"법 개정 없이 허가 가능\" 첫 유권해석…임신중지약 도입 급물살",
+      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9HU2dpdlNUd2FCVFFEQVVQdHFuTVJhMlpSSHlFU2FNNDgzMTVvUHdMUXpwT09YdXhuYmRRWEFsWkphYkN6TThpRW5IdFVlZVZNTG4tYw?oc=5",
+      "date": "2026-08-22",
+      "trust": 30,
+      "official": [
+        {
+          "label": "국가법령정보센터",
+          "url": "https://www.law.go.kr/"
+        },
+        {
+          "label": "국세청",
+          "url": "https://www.nts.go.kr/"
+        }
+      ],
+      "summary_lines": [
+        "JTBC가 보도한 세법 분야 동향입니다.",
+        "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+      ],
+      "impact": "법인·소득 신고 시 개정 내용 적용 여부를 사전에 확인해야 합니다."
+    },
+    {
       "source": "네이버뉴스",
       "source_type": "뉴스",
       "category": "세법",
@@ -1922,11 +1970,11 @@ window.POLICY_DATA = {
       "impact": "세무팀은 개정 시행일 기준으로 내부 프로세스 업데이트를 검토하세요."
     },
     {
-      "source": "블루밍비트",
+      "source": "TradingView",
       "source_type": "뉴스",
       "category": "K-IFRS",
       "title": "서클 CEO \"美 디지털자산 회계기준 개정, USDC '게임체인저'\"",
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9pajQ0TkFyTEFjbEl4b09DWllDa1FIMGl6dnRhcHZhZUFYQXlfbkxFa2kwZDdEVUZ5UjVJMUl2VV9RUlZCd21QMXllcDZCVlB4?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBHRWdsUDNFSE9UUU9YajVBaEo5XzJjellHSmx6ZnptekprRFFrODdhM2k1WkRzZWc4eUlRQ2FnajBWV1lWRjh2d2ZlWXF1T3lXWjU1T1pNb2l0TnRRU2hubUR3RnVSRmxjUldLLQ?oc=5",
       "date": "2026-08-21",
       "trust": 30,
       "official": [
@@ -1940,7 +1988,7 @@ window.POLICY_DATA = {
         }
       ],
       "summary_lines": [
-        "블루밍비트가 보도한 K-IFRS 분야 동향입니다.",
+        "TradingView가 보도한 K-IFRS 분야 동향입니다.",
         "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
       ],
       "impact": "감사 대응을 위해 기준서 변경 사항을 회계처리에 선반영하세요."
@@ -2040,30 +2088,6 @@ window.POLICY_DATA = {
         "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
       ],
       "impact": "공시 의무화 일정에 맞춰 내부 데이터 관리 체계를 준비해야 합니다."
-    },
-    {
-      "source": "네이버뉴스",
-      "source_type": "뉴스",
-      "category": "ESG",
-      "title": "ESG 공시 3년 유예에 안심? “지금이 공급망 데이터 준비 골든타임”",
-      "url": "https://www.hellot.net/news/article.html?no=114475",
-      "date": "2026-08-21",
-      "trust": 30,
-      "official": [
-        {
-          "label": "한국회계기준원",
-          "url": "https://www.kasb.or.kr/"
-        },
-        {
-          "label": "금융위원회",
-          "url": "https://www.fsc.go.kr/index"
-        }
-      ],
-      "summary_lines": [
-        "네이버뉴스가 보도한 ESG 분야 동향입니다.",
-        "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
-      ],
-      "impact": "지속가능성 공시 대응 로드맵에 반영해 단계별 준비가 필요합니다."
     },
     {
       "source": "MTN 머니투데이방송",
@@ -2424,6 +2448,30 @@ window.POLICY_DATA = {
         "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
       ],
       "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
+    },
+    {
+      "source": "수소신문",
+      "source_type": "뉴스",
+      "category": "ESG",
+      "title": "ESG 공시 의무화 앞두고 '양극화'…중소 제조기업 지원 관건",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5kdXpRWlJQTVRseXpxamJseDlTZ0NHOFNmRm0tYjFnMVhVcVc5RXR4SFRMUHVZZ3dLajYyX0pQMHBCWFlkS1FITkFHWmlxZlZ1eEljVWQza2Z0QjU0V2s2NXIxSF85RWtOSEdOMW9SU3XSAXRBVV95cUxPQi1BNnFqNThPQXhiQnp1SVlNTWJuYkhDMnBjTlJGYXJVX195V2hkbkpQSFpsQ1hLQlBsUTlRZHVJeE5jNElZY3NUTzhNT0pLeXl5d0F5R09rcG1INE56dE8xbnk0aXZqZFRnYkRBLXlSdjhmSQ?oc=5",
+      "date": "2026-08-13",
+      "trust": 30,
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ],
+      "summary_lines": [
+        "수소신문가 보도한 ESG 분야 동향입니다.",
+        "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+      ],
+      "impact": "공급망·배출량 데이터 수집 체계를 사전에 점검하세요."
     },
     {
       "source": "평화나무",
@@ -3314,6 +3362,30 @@ window.POLICY_DATA = {
       "impact": "세무조정·신고 실무에 반영이 필요하며, 시행일 전 관련 규정을 점검하세요."
     },
     {
+      "source": "헤럴드경제",
+      "source_type": "뉴스",
+      "category": "내부회계",
+      "title": "산안공단-지역난방공사, AI 감사기법 도입 맞손…내부통제 강화",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTFBUaHNPVkd6WWRfZWdpTDA4RnRYbGE0aWY1SmJnd0l6RDRCOTZ3Z3lYRHFZZXVXazByMlM5SV9zTDM1NkpTYTVOdkI4M3R3SHI4RWM3RVBR?oc=5",
+      "date": "2026-08-06",
+      "trust": 30,
+      "official": [
+        {
+          "label": "한국회계기준원",
+          "url": "https://www.kasb.or.kr/"
+        },
+        {
+          "label": "금융위원회",
+          "url": "https://www.fsc.go.kr/index"
+        }
+      ],
+      "summary_lines": [
+        "헤럴드경제가 보도한 내부회계 분야 동향입니다.",
+        "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
+      ],
+      "impact": "내부통제 문서화·평가 일정에 영향이 있는지 점검이 필요합니다."
+    },
+    {
       "source": "임팩트온",
       "source_type": "뉴스",
       "category": "ESG",
@@ -3336,30 +3408,6 @@ window.POLICY_DATA = {
         "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
       ],
       "impact": "공시 의무화 일정에 맞춰 내부 데이터 관리 체계를 준비해야 합니다."
-    },
-    {
-      "source": "v.daum.net",
-      "source_type": "뉴스",
-      "category": "내부회계",
-      "title": "산안공단-지역난방공사, AI 감사기법 도입 맞손…내부통제 강화",
-      "url": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE41SWxvTmZaNVJzN0pFX3ZQdlJISGRYeERqMHVNRTdZbEZiQlpIcGxUWkhBUE1jZllqeTVBMmF0MHFKbmtyaFE?oc=5",
-      "date": "2026-08-06",
-      "trust": 30,
-      "official": [
-        {
-          "label": "한국회계기준원",
-          "url": "https://www.kasb.or.kr/"
-        },
-        {
-          "label": "금융위원회",
-          "url": "https://www.fsc.go.kr/index"
-        }
-      ],
-      "summary_lines": [
-        "v.daum.net가 보도한 내부회계 분야 동향입니다.",
-        "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
-      ],
-      "impact": "내부통제 문서화·평가 일정에 영향이 있는지 점검이 필요합니다."
     },
     {
       "source": "wolyo.co.kr",
@@ -5064,30 +5112,6 @@ window.POLICY_DATA = {
         "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
       ],
       "impact": "법인·소득 신고 시 개정 내용 적용 여부를 사전에 확인해야 합니다."
-    },
-    {
-      "source": "수소신문",
-      "source_type": "뉴스",
-      "category": "ESG",
-      "title": "ESG 공시 의무화 앞두고 '양극화'…중소 제조기업 지원 관건",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5kdXpRWlJQTVRseXpxamJseDlTZ0NHOFNmRm0tYjFnMVhVcVc5RXR4SFRMUHVZZ3dLajYyX0pQMHBCWFlkS1FITkFHWmlxZlZ1eEljVWQza2Z0QjU0V2s2NXIxSF85RWtOSEdOMW9SU3XSAXRBVV95cUxPQi1BNnFqNThPQXhiQnp1SVlNTWJuYkhDMnBjTlJGYXJVX195V2hkbkpQSFpsQ1hLQlBsUTlRZHVJeE5jNElZY3NUTzhNT0pLeXl5d0F5R09rcG1INE56dE8xbnk0aXZqZFRnYkRBLXlSdjhmSQ?oc=5",
-      "date": "2026-07-14",
-      "trust": 30,
-      "official": [
-        {
-          "label": "한국회계기준원",
-          "url": "https://www.kasb.or.kr/"
-        },
-        {
-          "label": "금융위원회",
-          "url": "https://www.fsc.go.kr/index"
-        }
-      ],
-      "summary_lines": [
-        "수소신문가 보도한 ESG 분야 동향입니다.",
-        "관련 기관 공식 자료와 함께 실무 적용 사항을 검토할 필요가 있습니다."
-      ],
-      "impact": "공급망·배출량 데이터 수집 체계를 사전에 점검하세요."
     },
     {
       "source": "에너지데일리",
