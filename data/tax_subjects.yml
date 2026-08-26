@@ -1,0 +1,56 @@
+# 세법 카테고리 수집 대상 세목 (SPEC-ADDENDUM-3.md §2)
+#
+# enabled를 false로 바꾸면 해당 세목은 수집에서 제외된다.
+# 새 세목을 추가하려면 아래 형식대로 블록을 하나 더 쓰면 된다.
+# 이 파일이 없거나 파싱에 실패하면 _config.py가 "전체 세목 통과"로 동작하고
+# 경고 로그를 남긴다(조용히 0건이 되는 것보다 낫다 — ADDENDUM-3 §2-1).
+
+subjects:
+  - key: corp
+    label: 법인세
+    enabled: true
+    keywords: [법인세, 법인세법, 각사업연도소득, 법인지방소득세]
+    laws: [법인세법, 법인세법 시행령, 법인세법 시행규칙]
+
+  - key: vat
+    label: 부가가치세
+    enabled: true
+    keywords: [부가가치세, 부가세, 부가가치세법, 세금계산서, 매입세액, 영세율, 면세]
+    laws: [부가가치세법, 부가가치세법 시행령, 부가가치세법 시행규칙]
+
+  - key: wht
+    label: 원천세
+    enabled: true
+    keywords: [원천징수, 원천세, 지급명세서, 연말정산, 간이세액표]
+    laws: [소득세법, 소득세법 시행령, 소득세법 시행규칙]
+
+  - key: intl
+    label: 국제조세·이전가격
+    enabled: true
+    keywords: [국제조세, 이전가격, 정상가격, 과소자본, 글로벌최저한세, 필라2, BEPS, 조세조약]
+    laws: [국제조세조정에 관한 법률, 국제조세조정에 관한 법률 시행령, 국제조세조정에 관한 법률 시행규칙]
+
+  - key: stt
+    label: 조세특례제한법
+    enabled: true
+    keywords: [조세특례제한법, 조특법, 세액공제, 통합투자세액공제, 연구인력개발비, R&D 세액공제]
+    laws: [조세특례제한법, 조세특례제한법 시행령, 조세특례제한법 시행규칙]
+
+  - key: local
+    label: 지방세
+    enabled: true
+    keywords: [지방세, 취득세, 재산세, 지방소득세, 주민세, 지방세특례제한법]
+    laws: [지방세법, 지방세법 시행령, 지방세특례제한법]
+
+  # 필요 시 아래 주석을 해제해 사용
+  # - key: excise
+  #   label: 개별소비세
+  #   enabled: false
+  #   keywords: [개별소비세]
+  #   laws: [개별소비세법]
+
+features:
+  # MVP에서는 false. 안정화 후 true로 전환하면 수집이 시작된다.
+  collect_rulings: false      # 국세청 예규·유권해석
+  collect_precedents: false   # 판례
+  collect_tribunal: false     # 조세심판원 심판례

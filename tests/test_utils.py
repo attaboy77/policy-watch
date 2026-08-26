@@ -18,7 +18,12 @@ from sources._utils import (
     recency_score,
     final_score,
     make_id,
+    make_id_exact,
     dedupe,
+    compute_stage,
+    normalize_news_item,
+    finalize_item,
+    ITEM_FIELDS,
 )
 from sources._config import CATEGORIES, NOISE_KEYWORDS
 
@@ -199,6 +204,18 @@ class TestDedupe:
         b = make_id("https://law.go.kr/path")
         assert a == b
 
+    def test_make_id_exact_keeps_query_string(self):
+        # law.go.kr?lsiSeq=처럼 쿼리 자체가 식별자인 URL은 make_id()로 뭉개진다 —
+        # make_id_exact()는 그러지 않아야 한다(실측 버그: law_api.py 18건 → 1건으로 뭉개짐).
+        a = make_id_exact("https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=1")
+        b = make_id_exact("https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=2")
+        assert a != b
+
+    def test_make_id_exact_is_case_insensitive_and_trims(self):
+        a = make_id_exact("  HTTPS://LAW.GO.KR/PATH?X=1  ")
+        b = make_id_exact("https://law.go.kr/path?x=1")
+        assert a == b
+
     def test_dedupe_removes_exact_id_duplicates_keeps_higher_score(self):
         items = [
             {"id": "dup1", "title": "법인세법 개정", "final_score": 50.0},
@@ -237,6 +254,120 @@ class TestDedupe:
 
     def test_dedupe_empty_input(self):
         assert dedupe([]) == []
+
+
+# ── stage 판정 (ADDENDUM-2 §2-2) ────────────────────────────────────────────
+class TestComputeStage:
+    @pytest.mark.parametrize("doc_type,expected", [
+        ("공개초안", "의견수렴"),
+        ("검토의견", "의견수렴"),
+        ("제·개정", "확정"),
+        ("적용지침", "확정"),
+        ("모범규준", "확정"),
+        ("감사·검토기준", "확정"),
+        ("FAQ", "참고"),
+        ("해설·교육자료", "참고"),
+        ("기사", "참고"),
+    ])
+    def test_doc_type_maps_to_expected_stage(self, doc_type, expected):
+        assert compute_stage(doc_type) == expected
+
+    def test_never_returns_시행예정_or_시행중(self):
+        # ADDENDUM-2 §2-2: data.json에는 "확정"까지만 저장, 나머지는 프론트가 계산
+        for doc_type in ("제·개정", "적용지침", "공개초안", "FAQ", "기사"):
+            assert compute_stage(doc_type) not in ("시행예정", "시행중")
+
+
+# ── 뉴스(L3) raw item 정규화 ─────────────────────────────────────────────────
+class TestNormalizeNewsItem:
+    def _raw(self, **overrides):
+        base = {
+            "id": "newsid1",
+            "category": "tax",
+            "title": "법인세법 개정안 국회 통과",
+            "url": "https://example.com/a",
+            "published": date(2026, 8, 20),
+            "source_name": "한국경제",
+            "source_domain": "hankyung.com",
+            "trust_tier": 4,
+            "trust_score": 50,
+            "keyword_score": 30,
+            "matched_keywords": ["법인세법"],
+            "is_noise": False,
+        }
+        base.update(overrides)
+        return base
+
+    def test_produces_nested_source_dict(self):
+        out = normalize_news_item(self._raw())
+        assert out["source"] == {"name": "한국경제", "domain": "hankyung.com", "tier": 4, "type": "news"}
+
+    def test_urls_news_populated_official_null(self):
+        out = normalize_news_item(self._raw())
+        assert out["urls"] == {"news": "https://example.com/a", "official": None}
+
+    def test_published_at_is_iso_string(self):
+        out = normalize_news_item(self._raw())
+        assert out["published_at"] == "2026-08-20"
+
+    def test_published_none_when_missing(self):
+        out = normalize_news_item(self._raw(published=None))
+        assert out["published_at"] is None
+
+    def test_effective_date_always_none(self):
+        assert normalize_news_item(self._raw())["effective_date"] is None
+
+    def test_layer_is_l3(self):
+        assert normalize_news_item(self._raw())["layer"] == "L3"
+
+    def test_final_score_is_computed(self):
+        out = normalize_news_item(self._raw())
+        assert isinstance(out["final_score"], float)
+        assert out["final_score"] > 0
+
+    def test_law_meta_and_attachments_null(self):
+        out = normalize_news_item(self._raw())
+        assert out["law_meta"] is None
+        assert out["attachments"] is None
+
+
+# ── 최종 스키마 필드 화이트리스트 ────────────────────────────────────────────
+class TestFinalizeItem:
+    def _item(self, **overrides):
+        base = {
+            "id": "x1", "category": "tax", "doc_type": "제·개정", "title": "제목",
+            "summary": [], "impact": None, "published_at": "2026-08-20",
+            "collected_at": "2026-08-26T10:00:00+09:00", "effective_date": None,
+            "source": {"name": "국세청", "domain": "nts.go.kr", "tier": 1, "type": "official"},
+            "trust_score": 100, "keyword_score": 0, "final_score": 55.0,
+            "matched_keywords": [], "urls": {"news": None, "official": None},
+            "law_meta": None, "attachments": None,
+            "layer": "L1", "is_noise": False, "_body": "내부용 스크래치 필드",
+        }
+        base.update(overrides)
+        return base
+
+    def test_strips_internal_fields(self):
+        out = finalize_item(self._item())
+        assert "layer" not in out
+        assert "is_noise" not in out
+        assert "_body" not in out
+
+    def test_keeps_only_whitelisted_fields(self):
+        out = finalize_item(self._item())
+        assert set(out.keys()) == set(ITEM_FIELDS)
+
+    def test_computes_stage_field(self):
+        out = finalize_item(self._item(doc_type="공개초안"))
+        assert out["stage"] == "의견수렴"
+
+    def test_published_at_falls_back_to_collected_at_date(self):
+        out = finalize_item(self._item(published_at=None))
+        assert out["published_at"] == "2026-08-26"
+
+    def test_published_at_kept_when_present(self):
+        out = finalize_item(self._item(published_at="2025-01-01"))
+        assert out["published_at"] == "2025-01-01"
 
 
 if __name__ == "__main__":

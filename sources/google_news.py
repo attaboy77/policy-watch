@@ -17,7 +17,7 @@ from ._utils import (
     google_news_rss_url,
     keyword_score,
     matched_keywords,
-    is_noise,
+    is_noise_l3,
     make_id,
     trust_of,
 )
@@ -64,7 +64,7 @@ def fetch_category(cat_key: str, days: int = COLLECT_WINDOW_DAYS, *,
             continue
         source_hint = _entry_source_hint(entry)
         tier, trust_score, source_name = trust_of(source_hint)
-        noise = is_noise(title, tier=tier)
+        noise = is_noise_l3(title, tier=tier, category=cat_key)
         items.append({
             "id": make_id(link),
             "category": cat_key,
