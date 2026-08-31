@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-"""한국회계기준원(kasb.or.kr) 수집기 — A1(소식) / A3(질의회신요약) / C(주요일정).
-(A2는 아래 참고, fetch()에서 제외)
+"""한국회계기준원(kasb.or.kr) 수집기 — A1(소식) / A3(질의회신요약) / C(주요일정) /
+D(제개정현황). (A2는 아래 참고, fetch()에서 제외)
 
 docs/SOURCE_PROBE.md §A 조사 결과에 기반한다.
 
@@ -10,14 +10,20 @@ docs/SOURCE_PROBE.md §A 조사 결과에 기반한다.
 - 상세 페이지(comm010View.do?seq=)는 본문이 HTML에 그대로 노출되므로 시행일/기한
   텍스트를 `_utils.extract_effective_date()`로 시도한다(A3는 성격상 시도하지 않음).
 - 첨부파일 다운로드 링크는 `javascript:fileDownload(...)` 형태라 목록 HTML만으로는
-  실제 URL을 구성할 수 없다. attachments는 채우지 않는다(사용자 지시 2026-08-26 —
-  추적하지 않기로 함. FSS와 달리 평문 href가 아니라서 추적하려면 별도 JS 분석이 필요).
+  실제 URL을 구성할 수 없다. A1/A3/C는 attachments를 채우지 않는다(사용자 지시
+  2026-08-26 — 추적하지 않기로 함. FSS와 달리 평문 href가 아니라서 추적하려면
+  별도 JS 분석이 필요). D(제개정현황)는 파일명만이라도 넘긴다 — `fetch_revisions()` 참고.
 - A2(기준서 목록)는 실측 결과 (1) 날짜 없는 정적 카탈로그이고 (2) 애초에 K-IFRS가
   아니라 "일반기업회계기준"이라 fetch()에서 뺐다 — `fetch_standards()` 함수 docstring 참고.
 - C(calListA.do, "회계기준 주요일정")는 위원회 회의·세미나 등을 진행일자 기준으로
   나열하는 캘린더 게시판(2026-08-31 사용자 지시로 추가). 2019년부터 누적된
   ~1,100건짜리 아카이브라 서버 사이드 날짜필터(`s_date_start`/`s_date_end`) 없이
   훑으면 안 된다 — `fetch_schedule()` 참고.
+- D(List2006.do, "회계기준연혁 > 제개정현황")는 K-IFRS/일반기업회계기준 등 기준서
+  제·개정 이력과 **시행일이 직접 실려 있는** 표(2026-08-31 사용자 지시로 추가).
+  연도/적용기준 드롭다운은 전부 클라이언트 사이드 JS(`applyFilters()`)로 행을
+  숨기는 방식이라 서버는 항상 전체 73건(2026-08-31 기준)을 한 번에 내려준다 —
+  페이지네이션도 없다(실측 확인). `fetch_revisions()` 참고.
 """
 from __future__ import annotations
 
@@ -27,7 +33,7 @@ from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
 
-from .. import _http
+from .. import _gap_log, _http
 from .._config import COLLECT_WINDOW_DAYS
 from .._utils import (
     classify,
@@ -53,6 +59,11 @@ STANDARD_LIST_URLS = [f"{BASE}/front/board/List300{n}.do" for n in range(3, 9)] 
 # 영향이 없다. 상세 페이지 액션도 calViewA.do로 페어를 맞춘다.
 CALENDAR_LIST_URL = f"{BASE}/front/board/calListA.do"
 CALENDAR_VIEW_URL = f"{BASE}/front/board/calViewA.do"
+# D: 회계기준연혁 > 제개정현황(2026-08-31 사용자 지시로 추가). 실측 확인: 연도/
+# 적용기준 드롭다운은 전부 클라이언트 JS(`applyFilters()`, 서버 요청 없이
+# `<tr>`을 style="display:none"으로 숨기는 방식)이므로 쿼리 파라미터 없이 그냥
+# GET 한 번이면 전체 행(73건, 2026-08-31 기준)이 다 온다 — 페이지네이션 없음.
+REVISION_LIST_URL = f"{BASE}/front/board/List2006.do"
 
 SLEEP_BETWEEN_REQUESTS = 1.0  # SPEC §4-6: 공식 사이트는 뉴스보다 여유 있게
 _KST = timezone(timedelta(hours=9))
@@ -76,6 +87,12 @@ _CALENDAR_CATEGORY_MAP = {
 }
 CALENDAR_FORWARD_DAYS = 90  # 과거뿐 아니라 예정된 회의도 보여준다(조기 경보 가치, ADDENDUM-6 §3 근거와 동일한 논리)
 
+# List2006.do "적용기준" 열 텍스트. 이 값과 정확히 일치하는 행만 수집한다
+# (일반기업회계기준·특수분야회계기준 등은 제외 — 사용자 지시: "우리는 K-IFRS 적용 대상").
+_REVISION_APPLICABLE_STANDARD = "한국채택국제회계기준"
+# "2025년  11월  21일"(공백 불규칙)·"2027년 01월 01일" 둘 다 처리.
+_KOREAN_DATE_RE = re.compile(r"(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일")
+
 
 def probe() -> dict:
     """A1/A3 목록 페이지에 실제로 접근해 상태를 확인한다(개발용 진단 함수)."""
@@ -91,13 +108,19 @@ def _now_kst_iso() -> str:
     return datetime.now(_KST).isoformat(timespec="seconds")
 
 
-def _build_item(*, category: str, title: str, url: str, published_at: str | None,
+def _build_item(*, category: str, title: str, url: str | None, published_at: str | None,
                  doc_type: str, effective_date: str | None, tier: int, trust_score: int,
-                 source_name: str, is_meeting_schedule: bool = False) -> dict:
+                 source_name: str, is_meeting_schedule: bool = False,
+                 id_source: str | None = None, attachments: list[dict] | None = None) -> dict:
     kw = keyword_score(title, category) if category in ("kifrs", "esg") else 0
     rec = recency_score(_parse_iso_date(published_at)) if published_at else 0
     return {
-        "id": make_id_exact(url),  # comm010View.do?seq=/앵커(#seq)처럼 쿼리·프래그먼트가 식별자라 make_id()는 못 씀
+        # comm010View.do?seq=/앵커(#seq)처럼 쿼리·프래그먼트가 식별자라 make_id()는 못 씀.
+        # id_source가 오면 그걸로 id를 만든다 — List2006.do(제개정현황)는 서로 다른
+        # 여러 행이 같은 보도자료 URL(seq)을 공유하는 걸 실측 확인해서, url만으로
+        # id를 만들면 dedupe()에서 서로 다른 기준서 개정 항목이 하나로 뭉개진다
+        # (fetch_revisions() 참고).
+        "id": make_id_exact(id_source if id_source is not None else (url or "")),
         "category": category,
         "doc_type": doc_type,
         "title": title,
@@ -113,7 +136,10 @@ def _build_item(*, category: str, title: str, url: str, published_at: str | None
         "matched_keywords": matched_keywords(title, category) if category in ("kifrs", "esg") else [],
         "urls": {"news": None, "official": url},
         "law_meta": None,
-        "attachments": None,  # TODO: fileDownload() JS 엔드포인트 특정 필요(위 모듈 docstring 참고)
+        # TODO: A1/A3/C는 fileDownload() JS 엔드포인트 특정 필요해 늘 None이었으나
+        # List2006.do(제개정현황)는 파일명만이라도 넘겨준다(실제 다운로드 URL은
+        # 여전히 못 만듦 — url=None으로 채움, fetch_revisions() 참고).
+        "attachments": attachments,
         "layer": "L1",        # SPEC-ADDENDUM.md §1: L1은 노이즈 필터 면제, 상한 미적용
         "is_noise": False,
         # 2026-08-31 사용자 지시: effective_date가 "시행일"이 아니라 위원회
@@ -284,6 +310,97 @@ def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
     return items
 
 
+def _parse_korean_date(text: str) -> str | None:
+    """"2025년  11월  21일" 같은 표기를 "2025-11-21"로. 못 찾으면 None."""
+    m = _KOREAN_DATE_RE.search(text or "")
+    if not m:
+        return None
+    y, mo, d = (int(g) for g in m.groups())
+    return f"{y:04d}-{mo:02d}-{d:02d}"
+
+
+def fetch_revisions() -> list[dict]:
+    """D: 회계기준연혁 > 제개정현황(List2006.do, 2026-08-31 사용자 지시로 추가).
+
+    "적용기준" 열이 정확히 "한국채택국제회계기준"인 행만 수집한다(일반기업회계기준
+    등은 제외 — 사용자 지시). 제목은 "{의결연도}년 {제개정명} (관련기준서)" 형태로
+    합친다(관련기준서가 제개정명과 완전히 같으면 괄호는 생략).
+
+    **의결연도를 반드시 앞에 붙인다** — 처음엔 "제개정명 (관련기준서)"만
+    썼다가 실측에서 심각한 문제를 발견했다: K-IFRS 제1117호 보험계약은
+    2018/2021/2025년에 각각 별개로 제·개정됐는데(시행일 2021-01-01·
+    2023-01-01·2025-12-31, 전부 다름) 세 행 모두 "제1117호 보험계약"이라는
+    **똑같은 제목**이 나온다(관련기준서 열도 제개정명과 동일해서 괄호를 안
+    붙이면 구분이 안 됨). `_utils.dedupe()`는 제목 완전일치도 그룹 키로 쓰므로
+    의결연도 없이는 세 건 중 두 건이 조용히 사라진다 — 실측으로 확인 후 수정.
+
+    effective_date(시행일)가 이 소스의 핵심 값이다 — 못 뽑으면(실측상 거의
+    안 그렇지만) `_gap_log`에 기록해 수동 검토 대상으로 남긴다. 과거/미래 구분
+    없이 채운다 — `build_schedules()`가 effective_date 있는 항목을 전부
+    schedules[]로 만들고 상태(status)로 지난 일정과 예정 일정을 이미 구분하므로,
+    여기서 미래 항목만 따로 골라낼 필요가 없다(calListA.do의 회의 일정과 달리
+    이 소스의 effective_date는 처음부터 "진짜 시행일"이라 `is_meeting_schedule`을
+    세우지 않는다 — 캘린더에서 꽉 찬 점=시행일로 표시됨).
+
+    id는 "보도자료" 링크(seq)만으로 만들지 않는다 — 실측 확인 결과 서로 다른
+    여러 제·개정 항목이 같은 seq(같은 보도자료 게시물)를 공유해서, url 기반
+    id를 쓰면 dedupe()에서 서로 다른 기준서 개정이 하나로 뭉개진다. 대신
+    제개정명+의결일+시행일 원문 텍스트로 id를 만든다.
+
+    첨부파일은 `javascript:fileDownload(...)`라 실제 다운로드 URL은 여전히 못
+    만들지만(다른 kasb.py 게시판과 같은 한계), 파일명만은 목록 HTML의 <span>
+    에서 바로 뽑을 수 있어 attachments에 name만 채우고 url=None으로 둔다.
+    """
+    resp = _http.get(REVISION_LIST_URL)
+    soup = BeautifulSoup(resp.text, "html.parser")
+    tier, trust_score, source_name = trust_of(REVISION_LIST_URL)
+
+    items: list[dict] = []
+    for row in soup.select("tr[name='rowItem']"):
+        cells = row.find_all("td")
+        if len(cells) < 9:
+            continue
+        standard = cells[2].get_text(strip=True)
+        if standard != _REVISION_APPLICABLE_STANDARD:
+            continue  # 일반기업회계기준 등 K-IFRS가 아니면 제외(사용자 지시)
+
+        name = cells[3].get_text(strip=True)
+        if not name:
+            continue
+        dec_year = cells[0].get_text(strip=True)  # 의결연도 — 제목 유일성 확보용(위 docstring 참고)
+        related = ", ".join(cells[6].stripped_strings)
+        base = f"{name} ({related})" if related and related != name else name
+        title = f"{dec_year}년 {base}" if dec_year else base
+
+        decided_raw = cells[4].get_text(strip=True)
+        effective_raw = cells[5].get_text(strip=True)
+        published_at = _parse_korean_date(decided_raw)
+        effective_date = _parse_korean_date(effective_raw)
+        if not effective_date:
+            _gap_log.record(source="한국회계기준원(제개정현황)", category="kifrs",
+                             title=title, url=REVISION_LIST_URL,
+                             note=f"시행일 텍스트 파싱 실패(원문: {effective_raw!r}) — 수동 확인 필요")
+
+        link = cells[7].find("a")
+        url = link.get("href") if link and link.get("href") else None
+
+        attachments = [
+            {"name": span.get_text(strip=True), "url": None}
+            for span in cells[8].select("li.down_hwp a span")
+            if span.get_text(strip=True)
+        ] or None
+
+        id_source = f"list2006:{name}:{decided_raw}:{effective_raw}"
+        items.append(_build_item(
+            category="kifrs", title=title, url=url, published_at=published_at,
+            doc_type="제·개정",  # 분류(제정/개정) 둘 다 이 프로젝트의 doc_type enum에서는 "제·개정" 하나
+            effective_date=effective_date,
+            tier=tier, trust_score=trust_score, source_name=source_name,
+            id_source=id_source, attachments=attachments,
+        ))
+    return items
+
+
 def fetch_standards() -> list[dict]:
     """A2: List3003~List3008 게시판. **fetch()에서 제외됨 — 아래 참고.**
 
@@ -373,13 +490,15 @@ def fetch_qna() -> list[dict]:
 
 
 def fetch(*, fetch_detail: bool = True) -> list[dict]:
-    """A1+A3+C(주요일정). A2(fetch_standards)는 제외 — 위 fetch_standards() docstring 참고.
-    소스 한 종류가 실패해도 나머지는 계속 진행한다(SPEC §9-4).
+    """A1+A3+C(주요일정)+D(제개정현황). A2(fetch_standards)는 제외 — 위
+    fetch_standards() docstring 참고. 소스 한 종류가 실패해도 나머지는 계속
+    진행한다(SPEC §9-4).
     """
     out: list[dict] = []
     for name, fn in (("notices", lambda: fetch_notices(fetch_detail=fetch_detail)),
                       ("qna", fetch_qna),
-                      ("schedule", lambda: fetch_schedule(fetch_detail=fetch_detail))):
+                      ("schedule", lambda: fetch_schedule(fetch_detail=fetch_detail)),
+                      ("revisions", fetch_revisions)):
         try:
             out.extend(fn())
         except Exception as exc:  # noqa: BLE001
@@ -406,9 +525,16 @@ if __name__ == "__main__":
         print(f"  [{it['doc_type']}] {it['published_at']} | {it['title'][:50]}")
     print(f"  총 {len(qna)}건")
 
-    print("\n=== C: 회계기준 주요일정(calList.do) ===")
+    print("\n=== C: 회계기준 주요일정(calListA.do) ===")
     schedule = fetch_schedule(fetch_detail=True, max_detail_fetches=10)
     for it in schedule[:10]:
         eff = f" | 시행/기한: {it['effective_date']}" if it["effective_date"] else ""
         print(f"  [{it['category']:5s}] [{it['doc_type']:6s}] {it['published_at']} | {it['title'][:50]}{eff}")
     print(f"  총 {len(schedule)}건")
+
+    print("\n=== D: 제개정현황(List2006.do, K-IFRS만) ===")
+    revisions = fetch_revisions()
+    for it in revisions[:10]:
+        eff = f" | 시행일: {it['effective_date']}" if it["effective_date"] else " | 시행일 파싱 실패"
+        print(f"  [{it['doc_type']:6s}] {it['published_at']} | {it['title'][:60]}{eff}")
+    print(f"  총 {len(revisions)}건")
