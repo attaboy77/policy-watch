@@ -12,11 +12,12 @@ import sys
 
 from jsonschema import Draft202012Validator
 
-# SPEC-ADDENDUM-2.md §2-1 doc_type 14종 열거값
+# SPEC-ADDENDUM-2.md §2-1 doc_type 14종 열거값 + "논의자료"(2026-08-28 사용자
+# 피드백 — TF·실무그룹 중간 산출물, `_utils.is_discussion_material()` 참고)
 DOC_TYPES = [
     "제·개정", "공개초안", "검토의견", "적용지침", "모범규준", "질의회신", "FAQ",
     "예시서식", "감사·검토기준", "해설·교육자료", "로드맵·일정", "보도자료",
-    "결정례·판례", "기사",
+    "결정례·판례", "기사", "논의자료",
 ]
 # SPEC-ADDENDUM-2.md §2-2 stage. data.json에는 "확정"까지만 저장(시행예정/시행중은 프론트 계산)
 STAGES = ["의견수렴", "확정", "참고"]
@@ -42,6 +43,17 @@ _URLS_SCHEMA = {
     },
 }
 
+_RELATED_NEWS_ITEM_SCHEMA = {
+    "type": "object",
+    "required": ["title", "source", "url", "published_at"],
+    "properties": {
+        "title": {"type": "string"},
+        "source": {"type": "string"},
+        "url": {"type": ["string", "null"]},
+        "published_at": {"type": ["string", "null"]},
+    },
+}
+
 _ITEM_SCHEMA = {
     "type": "object",
     "required": [
@@ -49,6 +61,7 @@ _ITEM_SCHEMA = {
         "published_at", "collected_at", "effective_date", "source",
         "trust_score", "keyword_score", "final_score", "matched_keywords",
         "urls", "law_meta",
+        "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
     ],
     "properties": {
         "id": {"type": "string"},
@@ -56,7 +69,10 @@ _ITEM_SCHEMA = {
         "doc_type": {"enum": DOC_TYPES},
         "stage": {"enum": STAGES},
         "title": {"type": "string", "minLength": 1},
-        "summary": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": 3},
+        # minItems 0: 본문도 없고 카드에 없는 추가 사실(첨부파일·시행일)도 없으면
+        # 제목·출처 반복을 피하려고 빈 요약을 그대로 둔다(2026-08-28 피드백 반영,
+        # 프론트는 빈 배열이면 요약 영역 자체를 렌더링하지 않는다).
+        "summary": {"type": "array", "items": {"type": "string"}, "minItems": 0, "maxItems": 3},
         "impact": {"type": ["string", "null"]},
         "published_at": {"type": "string", "pattern": r"^\d{4}-\d{2}-\d{2}$"},
         "collected_at": {"type": "string"},
@@ -69,6 +85,15 @@ _ITEM_SCHEMA = {
         "urls": _URLS_SCHEMA,
         "law_meta": {"type": ["object", "null"]},
         "attachments": {"type": ["array", "null"]},
+        # SPEC-ADDENDUM-4.md §2: 상시 비치 자료(게시판 자체가 상설 참고자료) 플래그.
+        "is_static": {"type": "boolean"},
+        # published_at을 제목에서 못 뽑아 collected_at으로 대체했으면 true.
+        "date_estimated": {"type": "boolean"},
+        # §3: 유사 기사 병합 결과. 0/[]이면 중복 없음.
+        "duplicate_count": {"type": "integer", "minimum": 0},
+        "duplicate_sources": {"type": "array", "items": {"type": "string"}},
+        # §4: 공식 항목에 연결된 관련 L3 기사(최대 3건). 비어있으면 렌더 생략.
+        "related_news": {"type": "array", "items": _RELATED_NEWS_ITEM_SCHEMA, "maxItems": 3},
     },
 }
 

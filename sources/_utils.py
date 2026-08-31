@@ -7,15 +7,55 @@ from urllib.parse import urlparse, quote_plus
 from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       DEFAULT_TIER, DEFAULT_TRUST, DOC_TYPE_RULES,
                       INCIDENT_KEYWORDS, PROCEDURAL_KEYWORDS, TAX_INVESTIGATION_COMBO,
-                      TAX_SUBJECTS, MAX_NEWS_PER_CATEGORY, MAX_TIER4_PER_CATEGORY)
+                      TAX_SUBJECTS, MAX_NEWS_PER_CATEGORY, MAX_TIER4_PER_CATEGORY,
+                      ADMIN_NOISE_KEYWORDS, SIMILARITY_THRESHOLD, SUBJECT_SIMILARITY_THRESHOLD,
+                      SIMILARITY_DAY_WINDOW,
+                      RELATED_NEWS_MAX, RELATED_NEWS_DAY_WINDOW, RELATED_NEWS_MIN_SIMILARITY,
+                      DISCUSSION_MATERIAL_KEYWORDS, DISCUSSION_OVERRIDE_KEYWORDS,
+                      REGULATORY_SIGNALS, CORPORATE_PR_KEYWORDS, CORPORATE_PR_STRONG_SIGNALS)
+
+
+# ── 0-1) required_strong/required_weak 카테고리 지원 (SPEC-ADDENDUM-5.md §4) ─
+# icfr/kifrs는 "내부통제"/"금융위원회"처럼 일반 명사 성격의 약한 키워드가
+# required_strong 없이도 카테고리를 확정시켜버리는 문제(예: 이란 군부 기사가
+# "내부 통제"로 icfr에 걸림)가 있어, required를 강/약으로 나눴다. 약한 키워드는
+# weak_context(회계 문맥)와 함께 있을 때만 인정한다. tax/esg처럼 나누지 않은
+# 카테고리는 기존 "required" 리스트를 그대로 쓴다(하위 호환).
+def _required_list(cat_key: str) -> list[str]:
+    """점수 계산 등 '히트 개수 세기' 용도의 평평한 필수 키워드 리스트."""
+    c = CATEGORIES[cat_key]
+    if "required_strong" in c:
+        return c["required_strong"] + c.get("required_weak", [])
+    return c["required"]
+
+
+def _has_required_match(text: str, cat_key: str) -> bool:
+    """카테고리 확정 여부(통과/탈락) 판정. required_strong/required_weak로 나뉜
+    카테고리는 약한 키워드가 weak_context와 함께 있을 때만 통과시킨다.
+    """
+    c = CATEGORIES[cat_key]
+    t = _norm(text)
+    if "required_strong" in c:
+        if any(_norm(k) in t for k in c["required_strong"]):
+            return True
+        weak = c.get("required_weak", [])
+        if any(_norm(k) in t for k in weak):
+            return any(_norm(k) in t for k in c.get("weak_context", []))
+        return False
+    return any(_norm(k) in t for k in c["required"])
 
 
 # ── 1) 구글 뉴스 RSS: (A OR B) AND (C OR D) NOT(...) 완전 지원 ──────────────
 def build_google_query(cat_key: str, days: int = 30) -> str:
-    """(필수 OR ...) AND (조합 OR ...) -노이즈 -노이즈 ... when:30d"""
+    """(필수 OR ...) AND (조합 OR ...) -노이즈 -노이즈 ... when:30d
+
+    required_strong/required_weak로 나뉜 카테고리는 두 리스트를 합쳐 넓게 검색어를
+    구성한다 — weak_context 문맥 판정은 검색 단계가 아니라 결과를 받은 뒤
+    `match_loose()`(사후 필터)에서 적용한다.
+    """
     c = CATEGORIES[cat_key]
     q = lambda k: f'"{k}"' if " " in k else k
-    required = " OR ".join(q(k) for k in c["required"])
+    required = " OR ".join(q(k) for k in _required_list(cat_key))
     combine  = " OR ".join(q(k) for k in c["combine"])
     negative = " ".join(f"-{q(n)}" for n in NOISE_KEYWORDS)
     return f"({required}) AND ({combine}) {negative} when:{days}d"
@@ -38,15 +78,14 @@ def naver_news_api_url(query: str, display: int = 100, start: int = 1) -> str:
 
 # ── 3) 사후 매칭: 느슨한 매칭(필수 1개면 통과) + 점수화 ────────────────────
 def match_loose(text: str, cat_key: str) -> bool:
-    """필수 키워드가 하나라도 있으면 통과. 조합 키워드는 점수에만 반영."""
-    t = _norm(text)
-    return any(_norm(k) in t for k in CATEGORIES[cat_key]["required"])
+    """필수 키워드가 하나라도 있으면 통과(약한 키워드는 문맥 필요). 조합 키워드는 점수에만 반영."""
+    return _has_required_match(text, cat_key)
 
 
 def keyword_score(text: str, cat_key: str) -> int:
     t = _norm(text)
     c = CATEGORIES[cat_key]
-    hit_req = sum(1 for k in c["required"] if _norm(k) in t)
+    hit_req = sum(1 for k in _required_list(cat_key) if _norm(k) in t)
     hit_com = sum(1 for k in c["combine"]  if _norm(k) in t)
     # "세무조사"는 combine 목록에 없다(단독 매칭 금지, ADDENDUM-3 §5-2) — 조합 조건을
     # 만족할 때만 combine 히트 하나로 친다.
@@ -58,7 +97,7 @@ def keyword_score(text: str, cat_key: str) -> int:
 def matched_keywords(text: str, cat_key: str) -> list[str]:
     t = _norm(text)
     c = CATEGORIES[cat_key]
-    hits = [k for k in (c["required"] + c["combine"]) if _norm(k) in t]
+    hits = [k for k in (_required_list(cat_key) + c["combine"]) if _norm(k) in t]
     if cat_key == "tax" and matches_tax_investigation_combo(text):
         hits.append("세무조사")
     return hits
@@ -82,6 +121,16 @@ def is_noise(text: str, tier: int = 5) -> bool:
         return False
     t = _norm(text)
     return any(_norm(n) in t for n in NOISE_KEYWORDS)
+
+
+# ── 4-1) 조직 운영성 공지 제외 (SPEC-ADDENDUM-4.md §1) ──────────────────────
+def is_admin_noise(title: str) -> bool:
+    """기관의 인사·조직·운영 공지 판정. **계층(tier)과 무관하게 적용**한다 —
+    L1(공식기관)도 NOISE_KEYWORDS는 면제받지만 이 판정은 면제받지 않는다.
+    각 어댑터가 `classify()`/카테고리 확정 이전에 이 함수로 먼저 걸러야 한다.
+    """
+    t = _norm(title)
+    return any(_norm(k) in t for k in ADMIN_NOISE_KEYWORDS)
 
 
 # ── 5) 신뢰도 ────────────────────────────────────────────────────────────
@@ -182,6 +231,30 @@ def doc_type_of(title: str, source_tier: int = 1) -> str:
     return "기사" if source_tier >= 4 else "보도자료"
 
 
+def _norm_keep_spaces(s: str) -> str:
+    """`_norm()`과 달리 공백을 지우지 않고 한 칸으로만 정리한다.
+
+    "회의 결과"처럼 두 어절짜리 키워드는 `_norm()`으로 공백을 전부 지우면
+    "회의결과"가 되어 그 안에 override 키워드 "의결"이 우연히 부분 문자열로
+    끼어버린다(2026-08-28 실측으로 발견). `is_discussion_material()`처럼 다어절
+    구문을 다루는 곳에서만 이 정규화를 쓴다.
+    """
+    return re.sub(r"\s+", " ", (s or "")).strip().lower()
+
+
+def is_discussion_material(title: str) -> bool:
+    """TF·실무그룹 중간 산출물 판정(2026-08-28 사용자 피드백). 제목에 확정을
+    뜻하는 표현(의결·공표·제정·개정·확정)이 함께 있으면 재분류하지 않는다
+    (사용자 지시 — 이미 결론이 난 문서를 논의자료로 숨기면 안 되므로).
+    `finalize_item()`에서 doc_type을 최종 확정하기 직전에 호출해, 어댑터가
+    doc_type을 `doc_type_of()`로 판정했든 하드코딩했든 상관없이 일관되게 적용한다.
+    """
+    t = _norm_keep_spaces(title)
+    if any(_norm_keep_spaces(k) in t for k in DISCUSSION_OVERRIDE_KEYWORDS):
+        return False
+    return any(_norm_keep_spaces(k) in t for k in DISCUSSION_MATERIAL_KEYWORDS)
+
+
 # ── 8) 시행일 추출 (SPEC-ADDENDUM.md §4-4) ──────────────────────────────────
 _EFFECTIVE_DATE_PATTERNS = [
     # "2027년 1월 1일 이후 개시하는 사업연도부터" / "2026년 1월 1일부터 적용"
@@ -211,6 +284,48 @@ def extract_effective_date(text: str, promulgation_date: date | None = None) -> 
     if m and promulgation_date is not None:
         months = int(m.group(1))
         return _add_months(promulgation_date, months).isoformat()
+    return None
+
+
+# ── 8-1) 제목에서 개정·제정일 추출 (SPEC-ADDENDUM-4.md §2-1) ────────────────
+# "상시 비치 자료" 게시판(예: fss.py의 k-icfr.org 모범규준)은 published_at이
+# 없어 수집일로 대체되면 "오늘 나온 자료"처럼 보인다. 제목에 박힌 개정일을
+# 뽑아 published_at으로 쓰고, 실패하면 호출부가 date_estimated=True를 세운다.
+_TITLE_DATE_4DIGIT_RE = re.compile(r"(\d{4})\s*[.]\s*(\d{1,2})\s*[.]\s*(\d{1,2})\s*[.]?")
+_TITLE_DATE_2DIGIT_RE = re.compile(r"['‘](\d{2})\s*[.]\s*(\d{1,2})\s*[.]\s*(\d{1,2})")
+# "모범규준(2012.12)"/"新모범규준(2018.6)"처럼 일(day) 없이 연.월만 있는 경우
+# (2026-08-28 실사용 확인: 이 패턴을 못 잡아 오늘 날짜로 새서 필터를 통과했었다).
+# 위 두 패턴이 먼저 시도되고 실패했을 때만 쓰이므로 뒤에 일자가 더 있는 경우와는
+# 겹치지 않는다. 일(day)은 1일로 고정.
+_TITLE_DATE_YEAR_MONTH_RE = re.compile(r"(\d{4})\s*[.]\s*(\d{1,2})(?!\s*[.]?\s*\d)")
+
+
+def extract_title_revision_date(title: str) -> str | None:
+    """"(2021.10.1. 개정)", "('24.12.23 개정)", "Clean ver.('24.12.23)",
+    "(2012.12)"(일자 없음) 등에서 날짜를 뽑아 'YYYY-MM-DD'로 반환한다. 못 찾으면 None.
+    """
+    t = title or ""
+    m = _TITLE_DATE_4DIGIT_RE.search(t)
+    if m:
+        y, mo, d = (int(x) for x in m.groups())
+        try:
+            return date(y, mo, d).isoformat()
+        except ValueError:
+            pass
+    m = _TITLE_DATE_2DIGIT_RE.search(t)
+    if m:
+        yy, mo, d = (int(x) for x in m.groups())
+        try:
+            return date(2000 + yy, mo, d).isoformat()
+        except ValueError:
+            pass
+    m = _TITLE_DATE_YEAR_MONTH_RE.search(t)
+    if m:
+        y, mo = (int(x) for x in m.groups())
+        try:
+            return date(y, mo, 1).isoformat()
+        except ValueError:
+            pass
     return None
 
 
@@ -245,13 +360,38 @@ def is_incident_noise(text: str, tier: int = 5) -> bool:
     return not has_procedural
 
 
+# ── 규제성 판정 게이트 (SPEC-ADDENDUM-5.md §1) ──────────────────────────────
+def has_regulatory_signal(title: str) -> bool:
+    """제목에 "제도가 바뀌었다"는 신호가 있는지. L3 통과의 필요조건(§1)."""
+    t = _norm(title)
+    return any(_norm(k) in t for k in REGULATORY_SIGNALS)
+
+
+# ── 타사 홍보성 보도 제외 (SPEC-ADDENDUM-5.md §3) ───────────────────────────
+def is_corporate_pr(title: str) -> bool:
+    """타사 홍보성 보도 판정. 홍보 동사가 있으면서 강한 규제 신호(제도 변경
+    절차)가 없으면 홍보성으로 본다(§3)."""
+    t = _norm(title)
+    if not any(_norm(k) in t for k in CORPORATE_PR_KEYWORDS):
+        return False
+    return not any(_norm(k) in t for k in CORPORATE_PR_STRONG_SIGNALS)
+
+
 def is_noise_l3(text: str, tier: int, category: str) -> bool:
-    """L3(뉴스) 전용 종합 노이즈 판정. 기존 `is_noise()`(NOISE_KEYWORDS)에
-    사건·사고 필터(`is_incident_noise`)와 세목 화이트리스트(`pass_tax_filter`,
-    tax 카테고리만)를 OR로 더한다 — ADDENDUM.md §5-1의 L3 처리 순서(분류→세목
-    필터→노이즈 키워드→사건사고 필터) 중 노이즈/사건사고/세목 세 단계를 한 번에
-    반영한 것. tier==1(L1 공식기관)은 전부 면제(기존 is_noise와 동일 원칙).
+    """L3(뉴스) 전용 종합 노이즈 판정(수집 단계에서 적용). 기존 `is_noise()`
+    (NOISE_KEYWORDS)에 사건·사고 필터(`is_incident_noise`)와 세목 화이트리스트
+    (`pass_tax_filter`, tax 카테고리만)를 OR로 더한다. tier==1(L1 공식기관)은
+    전부 면제(기존 is_noise와 동일 원칙) — 단 `is_admin_noise`(조직 운영 공지)만은
+    ADDENDUM-4 §1에 따라 tier 무관하게 적용한다.
+
+    §1(규제성 게이트)·§3(홍보성 제외)는 여기 없다 — 2026-08-31 사용자 지시로
+    "§5(중복제거) → §1 → §3" 순서를 적용하기 위해 `main.build_data_json()`의
+    `dedupe_similar_news()` 다음 단계(`apply_regulatory_gate`/
+    `apply_corporate_pr_filter`)로 옮겼다. 그래야 §1/§3에 걸려 사라졌을 기사도
+    §5 중복 병합의 후보(및 duplicate_count 집계 대상)에 먼저 포함된다.
     """
+    if is_admin_noise(text):
+        return True
     if tier == 1:
         return False
     if is_noise(text, tier=tier):
@@ -417,22 +557,226 @@ def normalize_news_item(raw: dict, *, source_type: str = "news") -> dict:
     }
 
 
-# ── 14) 최종 스키마 필드 화이트리스트 (SPEC.md §4 + ADDENDUM-2 stage + ADDENDUM §4-3 attachments) ─
+# ── 14-1) 유사 기사 중복 제거 (SPEC-ADDENDUM-4.md §3, SPEC-ADDENDUM-5.md §5로 개선) ─
+# "- 스트레이트뉴스" 같은 매체명 접미사, "[로컬 게시판/...]" 같은 대괄호 접두사가
+# 어절 집합에 섞이면 유사도가 희석된다(ADDENDUM-5 §5-1 실측 확인) — 비교 전용으로
+# 제목을 정제한다. 표시용 title은 절대 건드리지 않는다.
+_MEDIA_SUFFIX_RE = re.compile(r"\s*[-–—|]\s*[^-–—|\s]{2,15}$")
+# ↑ 매체명은 보통 공백 없는 한 단어 브랜드명(스트레이트뉴스·조세일보·CPA뉴스 등)이라
+#   트레일링 세그먼트에 공백이 없을 때만 매체명 접미사로 본다. ADDENDUM-5 원안은
+#   공백까지 허용해서 "법인세법 시행령 개정안 — 접대비 한도" 같은 제목의 "접대비
+#   한도"(공백 포함, 2어절)까지 매체명으로 오인해 지워버리는 문제가 있었다(§5-4가
+#   명시적으로 "묶이면 안 된다"고 한 바로 그 케이스) — 그래서 `\s`를 제외해 고쳤다.
+_BRACKET_PREFIX_RE = re.compile(r"^\s*[\[\(【][^\]\)】]{1,30}[\]\)】]\s*")
+_QUOTE_RE = re.compile(r"[\"'‘’“”`]")
+
+
+def clean_title_for_compare(title: str) -> str:
+    """중복 비교 전용 제목 정제(ADDENDUM-5 §5-2). 표시용 title은 건드리지 않는다.
+
+    ","와 "·"는 여기서 지우지 않는다 — `extract_subject()`가 "남부발전, ..."의
+    쉼표를 주체 경계로 써야 하는데, 이 함수를 먼저 거치기 때문이다(원안 코드는
+    쉼표까지 공백으로 바꿔버려서 정작 자기 자신이 쓰는 §5-3 예시("남부발전, ...")의
+    주체 추출을 깨뜨리는 문제가 있었다 — 실제로 걸려서 고침). 어차피
+    `title_similarity()`의 어절 추출 정규식(`[가-힣A-Za-z0-9]+`)은 쉼표·가운뎃점을
+    이미 구분자로 취급하므로 지우지 않아도 유사도 계산에는 차이가 없다.
+    """
+    t = title or ""
+    t = _BRACKET_PREFIX_RE.sub("", t)
+    t = _MEDIA_SUFFIX_RE.sub("", t)
+    t = _QUOTE_RE.sub("", t)
+    t = re.sub(r"[…、]", " ", t)
+    return t.strip()
+
+
+def title_similarity(a: str, b: str) -> float:
+    """정제된 제목을 어절 단위로 쪼개 자카드 유사도 계산(ADDENDUM-5 §5-2)."""
+    ta = set(re.findall(r"[가-힣A-Za-z0-9]+", clean_title_for_compare(a)))
+    tb = set(re.findall(r"[가-힣A-Za-z0-9]+", clean_title_for_compare(b)))
+    if not ta or not tb:
+        return 0.0
+    return len(ta & tb) / len(ta | tb)
+
+
+def extract_subject(title: str) -> str | None:
+    """제목 앞부분의 주체명 추출(ADDENDUM-5 §5-3). "남부발전, ..." → "남부발전"."""
+    t = clean_title_for_compare(title)
+    m = re.match(r"^([가-힣A-Za-z0-9]{2,12})\s*[,·]", t)
+    return m.group(1) if m else None
+
+
+def _within_days(a_iso: str | None, b_iso: str | None, window: int) -> bool:
+    if not a_iso or not b_iso:
+        return False
+    try:
+        da, db = date.fromisoformat(a_iso), date.fromisoformat(b_iso)
+    except ValueError:
+        return False
+    return abs((da - db).days) <= window
+
+
+def dedupe_similar_news(items: list[dict]) -> list[dict]:
+    """L3(뉴스)끼리만 정제된 제목 유사도로 병합한다(ADDENDUM-4 §3, ADDENDUM-5 §5로
+    개선). L1/L2는 완전 일치만 중복 처리하는 기존 `dedupe()`가 이미 처리했으므로
+    건드리지 않는다.
+
+    같은 카테고리 안에서 다음 중 하나라도 만족하면 동일 사안으로 보고 병합한다
+    (ADDENDUM-5 §5-3):
+      (a) title_similarity(정제본) >= SIMILARITY_THRESHOLD(0.55) — 날짜 무관
+      (b) extract_subject()가 서로 같고 + published_at이 SIMILARITY_DAY_WINDOW일
+          이내 + title_similarity(정제본) >= SUBJECT_SIMILARITY_THRESHOLD(0.35)
+
+    final_score가 가장 높은 것만 남기고, 남은 항목에 `duplicate_count`/
+    `duplicate_sources`를 기록한다("외 N건 보도" 표시용).
+    """
+    news = [it for it in items if layer_of(it) == "L3"]
+    others = [it for it in items if layer_of(it) != "L3"]
+
+    by_cat: dict[str, list[dict]] = {}
+    for it in news:
+        by_cat.setdefault(it["category"], []).append(it)
+
+    kept: list[dict] = []
+    for cat_items in by_cat.values():
+        cat_items = sorted(cat_items, key=lambda x: -x.get("final_score", 0))
+        absorbed: set[int] = set()
+        for i, it in enumerate(cat_items):
+            if i in absorbed:
+                continue
+            sources = [it["source"]["name"]]
+            subject_i = extract_subject(it["title"])
+            for j in range(i + 1, len(cat_items)):
+                if j in absorbed:
+                    continue
+                other = cat_items[j]
+                sim = title_similarity(it["title"], other["title"])
+                is_dup = sim >= SIMILARITY_THRESHOLD  # 조건 (a)
+                if not is_dup and subject_i and subject_i == extract_subject(other["title"]):
+                    if (sim >= SUBJECT_SIMILARITY_THRESHOLD
+                            and _within_days(it.get("published_at"), other.get("published_at"), SIMILARITY_DAY_WINDOW)):
+                        is_dup = True  # 조건 (b)
+                if is_dup:
+                    absorbed.add(j)
+                    sources.append(other["source"]["name"])
+            if len(sources) > 1:
+                it["duplicate_count"] = len(sources) - 1
+                it["duplicate_sources"] = sources
+            kept.append(it)
+    return others + kept
+
+
+# ── 14-1b) §5 이후 순서로 옮긴 §1/§3 게이트 (2026-08-31 사용자 지시) ─────────
+# main.build_data_json()에서 dedupe_similar_news() 다음, apply_category_caps()
+# 이전에 호출한다. L1/L2(공식 소스)와 tier==1 뉴스는 기존 is_noise_l3와 같은
+# 원칙으로 게이트를 면제한다.
+def _l3_gate_exempt(item: dict) -> bool:
+    """§1/§3 게이트 면제 대상인지. L1/L2(공식 소스) 또는 tier==1 뉴스면 면제."""
+    return layer_of(item) != "L3" or item.get("source", {}).get("tier") == 1
+
+
+def apply_regulatory_gate(items: list[dict]) -> list[dict]:
+    """ADDENDUM-5 §1. "제도가 바뀌었다"는 신호 없는 L3 뉴스를 제외한다."""
+    return [it for it in items if _l3_gate_exempt(it) or has_regulatory_signal(it["title"])]
+
+
+def apply_corporate_pr_filter(items: list[dict]) -> list[dict]:
+    """ADDENDUM-5 §3. §1 통과분 중 타사 홍보성 보도를 제외한다."""
+    return [it for it in items if _l3_gate_exempt(it) or not is_corporate_pr(it["title"])]
+
+
+# ── 14-2) 공식 항목에 관련 뉴스 연결 (SPEC-ADDENDUM-4.md §4) ────────────────
+_ORG_NAME_STOPWORDS = {
+    "금융위원회", "국세청", "기획재정부", "한국회계기준원", "금융감독원",
+    "국가법령정보센터", "한국공인회계사회", "내부회계관리제도운영위원회",
+}
+
+
+def extract_core_phrase(title: str) -> str | None:
+    """공식 제목에서 기관명을 지우고 남는 어절 중 앞쪽 2~4어절을 "핵심 명사구"
+    후보로 삼는다(§4 "핵심 명사구 추출"). 형태소 분석 없는 실용적 근사치다.
+    """
+    words = [w for w in re.split(r"\s+", (title or "").strip()) if w and w not in _ORG_NAME_STOPWORDS]
+    if len(words) < 2:
+        return None
+    return " ".join(words[:4])
+
+
+def attach_related_news(items: list[dict]) -> list[dict]:
+    """L1/L2 공식 항목에 관련 L3 기사를 최대 `RELATED_NEWS_MAX`건 붙이고
+    (`related_news` 필드), 그렇게 붙은 L3 항목은 피드에서 중복 노출하지 않도록
+    반환 리스트에서 뺀다(§4 "부수 효과"). `finalize_item()` 이전(= `layer` 필드가
+    아직 남아있는) item 리스트를 받아야 한다.
+
+    매칭 조건: 같은 카테고리 + published_at 차이 `RELATED_NEWS_DAY_WINDOW`일 이내 +
+    (title_similarity >= `RELATED_NEWS_MIN_SIMILARITY` 또는 핵심 명사구 포함).
+    """
+    official = [it for it in items if layer_of(it) in ("L1", "L2", "L1_comprehensive")]
+    news = [it for it in items if layer_of(it) == "L3"]
+
+    used_ids: set[str] = set()
+    for off in official:
+        core = extract_core_phrase(off["title"])
+        candidates = []
+        for n in news:
+            if n["id"] in used_ids:
+                continue
+            if n["category"] != off["category"]:
+                continue
+            if not _within_days(off.get("published_at"), n.get("published_at"), RELATED_NEWS_DAY_WINDOW):
+                continue
+            sim = title_similarity(off["title"], n["title"])
+            phrase_hit = bool(core) and _norm(core) in _norm(n["title"])
+            if sim >= RELATED_NEWS_MIN_SIMILARITY or phrase_hit:
+                candidates.append(n)
+        candidates.sort(key=lambda n: -n.get("final_score", 0))
+        top = candidates[:RELATED_NEWS_MAX]
+        off["related_news"] = [
+            {
+                "title": n["title"],
+                "source": n["source"]["name"],
+                "url": n["urls"]["news"],
+                "published_at": n["published_at"],
+            }
+            for n in top
+        ]
+        used_ids.update(n["id"] for n in top)
+
+    return [it for it in items if not (layer_of(it) == "L3" and it["id"] in used_ids)]
+
+
+# ── 15) 최종 스키마 필드 화이트리스트 (SPEC.md §4 + ADDENDUM-2 stage + ADDENDUM §4-3 attachments
+#         + ADDENDUM-4 §2 is_static/date_estimated, §3 duplicate_*, §4 related_news) ──────
 # layer/is_noise/_body 등은 파이프라인 내부용이라 최종 JSON에는 안 나간다.
 ITEM_FIELDS = [
     "id", "category", "doc_type", "stage", "title", "summary", "impact",
     "published_at", "collected_at", "effective_date", "source",
     "trust_score", "keyword_score", "final_score", "matched_keywords",
     "urls", "law_meta", "attachments",
+    "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
 ]
 
 
 def finalize_item(item: dict) -> dict:
     """stage를 계산해 채우고, published_at 결측 시 collected_at 날짜로 대체하고
-    (SPEC §4 필드 규칙), 허용된 필드만 남겨 최종 스키마 모양으로 만든다.
+    (SPEC §4 필드 규칙), 신규 필드(is_static/date_estimated/duplicate_*/related_news)에
+    기본값을 채운 뒤, 허용된 필드만 남겨 최종 스키마 모양으로 만든다.
+
+    doc_type이 여기서 최종 확정된다 — `doc_type_of()`로 판정됐든 어댑터가
+    하드코딩했든(예: kasb.py fetch_qna()의 "질의회신" 고정) 상관없이, 여기서
+    한 번 더 `is_discussion_material()`을 걸어 "논의자료"로 재분류한다(2026-08-28
+    사용자 피드백 — 모든 경로에 일관되게 적용하기 위한 단일 지점).
     """
     out = {k: item.get(k) for k in ITEM_FIELDS}
-    out["stage"] = compute_stage(item["doc_type"])
+    doc_type = item.get("doc_type")
+    if is_discussion_material(item.get("title", "")):
+        doc_type = "논의자료"
+    out["doc_type"] = doc_type
+    out["stage"] = compute_stage(doc_type)
     if not out["published_at"]:
         out["published_at"] = item["collected_at"][:10]
+    out["is_static"] = bool(item.get("is_static", False))
+    out["date_estimated"] = bool(item.get("date_estimated", False))
+    out["duplicate_count"] = int(item.get("duplicate_count") or 0)
+    out["duplicate_sources"] = item.get("duplicate_sources") or []
+    out["related_news"] = item.get("related_news") or []
     return out

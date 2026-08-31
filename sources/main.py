@@ -17,7 +17,9 @@ from . import _gap_log
 from ._config import CATEGORIES, COLLECT_WINDOW_DAYS
 from ._schema import validate as validate_schema
 from ._summarize import summarize
-from ._utils import apply_category_caps, dedupe, finalize_item, normalize_news_item
+from ._utils import (apply_category_caps, apply_corporate_pr_filter,
+                     apply_regulatory_gate, attach_related_news, dedupe,
+                     dedupe_similar_news, finalize_item, normalize_news_item)
 from .schedules import build_schedules
 
 from . import google_news, naver_news
@@ -84,10 +86,35 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
     return items, sources_ok, sources_failed
 
 
+def _log_stage(stage: str, items: list[dict]) -> None:
+    """ADDENDUM-5 §7: 단계별 카테고리별 건수 로그(과다 필터링 확인용)."""
+    counts: dict[str, int] = {}
+    for it in items:
+        counts[it["category"]] = counts.get(it["category"], 0) + 1
+    parts = ", ".join(f"{k} {v}" for k, v in counts.items())
+    print(f"  [필터] {stage}: 합계 {len(items)}건 ({parts})")
+
+
 def build_data_json(items: list[dict]) -> dict:
-    """수집된 raw item 리스트 → site/data.json 전체 구조(메타 제외 조립은 main()에서)."""
+    """수집된 raw item 리스트 → site/data.json 전체 구조(메타 제외 조립은 main()에서).
+
+    필터 순서: dedupe(정확일치) → §5(유사기사 병합) → §1(규제성 게이트) →
+    §3(홍보성 제외) → 상한 적용. §1/§3을 §5 뒤로 옮긴 것은 2026-08-31
+    사용자 지시(SPEC-ADDENDUM-5.md §7 원안은 §1→§3→...→§5 순서였음) — 그래야
+    §1/§3에 걸려 사라질 기사도 §5 중복 병합의 후보에 먼저 포함된다.
+    """
     deduped = dedupe(items)
+    deduped = dedupe_similar_news(deduped)  # ADDENDUM-5 §5: L3 유사 기사 병합
+    _log_stage("§5 중복 제거 후", deduped)
+    deduped = apply_regulatory_gate(deduped)  # ADDENDUM-5 §1
+    _log_stage("§1 규제성 게이트 후", deduped)
+    deduped = apply_corporate_pr_filter(deduped)  # ADDENDUM-5 §3
+    _log_stage("§3 홍보성 제외 후", deduped)
     capped = apply_category_caps(deduped)
+    # ADDENDUM-4 §4: 공식(L1/L2) 항목에 관련 L3 기사를 연결하고, 그렇게 붙은 L3는
+    # 피드 중복 노출을 막기 위해 여기서 제외한다(layer 필드가 남아있는 동안 처리 —
+    # finalize_item()이 layer를 지우므로 그 전에 해야 함).
+    capped = attach_related_news(capped)
 
     finalized = []
     for it in capped:

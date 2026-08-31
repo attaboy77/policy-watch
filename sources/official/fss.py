@@ -24,7 +24,8 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from .. import _http, _gap_log
-from .._utils import doc_type_of, keyword_score, matched_keywords, make_id_exact, final_score, recency_score
+from .._utils import (doc_type_of, extract_title_revision_date, is_admin_noise,
+                      keyword_score, matched_keywords, make_id_exact, final_score, recency_score)
 
 FSS_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
           "Chrome/124.0.0.0 Safari/537.36 (contact: alchem1024@gmail.com, project: policy-watch)")
@@ -64,7 +65,8 @@ def _now_kst_iso() -> str:
 
 
 def _build_item(*, title: str, url: str, published_at: str | None, doc_type: str,
-                 domain: str, source_name: str, effective_date: str | None = None) -> dict:
+                 domain: str, source_name: str, effective_date: str | None = None,
+                 is_static: bool = False, date_estimated: bool = False) -> dict:
     kw = keyword_score(title, "icfr")
     rec = recency_score(_parse_iso_date(published_at)) if published_at else 0
     return {
@@ -87,6 +89,8 @@ def _build_item(*, title: str, url: str, published_at: str | None, doc_type: str
         "attachments": None,  # TODO: fileDown.do 링크는 있으나 파일명 파싱은 후속 작업
         "layer": "L1",
         "is_noise": False,
+        "is_static": is_static,
+        "date_estimated": date_estimated,
     }
 
 
@@ -146,6 +150,8 @@ def fetch_data_board(*, fetch_attachments: bool = True) -> list[dict]:
         href = title_cell.get("href", "")
         if not title or not href:
             continue
+        if is_admin_noise(title):  # ADDENDUM-4 §1
+            continue
         url = href if href.startswith("http") else f"{FSS_BASE}{href}"
         published_at = cells[3].get_text(strip=True) or None
         doc_type = doc_type_of(title, source_tier=1)
@@ -163,7 +169,14 @@ def fetch_data_board(*, fetch_attachments: bool = True) -> list[dict]:
 
 
 def fetch_kicfr_guidelines() -> list[dict]:
-    """B3: 내부회계관리제도운영위원회(k-icfr.org) 모범규준 페이지. EUC-KR 인코딩 주의."""
+    """B3: 내부회계관리제도운영위원회(k-icfr.org) 모범규준 페이지. EUC-KR 인코딩 주의.
+
+    이 게시판은 **상시 비치 자료**다(ADDENDUM-4 §2) — 신규 게시 소식이 아니라
+    현재 유효한 모범규준을 상설 비치해둔 것이라 `is_static=True`로 고정한다.
+    제목에 개정일이 박혀 있으면(예: "(2021.10.1. 개정)") 그걸 published_at으로
+    쓰고, 없으면 collected_at으로 대체하되 date_estimated=True를 세운다
+    (§2-1/§2-2 — 그렇게 안 하면 2021년 자료가 "오늘 나온 자료"로 보인다).
+    """
     resp = _http.get(B3_GUIDELINE_URL)
     resp.encoding = "euc-kr"
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -175,10 +188,16 @@ def fetch_kicfr_guidelines() -> list[dict]:
             continue
         if "모범규준" not in title and "설계" not in title and "평가" not in title:
             continue
+        if is_admin_noise(title):  # ADDENDUM-4 §1
+            continue
         url = href if href.startswith("http") else f"{KICFR_BASE}/sub/menu/{href.lstrip('./')}"
         doc_type = doc_type_of(title, source_tier=1)
-        items.append(_build_item(title=title, url=url, published_at=None, doc_type=doc_type,
-                                  domain="k-icfr.org", source_name="내부회계관리제도운영위원회"))
+        revision_date = extract_title_revision_date(title)
+        items.append(_build_item(
+            title=title, url=url, published_at=revision_date, doc_type=doc_type,
+            domain="k-icfr.org", source_name="내부회계관리제도운영위원회",
+            is_static=True, date_estimated=revision_date is None,
+        ))
     return items
 
 

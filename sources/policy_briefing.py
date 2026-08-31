@@ -32,7 +32,9 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from . import _http
-from ._utils import classify, doc_type_of, extract_effective_date, pass_tax_filter, keyword_score, matched_keywords, make_id_exact, final_score, recency_score
+from ._utils import (classify, doc_type_of, extract_effective_date, is_admin_noise,
+                     pass_tax_filter, keyword_score, matched_keywords, make_id_exact,
+                     final_score, recency_score)
 
 BASE = "https://www.korea.kr"
 LIST_URL = f"{BASE}/briefing/pressReleaseList.do"
@@ -119,6 +121,8 @@ def fetch_page(page_index: int) -> list[dict]:
 
         title = strong.get_text(strip=True)
         if not title or title in ("선택한 항목", "보도자료"):
+            continue
+        if is_admin_noise(title):  # ADDENDUM-4 §1: "금융위원회 인사보도(과장급 전보)" 등 제외
             continue
         category = classify(title)
         if category is None:

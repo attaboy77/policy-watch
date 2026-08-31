@@ -24,6 +24,11 @@ _VALID_ITEM = {
     "urls": {"news": None, "official": "https://law.go.kr/x"},
     "law_meta": None,
     "attachments": None,
+    "is_static": False,
+    "date_estimated": False,
+    "duplicate_count": 0,
+    "duplicate_sources": [],
+    "related_news": [],
 }
 
 _VALID_SCHEDULE = {

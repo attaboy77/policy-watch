@@ -1,15 +1,183 @@
-<!-- STATUS: Phase 0 스캐폴딩 placeholder — Phase 5에서 SPEC.md §7 요구사항으로 전면 구현 예정. -->
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Policy Watch</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Policy Watch</title>
+<meta name="description" content="팜한농 재경 부서용 규제 모니터링 대시보드 — K-IFRS·세법·내부회계·ESG" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <p>Policy Watch — Phase 5에서 대시보드 UI가 구현됩니다.</p>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+
+<header class="nav" id="nav">
+  <div class="nav-brand">
+    <span class="nav-word">Policy Watch</span>
+    <span class="nav-caption">팜한농 재경 규제 모니터링</span>
+  </div>
+  <nav class="nav-tabs" id="navTabs" aria-label="화면 전환">
+    <button type="button" data-view="today">오늘의 정책동향</button>
+    <button type="button" data-view="all">전체 동향</button>
+    <button type="button" data-view="calendar">시행일 캘린더</button>
+  </nav>
+  <div class="nav-updated tnum" id="navUpdated">마지막 갱신 확인 중…</div>
+</header>
+
+<!-- ADDENDUM-4 §5: 오늘의 정책동향 — 기본 진입 화면 -->
+<section class="view view-today is-active" id="viewToday">
+  <div class="today-header">
+    <span class="today-title" id="todayTitle">오늘의 정책동향 불러오는 중…</span>
+    <span class="today-counts tnum" id="todayCounts"></span>
+  </div>
+  <p class="today-notice" id="todayNotice" hidden>최근 3일간의 소식입니다</p>
+
+  <div id="todayOfficialSection">
+    <h2 class="today-section-title">공식 기관 발표</h2>
+    <div class="today-grid" id="todayOfficialGrid">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+    <button type="button" class="show-all-btn today-more" id="todayOfficialMore" hidden>전체 동향에서 더 보기</button>
+  </div>
+
+  <div id="todayNewsSection">
+    <h2 class="today-section-title">언론 보도</h2>
+    <div class="today-grid" id="todayNewsGrid">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+    <button type="button" class="show-all-btn today-more" id="todayNewsMore" hidden>전체 동향에서 더 보기</button>
+  </div>
+
+  <div class="empty-state" id="todayEmpty" hidden>
+    최근 3일간 새로 발표된 소식이 없습니다. 주말·공휴일이거나 아직 수집 전일 수 있습니다.
+    <div><button type="button" class="btn btn-outline" id="todayGoAllBtn">전체 동향 보기</button></div>
+  </div>
+</section>
+
+<!-- 시행일 캘린더 — 전체 화면 -->
+<section class="view view-calendar" id="viewCalendar">
+  <div class="cal-full-layout">
+    <div class="side-card cal-card cal-full-card">
+      <div class="cal-header">
+        <button type="button" class="cal-nav-btn" id="calFullPrev" aria-label="이전 달">‹</button>
+        <span class="cal-title tnum" id="calFullTitle">-</span>
+        <button type="button" class="cal-nav-btn" id="calFullNext" aria-label="다음 달">›</button>
+      </div>
+      <div class="cal-grid" id="calFullGrid"></div>
+    </div>
+    <div class="side-card cal-full-list-card">
+      <div class="sched-head">
+        <div class="sched-title">전체 시행 일정</div>
+        <div class="sched-sub" id="calFullSub">시행일순 전체 목록</div>
+      </div>
+      <ul class="sched-list is-expanded" id="calFullSchedList"></ul>
+    </div>
+  </div>
+</section>
+
+<main class="view layout" id="viewAll">
+  <!-- 좌측 70%: 필터 + 피드 -->
+  <div class="filter-bar">
+    <div class="filter-row" id="catChips">
+      <button type="button" class="chip is-active" data-cat="all">전체</button>
+      <button type="button" class="chip" data-cat="kifrs">K-IFRS</button>
+      <button type="button" class="chip" data-cat="tax">세법</button>
+      <button type="button" class="chip" data-cat="icfr">내부회계</button>
+      <button type="button" class="chip" data-cat="esg">ESG</button>
+
+      <details class="doctype-dd" id="doctypeDD">
+        <summary id="doctypeSummary">문서 종류: 전체</summary>
+        <div class="doctype-menu" id="doctypeMenu"></div>
+      </details>
+    </div>
+
+    <div class="filter-row">
+      <div class="date-field">
+        <label for="dateFrom">시작일</label>
+        <input type="date" id="dateFrom" />
+      </div>
+      <span aria-hidden="true">~</span>
+      <div class="date-field">
+        <label for="dateTo">종료일</label>
+        <input type="date" id="dateTo" />
+      </div>
+      <button type="button" class="btn-apply" id="applyDateBtn">조회</button>
+
+      <button type="button" class="quick-range" data-days="7">최근 7일</button>
+      <button type="button" class="quick-range" data-days="30">최근 30일</button>
+      <button type="button" class="quick-range" data-days="90">최근 90일</button>
+
+      <button type="button" class="quick-doctype" data-doctype="제·개정">제·개정만</button>
+      <button type="button" class="quick-doctype" data-doctype="질의회신">질의회신만</button>
+      <button type="button" class="quick-doctype" data-doctype="공개초안">공개초안만</button>
+      <button type="button" class="quick-doctype" data-doctype="논의자료">논의자료만</button>
+      <button type="button" class="quick-doctype" id="staticOnlyBtn">상설자료만</button>
+    </div>
+
+    <div class="filter-row between">
+      <span class="result-count" id="resultCount">총 0건</span>
+      <select class="sort-select" id="sortSelect">
+        <option value="importance">중요도순</option>
+        <option value="latest">최신순</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="feed" id="feed">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+  </div>
+
+  <!-- 우측 30%: 시행일 캘린더 (sticky) -->
+  <aside class="side-col" id="sideCol">
+    <div class="side-card cal-card">
+      <button type="button" class="cal-toggle" id="calToggle" aria-expanded="false" aria-controls="calBody">캘린더 보기</button>
+      <div class="cal-body" id="calBody">
+        <div class="cal-header">
+          <button type="button" class="cal-nav-btn" id="calPrev" aria-label="이전 달">‹</button>
+          <span class="cal-title tnum" id="calTitle">-</span>
+          <button type="button" class="cal-nav-btn" id="calNext" aria-label="다음 달">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+    </div>
+
+    <div class="side-card">
+      <div class="sched-head">
+        <div class="sched-title">시행 예정 일정</div>
+        <div class="sched-sub">당월 ~ 향후 3개월</div>
+      </div>
+      <ul class="sched-list" id="schedList"></ul>
+      <button type="button" class="show-all-btn" id="schedShowAll">전체 일정 보기</button>
+    </div>
+  </aside>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-links">
+    <span class="footer-label">주요 기관 바로가기</span>
+    <a href="https://www.kasb.or.kr" target="_blank" rel="noopener">한국회계기준원</a>
+    <a href="https://www.fsc.go.kr" target="_blank" rel="noopener">금융위원회</a>
+    <a href="https://www.fss.or.kr" target="_blank" rel="noopener">금융감독원</a>
+    <a href="https://www.nts.go.kr" target="_blank" rel="noopener">국세청</a>
+    <a href="https://www.law.go.kr" target="_blank" rel="noopener">국가법령정보센터</a>
+    <a href="https://www.moef.go.kr" target="_blank" rel="noopener">기획재정부</a>
+    <a href="https://www.kicpa.or.kr" target="_blank" rel="noopener">한국공인회계사회</a>
+    <a href="https://www.k-icfr.org" target="_blank" rel="noopener">내부회계관리제도운영위원회</a>
+  </div>
+  <p class="footer-note">
+    Policy Watch는 공개된 공식 원문과 언론 보도의 서지 정보를 수집·정리합니다.
+    요약과 실무 의견은 참고용 자동 생성 정보이며, 실제 적용은 원문과 전문가 확인이 필요합니다.
+    원문 저작권은 각 기관·매체에 있습니다.
+  </p>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

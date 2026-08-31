@@ -14,6 +14,8 @@ from sources._utils import (
     matched_keywords,
     classify,
     is_noise,
+    is_admin_noise,
+    is_noise_l3,
     trust_of,
     recency_score,
     final_score,
@@ -24,8 +26,19 @@ from sources._utils import (
     normalize_news_item,
     finalize_item,
     ITEM_FIELDS,
+    extract_title_revision_date,
+    is_discussion_material,
+    title_similarity,
+    clean_title_for_compare,
+    extract_subject,
+    dedupe_similar_news,
+    extract_core_phrase,
+    attach_related_news,
+    has_regulatory_signal,
+    is_corporate_pr,
 )
-from sources._config import CATEGORIES, NOISE_KEYWORDS
+from sources._config import (CATEGORIES, NOISE_KEYWORDS, ADMIN_NOISE_KEYWORDS,
+                             REGULATORY_SIGNALS)
 
 
 # ── 쿼리 생성 ────────────────────────────────────────────────────────────
@@ -368,6 +381,389 @@ class TestFinalizeItem:
     def test_published_at_kept_when_present(self):
         out = finalize_item(self._item(published_at="2025-01-01"))
         assert out["published_at"] == "2025-01-01"
+
+
+# ── 조직 운영성 공지 제외 (ADDENDUM-4 §1) ────────────────────────────────────
+class TestIsAdminNoise:
+    def test_hr_notice_excluded(self):
+        assert is_admin_noise("금융위원회 인사보도(과장급 전보)") is True
+
+    def test_maintenance_notice_excluded(self):
+        assert is_admin_noise("본인 인증 서비스 일시 점검 안내") is True
+
+    def test_real_meeting_result_passes(self):
+        assert is_admin_noise("회계기준위원회 제12차 회의 결과") is False
+
+    def test_industry_forum_passes(self):
+        assert is_admin_noise("ESG 공시 관련 업계 간담회 결과 발표") is False
+
+    def test_all_keywords_individually_detected(self):
+        for kw in ADMIN_NOISE_KEYWORDS:
+            assert is_admin_noise(f"{kw} 관련 공지") is True
+
+    def test_noise_l3_applies_admin_noise_even_for_tier1(self):
+        # tier==1(L1 공식기관)은 NOISE_KEYWORDS는 면제지만 admin noise는 아니다.
+        assert is_noise_l3("금융위원회 인사보도(과장급 전보)", tier=1, category="kifrs") is True
+
+
+# ── 제목에서 개정·제정일 추출 (ADDENDUM-4 §2-1) ──────────────────────────────
+class TestExtractTitleRevisionDate:
+    def test_4digit_year_with_periods(self):
+        assert extract_title_revision_date("내부회계관리제도 모범규준 전문(2021.10.1. 개정)") == "2021-10-01"
+
+    def test_2digit_year_with_quote(self):
+        assert extract_title_revision_date("평가·보고 가이드라인('24.12.23 개정)") == "2024-12-23"
+
+    def test_4digit_year_with_spaces(self):
+        assert extract_title_revision_date("설계·운영 모범규준(2023. 6. 30. 제정)") == "2023-06-30"
+
+    def test_clean_ver_without_keyword(self):
+        assert extract_title_revision_date("Clean ver.('24.12.23)") == "2024-12-23"
+
+    def test_year_month_without_day_defaults_to_1st(self):
+        # 2026-08-28 실사용 확인: 일자 없는 "(2012.12)" 형태를 놓쳐 오늘 날짜로 새면서
+        # 최근 90일 필터를 통과하는 버그가 있었다.
+        assert extract_title_revision_date("내부회계관리제도 모범규준(2012.12)") == "2012-12-01"
+
+    def test_year_month_single_digit_month(self):
+        assert extract_title_revision_date("新내부회계관리제도 모범규준(2018.6)") == "2018-06-01"
+
+    def test_no_date_returns_none(self):
+        assert extract_title_revision_date("내부회계관리제도 평가 가이드라인") is None
+
+
+# ── 유사 기사 중복 제거 (ADDENDUM-4 §3) ──────────────────────────────────────
+class TestTitleSimilarity:
+    def test_near_duplicate_headlines_are_similar(self):
+        a = "남부발전, 내부통제 고도화 '앞장'…6대 중점관리 분야 분과위 가동"
+        b = "남부발전, 내부통제 고도화 위한 '6대 중점관리 분야' 분과위 가동"
+        assert title_similarity(a, b) >= 0.65
+
+    def test_different_topics_not_similar(self):
+        a = "법인세법 시행령 개정안 입법예고 — 접대비 한도"
+        b = "법인세법 시행령 개정안 입법예고 — 감가상각 특례"
+        assert title_similarity(a, b) < 0.65
+
+    def test_empty_strings_zero_similarity(self):
+        assert title_similarity("", "아무거나") == 0.0
+
+
+class TestDedupeSimilarNews:
+    def _news(self, id_, title, score, published_at="2026-08-20", category="icfr"):
+        return {
+            "id": id_, "category": category, "title": title, "final_score": score,
+            "published_at": published_at, "source": {"name": id_}, "layer": "L3",
+        }
+
+    def test_merges_near_duplicate_l3_within_category_and_window(self):
+        items = [
+            self._news("a", "남부발전, 내부통제 고도화 '앞장'…6대 중점관리 분야 분과위 가동", 80.0),
+            self._news("b", "남부발전, 내부통제 고도화 위한 '6대 중점관리 분야' 분과위 가동", 60.0),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 1
+        assert out[0]["id"] == "a"  # final_score가 높은 쪽이 남는다
+        assert out[0]["duplicate_count"] == 1
+        assert "b" in out[0]["duplicate_sources"]
+
+    def test_does_not_merge_across_categories(self):
+        items = [
+            self._news("a", "동일한 제목의 기사입니다", 80.0, category="icfr"),
+            self._news("b", "동일한 제목의 기사입니다", 60.0, category="esg"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 2
+
+    def test_condition_a_merges_regardless_of_day_gap(self):
+        # ADDENDUM-5 §5-3 조건(a)는 유사도만 보고 날짜는 안 본다 — 20일 떨어져
+        # 있어도 유사도(0.55 이상)만 넘으면 병합된다(조건 (b)와 다른 점).
+        items = [
+            self._news("a", "남부발전, 내부통제 고도화 '앞장'…6대 중점관리 분야 분과위 가동", 80.0, published_at="2026-08-01"),
+            self._news("b", "남부발전, 내부통제 고도화 위한 '6대 중점관리 분야' 분과위 가동", 60.0, published_at="2026-08-20"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 1
+
+    def test_condition_b_requires_day_window_for_moderate_similarity(self):
+        # 같은 주체 + 유사도 0.375(0.35~0.55 사이, 조건 a는 미달) → 조건(b) 적용,
+        # 3일보다 멀면 안 묶인다.
+        items = [
+            self._news("a", "남부발전, 알파베타 감마델타 입실론", 80.0, published_at="2026-08-01"),
+            self._news("b", "남부발전, 알파베타 감마델타 제타에타 세타요타 카파람다 뮤뉴크시", 60.0, published_at="2026-08-20"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 2
+
+    def test_condition_b_merges_within_day_window_for_moderate_similarity(self):
+        items = [
+            self._news("a", "남부발전, 알파베타 감마델타 입실론", 80.0, published_at="2026-08-18"),
+            self._news("b", "남부발전, 알파베타 감마델타 제타에타 세타요타 카파람다 뮤뉴크시", 60.0, published_at="2026-08-20"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 1
+
+    def test_no_subject_and_moderate_similarity_does_not_merge(self):
+        # 주체가 없으면 조건(b) 자체가 적용 안 됨 — ESG 로드맵 예시(ADDENDUM-5 §5-4).
+        items = [
+            self._news("a", "ESG 공시 로드맵 연기", 80.0, category="esg"),
+            self._news("b", "ESG 공시 의무화 로드맵 핵심쟁점 6가지", 60.0, category="esg"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 2
+
+    def test_media_suffix_stripped_before_comparison(self):
+        items = [
+            self._news("a", "남부발전, 내부통제 고도화 위한 분과위 가동 - 스트레이트뉴스", 80.0),
+            self._news("b", "남부발전, 내부통제 고도화 위한 분과위 가동 - 에너지플랫폼뉴스", 60.0),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 1
+
+    def test_over_merge_guard_different_content_with_dash_suffix_shape(self):
+        # ADDENDUM-5 §5-4: "법인세법 시행령 개정안 — 접대비 한도" 류는 매체명이 아닌
+        # 실제 내용 차이인데, 원안 정규식(공백 허용)대로면 "접대비 한도"/"감가상각
+        # 특례"가 매체명처럼 잘려나가 오탐 병합된다 — 그러면 안 된다.
+        items = [
+            self._news("a", "법인세법 시행령 개정안 — 접대비 한도", 80.0, category="tax"),
+            self._news("b", "법인세법 시행령 개정안 — 감가상각 특례", 60.0, category="tax"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 2
+
+    def test_l1_l2_items_untouched(self):
+        items = [
+            {"id": "l1a", "category": "tax", "title": "법인세법 개정", "final_score": 90.0,
+             "published_at": "2026-08-20", "source": {"name": "국세청"}, "layer": "L1"},
+        ]
+        out = dedupe_similar_news(items)
+        assert out == items
+
+
+# ── 공식-뉴스 연결 (ADDENDUM-4 §4) ───────────────────────────────────────────
+class TestAttachRelatedNews:
+    def _official(self, title="지속가능성 공시기준 제2호 공개초안 발표", published_at="2026-08-20", category="esg"):
+        return {
+            "id": "off1", "category": category, "title": title, "final_score": 90.0,
+            "published_at": published_at, "source": {"name": "금융위원회"},
+            "urls": {"news": None, "official": "https://fsc.go.kr/x"}, "layer": "L1",
+        }
+
+    def _news(self, id_, title, published_at="2026-08-20", category="esg", score=60.0):
+        return {
+            "id": id_, "category": category, "title": title, "final_score": score,
+            "published_at": published_at, "source": {"name": "임팩트온"},
+            "urls": {"news": f"https://impacton.net/{id_}", "official": None}, "layer": "L3",
+        }
+
+    def test_links_matching_news_and_removes_it_from_feed(self):
+        off = self._official()
+        news = self._news("n1", "지속가능성 공시기준 제2호 공개초안 관련 해설")
+        out = attach_related_news([off, news])
+        assert [it["id"] for it in out] == ["off1"]  # n1은 피드에서 빠짐
+        assert len(off["related_news"]) == 1
+        assert off["related_news"][0]["title"] == news["title"]
+        assert off["related_news"][0]["source"] == "임팩트온"
+
+    def test_unrelated_news_not_linked_and_stays_in_feed(self):
+        off = self._official()
+        news = self._news("n2", "전혀 관련 없는 다른 주제의 기사")
+        out = attach_related_news([off, news])
+        assert off["related_news"] == []
+        assert "n2" in [it["id"] for it in out]
+
+    def test_max_3_related_news_sorted_by_final_score(self):
+        off = self._official()
+        candidates = [self._news(f"n{i}", "지속가능성 공시기준 제2호 공개초안 후속보도", score=float(i))
+                      for i in range(1, 6)]
+        attach_related_news([off] + candidates)
+        assert len(off["related_news"]) == 3
+        assert off["related_news"][0]["title"] == candidates[-1]["title"]  # score 5.0이 최상위
+
+    def test_different_category_not_linked(self):
+        off = self._official(category="esg")
+        news = self._news("n3", "지속가능성 공시기준 제2호 공개초안 후속", category="tax")
+        attach_related_news([off, news])
+        assert off["related_news"] == []
+
+    def test_outside_day_window_not_linked(self):
+        off = self._official(published_at="2026-08-20")
+        news = self._news("n4", "지속가능성 공시기준 제2호 공개초안 관련", published_at="2026-07-01")
+        attach_related_news([off, news])
+        assert off["related_news"] == []
+
+
+class TestExtractCorePhrase:
+    def test_strips_org_name_and_keeps_leading_words(self):
+        phrase = extract_core_phrase("금융위원회 지속가능성 공시기준 제2호 공개초안 발표")
+        assert phrase == "지속가능성 공시기준 제2호 공개초안"
+
+    def test_too_short_returns_none(self):
+        assert extract_core_phrase("금융위원회 발표") is None
+
+
+# ── required_strong/required_weak 문맥 게이팅 (SPEC-ADDENDUM-5.md §4) ───────
+class TestRequiredStrongWeakGating:
+    # icfr: "내부통제"는 회계 문맥(weak_context) 없이는 통과 못 함(§4-3)
+    def test_icfr_weak_keyword_without_context_fails(self):
+        assert match_loose("타에브의 바시즈 사령관 복귀, 모즈타바의 내부 통제 강화 포석", "icfr") is False
+
+    def test_icfr_weak_keyword_without_context_fails_corporate_pr_case(self):
+        assert match_loose("남부발전, 내부통제 고도화 위한 분과위 가동", "icfr") is False
+
+    def test_icfr_weak_keyword_with_context_passes(self):
+        assert match_loose("금융지주 내부통제 강화…감사위원회 역할 확대", "icfr") is True
+
+    def test_icfr_strong_keyword_passes_without_context(self):
+        assert match_loose("내부회계관리제도 평가·보고 지침 개정", "icfr") is True
+
+    def test_icfr_classify_drops_military_article_entirely(self):
+        # §4 효과: 이 카테고리뿐 아니라 classify() 전체에서 걸리는 카테고리가 없어야 한다.
+        assert classify("타에브의 바시즈 사령관 복귀, 모즈타바의 내부 통제 강화 포석") is None
+
+    # kifrs: "금융위원회"/"금융감독원"도 동일 원칙(§4-4)
+    def test_kifrs_weak_keyword_without_context_fails(self):
+        assert match_loose("금융위원회, 부동산 PF 대책 발표", "kifrs") is False
+
+    def test_kifrs_weak_keyword_with_context_passes(self):
+        assert match_loose("금융위원회 재무제표 공시 관련 지침 개정", "kifrs") is True
+
+    def test_kifrs_strong_keyword_passes_without_context(self):
+        assert match_loose("K-IFRS 제1116호 리스 기준 개정", "kifrs") is True
+
+    def test_keyword_score_uses_combined_strong_and_weak_list(self):
+        # required_strong 1개("회계기준원") 히트 → hit_req=1 → 최소 20점 이상.
+        score = keyword_score("회계기준원 참고자료", "kifrs")
+        assert score >= 20
+
+    def test_matched_keywords_includes_strong_hits(self):
+        hits = matched_keywords("내부회계관리제도 평가 지침", "icfr")
+        assert "내부회계관리제도" in hits
+
+    def test_google_query_still_buildable_for_split_categories(self):
+        for cat in ("kifrs", "icfr"):
+            q = build_google_query(cat)
+            assert q.startswith("(") and " AND (" in q
+
+
+# ── 논의자료(TF·실무그룹 중간 산출물) 판정 (2026-08-28 사용자 피드백) ────────
+class TestIsDiscussionMaterial:
+    def test_tf_discussion_note_detected(self):
+        assert is_discussion_material("제1118호 정착지원 TF 논의 내용(4차)") is True
+
+    def test_kickoff_meeting_variant_detected(self):
+        assert is_discussion_material("K-IFRS 제1118호 정착지원 TF 논의 내용(킥오프 미팅)") is True
+
+    def test_all_keywords_individually_detected(self):
+        for kw in ["TF", "태스크포스", "논의 내용", "회의 결과", "진행 경과",
+                   "중간 보고", "검토 경과", "워킹그룹", "실무그룹"]:
+            assert is_discussion_material(f"{kw} 관련 자료") is True
+
+    def test_no_keyword_not_discussion_material(self):
+        assert is_discussion_material("내부회계관리제도 평가·보고 지침") is False
+
+    # 사용자 지시: 의결/공표/제정/개정/확정이 함께 있으면 그대로 통과(재분류 안 함)
+    @pytest.mark.parametrize("override", ["의결", "공표", "제정", "개정", "확정"])
+    def test_override_keywords_prevent_reclassification(self, override):
+        title = f"TF 논의 내용 최종 {override}"
+        assert is_discussion_material(title) is False
+
+    def test_finalize_item_reclassifies_regardless_of_original_doc_type(self):
+        # kasb.py fetch_qna()처럼 doc_type을 "질의회신"으로 하드코딩한 경로도 잡아야 한다.
+        item = {
+            "id": "x1", "category": "kifrs", "doc_type": "질의회신",
+            "title": "제1118호 정착지원 TF 논의 내용(4차)",
+            "summary": [], "impact": None, "published_at": "2026-08-20",
+            "collected_at": "2026-08-26T10:00:00+09:00", "effective_date": None,
+            "source": {"name": "한국회계기준원", "domain": "kasb.or.kr", "tier": 1, "type": "official"},
+            "trust_score": 100, "keyword_score": 0, "final_score": 55.0,
+            "matched_keywords": [], "urls": {"news": None, "official": None},
+            "law_meta": None, "attachments": None, "layer": "L1", "is_noise": False,
+        }
+        out = finalize_item(item)
+        assert out["doc_type"] == "논의자료"
+        assert out["stage"] == "참고"
+
+    def test_finalize_item_keeps_original_when_override_present(self):
+        item = {
+            "id": "x2", "category": "kifrs", "doc_type": "질의회신",
+            "title": "제1118호 TF 논의 결과 최종 의결", "summary": [], "impact": None,
+            "published_at": "2026-08-20", "collected_at": "2026-08-26T10:00:00+09:00",
+            "effective_date": None,
+            "source": {"name": "한국회계기준원", "domain": "kasb.or.kr", "tier": 1, "type": "official"},
+            "trust_score": 100, "keyword_score": 0, "final_score": 55.0,
+            "matched_keywords": [], "urls": {"news": None, "official": None},
+            "law_meta": None, "attachments": None, "layer": "L1", "is_noise": False,
+        }
+        out = finalize_item(item)
+        assert out["doc_type"] == "질의회신"
+
+
+# ── 제목 정제 (SPEC-ADDENDUM-5.md §5-2) ──────────────────────────────────────
+class TestCleanTitleForCompare:
+    def test_strips_media_suffix(self):
+        assert clean_title_for_compare("남부발전, 분과위 가동 - 스트레이트뉴스") == "남부발전, 분과위 가동"
+
+    def test_keeps_multiword_dash_content(self):
+        # §5-4 과다병합 방지: 공백 있는 트레일링 세그먼트는 매체명이 아니므로 안 지운다.
+        assert "접대비 한도" in clean_title_for_compare("법인세법 시행령 개정안 — 접대비 한도")
+
+    def test_strips_bracket_prefix(self):
+        assert clean_title_for_compare("[로컬 게시판] 남부발전 소식") == "남부발전 소식"
+
+    def test_strips_quotes(self):
+        assert '"' not in clean_title_for_compare('남부발전 "내부통제" 고도화')
+
+    def test_display_title_untouched(self):
+        # clean_title_for_compare는 비교 전용 — title_similarity가 원본을 바꾸지 않는지 확인.
+        original = "남부발전, 분과위 가동 - 스트레이트뉴스"
+        title_similarity(original, "다른 제목")
+        assert original == "남부발전, 분과위 가동 - 스트레이트뉴스"
+
+
+class TestExtractSubject:
+    def test_extracts_leading_subject_before_comma(self):
+        assert extract_subject("남부발전, 내부통제 고도화") == "남부발전"
+
+    def test_no_comma_returns_none(self):
+        assert extract_subject("ESG 공시 로드맵 연기") is None
+
+
+# ── 규제성 판정 게이트 (SPEC-ADDENDUM-5.md §1) ────────────────────────────────
+class TestHasRegulatorySignal:
+    def test_military_article_has_false_positive_signal(self):
+        # ADDENDUM-5 §1-3 스스로 인정하는 한계: "강화"가 REGULATORY_SIGNALS에
+        # 있어서 §1 단독으로는 못 거른다("§3에서 재차단" — 그런데 §3도 이 예시엔
+        # 홍보 동사가 없어서 못 거른다. §2(무관 업종·군사 키워드)가 있어야 완전히
+        # 걸러진다 — 이번 라운드는 §2를 안 하기로 했으니 이 한계는 남아있다).
+        assert has_regulatory_signal("타에브의 바시즈 사령관 복귀…내부 통제 강화 포석") is True
+
+    def test_corporate_activity_no_signal(self):
+        assert has_regulatory_signal("남부발전, 내부통제 고도화 위한 분과위 가동") is False
+
+    def test_kssb_resolution_delay_has_signal(self):
+        assert has_regulatory_signal("KSSB, ESG공시 기준서 권고안 의결 연기") is True
+
+    def test_tax_reform_bill_has_signal(self):
+        assert has_regulatory_signal("2026년 정부 세제개편(안) - 국제조세 관련 주요 개정사항") is True
+
+    def test_all_signals_individually_detected(self):
+        for kw in REGULATORY_SIGNALS:
+            assert has_regulatory_signal(f"{kw} 관련 소식") is True
+
+
+# ── 타사 홍보성 보도 제외 (SPEC-ADDENDUM-5.md §3) ─────────────────────────────
+class TestIsCorporatePr:
+    def test_pr_without_strong_signal_is_pr(self):
+        assert is_corporate_pr("남부발전, 내부통제 고도화 위한 분과위 가동") is True
+
+    def test_pr_verb_with_strong_signal_is_not_pr(self):
+        assert is_corporate_pr("금감원, 내부회계관리제도 평가 지침 개정") is False
+
+    def test_no_pr_verb_is_not_pr(self):
+        assert is_corporate_pr("KSSB, ESG공시 기준서 권고안 의결 연기") is False
+
+    def test_explanation_session_without_signal_is_pr(self):
+        assert is_corporate_pr("회계기준원, ESG 공시기준 설명회 개최") is True
 
 
 if __name__ == "__main__":

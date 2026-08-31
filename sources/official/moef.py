@@ -26,7 +26,8 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from .. import _http
-from .._utils import classify, doc_type_of, pass_tax_filter, keyword_score, matched_keywords, make_id_exact, final_score, recency_score
+from .._utils import (classify, doc_type_of, is_admin_noise, pass_tax_filter, keyword_score,
+                      matched_keywords, make_id_exact, final_score, recency_score)
 
 BASE = "https://mofe.go.kr"
 PRESS_LIST_URL = f"{BASE}/nw/nes/nesdta.do"
@@ -110,6 +111,8 @@ def fetch(*, max_items: int | None = None) -> list[dict]:
         if not m:
             continue
         title = a.get_text(strip=True)
+        if is_admin_noise(title):  # ADDENDUM-4 §1
+            continue
         category = classify(title)
         if category is None:
             continue  # 부동산 PF·국고채 등 우리 4개 카테고리와 무관한 보도자료는 버림
