@@ -36,9 +36,11 @@ from sources._utils import (
     attach_related_news,
     has_regulatory_signal,
     is_corporate_pr,
+    is_applicable,
+    apply_applicability_gate,
 )
 from sources._config import (CATEGORIES, NOISE_KEYWORDS, ADMIN_NOISE_KEYWORDS,
-                             REGULATORY_SIGNALS)
+                             REGULATORY_SIGNALS, APPLICABILITY)
 
 
 # ── 쿼리 생성 ────────────────────────────────────────────────────────────
@@ -112,9 +114,11 @@ class TestClassifyAndMatching:
         assert keyword_score(text, "tax") == 100
 
     def test_matched_keywords_lists_hits(self):
-        hits = matched_keywords("세법 개정안 국세청 발표", "tax")
+        # ADDENDUM-6 §2-3: tax의 required에서 "국세청"(기관명)을 뺐으므로
+        # "유권해석"으로 교체(2026-08-31).
+        hits = matched_keywords("세법 개정안 유권해석 발표", "tax")
         assert "세법" in hits
-        assert "국세청" in hits
+        assert "유권해석" in hits
         assert "개정안" in hits
 
     def test_classify_picks_highest_scoring_category(self):
@@ -125,8 +129,13 @@ class TestClassifyAndMatching:
         assert classify("오늘의 날씨는 맑음입니다") is None
 
     def test_classify_disambiguates_by_score(self):
-        # tax 필수 키워드 2개 + combine 1개(score=50) vs kifrs 필수 1개(score=20)
-        text = "세법 국세청 개정안 발표, 회계기준원 참고자료"
+        # tax 필수 2개("세법"·"세제개편")+combine 1개("법인세법")=50
+        # vs kifrs 필수 1개("K-IFRS")=20. ADDENDUM-6 §2-3: tax의 required에서
+        # "국세청"(기관명)을 뺐으므로 "세제개편"으로 교체(2026-08-31). "회계기준원"은
+        # §2에서 kifrs required_weak에 추가된 "회계"/"회계기준"과 부분일치가 겹쳐
+        # 점수가 예상보다 높아져("개정안"도 kifrs combine "개정"과 겹침) 겹치지 않는
+        # "K-IFRS"·"법인세법"으로 교체했다.
+        text = "세법 세제개편 법인세법 발표, K-IFRS 참고자료"
         assert classify(text) == "tax"
 
 
@@ -643,6 +652,115 @@ class TestRequiredStrongWeakGating:
         for cat in ("kifrs", "icfr"):
             q = build_google_query(cat)
             assert q.startswith("(") and " AND (" in q
+
+
+# ── 기관명 키워드 제거 (SPEC-ADDENDUM-6.md §2) ────────────────────────────────
+# §0-1 실측 오탐 3건 + §8 테스트 필수 케이스. "금융위원회"/"금융감독원"을 kifrs
+# 매칭 키워드에서 완전히 제거하고 내용 키워드(§2-2)로 대체한 효과를 검증한다.
+class TestInstitutionNameRemoved:
+    def test_financial_regulation_by_fsc_not_classified_as_kifrs(self):
+        # §0-1 실측 오탐 1: 대부업법은 금융업 규제이지 회계기준이 아니다.
+        assert classify("금융위, 대부업법 개정해 신협도 부실채권 전담기관 허용") != "kifrs"
+
+    def test_supervisory_regulation_not_classified_as_kifrs(self):
+        # §0-1 실측 오탐 2: "감독규정"은 weak_context 시절 "회계"류와 우연히
+        # 안 겹쳤을 뿐 회계기준 개정이 아니다.
+        assert classify("신협자산관리회사, 대부채권 양도…금융위 감독규정 개정 예고") != "kifrs"
+
+    def test_capital_market_policy_not_classified_as_kifrs(self):
+        # §0-1 실측 오탐 3: 저PBR 공표제도는 자본시장 정책이지 회계기준이 아니다.
+        assert classify('금융위 "저PBR기업 공표제도 세부기준(안)" 의견수렴') != "kifrs"
+
+    def test_fsc_accounting_regulation_still_classified_as_kifrs(self):
+        # §8 통과 예시: 기관명 없이도 "외부감사"·"회계" 내용 키워드로 잡혀야 한다.
+        assert classify("금융위, 외부감사 및 회계 등에 관한 규정 개정") == "kifrs"
+
+    def test_law_reform_still_classified_as_tax(self):
+        # §8 통과 예시: tax에서 "국세청"을 빼도 세법 자체 키워드로는 정상 분류돼야 한다.
+        assert classify("법인세법 시행령 개정안 입법예고") == "tax"
+
+
+# ── 기관 홍보·외교 활동 제외 (SPEC-ADDENDUM-6.md §3) ─────────────────────────
+class TestPromotionalActivityAdminNoise:
+    def test_tax_administration_export_pr_is_admin_noise(self):
+        # §0-1/§8 실측 오탐: 규제 변경이 아니라 기관의 대외 활동 홍보.
+        assert is_admin_noise("글로벌최저한세, 한국 국세청의 선진 세정경험 수출") is True
+
+    def test_core_tax_terms_not_removed(self):
+        # §3-2 주의사항: "국제조세"·"조세조약"·"글로벌최저한세" 자체는 실무
+        # 관련성이 높으므로 제거하지 않는다 — 홍보 표현이 없으면 admin_noise가
+        # 아니어야 한다.
+        for term in ("국제조세", "조세조약", "글로벌최저한세"):
+            assert is_admin_noise(f"{term} 관련 개정안 발표") is False
+
+    def test_all_new_keywords_individually_detected(self):
+        new_keywords = ["세정경험", "경험 수출", "우수사례 공유", "국제협력",
+                        "기술협력", "초청 연수", "방한", "방문단", "업무협약 체결",
+                        "양해각서", "공동선언", "국제기구 진출", "수상", "표창"]
+        for kw in new_keywords:
+            assert is_admin_noise(f"{kw} 관련 소식") is True
+
+
+# ── 적용 대상 판정 게이트 (SPEC-ADDENDUM-6.md §1) ────────────────────────────
+class TestIsApplicable:
+    def test_financial_regulation_excluded(self):
+        ok, reason = is_applicable("금융위, 대부업법 개정해 신협도 부실채권 전담기관 허용")
+        assert ok is False
+        assert reason == "excluded:financial"
+
+    def test_supervisory_regulation_excluded(self):
+        ok, reason = is_applicable("신협자산관리회사, 대부채권 양도…금융위 감독규정 개정 예고")
+        assert ok is False
+        assert reason == "excluded:financial"
+
+    def test_nonprofit_excluded(self):
+        ok, reason = is_applicable("사회복지법인 전문인력 확보 절실…법인세법 시행령 개정 선행돼야")
+        assert ok is False
+        assert reason == "excluded:nonprofit"
+
+    def test_foreign_jurisdiction_excluded(self):
+        ok, reason = is_applicable("EFRAG, 비EU 기업 대상 ESRS-40a 공개초안")
+        assert ok is False
+        assert reason == "excluded:foreign"
+
+    def test_foreign_jurisdiction_with_domestic_context_passes(self):
+        # §8 통과 예시: 해외 관할이라도 국내 도입 맥락이 함께 있으면 예외.
+        ok, reason = is_applicable("EU CSRD 국내 도입 영향…금융위 검토 착수")
+        assert ok is True
+        assert reason is None
+
+    def test_tax_law_reform_passes(self):
+        ok, reason = is_applicable("법인세법 시행령 개정안 입법예고")
+        assert ok is True
+        assert reason is None
+
+    def test_kssb_disclosure_standard_passes(self):
+        ok, reason = is_applicable("KSSB, 지속가능성 공시기준 제2호 공개초안")
+        assert ok is True
+        assert reason is None
+
+    def test_all_excluded_entity_keywords_individually_detected(self):
+        for scope, kws in APPLICABILITY["excluded_entities"].items():
+            for kw in kws:
+                ok, reason = is_applicable(f"{kw} 관련 개정 소식")
+                assert ok is False, f"{kw}가 통과됨(scope={scope})"
+                assert reason == f"excluded:{scope}"
+
+    def test_all_foreign_jurisdiction_keywords_individually_detected(self):
+        for kw in APPLICABILITY["foreign_jurisdiction"]:
+            ok, reason = is_applicable(f"{kw} 관련 공개초안 발표")
+            assert ok is False, f"{kw}가 통과됨"
+            assert reason == "excluded:foreign"
+
+    def test_apply_applicability_gate_splits_kept_and_excluded(self):
+        items = [
+            {"category": "kifrs", "title": "K-IFRS 제1118호 기준서 개정"},
+            {"category": "kifrs", "title": "신협, 대부채권 양도 감독규정 개정"},
+        ]
+        kept, excluded = apply_applicability_gate(items)
+        assert [it["title"] for it in kept] == ["K-IFRS 제1118호 기준서 개정"]
+        assert len(excluded) == 1
+        assert excluded[0]["excluded_reason"] == "excluded:financial"
 
 
 # ── 논의자료(TF·실무그룹 중간 산출물) 판정 (2026-08-28 사용자 피드백) ────────

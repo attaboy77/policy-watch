@@ -12,7 +12,8 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       SIMILARITY_DAY_WINDOW,
                       RELATED_NEWS_MAX, RELATED_NEWS_DAY_WINDOW, RELATED_NEWS_MIN_SIMILARITY,
                       DISCUSSION_MATERIAL_KEYWORDS, DISCUSSION_OVERRIDE_KEYWORDS,
-                      REGULATORY_SIGNALS, CORPORATE_PR_KEYWORDS, CORPORATE_PR_STRONG_SIGNALS)
+                      REGULATORY_SIGNALS, CORPORATE_PR_KEYWORDS, CORPORATE_PR_STRONG_SIGNALS,
+                      APPLICABILITY)
 
 
 # ── 0-1) required_strong/required_weak 카테고리 지원 (SPEC-ADDENDUM-5.md §4) ─
@@ -131,6 +132,47 @@ def is_admin_noise(title: str) -> bool:
     """
     t = _norm(title)
     return any(_norm(k) in t for k in ADMIN_NOISE_KEYWORDS)
+
+
+# ── 4-2) 적용 대상 판정 게이트 (SPEC-ADDENDUM-6.md §1) ──────────────────────
+def is_applicable(title: str, body: str = "") -> tuple[bool, str | None]:
+    """이 규제가 우리 조직(비금융 일반 제조법인)에 적용되는지 판정.
+
+    "이게 회계·세무 주제인가"가 아니라 "적용 대상에 우리가 포함되는가"를 묻는다
+    (§0-2). **L1/L2/L3 전 계층에 적용** — 호출부(main.py)가 tier/layer로 면제
+    처리하지 않는다(§1-2, 기존 필터들과의 핵심 차이).
+
+    Returns:
+        (적용여부, 제외사유). 적용되면 (True, None).
+    """
+    t = _norm(title + " " + body)
+
+    for scope, kws in APPLICABILITY["excluded_entities"].items():
+        if any(_norm(k) in t for k in kws):
+            return False, f"excluded:{scope}"
+
+    if any(_norm(k) in t for k in APPLICABILITY["foreign_jurisdiction"]):
+        if not any(_norm(k) in t for k in APPLICABILITY["foreign_exception_context"]):
+            return False, "excluded:foreign"
+
+    return True, None
+
+
+def apply_applicability_gate(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """items 전체(L1/L2/L3 구분 없이)에 `is_applicable()`을 적용해 (통과분, 제외분)을
+    반환한다. 제외분에는 `excluded_reason`을 채워 넣어 `main.py`가 로그로 남길 수
+    있게 한다(§1-3). 반드시 다른 필터들보다 먼저, `main.build_data_json()`에서
+    `dedupe()` 이전에 호출한다.
+    """
+    kept, excluded = [], []
+    for it in items:
+        ok, reason = is_applicable(it.get("title", ""))
+        if ok:
+            kept.append(it)
+        else:
+            it = dict(it, excluded_reason=reason)
+            excluded.append(it)
+    return kept, excluded
 
 
 # ── 5) 신뢰도 ────────────────────────────────────────────────────────────

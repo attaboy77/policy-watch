@@ -13,13 +13,14 @@ import json
 import os
 from datetime import datetime, timezone, timedelta
 
-from . import _gap_log
+from . import _excluded_log, _gap_log
 from ._config import CATEGORIES, COLLECT_WINDOW_DAYS
 from ._schema import validate as validate_schema
 from ._summarize import summarize
-from ._utils import (apply_category_caps, apply_corporate_pr_filter,
-                     apply_regulatory_gate, attach_related_news, dedupe,
-                     dedupe_similar_news, finalize_item, normalize_news_item)
+from ._utils import (apply_applicability_gate, apply_category_caps,
+                     apply_corporate_pr_filter, apply_regulatory_gate,
+                     attach_related_news, dedupe, dedupe_similar_news,
+                     finalize_item, normalize_news_item)
 from .schedules import build_schedules
 
 from . import google_news, naver_news
@@ -98,11 +99,23 @@ def _log_stage(stage: str, items: list[dict]) -> None:
 def build_data_json(items: list[dict]) -> dict:
     """수집된 raw item 리스트 → site/data.json 전체 구조(메타 제외 조립은 main()에서).
 
-    필터 순서: dedupe(정확일치) → §5(유사기사 병합) → §1(규제성 게이트) →
-    §3(홍보성 제외) → 상한 적용. §1/§3을 §5 뒤로 옮긴 것은 2026-08-31
-    사용자 지시(SPEC-ADDENDUM-5.md §7 원안은 §1→§3→...→§5 순서였음) — 그래야
-    §1/§3에 걸려 사라질 기사도 §5 중복 병합의 후보에 먼저 포함된다.
+    필터 순서: ADDENDUM-6 §1(적용 대상 게이트, 전 계층) → dedupe(정확일치) →
+    ADDENDUM-5 §5(유사기사 병합) → §1(규제성 게이트) → §3(홍보성 제외) →
+    상한 적용. §1(적용 대상)을 맨 앞에 두는 건 §1-1 설계 그대로("카테고리
+    분류 직후, 다른 모든 필터 이전")다. ADDENDUM-5 §1/§3을 §5 뒤로 옮긴 것은
+    2026-08-31 사용자 지시(SPEC-ADDENDUM-5.md §7 원안은 §1→§3→...→§5
+    순서였음) — 그래야 §1/§3에 걸려 사라질 기사도 §5 중복 병합의 후보에
+    먼저 포함된다.
     """
+    items, excluded = apply_applicability_gate(items)  # ADDENDUM-6 §1, 전 계층
+    for it in excluded:
+        _excluded_log.record(
+            category=it.get("category", ""), title=it.get("title", ""),
+            url=(it.get("urls") or {}).get("official") or (it.get("urls") or {}).get("news"),
+            source=(it.get("source") or {}).get("name"),
+            reason=it["excluded_reason"],
+        )
+    _log_stage("ADDENDUM-6 §1(적용 대상) 게이트 후", items)
     deduped = dedupe(items)
     deduped = dedupe_similar_news(deduped)  # ADDENDUM-5 §5: L3 유사 기사 병합
     _log_stage("§5 중복 제거 후", deduped)
@@ -144,6 +157,7 @@ def build_data_json(items: list[dict]) -> dict:
 def main() -> None:
     print("=== Policy Watch 수집 시작 ===")
     _gap_log.clear()  # 이 프로세스 실행 동안 모인 gap만 반영(재실행 시 누적 방지)
+    _excluded_log.clear()  # ADDENDUM-6 §1: 이번 실행에서 제외된 항목만 반영
     raw_items, sources_ok, sources_failed = collect_all()
     print(f"  원본 수집: {len(raw_items)}건 (성공 소스 {len(sources_ok)}개, 실패 {len(sources_failed)}개)")
 
@@ -183,6 +197,11 @@ def main() -> None:
     gap_count = len(_gap_log.gaps())
     if gap_count:
         print(f"  ⚠ 시행일 수동 검토 필요: {gap_count}건 → docs/EFFECTIVE_DATE_GAPS.md")
+
+    _excluded_log.flush()
+    excluded_count = len(_excluded_log.excluded())
+    if excluded_count:
+        print(f"  ⚠ 적용 대상 게이트 제외: {excluded_count}건 → docs/EXCLUDED_LOG.md (과다 필터링 여부 검토 필요)")
 
     if errors:
         raise SystemExit(1)

@@ -85,8 +85,10 @@ class TestTaxInvestigationCombo:
         assert matches_tax_investigation_combo("절차 안내") is False
 
     def test_keyword_score_counts_combo_once(self):
-        # 필수 1개(국세청) + 세무조사 조합 1개 = 20 + 10 = 30
-        assert keyword_score("국세청 세무조사 사전통지 개선", "tax") == 30
+        # 필수 1개(세법) + 세무조사 조합 1개 = 20 + 10 = 30
+        # ADDENDUM-6 §2-3: tax의 required에서 "국세청"(기관명)을 뺐으므로
+        # 필수 키워드 예시를 "세법"로 교체(§2-3, 2026-08-31).
+        assert keyword_score("세법 세무조사 사전통지 개선", "tax") == 30
 
     def test_matched_keywords_includes_semujosa_when_combo_present(self):
         hits = matched_keywords("국세청 세무조사 절차 개선", "tax")
