@@ -13,7 +13,9 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       RELATED_NEWS_MAX, RELATED_NEWS_DAY_WINDOW, RELATED_NEWS_MIN_SIMILARITY,
                       DISCUSSION_MATERIAL_KEYWORDS, DISCUSSION_OVERRIDE_KEYWORDS,
                       REGULATORY_SIGNALS, CORPORATE_PR_KEYWORDS, CORPORATE_PR_STRONG_SIGNALS,
-                      APPLICABILITY)
+                      APPLICABILITY, COMPANY_EVENTS, COMPANY_EVENT_STRONG_SIGNALS,
+                      MANUFACTURING_ACCOUNTING_CONTEXT, EVENT_ANNOUNCEMENT_STRONG_SIGNALS,
+                      FOREIGN_STANDARD_BODIES)
 
 
 # ── 0-1) required_strong/required_weak 카테고리 지원 (SPEC-ADDENDUM-5.md §4) ─
@@ -132,6 +134,34 @@ def is_admin_noise(title: str) -> bool:
     """
     t = _norm(title)
     return any(_norm(k) in t for k in ADMIN_NOISE_KEYWORDS)
+
+
+# ── 4-1b) 행사·포럼 안내 제외 보강 (SPEC-ADDENDUM-7.md §4) ──────────────────
+# "제N회"/"제N차" 패턴. 영문 행사 표현(Forum 등)은 ADMIN_NOISE_KEYWORDS에 이미
+# 포함돼 있어 is_admin_noise() 쪽에서 잡힌다 — 이 정규식은 그걸로 못 잡는
+# "제149회 OO" 처럼 숫자 회차로만 식별되는 경우를 추가로 잡기 위한 것이다.
+_SERIAL_EVENT_RE = re.compile(r"제\s*\d+\s*[회차]")
+
+
+def is_event_announcement(title: str) -> bool:
+    """행사·운영 공지 판정(§4-2). `is_admin_noise()`의 상위 호환 —
+    ADMIN_NOISE_KEYWORDS 매칭에 더해 "제N회/제N차" 패턴을 규제 신호 유무로
+    한 번 더 본다. §5 처리순서 2번(수집 단계) — google_news.py/naver_news.py의
+    is_noise_l3()와 각 공식 어댑터가 기존 is_admin_noise() 대신 이 함수를 쓴다.
+
+    "회계기준위원회 제12차 회의 결과"처럼 강한 신호 없이 회차 번호만 있는
+    제목도 걸릴 것 같지만, `_norm()`이 공백을 지우면서 "회의 결과"가
+    "회의결과"가 되고 그 안에 강한 신호 "의결"이 부분 문자열로 우연히 포함돼
+    실제로는 안 걸린다(§4 "주의" 사례와 동일한 부분일치 특성 — is_discussion_
+    material()의 `_norm_keep_spaces()` 도입 배경이 된 바로 그 현상). 이 함수가
+    특별 취급을 하는 게 아니라 `_norm()`을 다른 함수들과 똑같이 쓴 결과다.
+    """
+    t = _norm(title)
+    if any(_norm(k) in t for k in ADMIN_NOISE_KEYWORDS):
+        return True
+    if _SERIAL_EVENT_RE.search(title):
+        return not any(_norm(k) in t for k in EVENT_ANNOUNCEMENT_STRONG_SIGNALS)
+    return False
 
 
 # ── 4-2) 적용 대상 판정 게이트 (SPEC-ADDENDUM-6.md §1) ──────────────────────
@@ -297,6 +327,25 @@ def is_discussion_material(title: str) -> bool:
     return any(_norm_keep_spaces(k) in t for k in DISCUSSION_MATERIAL_KEYWORDS)
 
 
+# ── 해외 기준 처리 — 안 A: 별도 분류 (SPEC-ADDENDUM-7.md §3) ────────────────
+def is_foreign_standard(title: str) -> bool:
+    """IASB/ISSB 발신 항목인지 판정(§3-2 안 A). True면 `finalize_item()`이
+    doc_type을 "해외기준"으로 재분류해 기본 조회/오늘의 정책동향에서 뺀다
+    (완전 제외가 아니다 — EFRAG/FASB/SEC 등과 달리 K-IFRS/KSSB의 원천이라
+    수집은 유지). §3-4: 국내 도입 맥락(APPLICABILITY.foreign_exception_context)이
+    함께 있으면 정상 항목으로 취급한다(False 반환).
+
+    안 B(전면 제외)로 전환하려면 이 함수를 안 쓰고 FOREIGN_STANDARD_BODIES를
+    `APPLICABILITY.foreign_jurisdiction`으로 옮기면 된다(§3-3, _config.py 참고).
+    """
+    t = _norm(title)
+    if not any(_norm(k) in t for k in FOREIGN_STANDARD_BODIES):
+        return False
+    if any(_norm(k) in t for k in APPLICABILITY["foreign_exception_context"]):
+        return False
+    return True
+
+
 # ── 8) 시행일 추출 (SPEC-ADDENDUM.md §4-4) ──────────────────────────────────
 _EFFECTIVE_DATE_PATTERNS = [
     # "2027년 1월 1일 이후 개시하는 사업연도부터" / "2026년 1월 1일부터 적용"
@@ -419,12 +468,41 @@ def is_corporate_pr(title: str) -> bool:
     return not any(_norm(k) in t for k in CORPORATE_PR_STRONG_SIGNALS)
 
 
+# ── 개별 기업 소식 제외 (SPEC-ADDENDUM-7.md §1) ─────────────────────────────
+# "상장"/"비상"은 COMPANY_EVENTS 평문 키워드 목록에 없다(부분일치 오탐 실측—
+# _config.COMPANY_EVENTS 주석 참고). 부정 전방탐색으로 "상장사"/"상장기업"/
+# "상장법인"/"상장회사"(회사 상태를 가리키는 일반 명사), "비상장"(그 부정형)은
+# 걸러내고 "상장 확정"/"상장 추진"처럼 실제 이벤트만 잡는다.
+_LISTING_EVENT_RE = re.compile(r"상장(?!사|기업|법인|회사)")
+_EMERGENCY_RE = re.compile(r"비상(?!장)")
+
+
+def is_company_event(title: str) -> bool:
+    """개별 기업 소식·시황 기사 판정(§1-1). `is_corporate_pr()`이 홍보 동사(가동·
+    맞손)를 잡는다면, 이건 특정 기업의 자본시장 이벤트·실적·재무위기·시황을 잡는다
+    — "규제가 바뀐 게 아니라 한 회사의 개별 사정"인 기사(§0 공통 원인).
+
+    §1-2 제조업 회계 예외: 개별 기업 사례라도 제조업 회계기준과 직결되면
+    (재고자산·감가상각 등) 통과시킨다 — 실무 참고 가치가 크다는 사용자 요청.
+    """
+    t = _norm(title)
+    has_event_kw = (any(_norm(k) in t for k in COMPANY_EVENTS)
+                    or bool(_LISTING_EVENT_RE.search(title))
+                    or bool(_EMERGENCY_RE.search(title)))
+    if not has_event_kw:
+        return False
+    if any(_norm(k) in t for k in MANUFACTURING_ACCOUNTING_CONTEXT):
+        return False  # §1-2 예외
+    return not any(_norm(k) in t for k in COMPANY_EVENT_STRONG_SIGNALS)
+
+
 def is_noise_l3(text: str, tier: int, category: str) -> bool:
     """L3(뉴스) 전용 종합 노이즈 판정(수집 단계에서 적용). 기존 `is_noise()`
     (NOISE_KEYWORDS)에 사건·사고 필터(`is_incident_noise`)와 세목 화이트리스트
     (`pass_tax_filter`, tax 카테고리만)를 OR로 더한다. tier==1(L1 공식기관)은
-    전부 면제(기존 is_noise와 동일 원칙) — 단 `is_admin_noise`(조직 운영 공지)만은
-    ADDENDUM-4 §1에 따라 tier 무관하게 적용한다.
+    전부 면제(기존 is_noise와 동일 원칙) — 단 `is_event_announcement`(조직 운영
+    공지 + 행사·포럼 안내, ADDENDUM-4 §1 + ADDENDUM-7 §4)만은 tier 무관하게
+    적용한다.
 
     §1(규제성 게이트)·§3(홍보성 제외)는 여기 없다 — 2026-08-31 사용자 지시로
     "§5(중복제거) → §1 → §3" 순서를 적용하기 위해 `main.build_data_json()`의
@@ -432,7 +510,7 @@ def is_noise_l3(text: str, tier: int, category: str) -> bool:
     `apply_corporate_pr_filter`)로 옮겼다. 그래야 §1/§3에 걸려 사라졌을 기사도
     §5 중복 병합의 후보(및 duplicate_count 집계 대상)에 먼저 포함된다.
     """
-    if is_admin_noise(text):
+    if is_event_announcement(text):
         return True
     if tier == 1:
         return False
@@ -726,6 +804,13 @@ def apply_corporate_pr_filter(items: list[dict]) -> list[dict]:
     return [it for it in items if _l3_gate_exempt(it) or not is_corporate_pr(it["title"])]
 
 
+def apply_company_event_filter(items: list[dict]) -> list[dict]:
+    """ADDENDUM-7 §1. §5 처리순서 7번 — 규제성 게이트(6) 다음, 홍보성 제외(8) 이전에
+    호출한다(main.py). `_l3_gate_exempt()`로 L1/L2·tier==1 뉴스는 그대로 면제한다.
+    """
+    return [it for it in items if _l3_gate_exempt(it) or not is_company_event(it["title"])]
+
+
 # ── 14-2) 공식 항목에 관련 뉴스 연결 (SPEC-ADDENDUM-4.md §4) ────────────────
 _ORG_NAME_STOPWORDS = {
     "금융위원회", "국세청", "기획재정부", "한국회계기준원", "금융감독원",
@@ -806,12 +891,16 @@ def finalize_item(item: dict) -> dict:
     doc_type이 여기서 최종 확정된다 — `doc_type_of()`로 판정됐든 어댑터가
     하드코딩했든(예: kasb.py fetch_qna()의 "질의회신" 고정) 상관없이, 여기서
     한 번 더 `is_discussion_material()`을 걸어 "논의자료"로 재분류한다(2026-08-28
-    사용자 피드백 — 모든 경로에 일관되게 적용하기 위한 단일 지점).
+    사용자 피드백 — 모든 경로에 일관되게 적용하기 위한 단일 지점). ADDENDUM-7 §3
+    (안 A)의 `is_foreign_standard()`도 같은 지점에서 "해외기준"으로 재분류한다 —
+    두 조건이 동시에 걸리면(드묾) 해외기준 쪽을 최종값으로 둔다.
     """
     out = {k: item.get(k) for k in ITEM_FIELDS}
     doc_type = item.get("doc_type")
     if is_discussion_material(item.get("title", "")):
         doc_type = "논의자료"
+    if is_foreign_standard(item.get("title", "")):
+        doc_type = "해외기준"
     out["doc_type"] = doc_type
     out["stage"] = compute_stage(doc_type)
     if not out["published_at"]:

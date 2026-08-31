@@ -22,7 +22,7 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from .. import _http
-from .._utils import is_admin_noise, keyword_score, matched_keywords, make_id_exact, final_score, recency_score
+from .._utils import is_event_announcement, keyword_score, matched_keywords, make_id_exact, final_score, recency_score
 
 BASE = "https://www.nts.go.kr"
 LIST_URL = f"{BASE}/nts/na/ntt/selectNttList.do"
@@ -80,7 +80,7 @@ def fetch() -> list[dict]:
         ntt_id = a.get("data-id", "")
         if not title or not ntt_id:
             continue
-        if is_admin_noise(title):  # ADDENDUM-4 §1
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
             continue
         published_at = _parse_dotted_date(date_cell.get_text(strip=True)) if date_cell else None
         url = f"{DETAIL_URL}?mi={MI}&nttSn={ntt_id}"

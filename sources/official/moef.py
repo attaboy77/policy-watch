@@ -26,7 +26,7 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from .. import _http
-from .._utils import (classify, doc_type_of, is_admin_noise, pass_tax_filter, keyword_score,
+from .._utils import (classify, doc_type_of, is_event_announcement, pass_tax_filter, keyword_score,
                       matched_keywords, make_id_exact, final_score, recency_score)
 
 BASE = "https://mofe.go.kr"
@@ -111,7 +111,7 @@ def fetch(*, max_items: int | None = None) -> list[dict]:
         if not m:
             continue
         title = a.get_text(strip=True)
-        if is_admin_noise(title):  # ADDENDUM-4 §1
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
             continue
         category = classify(title)
         if category is None:

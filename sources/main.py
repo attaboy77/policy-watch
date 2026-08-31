@@ -18,9 +18,9 @@ from ._config import CATEGORIES, COLLECT_WINDOW_DAYS
 from ._schema import validate as validate_schema
 from ._summarize import summarize
 from ._utils import (apply_applicability_gate, apply_category_caps,
-                     apply_corporate_pr_filter, apply_regulatory_gate,
-                     attach_related_news, dedupe, dedupe_similar_news,
-                     finalize_item, normalize_news_item)
+                     apply_company_event_filter, apply_corporate_pr_filter,
+                     apply_regulatory_gate, attach_related_news, dedupe,
+                     dedupe_similar_news, finalize_item, normalize_news_item)
 from .schedules import build_schedules
 
 from . import google_news, naver_news
@@ -100,12 +100,14 @@ def build_data_json(items: list[dict]) -> dict:
     """수집된 raw item 리스트 → site/data.json 전체 구조(메타 제외 조립은 main()에서).
 
     필터 순서: ADDENDUM-6 §1(적용 대상 게이트, 전 계층) → dedupe(정확일치) →
-    ADDENDUM-5 §5(유사기사 병합) → §1(규제성 게이트) → §3(홍보성 제외) →
-    상한 적용. §1(적용 대상)을 맨 앞에 두는 건 §1-1 설계 그대로("카테고리
-    분류 직후, 다른 모든 필터 이전")다. ADDENDUM-5 §1/§3을 §5 뒤로 옮긴 것은
-    2026-08-31 사용자 지시(SPEC-ADDENDUM-5.md §7 원안은 §1→§3→...→§5
-    순서였음) — 그래야 §1/§3에 걸려 사라질 기사도 §5 중복 병합의 후보에
-    먼저 포함된다.
+    ADDENDUM-5 §5(유사기사 병합) → §1(규제성 게이트) → ADDENDUM-7 §1(개별 기업
+    소식 제외) → ADDENDUM-5 §3(홍보성 제외) → 상한 적용. §1(적용 대상)을
+    맨 앞에 두는 건 §1-1 설계 그대로("카테고리 분류 직후, 다른 모든 필터
+    이전")다. ADDENDUM-5 §1/§3을 §5 뒤로 옮긴 것은 2026-08-31 사용자 지시
+    (SPEC-ADDENDUM-5.md §7 원안은 §1→§3→...→§5 순서였음) — 그래야 §1/§3에
+    걸려 사라질 기사도 §5 중복 병합의 후보에 먼저 포함된다. ADDENDUM-7 §1
+    (개별 기업 소식)은 그 원안 §5 처리순서(규제성 게이트 다음, 홍보성 제외
+    이전)대로 §1과 §3 사이에 끼워 넣는다.
     """
     items, excluded = apply_applicability_gate(items)  # ADDENDUM-6 §1, 전 계층
     for it in excluded:
@@ -121,6 +123,8 @@ def build_data_json(items: list[dict]) -> dict:
     _log_stage("§5 중복 제거 후", deduped)
     deduped = apply_regulatory_gate(deduped)  # ADDENDUM-5 §1
     _log_stage("§1 규제성 게이트 후", deduped)
+    deduped = apply_company_event_filter(deduped)  # ADDENDUM-7 §1
+    _log_stage("ADDENDUM-7 §1(개별 기업 소식) 제외 후", deduped)
     deduped = apply_corporate_pr_filter(deduped)  # ADDENDUM-5 §3
     _log_stage("§3 홍보성 제외 후", deduped)
     capped = apply_category_caps(deduped)

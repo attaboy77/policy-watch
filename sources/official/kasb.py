@@ -27,7 +27,7 @@ from .._utils import (
     classify,
     doc_type_of,
     extract_effective_date,
-    is_admin_noise,
+    is_event_announcement,
     keyword_score,
     matched_keywords,
     make_id_exact,
@@ -127,7 +127,7 @@ def fetch_notices(*, fetch_detail: bool = True, max_detail_fetches: int = 30) ->
         m = re.search(r"fn_Detail\('(\d+)'\)", link.get("onclick", ""))
         if not title or not m:
             continue
-        if is_admin_noise(title):  # ADDENDUM-4 §1: 인사·조직·운영 공지 제외(tier 무관)
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4: 인사·조직·운영 공지 + 행사/포럼 안내 제외(tier 무관)
             continue
         seq = m.group(1)
         date_p = row.select_one(".board_date")
@@ -229,7 +229,7 @@ def fetch_qna() -> list[dict]:
         m = re.search(r"fn_Detail\('(\d+)'", link.get("onclick", ""))
         if not title or not m:
             continue
-        if is_admin_noise(title):  # ADDENDUM-4 §1
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
             continue
         seq = m.group(1)
         date_p = row.select_one(".board_date")

@@ -38,9 +38,14 @@ from sources._utils import (
     is_corporate_pr,
     is_applicable,
     apply_applicability_gate,
+    is_company_event,
+    apply_company_event_filter,
+    is_event_announcement,
+    is_foreign_standard,
 )
 from sources._config import (CATEGORIES, NOISE_KEYWORDS, ADMIN_NOISE_KEYWORDS,
-                             REGULATORY_SIGNALS, APPLICABILITY)
+                             REGULATORY_SIGNALS, APPLICABILITY, COMPANY_EVENTS,
+                             FOREIGN_STANDARD_BODIES)
 
 
 # ── 쿼리 생성 ────────────────────────────────────────────────────────────
@@ -761,6 +766,123 @@ class TestIsApplicable:
         assert [it["title"] for it in kept] == ["K-IFRS 제1118호 기준서 개정"]
         assert len(excluded) == 1
         assert excluded[0]["excluded_reason"] == "excluded:financial"
+
+    # ── 업종 특화 감리·회계 제외 (SPEC-ADDENDUM-7.md §2) ────────────────────
+    def test_public_apartment_audit_excluded(self):
+        ok, reason = is_applicable("한국공인회계사회, 2025년 공동주택 감리 지적사례 공개")
+        assert ok is False
+        assert reason == "excluded:industry_specific"
+
+    def test_all_industry_specific_keywords_individually_detected(self):
+        for kw in APPLICABILITY["excluded_entities"]["industry_specific"]:
+            ok, reason = is_applicable(f"{kw} 관련 개정 소식")
+            assert ok is False, f"{kw}가 통과됨"
+            assert reason == "excluded:industry_specific"
+
+    def test_labor_union_not_excluded_by_industry_specific(self):
+        # §2-2 주의: "조합" 단독은 목록에 없어 "노동조합"/"조합원"은 안 걸려야 한다.
+        ok, reason = is_applicable("노동조합 임금교섭 타결, 조합원 총회 개최")
+        assert ok is True
+        assert reason is None
+
+
+# ── 개별 기업 소식 제외 (SPEC-ADDENDUM-7.md §1) ──────────────────────────────
+class TestIsCompanyEvent:
+    def test_ipo_denial_excluded(self):
+        assert is_company_event('두나무 "美 상장 확정 아냐…회계기준 전환도 사실무근"') is True
+
+    def test_market_panic_headline_excluded(self):
+        assert is_company_event("삼전닉스에 몰려 '재무제표' 발표가 두려운 기업들…흑자도산 공포") is True
+
+    def test_manufacturing_accounting_context_passes_despite_company_event_keyword(self):
+        # §1-2 제조업 회계 예외: "인수"가 있어도 재고자산 문맥이면 통과.
+        assert is_company_event("A사, 재고자산 저가법 적용 오류로 감리 지적") is False
+
+    def test_strong_regulatory_signal_passes_despite_company_event_keyword(self):
+        assert is_company_event("상장기업 재고자산 평가 관련 K-IFRS 질의회신 공개") is False
+
+    def test_no_company_event_keyword_passes(self):
+        assert is_company_event("법인세법 시행령 개정안 입법예고") is False
+
+    def test_all_company_event_keywords_individually_detected(self):
+        for kw in COMPANY_EVENTS:
+            assert is_company_event(f"{kw} 관련 소식") is True, f"{kw}가 통과됨"
+
+    # ── "상장"/"비상" 부분일치 오탐 회귀 테스트 (2026-08-31 실측으로 발견) ────
+    def test_listed_company_noun_not_excluded(self):
+        # "상장사"는 "상장 이벤트"가 아니라 그냥 "상장된 회사"를 가리키는 일반
+        # 명사 — 실측: 이 제목이 오탐 제외되던 걸 확인, K-IFRS 도입 관련 정상 기사.
+        assert is_company_event("상장사 감사의견 '적정' 97%…내년 새로운 K-IFRS 도입에 손익계산서 변경") is False
+
+    def test_non_listed_company_noun_not_excluded(self):
+        # "비상장회사"도 "비상"(긴급) 오탐 + "상장"(공모) 오탐 둘 다 없어야 한다.
+        assert is_company_event("신외감법 시행으로 비상장회사 규제비용 증가") is False
+
+    def test_listing_confirmation_still_excluded(self):
+        # "상장" 뒤에 회사 관련 명사가 안 붙으면(공백·"확정" 등) 실제 이벤트로 본다.
+        assert is_company_event("OO기업, 코스닥 상장 확정") is True
+
+    def test_kifrs_series_explainer_not_excluded_by_operating_profit(self):
+        # "영업이익"은 실적 발표 신호이자 K-IFRS 제1118호 손익계산서 개편의 핵심
+        # 용어이기도 하다 — K-IFRS 시리즈 해설 기사가 오탐 제외되던 걸 실측 확인.
+        assert is_company_event("[K-IFRS 제1118호 시리즈] 두 개의 영업이익") is False
+
+    def test_apply_company_event_filter_l3_only(self):
+        items = [
+            {"category": "kifrs", "title": "두나무 상장 준비", "layer": "L3",
+             "source": {"tier": 5}},
+            {"category": "kifrs", "title": "K-IFRS 제1118호 개정 공표", "layer": "L1",
+             "source": {"tier": 1}},
+        ]
+        kept = apply_company_event_filter(items)
+        assert [it["title"] for it in kept] == ["K-IFRS 제1118호 개정 공표"]
+
+
+# ── 행사·포럼 안내 제외 보강 (SPEC-ADDENDUM-7.md §4) ─────────────────────────
+class TestIsEventAnnouncement:
+    def test_forum_name_excluded(self):
+        assert is_event_announcement("한국회계기준원, 제149회 KAI Forum: IASB 공개초안 '위험경감회계' 개최") is True
+
+    def test_serial_number_with_strong_signal_passes(self):
+        assert is_event_announcement("회계기준위원회 제12차 회의, 제1116호 개정 의결") is False
+
+    def test_admin_noise_still_excluded(self):
+        # is_admin_noise()의 상위 호환이므로 기존 케이스도 그대로 걸려야 한다.
+        assert is_event_announcement("금융위원회 인사보도(과장급 전보)") is True
+
+    def test_no_serial_no_keyword_passes(self):
+        assert is_event_announcement("재무제표 중점심사 회계이슈 사전예고") is False
+
+
+# ── 해외 기준 처리 — 안 A (SPEC-ADDENDUM-7.md §3) ────────────────────────────
+class TestIsForeignStandard:
+    def test_iasb_exposure_draft_is_foreign_standard(self):
+        assert is_foreign_standard("IASB 공개초안 '위험경감회계(Risk Mitigation Accounting)' 검토의견 조회 기한 연장") is True
+
+    def test_domestic_adoption_context_passes(self):
+        # §3-4: 국내 도입 논의는 항상 통과.
+        assert is_foreign_standard("IASB 리스 기준 개정, K-IFRS 반영 시기는") is False
+
+    def test_no_foreign_body_passes(self):
+        assert is_foreign_standard("KSSB, 지속가능성 공시기준 제2호 공개초안") is False
+
+    def test_all_foreign_standard_bodies_individually_detected(self):
+        for kw in FOREIGN_STANDARD_BODIES:
+            assert is_foreign_standard(f"{kw} 공개초안 발표") is True, f"{kw}가 통과됨"
+
+    def test_finalize_item_overrides_doc_type_to_foreign_standard(self):
+        item = {
+            "id": "x1", "category": "kifrs", "doc_type": "검토의견",
+            "title": "IASB 공개초안 '위험경감회계' 검토의견 조회 기한 연장",
+            "summary": [], "impact": None, "published_at": "2026-08-20",
+            "collected_at": "2026-08-26T10:00:00+09:00", "effective_date": None,
+            "source": {"name": "한국회계기준원", "domain": "kasb.or.kr", "tier": 1, "type": "official"},
+            "trust_score": 100, "keyword_score": 0, "final_score": 55.0,
+            "matched_keywords": [], "urls": {"news": None, "official": None},
+            "law_meta": None, "attachments": None, "layer": "L1", "is_noise": False,
+        }
+        out = finalize_item(item)
+        assert out["doc_type"] == "해외기준"
 
 
 # ── 논의자료(TF·실무그룹 중간 산출물) 판정 (2026-08-28 사용자 피드백) ────────

@@ -23,7 +23,7 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from .. import _http
-from .._utils import (classify, doc_type_of, extract_effective_date, is_admin_noise,
+from .._utils import (classify, doc_type_of, extract_effective_date, is_event_announcement,
                       pass_tax_filter, keyword_score, matched_keywords, make_id_exact,
                       final_score, recency_score)
 
@@ -90,7 +90,7 @@ def fetch_page(page: int = 1) -> list[dict]:
         href = subject_a.get("href", "")
         if not title or not href:
             continue
-        if is_admin_noise(title):  # ADDENDUM-4 §1
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
             continue
         category = _classify_own_press(title)
         if category is None:

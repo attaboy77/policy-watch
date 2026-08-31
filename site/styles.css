@@ -244,6 +244,9 @@ main.view.is-active{ display:grid; }  /* .layout(전체 동향)은 grid 유지 *
 /* ADDENDUM-4 §2-3: 상설자료 뱃지(연회색) */
 .badge-static{ background:#f1f5f9; color:var(--muted); border:1px solid var(--line); font-weight:600; }
 
+/* ADDENDUM-7 §3 안 A: 해외기준(IASB/ISSB) 뱃지(연회색, 상설자료와 동일 톤) */
+.badge-foreign{ background:#f1f5f9; color:var(--muted); border:1px solid var(--line); font-weight:600; }
+
 /* ADDENDUM-4 §3: "외 N건 보도" */
 .dup-tag{ color:var(--muted); }
 .dup-tag::before{ content:"· "; }

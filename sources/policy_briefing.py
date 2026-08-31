@@ -32,7 +32,7 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from . import _http
-from ._utils import (classify, doc_type_of, extract_effective_date, is_admin_noise,
+from ._utils import (classify, doc_type_of, extract_effective_date, is_event_announcement,
                      pass_tax_filter, keyword_score, matched_keywords, make_id_exact,
                      final_score, recency_score)
 
@@ -122,7 +122,7 @@ def fetch_page(page_index: int) -> list[dict]:
         title = strong.get_text(strip=True)
         if not title or title in ("선택한 항목", "보도자료"):
             continue
-        if is_admin_noise(title):  # ADDENDUM-4 §1: "금융위원회 인사보도(과장급 전보)" 등 제외
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4: "금융위원회 인사보도(과장급 전보)"/행사 안내 등 제외
             continue
         category = classify(title)
         if category is None:

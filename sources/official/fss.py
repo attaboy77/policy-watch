@@ -24,7 +24,7 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from .. import _http, _gap_log
-from .._utils import (doc_type_of, extract_title_revision_date, is_admin_noise,
+from .._utils import (doc_type_of, extract_title_revision_date, is_event_announcement,
                       keyword_score, matched_keywords, make_id_exact, final_score, recency_score)
 
 FSS_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -150,7 +150,7 @@ def fetch_data_board(*, fetch_attachments: bool = True) -> list[dict]:
         href = title_cell.get("href", "")
         if not title or not href:
             continue
-        if is_admin_noise(title):  # ADDENDUM-4 §1
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
             continue
         url = href if href.startswith("http") else f"{FSS_BASE}{href}"
         published_at = cells[3].get_text(strip=True) or None
@@ -188,7 +188,7 @@ def fetch_kicfr_guidelines() -> list[dict]:
             continue
         if "모범규준" not in title and "설계" not in title and "평가" not in title:
             continue
-        if is_admin_noise(title):  # ADDENDUM-4 §1
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
             continue
         url = href if href.startswith("http") else f"{KICFR_BASE}/sub/menu/{href.lstrip('./')}"
         doc_type = doc_type_of(title, source_tier=1)

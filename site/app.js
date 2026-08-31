@@ -7,7 +7,7 @@
   var DOC_TYPE_ORDER = [
     "제·개정", "공개초안", "검토의견", "적용지침", "모범규준", "질의회신", "FAQ",
     "예시서식", "감사·검토기준", "해설·교육자료", "로드맵·일정", "보도자료",
-    "결정례·판례", "기사", "논의자료",
+    "결정례·판례", "기사", "논의자료", "해외기준",  // ADDENDUM-7 §3 안 A
   ];
 
   var STAGE_COLOR = {
@@ -134,13 +134,22 @@
     return state.doctypes.indexOf("논의자료") !== -1;
   }
 
+  // ADDENDUM-7 §3 안 A: "해외기준"(IASB/ISSB)도 논의자료와 같은 방식 —
+  // 완전 제외가 아니라 기본 조회/오늘의 정책동향에서만 빼고, 문서종류 필터에서
+  // 직접 선택했을 때만 보여준다.
+  function showsForeignStandard() {
+    return state.doctypes.indexOf("해외기준") !== -1;
+  }
+
   function filterItems(items) {
     var wideRange = isWideDateRange();
     var showDiscussion = showsDiscussionMaterial();
+    var showForeign = showsForeignStandard();
     return items.filter(function (it) {
       if (state.cats.length && state.cats.indexOf(it.category) === -1) return false;
       if (state.doctypes.length && state.doctypes.indexOf(it.doc_type) === -1) return false;
       if (it.doc_type === "논의자료" && !showDiscussion) return false;
+      if (it.doc_type === "해외기준" && !showForeign) return false;
       if (state.staticOnly) {
         // "상설자료만": 상설자료가 아니면 제외. 상설자료는 개정일이 오래돼 보통
         // 조회 기간 밖에 있는 게 정상이므로 이 모드에서는 날짜 필터를 건너뛴다.
@@ -245,6 +254,8 @@
       : "";
     // ADDENDUM-4 §2-3: 상설자료 회색 뱃지.
     var staticBadge = it.is_static ? '<span class="badge badge-static">상설자료</span>' : "";
+    // ADDENDUM-7 §3 안 A: 해외기준(IASB/ISSB) 회색 뱃지.
+    var foreignBadge = it.doc_type === "해외기준" ? '<span class="badge badge-foreign">해외기준</span>' : "";
     var officialTag = it.source && it.source.tier === 1 ? '<span class="badge-official">공식</span>' : "";
     // ADDENDUM-4 §3: "외 N건 보도" — 유사 기사가 병합된 경우.
     var dupTag = it.duplicate_count > 0 ? '<span class="dup-tag">외 ' + it.duplicate_count + '건 보도</span>' : "";
@@ -262,7 +273,7 @@
       '<article class="card">' +
       '<div class="card-top">' +
       '<div class="card-badges">' + catBadge(it.category) +
-      '<span class="badge badge-doctype">' + esc(it.doc_type) + "</span>" + stageBadge + staticBadge + "</div>" +
+      '<span class="badge badge-doctype">' + esc(it.doc_type) + "</span>" + stageBadge + staticBadge + foreignBadge + "</div>" +
       '<div class="card-source">출처: ' + esc(it.source ? it.source.name : "-") + officialTag + dupTag + "</div>" +
       "</div>" +
       '<h3 class="card-title">' + esc(it.title) + "</h3>" +
@@ -420,7 +431,9 @@
     // §5-2 "오늘"의 정의: 최근 수집 실행일(meta.generated_at)과 published_at이
     // 같은 날. 그 날 5건 미만이면 최근 3일로 확대(안내 문구 표시). is_static 전부 제외.
     var day = (DATA.meta && DATA.meta.generated_at) ? DATA.meta.generated_at.slice(0, 10) : todayISO();
-    var pool = DATA.items.filter(function (it) { return !it.is_static && it.doc_type !== "논의자료"; });
+    var pool = DATA.items.filter(function (it) {
+      return !it.is_static && it.doc_type !== "논의자료" && it.doc_type !== "해외기준";
+    });
     var todays = pool.filter(function (it) { return it.published_at === day; });
     var expanded = false;
     if (todays.length < 5) {
