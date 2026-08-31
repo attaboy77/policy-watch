@@ -30,6 +30,7 @@ _VALID_ITEM = {
     "duplicate_sources": [],
     "related_news": [],
     "is_meeting_schedule": False,
+    "ai_generated": False,
 }
 
 _VALID_SCHEDULE = {

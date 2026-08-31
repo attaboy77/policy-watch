@@ -419,4 +419,44 @@ def _load_tax_subjects(path: str = TAX_SUBJECTS_YML_PATH):
         return [], {}
 
 
+# ── AI 요약 (SPEC-ADDENDUM-8.md §4, 2026-08-31 사용자 지시로 재설계) ────────
+# 원안은 Anthropic API를 호출하는 방식이었으나, 유료 API 대신 **Claude Code가
+# 직접 요약을 생성해 캐시 파일에 저장**하는 방식으로 바꿨다 — "내가 필요할 때마다
+# 시킬게"(사용자) — 즉 자동/정기 실행이 아니라 사용자가 명시적으로 요청할 때만
+# `sources/summary_candidates.py`로 대상을 뽑고, Claude Code가 원문을 직접 읽어
+# summary/impact를 작성해 캐시에 기록한다. 캐시 구조와 프롬프트는 §4 원안 그대로
+# 쓴다(사용자 지시) — `_summarize.py`/`summary_candidates.py` 참고.
+SUMMARY_CACHE_PATH = "data/summary_cache.json"
+
+# §4-4 원안 그대로 가져오되 한 가지를 바로잡았다: "상설자료"는 doc_type 값이
+# 아니라 `is_static` 불리언 플래그다(DOC_TYPES enum에 "상설자료"가 없음) —
+# `summary_candidates.py`가 `is_static`과 `skip_doc_types`를 따로 검사한다.
+SUMMARIZE_CONFIG = {
+    "enabled": False,  # 기본 꺼짐. 사용자가 명시적으로 시킬 때만 후보를 뽑는다.
+    "min_tier": 2,      # tier 3 이하(일반 뉴스)는 대상에서 제외 — 공식 자료 위주
+    "skip_doc_types": ["논의자료", "해외기준"],  # is_static은 코드에서 별도 처리
+    "max_batch": 30,    # 한 번에 처리할 후보 상한(§4-4의 max_new_per_run과 같은 취지)
+}
+
+# §4-2 원안 그대로. Claude Code가 요약을 "직접 판단해서" 쓸 때 따르는 기준
+# — API에 보내는 게 아니라 사람이 이 지시문을 읽고 그대로 따른다는 점만 다르다.
+SUMMARY_SYSTEM_PROMPT = """당신은 제조업 상장기업의 재경 실무를 지원한다.
+회사 정보: 팜한농 — 작물보호제·비료·종자 제조업, 외부감사 대상, 연결 실체.
+K-IFRS 적용 대상이며 금융업·공공기관·비영리법인이 아니다.
+
+주어진 규제 자료를 읽고 다음 형식의 JSON만 출력한다. 다른 말은 하지 않는다.
+
+{
+  "summary": ["<무엇이 바뀌는지 1줄>", "<핵심 내용 1줄>"],
+  "impact": "<이 회사가 준비할 것 1줄. 없으면 null>"
+}
+
+규칙:
+- 각 줄은 80자 이내, 평서문
+- 원문에 없는 내용을 추측해 쓰지 않는다
+- 시행일이 명시되어 있으면 impact에 포함한다
+- 이 회사와 무관한 내용이면 impact를 null로 둔다
+- 확정 여부를 분명히 한다 (공개초안이면 "확정 시" 등으로 표현)
+"""
+
 TAX_SUBJECTS, TAX_FEATURES = _load_tax_subjects()

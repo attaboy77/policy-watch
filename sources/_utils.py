@@ -903,7 +903,7 @@ ITEM_FIELDS = [
     "trust_score", "keyword_score", "final_score", "matched_keywords",
     "urls", "law_meta", "attachments",
     "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
-    "is_meeting_schedule",
+    "is_meeting_schedule", "ai_generated",
 ]
 
 
@@ -932,6 +932,7 @@ def finalize_item(item: dict) -> dict:
     out["is_static"] = bool(item.get("is_static", False))
     out["date_estimated"] = bool(item.get("date_estimated", False))
     out["is_meeting_schedule"] = bool(item.get("is_meeting_schedule", False))
+    out["ai_generated"] = bool(item.get("ai_generated", False))
     out["duplicate_count"] = int(item.get("duplicate_count") or 0)
     out["duplicate_sources"] = item.get("duplicate_sources") or []
     out["related_news"] = item.get("related_news") or []

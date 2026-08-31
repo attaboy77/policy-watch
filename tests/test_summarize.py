@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-"""sources/_summarize.py 단위 테스트 (SPEC.md §6)."""
+"""sources/_summarize.py 단위 테스트 (SPEC.md §6 + SPEC-ADDENDUM-8.md §4)."""
 from sources._summarize import summarize
 
 
 def _item(**overrides):
     base = {
+        # id는 일부러 안 넣는다 — summarize()가 캐시 조회에 item["id"]를 쓰는데,
+        # None은 실제 캐시 파일에 절대 있을 수 없는 키라 테스트가 실제
+        # data/summary_cache.json 내용과 무관하게 항상 격리된다.
         "category": "tax",
         "doc_type": "제·개정",
         "title": "법인세법 시행령 일부개정령안 입법예고",
@@ -92,3 +95,42 @@ class TestBuildImpact:
         result = summarize(_item(effective_date="2026-09-04", is_meeting_schedule=True))
         assert any("위원회 회의 2026.09.04" in line for line in result["summary"])
         assert not any("시행일 2026.09.04" in line for line in result["summary"])
+
+
+# ── AI 요약 캐시 우선 적용 (SPEC-ADDENDUM-8.md §4, 2026-08-31 재설계) ────────
+class TestSummaryCache:
+    def test_no_id_or_cache_miss_falls_back_to_rule_based(self):
+        result = summarize(_item(), cache={})
+        assert result["ai_generated"] is False
+
+    def test_rule_based_path_reports_ai_generated_false(self):
+        result = summarize(_item(effective_date="2026-01-01"), cache={})
+        assert result["ai_generated"] is False
+
+    def test_cache_hit_uses_cached_summary_and_impact_verbatim(self):
+        cache = {
+            "kifrs-1118": {
+                "summary": ["K-IFRS 제1118호가 제정되어 손익계산서 표시가 개편된다.",
+                            "경영진성과측정치(MPM) 공시가 새로 요구된다."],
+                "impact": "2027년 재무제표부터 적용되므로 2026년 중 대응 필요.",
+                "generated_at": "2026-08-31T10:00:00+09:00",
+                "model": "claude-code-manual",
+            }
+        }
+        result = summarize(_item(id="kifrs-1118", title="K-IFRS 제1118호 제정"), cache=cache)
+        assert result["summary"] == cache["kifrs-1118"]["summary"]
+        assert result["impact"] == cache["kifrs-1118"]["impact"]
+        assert result["ai_generated"] is True
+
+    def test_cache_hit_takes_priority_over_rule_based_effective_date_wording(self):
+        # 캐시가 있으면 effective_date 기반 "~부터 적용" 규칙 문구를 덮어써야 한다.
+        cache = {"x1": {"summary": ["요약"], "impact": "AI가 쓴 준비사항", "model": "m"}}
+        result = summarize(_item(id="x1", effective_date="2026-01-01"), cache=cache)
+        assert result["impact"] == "AI가 쓴 준비사항"
+        assert "부터 적용" not in result["impact"]
+
+    def test_cache_entry_with_null_impact_preserved(self):
+        cache = {"x1": {"summary": ["요약 1", "요약 2"], "impact": None, "model": "m"}}
+        result = summarize(_item(id="x1"), cache=cache)
+        assert result["impact"] is None
+        assert result["ai_generated"] is True

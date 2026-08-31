@@ -1,7 +1,7 @@
 {
   "meta": {
     "schema_version": "1.0",
-    "generated_at": "2026-08-31T16:21:55+09:00",
+    "generated_at": "2026-08-31T17:02:21+09:00",
     "window_days": 90,
     "total_items": 163,
     "counts_by_category": {
@@ -65,7 +65,7 @@
       ],
       "impact": "2026.09.04 위원회 회의 예정 · 안건 의결 시 시행일 별도 확인",
       "published_at": "2026-09-04",
-      "collected_at": "2026-08-31T16:19:37+09:00",
+      "collected_at": "2026-08-31T17:00:09+09:00",
       "effective_date": "2026-09-04",
       "source": {
         "name": "한국회계기준원",
@@ -93,7 +93,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": true
+      "is_meeting_schedule": true,
+      "ai_generated": false
     },
     {
       "id": "5ba775f02ed3ed7f",
@@ -104,7 +105,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-12",
-      "collected_at": "2026-08-31T16:19:41+09:00",
+      "collected_at": "2026-08-31T17:00:13+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -133,7 +134,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": true
+      "is_meeting_schedule": true,
+      "ai_generated": false
     },
     {
       "id": "59df521c3adc5420",
@@ -147,7 +149,7 @@
       ],
       "impact": "2020.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-11-14",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -180,7 +182,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "8d42db70eba720fe",
@@ -191,7 +194,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-06-05",
-      "collected_at": "2026-08-31T16:20:06+09:00",
+      "collected_at": "2026-08-31T17:00:30+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -219,7 +222,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "e8e790cc216b2661",
@@ -233,7 +237,7 @@
       ],
       "impact": "2026.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2024-11-22",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -265,7 +269,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "c7d0428613141653",
@@ -279,7 +284,7 @@
       ],
       "impact": "2017.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2016-05-27",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2017-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -311,7 +316,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "b6ad3d736ef50754",
@@ -322,7 +328,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -349,7 +355,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "c68ecb80a8b050c5",
@@ -363,7 +370,7 @@
       ],
       "impact": "2026.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-12-22",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -394,7 +401,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "fe08c2b40b993b2f",
@@ -408,7 +416,7 @@
       ],
       "impact": "2022.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-09-11",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -439,7 +447,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "b893f5e5440901f6",
@@ -453,7 +462,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-04-27",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -484,7 +493,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "e3420be7b1fd7b67",
@@ -498,7 +508,7 @@
       ],
       "impact": "2016.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-02-27",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -529,7 +539,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "6b80af08a309b400",
@@ -540,7 +551,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-12-23",
-      "collected_at": "2026-08-31T16:19:45+09:00",
+      "collected_at": "2026-08-31T17:00:16+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -566,7 +577,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "1a46fa331b9cd907",
@@ -577,7 +589,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-01-08",
-      "collected_at": "2026-08-31T16:19:49+09:00",
+      "collected_at": "2026-08-31T17:00:20+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -603,7 +615,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "9204a2cb8d4f8a52",
@@ -614,7 +627,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-01-02",
-      "collected_at": "2026-08-31T16:19:54+09:00",
+      "collected_at": "2026-08-31T17:00:23+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -640,7 +653,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "69c2d4668fe23175",
@@ -651,7 +665,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-06-05",
-      "collected_at": "2026-08-31T16:20:10+09:00",
+      "collected_at": "2026-08-31T17:00:33+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -677,7 +691,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "1a711fdd0c342028",
@@ -688,7 +703,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -714,7 +729,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "74795672b06f9c97",
@@ -725,7 +741,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-05-11",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -751,7 +767,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "00ea305aac4e5a33",
@@ -762,7 +779,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-05-11",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -788,7 +805,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "75b6483b2158c1d5",
@@ -799,7 +817,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-02-07",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -825,7 +843,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "691464f48c67f01c",
@@ -836,7 +855,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-02-07",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -862,7 +881,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "1444709b36f4d789",
@@ -873,7 +893,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -899,7 +919,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "14af2bd99efff38c",
@@ -910,7 +931,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -936,7 +957,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "7c82d02e21ee5442",
@@ -949,7 +971,7 @@
       ],
       "impact": null,
       "published_at": "2026-07-24",
-      "collected_at": "2026-08-31T16:20:41+09:00",
+      "collected_at": "2026-08-31T17:01:06+09:00",
       "effective_date": null,
       "source": {
         "name": "금융위원회",
@@ -984,7 +1006,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "91cefa63682603d8",
@@ -997,7 +1020,7 @@
       ],
       "impact": "2026.01.01부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2025-12-23",
-      "collected_at": "2026-08-31T16:21:01+09:00",
+      "collected_at": "2026-08-31T17:01:25+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "기획재정부",
@@ -1029,7 +1052,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "ec461a1366f4730f",
@@ -1042,7 +1066,7 @@
       ],
       "impact": "2026.02.27부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-02-27",
-      "collected_at": "2026-08-31T16:21:03+09:00",
+      "collected_at": "2026-08-31T17:01:27+09:00",
       "effective_date": "2026-02-27",
       "source": {
         "name": "기획재정부",
@@ -1074,7 +1098,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "458aff841078bcde",
@@ -1087,7 +1112,7 @@
       ],
       "impact": "2026.07.01부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-07-01",
-      "collected_at": "2026-08-31T16:21:07+09:00",
+      "collected_at": "2026-08-31T17:01:31+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "기획재정부",
@@ -1119,7 +1144,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "3139eed9c4c3b608",
@@ -1132,7 +1158,7 @@
       ],
       "impact": "2026.01.02부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2025-10-01",
-      "collected_at": "2026-08-31T16:21:10+09:00",
+      "collected_at": "2026-08-31T17:01:34+09:00",
       "effective_date": "2026-01-02",
       "source": {
         "name": "기획재정부",
@@ -1164,7 +1190,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "04ccf64eccbb94ec",
@@ -1177,7 +1204,7 @@
       ],
       "impact": "2026.02.27부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-02-27",
-      "collected_at": "2026-08-31T16:21:12+09:00",
+      "collected_at": "2026-08-31T17:01:36+09:00",
       "effective_date": "2026-02-27",
       "source": {
         "name": "기획재정부",
@@ -1209,7 +1236,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "1e9591c70e26dcb9",
@@ -1222,7 +1250,7 @@
       ],
       "impact": "2026.03.20부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-03-20",
-      "collected_at": "2026-08-31T16:21:14+09:00",
+      "collected_at": "2026-08-31T17:01:39+09:00",
       "effective_date": "2026-03-20",
       "source": {
         "name": "기획재정부",
@@ -1254,7 +1282,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "c7ec2a1cb50b8424",
@@ -1265,7 +1294,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-02-27",
-      "collected_at": "2026-08-31T16:19:35+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -1290,7 +1319,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "806607f77353384b",
@@ -1301,7 +1331,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2025-11-25",
-      "collected_at": "2026-08-31T16:19:35+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -1326,7 +1356,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "68087adfaa1eaee6",
@@ -1340,7 +1371,7 @@
       ],
       "impact": "2027.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2025-11-21",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2027-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1374,7 +1405,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "583038805d16c3d1",
@@ -1388,7 +1420,7 @@
       ],
       "impact": "2024.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-10-13",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1418,7 +1450,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "63f16f6e10a6e23b",
@@ -1432,7 +1465,7 @@
       ],
       "impact": "2024.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-03-17",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1462,7 +1495,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "9ead55f57dc69745",
@@ -1476,7 +1510,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2022-12-02",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1506,7 +1540,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "7b2bd2616e6b597a",
@@ -1520,7 +1555,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2021-09-10",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1550,7 +1585,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "872e59c4f99af5f2",
@@ -1564,7 +1600,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-10-16",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1594,7 +1630,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "2002dbf94fdd1896",
@@ -1608,7 +1645,7 @@
       ],
       "impact": "2022.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-04-24",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1638,7 +1675,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "4871e57f29a4fcbf",
@@ -1652,7 +1690,7 @@
       ],
       "impact": "2020.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2019-04-19",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1682,7 +1720,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "eca008a239c10381",
@@ -1696,7 +1735,7 @@
       ],
       "impact": "2016.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-05-26",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1730,7 +1769,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "b0cf26e1698be745",
@@ -1744,7 +1784,7 @@
       ],
       "impact": "2016.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-05-08",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1794,7 +1834,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "59699d7f3a686df7",
@@ -1808,7 +1849,7 @@
       ],
       "impact": "2016.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-02-06",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1838,7 +1879,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "cd682e391cdcb6b2",
@@ -1849,7 +1891,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-15",
-      "collected_at": "2026-08-31T16:20:18+09:00",
+      "collected_at": "2026-08-31T17:00:41+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -1874,7 +1916,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "129870ed37a8ae9a",
@@ -1885,7 +1928,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-04-14",
-      "collected_at": "2026-08-31T16:20:19+09:00",
+      "collected_at": "2026-08-31T17:00:41+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -1910,7 +1953,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "a7a7685132282d2f",
@@ -1921,7 +1965,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-04-11",
-      "collected_at": "2026-08-31T16:20:19+09:00",
+      "collected_at": "2026-08-31T17:00:41+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -1946,7 +1990,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "73bc399390311e5c",
@@ -1957,7 +2002,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-04-07",
-      "collected_at": "2026-08-31T16:20:19+09:00",
+      "collected_at": "2026-08-31T17:00:41+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -1982,7 +2027,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "32fac44f03a3efe3",
@@ -1993,7 +2039,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-03-31",
-      "collected_at": "2026-08-31T16:20:19+09:00",
+      "collected_at": "2026-08-31T17:00:41+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2018,7 +2064,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "10208bce920325fc",
@@ -2029,7 +2076,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-04-01",
-      "collected_at": "2026-08-31T16:20:19+09:00",
+      "collected_at": "2026-08-31T17:00:41+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2054,7 +2101,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "ae0a6b33e44912de",
@@ -2065,7 +2113,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-03-18",
-      "collected_at": "2026-08-31T16:20:19+09:00",
+      "collected_at": "2026-08-31T17:00:41+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2090,7 +2138,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "bcce16a2edb3dca5",
@@ -2101,7 +2150,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2019-03-27",
-      "collected_at": "2026-08-31T16:20:19+09:00",
+      "collected_at": "2026-08-31T17:00:41+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2126,7 +2175,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "529cf36d991a6a0a",
@@ -2137,7 +2187,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-03-27",
-      "collected_at": "2026-08-31T16:20:19+09:00",
+      "collected_at": "2026-08-31T17:00:41+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2162,7 +2212,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "0c2c3f5d2d513480",
@@ -2173,7 +2224,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2017-08-02",
-      "collected_at": "2026-08-31T16:20:19+09:00",
+      "collected_at": "2026-08-31T17:00:41+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2198,7 +2249,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "61d39ad3a5e78fde",
@@ -2211,7 +2263,7 @@
       ],
       "impact": "2026.01.01부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2025-12-23",
-      "collected_at": "2026-08-31T16:21:18+09:00",
+      "collected_at": "2026-08-31T17:01:43+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "기획재정부",
@@ -2242,7 +2294,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "e6b2a1dbc4b0cd46",
@@ -2255,7 +2308,7 @@
       ],
       "impact": "2026.07.01부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-05-22",
-      "collected_at": "2026-08-31T16:21:21+09:00",
+      "collected_at": "2026-08-31T17:01:47+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "기획재정부",
@@ -2286,7 +2339,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "a508a599d9274dde",
@@ -2299,7 +2353,7 @@
       ],
       "impact": "2026.05.22부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-05-22",
-      "collected_at": "2026-08-31T16:21:25+09:00",
+      "collected_at": "2026-08-31T17:01:51+09:00",
       "effective_date": "2026-05-22",
       "source": {
         "name": "기획재정부",
@@ -2330,7 +2384,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "38a29e3a5e491dd0",
@@ -2343,7 +2398,7 @@
       ],
       "impact": "2026.01.01부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2025-12-31",
-      "collected_at": "2026-08-31T16:21:41+09:00",
+      "collected_at": "2026-08-31T17:02:07+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "행정안전부",
@@ -2374,7 +2429,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "bdca5e9dc61458d2",
@@ -2387,7 +2443,7 @@
       ],
       "impact": "2026.07.01부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-06-23",
-      "collected_at": "2026-08-31T16:21:44+09:00",
+      "collected_at": "2026-08-31T17:02:09+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "행정안전부",
@@ -2418,7 +2474,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "73399968c44789bb",
@@ -2429,7 +2486,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-30",
-      "collected_at": "2026-08-31T16:19:39+09:00",
+      "collected_at": "2026-08-31T17:00:10+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -2454,7 +2511,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": true
+      "is_meeting_schedule": true,
+      "ai_generated": false
     },
     {
       "id": "fee4e7d2ab367e7b",
@@ -2465,7 +2523,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-24",
-      "collected_at": "2026-08-31T16:19:40+09:00",
+      "collected_at": "2026-08-31T17:00:11+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -2490,7 +2548,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": true
+      "is_meeting_schedule": true,
+      "ai_generated": false
     },
     {
       "id": "e6a278803535318e",
@@ -2501,7 +2560,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-08-18",
-      "collected_at": "2026-08-31T16:19:35+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -2524,7 +2583,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "6b21dc9517e82d99",
@@ -2538,7 +2598,7 @@
       ],
       "impact": "2026.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2024-11-22",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2568,7 +2628,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "ab6aeea5bd158a7d",
@@ -2582,7 +2643,7 @@
       ],
       "impact": "2020.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-12-21",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2612,7 +2673,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "2969aff07892421c",
@@ -2626,7 +2688,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-10-16",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2656,7 +2718,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "d96964bb13f723e8",
@@ -2670,7 +2733,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-05-25",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2700,7 +2763,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "a0d812f9302abf15",
@@ -2713,7 +2777,7 @@
       ],
       "impact": "2026.01.01부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2025-12-23",
-      "collected_at": "2026-08-31T16:21:29+09:00",
+      "collected_at": "2026-08-31T17:01:55+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "기획재정부,행정안전부",
@@ -2744,7 +2808,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "cf055d182b1c4dba",
@@ -2757,7 +2822,7 @@
       ],
       "impact": "2026.07.01부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-06-23",
-      "collected_at": "2026-08-31T16:21:32+09:00",
+      "collected_at": "2026-08-31T17:01:59+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "기획재정부,행정안전부",
@@ -2788,7 +2853,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "c758f5a0eece40c3",
@@ -2801,7 +2867,7 @@
       ],
       "impact": "2026.03.20부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-03-20",
-      "collected_at": "2026-08-31T16:21:38+09:00",
+      "collected_at": "2026-08-31T17:02:03+09:00",
       "effective_date": "2026-03-20",
       "source": {
         "name": "기획재정부,행정안전부",
@@ -2832,7 +2898,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "59cb28288ff7145e",
@@ -2843,7 +2910,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-31",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2868,7 +2935,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "9132e55304c0d64f",
@@ -2879,7 +2947,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-06-01",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2904,7 +2972,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "1ca6d21bb824a6bc",
@@ -2915,7 +2984,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2012-12-01",
-      "collected_at": "2026-08-31T16:20:16+09:00",
+      "collected_at": "2026-08-31T17:00:39+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2940,7 +3009,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "71040c1f7d2ad8ec",
@@ -2951,7 +3021,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-24",
-      "collected_at": "2026-08-31T16:19:34+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -2974,7 +3044,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "3efed538ddd334a9",
@@ -2985,7 +3056,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-07-16",
-      "collected_at": "2026-08-31T16:19:35+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3008,7 +3079,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "105985e6af8e1a59",
@@ -3019,7 +3091,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-06-16",
-      "collected_at": "2026-08-31T16:19:35+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3042,7 +3114,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "d8da68e1e70de5e6",
@@ -3053,7 +3126,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-05-15",
-      "collected_at": "2026-08-31T16:19:35+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3076,7 +3149,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "3ea659f1c67cb57a",
@@ -3087,7 +3161,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2025-12-31",
-      "collected_at": "2026-08-31T16:19:35+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3110,7 +3184,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "e07e178008f2d05e",
@@ -3121,7 +3196,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2025-12-23",
-      "collected_at": "2026-08-31T16:19:35+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3144,7 +3219,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "6a586124c52a77ad",
@@ -3155,7 +3231,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2025-12-12",
-      "collected_at": "2026-08-31T16:19:35+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3178,7 +3254,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "fc6e3d727db8610f",
@@ -3189,7 +3266,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2025-12-02",
-      "collected_at": "2026-08-31T16:19:35+09:00",
+      "collected_at": "2026-08-31T17:00:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3212,7 +3289,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "70684f0e30751d27",
@@ -3226,7 +3304,7 @@
       ],
       "impact": "2025.12.31부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2025-11-21",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2025-12-31",
       "source": {
         "name": "한국회계기준원",
@@ -3254,7 +3332,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "9698298d79ebb017",
@@ -3268,7 +3347,7 @@
       ],
       "impact": "2026.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2025-10-17",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3296,7 +3375,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "d6932c96df766ff4",
@@ -3310,7 +3390,7 @@
       ],
       "impact": "2024.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-10-27",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3338,7 +3418,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "f4956a910e65cf70",
@@ -3352,7 +3433,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-09-15",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3380,7 +3461,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "d79df0414f4f7217",
@@ -3394,7 +3476,7 @@
       ],
       "impact": "2023.12.13부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-09-15",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2023-12-13",
       "source": {
         "name": "한국회계기준원",
@@ -3422,7 +3504,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "ca79fc238be4964b",
@@ -3436,7 +3519,7 @@
       ],
       "impact": "2024.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-05-12",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3464,7 +3547,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "09cd5c0dc6380f82",
@@ -3478,7 +3562,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2022-02-11",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3506,7 +3590,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "b81287c2f2482f0c",
@@ -3520,7 +3605,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2021-10-15",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3548,7 +3633,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "8c9fdf637ea31395",
@@ -3562,7 +3648,7 @@
       ],
       "impact": "2026.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2021-09-10",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3590,7 +3676,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "5479d8b2e44e1606",
@@ -3604,7 +3691,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2021-04-23",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3632,7 +3719,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "84e7c74a5aa89f1c",
@@ -3646,7 +3734,7 @@
       ],
       "impact": "2021.04.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2021-04-01",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2021-04-01",
       "source": {
         "name": "한국회계기준원",
@@ -3674,7 +3762,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "7f0a9f3d43237d06",
@@ -3688,7 +3777,7 @@
       ],
       "impact": "2021.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-12-18",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2021-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3716,7 +3805,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "20d1deb1058213da",
@@ -3730,7 +3820,7 @@
       ],
       "impact": "2022.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-09-25",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3758,7 +3848,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "e81b961eed012527",
@@ -3772,7 +3863,7 @@
       ],
       "impact": "2022.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-09-25",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3800,7 +3891,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "4b66ce824b933e36",
@@ -3814,7 +3906,7 @@
       ],
       "impact": "2022.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-09-25",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3842,7 +3934,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "45e736e894d6a7d1",
@@ -3856,7 +3949,7 @@
       ],
       "impact": "2020.06.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-05-29",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2020-06-01",
       "source": {
         "name": "한국회계기준원",
@@ -3884,7 +3977,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "80d0736d1fd1f945",
@@ -3898,7 +3992,7 @@
       ],
       "impact": "2020.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2019-12-20",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3926,7 +4020,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "db6ced6660ac19e9",
@@ -3940,7 +4035,7 @@
       ],
       "impact": "2020.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2019-04-19",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3968,7 +4063,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "4f4237b1761fa691",
@@ -3982,7 +4078,7 @@
       ],
       "impact": "2021.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-05-25",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2021-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4034,7 +4130,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "92bcc92013a09a57",
@@ -4048,7 +4145,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-02-28",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4076,7 +4173,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "c1d1158c7f0e8cfc",
@@ -4090,7 +4188,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-01-26",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4118,7 +4216,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "0a99f1882d5b9930",
@@ -4132,7 +4231,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2017-12-15",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4160,7 +4259,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "8056e00dd648a3e7",
@@ -4174,7 +4274,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2017-05-22",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4202,7 +4302,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "365dbbfd6ff20fd3",
@@ -4216,7 +4317,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2017-04-21",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4244,7 +4345,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "da7033249cd04518",
@@ -4258,7 +4360,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2017-03-24",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4286,7 +4388,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "e75150308ed8e5bf",
@@ -4300,7 +4403,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2017-02-24",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4328,7 +4431,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "6f048e4bb29c947c",
@@ -4342,7 +4446,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2016-11-15",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4370,7 +4474,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "ffb7d7a9904f74d3",
@@ -4384,7 +4489,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2016-11-15",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4412,7 +4517,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "800f7a03fdb83588",
@@ -4426,7 +4532,7 @@
       ],
       "impact": "2017.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2016-11-15",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2017-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4454,7 +4560,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "03d6c8cd8ef38e8d",
@@ -4468,7 +4575,7 @@
       ],
       "impact": "2016.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-12-24",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4496,7 +4603,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "a9ecc21bc831574b",
@@ -4510,7 +4618,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-11-06",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4538,7 +4646,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "4cec8dbd259992e6",
@@ -4552,7 +4661,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-09-25",
-      "collected_at": "2026-08-31T16:19:43+09:00",
+      "collected_at": "2026-08-31T17:00:14+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4580,7 +4689,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "ae09f3587c5e3bf7",
@@ -4593,7 +4703,7 @@
       ],
       "impact": "2026.01.01부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2025-12-23",
-      "collected_at": "2026-08-31T16:20:52+09:00",
+      "collected_at": "2026-08-31T17:01:15+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "기획재정부",
@@ -4622,7 +4732,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "ed8aee0d1a28ad22",
@@ -4635,7 +4746,7 @@
       ],
       "impact": "2026.02.27부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-02-27",
-      "collected_at": "2026-08-31T16:20:54+09:00",
+      "collected_at": "2026-08-31T17:01:17+09:00",
       "effective_date": "2026-02-27",
       "source": {
         "name": "기획재정부",
@@ -4664,7 +4775,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "90013be1f707011f",
@@ -4677,7 +4789,7 @@
       ],
       "impact": "2026.03.20부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-03-20",
-      "collected_at": "2026-08-31T16:20:57+09:00",
+      "collected_at": "2026-08-31T17:01:21+09:00",
       "effective_date": "2026-03-20",
       "source": {
         "name": "기획재정부",
@@ -4706,7 +4818,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "fed6017ba1775bb2",
@@ -4719,7 +4832,7 @@
       ],
       "impact": "2026.06.02부터 적용. 세무팀 사전 검토 필요.",
       "published_at": "2026-06-02",
-      "collected_at": "2026-08-31T16:21:47+09:00",
+      "collected_at": "2026-08-31T17:02:13+09:00",
       "effective_date": "2026-06-02",
       "source": {
         "name": "행정안전부",
@@ -4748,7 +4861,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "2d985b567a9e6d86",
@@ -4759,7 +4873,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-11-04",
-      "collected_at": "2026-08-31T16:19:58+09:00",
+      "collected_at": "2026-08-31T17:00:27+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -4782,7 +4896,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "9c1e7cf2f7ead25f",
@@ -4793,7 +4908,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-31",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "한국공인회계사회",
@@ -4818,7 +4933,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "8a16b2dfca872a50",
@@ -4829,7 +4945,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-28",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "한국공인회계사회",
@@ -4854,7 +4970,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "4eb8762a961183ee",
@@ -4865,7 +4982,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-22",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "한국공인회계사회",
@@ -4892,7 +5009,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "92fe86e2ebf19973",
@@ -4903,7 +5021,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-27",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -4929,7 +5047,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "18ced3fa9f81ec28",
@@ -4940,7 +5059,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-21",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "한국공인회계사회",
@@ -4965,7 +5084,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "014f717cd6e25220",
@@ -4976,7 +5096,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-29",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "한국공인회계사회",
@@ -5001,7 +5121,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "e78e5f172f1fab5d",
@@ -5012,7 +5133,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-09",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "한국공인회계사회",
@@ -5037,7 +5158,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "fa45ec2659034054",
@@ -5048,7 +5170,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-04-25",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "일간NTN",
@@ -5075,7 +5197,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "063083cc277dae9b",
@@ -5086,7 +5209,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-04-25",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -5116,7 +5239,8 @@
         "g-enews.com"
       ],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "0b1a8a1a70b58329",
@@ -5127,7 +5251,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-26",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -5153,7 +5277,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "b165aa1fe8760fc8",
@@ -5164,7 +5289,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-01",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5190,7 +5315,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "88fc729e853f2fcb",
@@ -5201,7 +5327,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-06",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5230,7 +5356,8 @@
         "netzeronews.kr"
       ],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "de64ce7fedc72a59",
@@ -5241,7 +5368,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-13",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5267,7 +5394,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "b0947a26e7ef9b14",
@@ -5278,7 +5406,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-06",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -5304,7 +5432,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "c381025cff317e01",
@@ -5315,7 +5444,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-09",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5341,7 +5470,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "45b46b72e32c3ac1",
@@ -5352,7 +5482,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-08",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5378,7 +5508,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "5bad9bb5fcf2f5e1",
@@ -5389,7 +5520,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-24",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5415,7 +5546,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "1c0a39f79752e2d0",
@@ -5426,7 +5558,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-08",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -5452,7 +5584,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "6a832d1b18b85eda",
@@ -5463,7 +5596,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-07",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5489,7 +5622,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "0e1fe5c52e1d0ca8",
@@ -5500,7 +5634,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-09",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5526,7 +5660,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "dcc492b453a75305",
@@ -5537,7 +5672,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-03",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -5563,7 +5698,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "3a9f970d3538b763",
@@ -5574,7 +5710,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-18",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -5600,7 +5736,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "ca226d7d35d6ae9c",
@@ -5611,7 +5748,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-09",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "일간NTN",
@@ -5636,7 +5773,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "5e44e5e2c355fdca",
@@ -5647,7 +5785,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-11",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "일간NTN",
@@ -5672,7 +5810,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "3dfbf48da228c0a0",
@@ -5683,7 +5822,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-08",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -5708,7 +5847,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "21d8ab2d29e31ca8",
@@ -5719,7 +5859,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-08-21",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "EY한영",
@@ -5744,7 +5884,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "451c9516f2e8b01e",
@@ -5755,7 +5896,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-12-28",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "매일경제",
@@ -5782,7 +5923,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "33c9f3a8c8d4276d",
@@ -5793,7 +5935,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-19",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "한국경제",
@@ -5819,7 +5961,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "65dd478706a2c5be",
@@ -5830,7 +5973,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-12",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "한국경제",
@@ -5856,7 +5999,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "bfda1ca8c8b56e8f",
@@ -5867,7 +6011,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-10-28",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "머니투데이",
@@ -5892,43 +6036,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
-    },
-    {
-      "id": "388d3350696af976",
-      "category": "icfr",
-      "doc_type": "기사",
-      "stage": "참고",
-      "title": "\"신외감법 시행 3년…외국인 투자자도 기업 투명성 개선 인정\" - 매일경제 마켓",
-      "summary": [],
-      "impact": null,
-      "published_at": "2023-03-06",
-      "collected_at": "2026-08-31T16:21:53+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "매일경제",
-        "domain": "https://stock.mk.co.kr",
-        "tier": 4,
-        "type": "news"
-      },
-      "trust_score": 50,
-      "keyword_score": 20,
-      "final_score": 33.5,
-      "matched_keywords": [
-        "외감법"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE4wVlVodXJlT256M0hxZEJESVQtX1J0S0I2aUk5b3VNUlFscHZ4NEhzcU1XQnhxcmlIczFkeVRyalo3X1h0MGNlRV9YS3B4b0k?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 0,
-      "duplicate_sources": [],
-      "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "7f2bd29b761e8a42",
@@ -5939,7 +6048,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-08-21",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "이데일리",
@@ -5964,7 +6073,45 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
+    },
+    {
+      "id": "388d3350696af976",
+      "category": "icfr",
+      "doc_type": "기사",
+      "stage": "참고",
+      "title": "\"신외감법 시행 3년…외국인 투자자도 기업 투명성 개선 인정\" - 매일경제 마켓",
+      "summary": [],
+      "impact": null,
+      "published_at": "2023-03-06",
+      "collected_at": "2026-08-31T17:02:19+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "매일경제",
+        "domain": "https://stock.mk.co.kr",
+        "tier": 4,
+        "type": "news"
+      },
+      "trust_score": 50,
+      "keyword_score": 20,
+      "final_score": 33.5,
+      "matched_keywords": [
+        "외감법"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE4wVlVodXJlT256M0hxZEJESVQtX1J0S0I2aUk5b3VNUlFscHZ4NEhzcU1XQnhxcmlIczFkeVRyalo3X1h0MGNlRV9YS3B4b0k?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "is_static": false,
+      "date_estimated": false,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "5e6cb5e38c0ccf8c",
@@ -5975,7 +6122,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-02-01",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "서울경제",
@@ -6000,7 +6147,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "b602520acc798b19",
@@ -6011,7 +6159,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-10-07",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "lawleader.co.kr",
@@ -6039,7 +6187,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "8369e3143da07190",
@@ -6050,7 +6199,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-04-25",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "ceoscoredaily.com",
@@ -6077,7 +6226,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "e4cb313de4b9227d",
@@ -6088,7 +6238,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-04-25",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "m.ekn.kr",
@@ -6115,7 +6265,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "3b36c436efcf4aa3",
@@ -6126,7 +6277,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-09-28",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "khan.co.kr",
@@ -6153,7 +6304,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "b89c24fa5a7b9e5b",
@@ -6164,7 +6316,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-02-24",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "fntimes.com",
@@ -6191,7 +6343,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "b23bb6e737cf6210",
@@ -6202,7 +6355,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-07-01",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "tfmedia.co.kr",
@@ -6228,7 +6381,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "79d25b5811c123e3",
@@ -6239,7 +6393,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-19",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "imedialife.co.kr",
@@ -6264,7 +6418,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "c91774b7c7720e88",
@@ -6275,7 +6430,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-20",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "christiandaily.co.kr",
@@ -6301,7 +6456,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "8ffd776a841c9745",
@@ -6312,7 +6468,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-02",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "capnews.kr",
@@ -6338,7 +6494,49 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
+    },
+    {
+      "id": "4fb95814248440d4",
+      "category": "tax",
+      "doc_type": "공개초안",
+      "stage": "의견수렴",
+      "title": "[2026 세법개정안] 아이 낳고 키우면 세금 덜 낸다…청년·장애인 혜택도 확대 - 데일리안",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-08-03",
+      "collected_at": "2026-08-31T17:02:19+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "dailian.co.kr",
+        "domain": "https://www.dailian.co.kr",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 30,
+      "final_score": 20.0,
+      "matched_keywords": [
+        "세법",
+        "개정안"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxOYXR5MS1RNFpmdjlBTjNrTERjSWNwZlBEbnZ3eDNhbUVwbVlPcjBfTVlLRTJTRHVfa3Q2Zk1nX20wbEd3bkNSV2ttMV8yZGtSMVFNYXZIbG04SWZBZm5RdWhzU0VmNkdQMjRNc25OM3RrU2xhRHRmdXVBcmRXa3V3d0tiaDVBdE9UQ2Y0VlpuVWhOV1FDWXNZQTI5VHdwVHZDUXFfSTV5THM4X1p3WERtN2ZtUzVSSU96WUNNUkdJRXgydEFwS2NBb3l1dkZ2SjIxbE1mdU1DMXF5WWxlUWFNSU1wbGgzRWxVRTREbUNuSEFwT0E1aG1PSA?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "is_static": false,
+      "date_estimated": false,
+      "duplicate_count": 1,
+      "duplicate_sources": [
+        "dailian.co.kr",
+        "news.nate.com"
+      ],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "6f5fca4f685868e2",
@@ -6349,7 +6547,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-02",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "news1.kr",
@@ -6375,44 +6573,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
-    },
-    {
-      "id": "477a0433ac369233",
-      "category": "tax",
-      "doc_type": "공개초안",
-      "stage": "의견수렴",
-      "title": "[2026 세법개정안] 아이 낳고 키우면 세금 덜 낸다…청년·장애인 혜택도 확대 - 네이트",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-08-03",
-      "collected_at": "2026-08-31T16:21:53+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "news.nate.com",
-        "domain": "https://news.nate.com",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 30,
-      "final_score": 20.0,
-      "matched_keywords": [
-        "세법",
-        "개정안"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9iYkRkaE9qeXFiekdlTTUxWjF4WlVYdWItLUdhMWwwZS04Z1lRWnRTT3J3bGxscENXNjVock1lWTREU0J2cER0ZEU3N3I4a19JZ2JV?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 0,
-      "duplicate_sources": [],
-      "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "36a092a4f7539318",
@@ -6423,7 +6585,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-01-14",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "news2day.co.kr",
@@ -6449,7 +6611,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "ca6f306e446cec1c",
@@ -6460,7 +6623,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-09-11",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "medigatenews.com",
@@ -6486,7 +6649,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "4077166457615cab",
@@ -6497,7 +6661,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-16",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "v.daum.net",
@@ -6522,7 +6686,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     },
     {
       "id": "bfb1cd85554bcb09",
@@ -6533,7 +6698,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-21",
-      "collected_at": "2026-08-31T16:21:53+09:00",
+      "collected_at": "2026-08-31T17:02:19+09:00",
       "effective_date": null,
       "source": {
         "name": "zdnet.co.kr",
@@ -6558,7 +6723,8 @@
       "duplicate_count": 0,
       "duplicate_sources": [],
       "related_news": [],
-      "is_meeting_schedule": false
+      "is_meeting_schedule": false,
+      "ai_generated": false
     }
   ],
   "schedules": [

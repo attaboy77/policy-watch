@@ -33,6 +33,32 @@
 
   var fmtDot = function (iso) { return iso ? iso.replace(/-/g, ".") : ""; };
 
+  // ADDENDUM-8 §1: 검색. 공백 제거 + 소문자 변환(백엔드 _norm()과 같은 규칙).
+  var norm = function (s) { return String(s == null ? "" : s).replace(/\s+/g, "").toLowerCase(); };
+
+  // §1-3 검색 대상 필드.
+  function searchTargetsOf(it) {
+    return [
+      it.title,
+      it.source ? it.source.name : "",
+      (it.summary || []).join(" "),
+      it.impact || "",
+      (it.matched_keywords || []).join(" "),
+    ].join(" ");
+  }
+
+  // §1-4 매칭 규칙(AND). addendum 원문 pseudo-code는 공백을 지운 뒤에 공백으로
+  // split해서 사실상 토큰이 하나로 뭉개지는 버그가 있었다 — 원문 query를 먼저
+  // 공백으로 나눠 토큰화한 뒤 토큰별로 norm()한다(다국어 대소문자·띄어쓰기
+  // 무시는 그대로 유지).
+  function matchesQuery(it, query) {
+    if (!query) return true;
+    var tokens = query.trim().split(/\s+/).filter(Boolean).map(norm);
+    if (!tokens.length) return true;
+    var hay = norm(searchTargetsOf(it));
+    return tokens.every(function (t) { return hay.indexOf(t) !== -1; });
+  }
+
   var WEEKDAY_KO = ["일", "월", "화", "수", "목", "금", "토"];
 
   var fmtDateHeader = function (iso) {
@@ -83,6 +109,7 @@
     from: addDaysISO(todayISO(), -30),
     to: todayISO(),
     sort: "importance",
+    q: "",  // ADDENDUM-8 §1: 검색어. 오늘의 정책동향/전체 동향 둘 다에 적용(§1-1).
   };
 
   var DATA = null;
@@ -100,6 +127,7 @@
     if (p.get("to")) state.to = p.get("to");
     if (p.get("sort") === "latest" || p.get("sort") === "importance") state.sort = p.get("sort");
     if (p.get("static") === "1") state.staticOnly = true;
+    if (p.get("q")) state.q = p.get("q");
   }
 
   function syncURL() {
@@ -111,6 +139,7 @@
     p.set("from", state.from);
     p.set("to", state.to);
     if (state.sort !== "importance") p.set("sort", state.sort);
+    if (state.q) p.set("q", state.q);
     var qs = p.toString();
     history.replaceState(null, "", location.pathname + (qs ? "?" + qs : ""));
   }
@@ -150,6 +179,7 @@
       if (state.doctypes.length && state.doctypes.indexOf(it.doc_type) === -1) return false;
       if (it.doc_type === "논의자료" && !showDiscussion) return false;
       if (it.doc_type === "해외기준" && !showForeign) return false;
+      if (!matchesQuery(it, state.q)) return false;
       if (state.staticOnly) {
         // "상설자료만": 상설자료가 아니면 제외. 상설자료는 개정일이 오래돼 보통
         // 조회 기간 밖에 있는 게 정상이므로 이 모드에서는 날짜 필터를 건너뛴다.
@@ -213,9 +243,30 @@
     var feedEl = document.getElementById("feed");
     var filtered = sortItems(filterItems(DATA.items));
 
-    document.getElementById("resultCount").innerHTML = "총 <b>" + filtered.length + "</b>건";
+    // §1-2: 결과 건수 표시에 검색어 반영 — 총 12건 (검색: "법인세")
+    var countHtml = "총 <b>" + filtered.length + "</b>건";
+    if (state.q) countHtml += ' (검색: "' + esc(state.q) + '")';
+    document.getElementById("resultCount").innerHTML = countHtml;
 
     if (!filtered.length) {
+      // §1-6: 검색어가 있을 때는 검색 전용 빈 상태 메시지 + 버튼 2개.
+      if (state.q) {
+        feedEl.innerHTML =
+          '<div class="empty-state">"' + esc(state.q) + '"에 해당하는 항목이 없습니다.' +
+          '<div><button type="button" class="btn btn-outline" id="clearQueryBtn">검색어 지우기</button> ' +
+          '<button type="button" class="btn btn-outline" id="widenAllBtn">전체 기간으로 조회</button></div></div>';
+        document.getElementById("clearQueryBtn").addEventListener("click", function () {
+          setQuery("");
+          applyAndRender();
+        });
+        document.getElementById("widenAllBtn").addEventListener("click", function () {
+          state.from = "2000-01-01";
+          state.to = todayISO();
+          refreshDateInputs();
+          applyAndRender();
+        });
+        return;
+      }
       feedEl.innerHTML =
         '<div class="empty-state">조건에 맞는 항목이 없습니다. 기간을 넓히거나 카테고리를 추가해 보세요.' +
         '<div><button type="button" class="btn btn-outline" id="widen90Btn">최근 90일로 보기</button></div></div>';
@@ -264,8 +315,11 @@
     var summaryHtml = (it.summary && it.summary.length)
       ? '<ul class="card-summary">' + it.summary.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ul>"
       : "";
+    // ADDENDUM-8 §5-1: AI가 생성한 요약/준비사항임을 카드에서 인지할 수 있게
+    // 라벨에 "(AI 생성)"을 병기하고 박스 색도 바꾼다.
+    var impactLabel = it.ai_generated ? "준비사항 (AI 생성)" : "실무 영향";
     var impactHtml = it.impact
-      ? '<div class="card-impact"><b>실무 영향:</b> ' + esc(it.impact) + "</div>"
+      ? '<div class="card-impact' + (it.ai_generated ? " is-ai" : "") + '"><b>' + impactLabel + ':</b> ' + esc(it.impact) + "</div>"
       : "";
     var relatedHtml = renderRelatedNews(it.related_news);
 
@@ -384,22 +438,39 @@
     setTimeout(function () { target.classList.remove("is-highlight"); }, 2000);
   }
 
-  function scheduleItemHtml(s) {
-    var n = dday(s.effective_date);
+  // hideDdayIfPast: ADDENDUM-8 §2-3 "과거 항목은 D-Day 대신 날짜만 표시"는
+  // 시행일 캘린더 탭의 전체 목록(renderFullScheduleList())에만 해당한다 —
+  // §2-4가 사이드바 위젯(renderScheduleList())은 "변경 없음"이라 명시했으므로,
+  // 이 옵션을 안 넘기는 기존 호출부는 과거 항목이어도 D-Day를 그대로 보여준다.
+  function scheduleItemHtml(s, hideDdayIfPast) {
     var isPast = s.effective_date < todayISO();
     var ddayClass = s.importance === "high" ? " is-important" : "";
     // 2026-08-31 사용자 지시: 법제처 시행일과 위원회 회의 일정이 캘린더에
     // 섞이면 헷갈린다 — 회의 일정 항목은 뱃지로 명시한다.
     var meetingBadge = s.is_meeting ? '<span class="badge badge-meeting">회의 예정</span>' : "";
+    var ddayHtml = (isPast && hideDdayIfPast) ? "" :
+      '<span class="dday-badge' + ddayClass + ' tnum">' + ddayLabel(dday(s.effective_date)) + "</span>";
     return (
       '<li class="sched-item' + (isPast ? " is-past" : "") + '" data-date="' + s.effective_date + '">' +
-      '<div class="sched-top"><span class="dday-badge' + ddayClass + ' tnum">' + ddayLabel(n) + "</span>" + catBadge(s.category) + meetingBadge + "</div>" +
+      '<div class="sched-top">' + ddayHtml + catBadge(s.category) + meetingBadge + "</div>" +
       '<div class="sched-item-title">' + esc(s.title) + "</div>" +
       '<div class="sched-date tnum">' + esc(fmtDot(s.effective_date)) + "</div>" +
       '<div class="sched-desc">' + esc(s.description) + "</div>" +
       '<div class="sched-actions">' + actionButtons(s.urls) + "</div>" +
       "</li>"
     );
+  }
+
+  // ADDENDUM-8 §2-2: 미래 일정(가까운 순) 먼저, 그다음 과거 일정(최근 순).
+  function sortSchedules(schedules) {
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var future = [], past = [];
+    schedules.forEach(function (s) {
+      (new Date(s.effective_date + "T00:00:00") >= today ? future : past).push(s);
+    });
+    future.sort(function (a, b) { return new Date(a.effective_date) - new Date(b.effective_date); });
+    past.sort(function (a, b) { return new Date(b.effective_date) - new Date(a.effective_date); });
+    return { future: future, past: past };
   }
 
   // ── 시행 예정 일정 리스트 (사이드바, 당월 ~ 향후 3개월) ──────────────
@@ -410,15 +481,56 @@
     var winEnd = winEndDate.getFullYear() + "-" + String(winEndDate.getMonth() + 1).padStart(2, "0") + "-" + String(winEndDate.getDate()).padStart(2, "0");
 
     var list = DATA.schedules.filter(function (s) { return s.effective_date >= winStart && s.effective_date <= winEnd; });
-    var html = list.map(scheduleItemHtml).join("");
+    // bare .map(scheduleItemHtml)은 Array#map이 두 번째 인자로 index를 넘겨
+    // hideDdayIfPast에 index가 들어가버린다 — §2-4가 "변경 없음"이라 명시한
+    // 사이드바이므로 명시적으로 인자 1개만 넘긴다.
+    var html = list.map(function (s) { return scheduleItemHtml(s); }).join("");
     document.getElementById("schedList").innerHTML = html || '<li class="sched-desc">해당 기간 내 예정된 일정이 없습니다.</li>';
   }
 
   // ── 시행일 캘린더 탭: 전체 일정 리스트(기간 제한 없음) ────────────────
+  // ADDENDUM-8 §2-3: 기본은 미래 전체 + 과거 10건. "과거 일정 더 보기"로 나머지 노출.
+  var PAST_SCHEDULE_DEFAULT_SHOW = 10;
+
   function renderFullScheduleList() {
-    var html = DATA.schedules.map(scheduleItemHtml).join("");
-    document.getElementById("calFullSchedList").innerHTML = html || '<li class="sched-desc">등록된 일정이 없습니다.</li>';
-    document.getElementById("calFullSub").textContent = "시행일순 전체 " + DATA.schedules.length + "건";
+    var g = sortSchedules(DATA.schedules);
+    var html = "";
+
+    // .map(scheduleItemHtml) 그대로 쓰면 Array#map이 (item, index, array)를
+    // 넘겨서 두 번째 인자(hideDdayIfPast)에 인덱스가 들어가버린다(0번째 항목만
+    // falsy라 D-Day가 안 지워짐) — 반드시 래퍼로 감싸서 true만 넘긴다.
+    if (g.future.length) {
+      html += '<li class="sched-group-label">시행 예정 (' + g.future.length + "건)</li>";
+      html += g.future.map(function (s) { return scheduleItemHtml(s, true); }).join("");
+    }
+    if (g.past.length) {
+      if (g.future.length) html += '<li class="sched-divider" aria-hidden="true"></li>';
+      html += '<li class="sched-group-label">시행 완료 (' + g.past.length + "건)</li>";
+      html += g.past.slice(0, PAST_SCHEDULE_DEFAULT_SHOW).map(function (s) { return scheduleItemHtml(s, true); }).join("");
+      if (g.past.length > PAST_SCHEDULE_DEFAULT_SHOW) {
+        html += g.past.slice(PAST_SCHEDULE_DEFAULT_SHOW).map(function (s) {
+          return scheduleItemHtml(s, true).replace('class="sched-item', 'class="sched-item is-more-past');
+        }).join("");
+        html += '<li class="show-more-past-wrap"><button type="button" class="show-all-btn" id="pastMoreBtn">과거 일정 더 보기 (' +
+          (g.past.length - PAST_SCHEDULE_DEFAULT_SHOW) + "건)</button></li>";
+      }
+    }
+    if (!g.future.length && !g.past.length) {
+      html = '<li class="sched-desc">등록된 일정이 없습니다.</li>';
+    }
+
+    document.getElementById("calFullSchedList").innerHTML = html;
+    document.getElementById("calFullSub").textContent = "시행 예정 " + g.future.length + "건 · 시행 완료 " + g.past.length + "건";
+
+    var moreBtn = document.getElementById("pastMoreBtn");
+    if (moreBtn) {
+      moreBtn.addEventListener("click", function () {
+        Array.prototype.forEach.call(document.querySelectorAll("#calFullSchedList .is-more-past"), function (li) {
+          li.classList.remove("is-more-past");
+        });
+        moreBtn.parentElement.remove();
+      });
+    }
   }
 
   // ── 화면 전환: 오늘의 정책동향 / 전체 동향 / 시행일 캘린더 (ADDENDUM-4 §5-1) ──
@@ -452,6 +564,9 @@
       todays = pool.filter(function (it) { return it.published_at >= from3 && it.published_at <= day; });
       expanded = true;
     }
+    // ADDENDUM-8 §1-1: 검색은 날짜 범위(오늘/최근 3일)를 정한 다음 그 안에서만
+    // 좁힌다 — 검색어 때문에 "최근 3일로 확대" 안내가 잘못 뜨지 않도록.
+    if (state.q) todays = todays.filter(function (it) { return matchesQuery(it, state.q); });
 
     var official = todays.filter(function (it) { return it.source && it.source.type === "official"; });
     var news = todays.filter(function (it) { return !(it.source && it.source.type === "official"); });
@@ -471,6 +586,22 @@
     document.getElementById("todayOfficialSection").hidden = official.length === 0;
     document.getElementById("todayNewsSection").hidden = news.length === 0;
     document.getElementById("todayEmpty").hidden = todays.length > 0;
+    // §1-6: 검색 결과가 0건이면 검색 전용 문구/버튼으로 바꾼다.
+    var emptyText = document.getElementById("todayEmptyText");
+    var emptyActions = document.getElementById("todayEmptyActions");
+    if (state.q) {
+      emptyText.textContent = '"' + state.q + '"에 해당하는 항목이 없습니다.';
+      emptyActions.innerHTML =
+        '<button type="button" class="btn btn-outline" id="todayClearQueryBtn">검색어 지우기</button> ' +
+        '<button type="button" class="btn btn-outline" id="todayGoAllBtn">전체 동향에서 검색</button>';
+      var clearBtn = document.getElementById("todayClearQueryBtn");
+      if (clearBtn) clearBtn.addEventListener("click", function () { setQuery(""); applyAndRender(); });
+    } else {
+      emptyText.textContent = "최근 3일간 새로 발표된 소식이 없습니다. 주말·공휴일이거나 아직 수집 전일 수 있습니다.";
+      emptyActions.innerHTML = '<button type="button" class="btn btn-outline" id="todayGoAllBtn">전체 동향 보기</button>';
+    }
+    var goAllBtn = document.getElementById("todayGoAllBtn");
+    if (goAllBtn) goAllBtn.addEventListener("click", function () { switchView("all"); });
   }
 
   function renderTodayCard(it) {
@@ -484,7 +615,11 @@
     var summaryHtml = (it.summary && it.summary.length)
       ? '<ul class="today-card-summary">' + it.summary.slice(0, 2).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ul>"
       : "";
-    var impactHtml = it.impact ? '<div class="today-card-impact">' + esc(it.impact) + "</div>" : "";
+    // ADDENDUM-8 §5-1: AI 생성 라벨 병기.
+    var aiTag = it.ai_generated ? '<b>(AI 생성)</b> ' : "";
+    var impactHtml = it.impact
+      ? '<div class="today-card-impact' + (it.ai_generated ? " is-ai" : "") + '">' + aiTag + esc(it.impact) + "</div>"
+      : "";
     var relatedHtml = isOfficial ? renderRelatedNews(it.related_news) : "";
     var actionUrl = isOfficial ? (it.urls && it.urls.official) : (it.urls && it.urls.news);
     var actionLabel = isOfficial ? "원문 →" : "기사 보기 →";
@@ -552,6 +687,44 @@
     renderFeed();
     renderScheduleList();
     updateCatChipsUI();
+    // ADDENDUM-8 §1-1: 검색은 오늘의 정책동향에도 적용된다 — 그 탭이 보이는
+    // 중이면 같이 다시 그린다(다른 필터는 today 탭에 영향 없음, 검색만 예외).
+    if (state.view === "today") renderTodayView();
+  }
+
+  // ADDENDUM-8 §1: 검색창 두 개(필터 바 / 오늘의 정책동향 헤더)를 같은
+  // state.q로 동기화한다. 한쪽에 입력해도 다른 쪽 표시값과 X 버튼이 맞게 갱신된다.
+  function setQuery(q) {
+    state.q = q || "";
+    var input1 = document.getElementById("searchInput");
+    var input2 = document.getElementById("todaySearchInput");
+    if (input1 && input1.value !== state.q) input1.value = state.q;
+    if (input2 && input2.value !== state.q) input2.value = state.q;
+    document.getElementById("searchClear").hidden = !state.q;
+    document.getElementById("todaySearchClear").hidden = !state.q;
+  }
+
+  function wireSearch() {
+    var DEBOUNCE_MS = 200;
+    var timer = null;
+    function onInput(e) {
+      var val = e.target.value;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        setQuery(val);
+        applyAndRender();
+      }, DEBOUNCE_MS);
+    }
+    ["searchInput", "todaySearchInput"].forEach(function (id) {
+      document.getElementById(id).addEventListener("input", onInput);
+    });
+    ["searchClear", "todaySearchClear"].forEach(function (id) {
+      document.getElementById(id).addEventListener("click", function () {
+        clearTimeout(timer);
+        setQuery("");
+        applyAndRender();
+      });
+    });
   }
 
   function wireFilterBar() {
@@ -647,7 +820,9 @@
       renderCalendarFull();
     });
 
-    ["todayOfficialMore", "todayNewsMore", "todayGoAllBtn"].forEach(function (id) {
+    // todayGoAllBtn은 renderTodayView()가 매번 다시 그리며 직접 바인딩한다
+    // (검색 유무에 따라 문구가 바뀌는 버튼이라 정적 바인딩이 유지되지 않음).
+    ["todayOfficialMore", "todayNewsMore"].forEach(function (id) {
       document.getElementById(id).addEventListener("click", function () { switchView("all"); });
     });
   }
@@ -686,6 +861,8 @@
         document.getElementById("sortSelect").value = state.sort;
 
         wireFilterBar();
+        wireSearch();
+        setQuery(state.q);  // URL에 ?q=가 있었으면 입력창에 반영
         wireViews();
         renderMeta();
         renderCalendar();

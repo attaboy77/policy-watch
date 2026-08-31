@@ -197,6 +197,22 @@ main.view.is-active{ display:grid; }  /* .layout(전체 동향)은 grid 유지 *
 .result-count{ font-size:13px; color:var(--muted); }
 .result-count b{ color:var(--ink); font-weight:700; }
 
+/* ADDENDUM-8 §1-2: 검색 입력창. 필터 바에서는 오른쪽으로 밀어 붙인다. */
+.search-box{ position:relative; margin-left:auto; }
+#catChips .search-box{ min-width:220px; }
+.search-box input[type="search"]{
+  width:100%; border:1px solid var(--line); border-radius:6px;
+  padding:6px 30px 6px 10px; font-size:13px; background:var(--card); color:var(--ink);
+}
+.search-box input[type="search"]::-webkit-search-cancel-button{ display:none; }
+.search-box input[type="search"]:focus{ outline:none; border-color:var(--navy); }
+.search-clear{
+  position:absolute; right:6px; top:50%; transform:translateY(-50%);
+  border:none; background:none; color:var(--muted); cursor:pointer;
+  font-size:13px; line-height:1; padding:4px;
+}
+.search-clear:hover{ color:var(--ink); }
+
 .sort-select{
   border:1px solid var(--line); border-radius:6px; padding:6px 10px; background:var(--card);
   cursor:pointer;
@@ -281,6 +297,9 @@ main.view.is-active{ display:grid; }  /* .layout(전체 동향)은 grid 유지 *
   margin-bottom:14px;
 }
 .card-impact b{ color:var(--navy-deep); }
+/* ADDENDUM-8 §5-1: AI가 생성한 요약/준비사항은 라벨과 색으로 구분한다. */
+.card-impact.is-ai{ border-left-color:#7c3aed; background:#f5f3ff; }
+.card-impact.is-ai b{ color:#5b21b6; }
 
 /* ADDENDUM-4 §4: 관련 보도 접이식 목록 */
 .related-news{ margin-bottom:14px; }
@@ -392,6 +411,20 @@ main.view.is-active{ display:grid; }  /* .layout(전체 동향)은 grid 유지 *
 }
 .show-all-btn:hover{ border-color:var(--navy); }
 
+/* ADDENDUM-8 §2-3: 시행일 캘린더 탭 — 시행 예정/시행 완료 구분. */
+.sched-group-label{
+  font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase;
+  letter-spacing:.03em; padding:4px 2px 0;
+}
+.sched-divider{ border-top:1px solid var(--line); margin:4px 0; }
+.is-more-past{ display:none; }
+.show-more-past-wrap{ margin:0; }
+.show-more-past-wrap .show-all-btn{ margin-top:0; }
+/* 모바일 미디어쿼리의 ".sched-list.is-expanded .sched-item{display:block!important}"
+   (사이드바 위젯용, 아래 참고)가 #calFullSchedList에도 걸려 .is-more-past를
+   덮어써버리는 걸 더 높은 특이도 + !important로 막는다. */
+.sched-list.is-expanded .sched-item.is-more-past{ display:none !important; }
+
 /* ── 모바일: 캘린더 접힘 ─────────────────────────────────────────── */
 /* <details>는 브라우저별로 [open] 없이도 CSS로 강제 노출하는 게 안정적이지
    않아(2026-08-28 실사용 확인: 데스크톱에서 캘린더 자체가 안 보이는 버그
@@ -423,11 +456,12 @@ main.view.is-active{ display:grid; }  /* .layout(전체 동향)은 grid 유지 *
   max-width:1440px; margin:0 auto; padding:var(--gap);
 }
 .today-header{
-  display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
   margin-bottom:4px;
 }
 .today-title{ font-size:20px; font-weight:700; color:var(--navy-deep); }
-.today-counts{ font-size:13px; color:var(--muted); }
+.today-counts{ font-size:13px; color:var(--muted); margin-right:auto; }
+.today-header .search-box{ min-width:220px; margin-left:0; }
 .today-notice{ font-size:12.5px; color:var(--stage-opinion); margin:0 0 20px; }
 
 .today-section-title{
@@ -474,6 +508,9 @@ main.view.is-active{ display:grid; }  /* .layout(전체 동향)은 grid 유지 *
   border-left:3px solid var(--navy); background:#eef2ff; padding:6px 10px;
   font-size:12.5px; color:var(--ink); border-radius:0 4px 4px 0; margin-bottom:10px;
 }
+/* ADDENDUM-8 §5-1 */
+.today-card-impact.is-ai{ border-left-color:#7c3aed; background:#f5f3ff; }
+.today-card-impact.is-ai b{ color:#5b21b6; }
 .today-card-bottom{
   margin-top:auto; padding-top:10px;
   display:flex; align-items:center; justify-content:space-between; gap:8px;

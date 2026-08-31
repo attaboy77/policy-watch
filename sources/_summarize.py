@@ -1,24 +1,33 @@
 # -*- coding: utf-8 -*-
-"""규칙 기반 2~3줄 요약 + 실무 영향 한 줄 생성 (SPEC.md §6).
+"""규칙 기반 2~3줄 요약 + 실무 영향 한 줄 생성 (SPEC.md §6) + AI 요약 캐시 우선
+적용 (SPEC-ADDENDUM-8.md §4, 2026-08-31 재설계).
 
-단일 인터페이스: summarize(item) -> {"summary": [...], "impact": str|None}
-(추후 외부 LLM 요약으로 교체 가능하도록 인터페이스만 고정)
+단일 인터페이스: summarize(item) -> {"summary": [...], "impact": str|None,
+"ai_generated": bool}. `item["id"]`가 `data/summary_cache.json`에 있으면 그
+캐시 내용을 그대로 쓰고(ai_generated=True), 없으면 아래 규칙 기반 로직으로
+폴백한다(ai_generated=False) — §4-5 "키가 없으면 요약 없이 정상 동작" 원칙을
+그대로 따른다. 캐시를 채우는 방법은 `_summary_cache.py`/`summary_candidates.py`
+참고 — Anthropic API가 아니라 Claude Code가 직접 요약을 써서 캐시에 저장한다.
 
-**본문 텍스트 한계**: SPEC §6이 가정한 "본문 첫 문장 + 키워드 포함 문장 추출"은
-본문이 있어야 가능하다. 지금까지 만든 어댑터 중 상세 본문을 실제로 긁어와
-`item["_body"]`에 채워두는 건 일부(예: kasb.py의 A1 공개초안/검토의견 본문)뿐이고
-나머지 대부분은 제목만 있다. `_body`가 없으면 억지로 문장을 지어내는 대신
-**제목 + 우리가 실제로 아는 사실(문서종류·출처·첨부파일 수)**로 대체한다 — 없는
-내용을 요약이라고 우기는 것보다 낫다.
+**본문 텍스트 한계(규칙 기반 폴백에만 해당)**: SPEC §6이 가정한 "본문 첫 문장 +
+키워드 포함 문장 추출"은 본문이 있어야 가능하다. 지금까지 만든 어댑터 중 상세
+본문을 실제로 긁어와 `item["_body"]`에 채워두는 건 일부(예: kasb.py의 A1
+공개초안/검토의견 본문)뿐이고 나머지 대부분은 제목만 있다. `_body`가 없으면
+억지로 문장을 지어내는 대신 **제목 + 우리가 실제로 아는 사실(문서종류·출처·
+첨부파일 수)**로 대체한다 — 없는 내용을 요약이라고 우기는 것보다 낫다.
 """
 from __future__ import annotations
 
 import re
 
 from ._config import CATEGORIES
+from . import _summary_cache
 
 MAX_LINE_LEN = 60
 MAX_SUMMARY_LINES = 3
+
+# main.py 한 번 실행(프로세스 수명) 동안 재사용 — 항목마다 파일을 다시 읽지 않는다.
+_CACHE = _summary_cache.load()
 
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?다요])\s+")
 
@@ -128,8 +137,20 @@ def _build_impact(item: dict) -> str | None:
     return None
 
 
-def summarize(item: dict) -> dict:
+def summarize(item: dict, cache: dict | None = None) -> dict:
     """item(최종 스키마에 가까운 dict, `_body` 있으면 활용)을 받아
-    {"summary": [...], "impact": str|None}을 반환한다.
+    {"summary": [...], "impact": str|None, "ai_generated": bool}을 반환한다.
+
+    `item["id"]`가 캐시(`cache` 인자로 주입 가능 — 테스트용. 기본은 모듈 로드 시
+    읽은 `_CACHE`)에 있으면 그 내용을 그대로 쓴다(ADDENDUM-8 §4 재설계). 없으면
+    기존 규칙 기반 로직으로 폴백한다.
     """
-    return {"summary": _build_summary(item), "impact": _build_impact(item)}
+    c = _CACHE if cache is None else cache
+    cached = c.get(item.get("id"))
+    if cached:
+        return {
+            "summary": cached.get("summary") or [],
+            "impact": cached.get("impact"),
+            "ai_generated": True,
+        }
+    return {"summary": _build_summary(item), "impact": _build_impact(item), "ai_generated": False}

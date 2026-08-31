@@ -63,7 +63,7 @@ _ITEM_SCHEMA = {
         "trust_score", "keyword_score", "final_score", "matched_keywords",
         "urls", "law_meta",
         "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
-        "is_meeting_schedule",
+        "is_meeting_schedule", "ai_generated",
     ],
     "properties": {
         "id": {"type": "string"},
@@ -99,6 +99,10 @@ _ITEM_SCHEMA = {
         # effective_date가 "시행일"이 아니라 위원회 "회의 진행일자"면 true
         # (kasb.py fetch_schedule(), 2026-08-31 사용자 지시).
         "is_meeting_schedule": {"type": "boolean"},
+        # ADDENDUM-8 §4/§5-1: summary/impact가 규칙 기반이 아니라
+        # data/summary_cache.json(Claude Code가 직접 작성)에서 왔으면 true —
+        # 프론트가 "(AI 생성)" 라벨을 붙인다.
+        "ai_generated": {"type": "boolean"},
     },
 }
 

@@ -137,6 +137,7 @@ def build_data_json(items: list[dict]) -> dict:
     for it in capped:
         s = summarize(it)  # `_body`가 있으면 여기서 활용(finalize_item이 지우기 전에 먼저 호출)
         it["summary"], it["impact"] = s["summary"], s["impact"]
+        it["ai_generated"] = s["ai_generated"]  # ADDENDUM-8 §5-1: 카드에 "(AI 생성)" 라벨 표시용
         finalized.append(finalize_item(it))
 
     schedules = build_schedules(finalized)
