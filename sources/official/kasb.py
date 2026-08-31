@@ -14,7 +14,7 @@ docs/SOURCE_PROBE.md §A 조사 결과에 기반한다.
   추적하지 않기로 함. FSS와 달리 평문 href가 아니라서 추적하려면 별도 JS 분석이 필요).
 - A2(기준서 목록)는 실측 결과 (1) 날짜 없는 정적 카탈로그이고 (2) 애초에 K-IFRS가
   아니라 "일반기업회계기준"이라 fetch()에서 뺐다 — `fetch_standards()` 함수 docstring 참고.
-- C(calList.do, "회계기준 주요일정")는 위원회 회의·세미나 등을 진행일자 기준으로
+- C(calListA.do, "회계기준 주요일정")는 위원회 회의·세미나 등을 진행일자 기준으로
   나열하는 캘린더 게시판(2026-08-31 사용자 지시로 추가). 2019년부터 누적된
   ~1,100건짜리 아카이브라 서버 사이드 날짜필터(`s_date_start`/`s_date_end`) 없이
   훑으면 안 된다 — `fetch_schedule()` 참고.
@@ -47,8 +47,12 @@ NOTICE_LIST_URL = f"{BASE}/front/board/comm010List.do"
 NOTICE_VIEW_URL = f"{BASE}/front/board/comm010View.do"
 QNA_LIST_URL = f"{BASE}/front/board/allReplySummaryList.do"
 STANDARD_LIST_URLS = [f"{BASE}/front/board/List300{n}.do" for n in range(3, 9)]  # List3003~List3008
-CALENDAR_LIST_URL = f"{BASE}/front/board/calList.do"
-CALENDAR_VIEW_URL = f"{BASE}/front/board/calView.do"
+# calListA.do(=bu=A, "회계기준" 메뉴 하위)를 쓴다(2026-08-31 사용자 지시).
+# 실측 확인: calList.do(접미사 없음)·calListB.do와 행 데이터가 완전히 동일한
+# 게시판이다 — bu 파라미터는 메뉴 하이라이트에만 쓰이고 실제 목록 필터링에는
+# 영향이 없다. 상세 페이지 액션도 calViewA.do로 페어를 맞춘다.
+CALENDAR_LIST_URL = f"{BASE}/front/board/calListA.do"
+CALENDAR_VIEW_URL = f"{BASE}/front/board/calViewA.do"
 
 SLEEP_BETWEEN_REQUESTS = 1.0  # SPEC §4-6: 공식 사이트는 뉴스보다 여유 있게
 _KST = timezone(timedelta(hours=9))
@@ -60,7 +64,7 @@ _NOTICE_CATEGORY_MAP = {
 }
 _EXCLUDED_NOTICE_CATEGORIES = {"공지사항"}  # 운영성 공지 — 사용자 지시로 제외
 
-# calList.do 중분류(<p class="cata03_..">) → 우리 category key. 실측 결과 KASB는
+# calListA.do 중분류(<p class="cata03_..">) → 우리 category key. 실측 결과 KASB는
 # 회계기준·지속가능성기준 두 위원회만 운영하고(icfr/tax는 각각 FSS/NTS 소관이라
 # 이 게시판에 안 나옴), 나머지 중분류("세미나"/"포럼" 등 공통 행사)는 매핑에
 # 없으면 스킵한다 — A1과 달리 classify(title)로 대체 판정하지 않는다. 위원회
@@ -89,7 +93,7 @@ def _now_kst_iso() -> str:
 
 def _build_item(*, category: str, title: str, url: str, published_at: str | None,
                  doc_type: str, effective_date: str | None, tier: int, trust_score: int,
-                 source_name: str) -> dict:
+                 source_name: str, is_meeting_schedule: bool = False) -> dict:
     kw = keyword_score(title, category) if category in ("kifrs", "esg") else 0
     rec = recency_score(_parse_iso_date(published_at)) if published_at else 0
     return {
@@ -112,6 +116,11 @@ def _build_item(*, category: str, title: str, url: str, published_at: str | None
         "attachments": None,  # TODO: fileDownload() JS 엔드포인트 특정 필요(위 모듈 docstring 참고)
         "layer": "L1",        # SPEC-ADDENDUM.md §1: L1은 노이즈 필터 면제, 상한 미적용
         "is_noise": False,
+        # 2026-08-31 사용자 지시: effective_date가 "시행일"이 아니라 위원회
+        # "회의 진행일자"인 항목(fetch_schedule() 전용) 표시 — _summarize.py가
+        # "~부터 적용" 대신 "~ 위원회 회의 예정" 문구를 쓰게 하고, 캘린더가
+        # 회의 일정과 실제 시행일을 구분해 보여주는 데 쓴다.
+        "is_meeting_schedule": is_meeting_schedule,
     }
 
 
@@ -120,7 +129,7 @@ def _parse_iso_date(s: str) -> date:
 
 
 def _fetch_detail_body_text(seq: str, *, base_url: str = NOTICE_VIEW_URL) -> str:
-    """상세 페이지 본문 텍스트. calView.do도 comm010View.do와 같은 클래스
+    """상세 페이지 본문 텍스트. calViewA.do도 comm010View.do와 같은 클래스
     (.board_view_cont)를 쓰므로 `base_url`만 바꿔 재사용한다(fetch_schedule() 참고)."""
     resp = _http.get(base_url, params={"seq": seq})
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -182,7 +191,7 @@ def fetch_notices(*, fetch_detail: bool = True, max_detail_fetches: int = 30) ->
 
 def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
                     max_pages: int = 5) -> list[dict]:
-    """C: 회계기준 주요일정(calList.do) — 위원회 회의·세미나 등 진행일자 기준
+    """C: 회계기준 주요일정(calListA.do) — 위원회 회의·세미나 등 진행일자 기준
     캘린더(2026-08-31 사용자 지시로 추가).
 
     `s_date_start`/`s_date_end`(YYYY-MM-DD)로 서버 사이드 날짜필터를 건다 —
@@ -190,15 +199,20 @@ def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
     2019년부터 누적된 ~1,100건짜리 아카이브라 필터 없이 훑으면 안 된다(실측
     확인, 총 110페이지). `page` 쿼리 파라미터로 페이지네이션(실측 확인).
 
-    effective_date는 채우지 않는다 — 회의 진행일자는 "시행일"이 아니라 "논의일"
-    이라 의미가 다르다(우측 시행일 캘린더는 여전히 법령/공식 발표의 시행일만
-    다룬다). 상세 페이지 본문에서 `extract_effective_date()`를 시도는 하지만
-    (안건 목록 텍스트라 대개 실패해도 정상 — A1과 같은 패턴), 성공하면 그대로
-    채운다.
-
     _CALENDAR_CATEGORY_MAP에 없는 중분류(세미나·포럼 등 공통 행사)는 스킵한다
     (A1과 달리 classify(title)로 대체 판정하지 않음 — 위원회 회의가 아닌 행사를
-    우리 카테고리로 잘못 편입시키는 게 더 위험하다고 판단).
+    우리 카테고리로 잘못 편입시키는 게 더 위험하다고 판단). "일반기업회계기준"이
+    일정명에 들어간 건 명시적으로 제외한다(2026-08-31 사용자 지시 — "우리는
+    K-IFRS 적용 대상") — ADDENDUM-6 §1 APPLICABILITY.smb_only가 이미 걸러주지만,
+    이 소스에서 바로 눈에 보이게 한 번 더 막는다.
+
+    effective_date: 상세 페이지 본문에서 `extract_effective_date()`를 먼저
+    시도한다(안건 목록 텍스트라 대개 실패해도 정상 — A1과 같은 패턴). 못 찾았고
+    진행일자가 미래면 진행일자 자체를 effective_date로 채운다(2026-08-31
+    사용자 지시 — "우측 캘린더가 비어 있는데 이걸로 채울 수 있다"). 회의
+    진행일자가 엄밀히는 "시행일"이 아니라 "논의일"이지만, 예정된 위원회 안건을
+    미리 보여주는 조기 경보 용도로 schedules[]에 태운다. 과거 진행일자는 채우지
+    않는다 — 지난 회의를 "일정"으로 보여줄 이유가 없다.
     """
     today = date.today()
     start = today - timedelta(days=COLLECT_WINDOW_DAYS)
@@ -232,6 +246,8 @@ def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
             m = re.search(r"fn_Detail\('(\d+)'\)", link.get("onclick", "") if link else "")
             if not title or not m or not published_at:
                 continue
+            if "일반기업회계기준" in title:  # 2026-08-31 사용자 지시: K-IFRS 대상 아님
+                continue
             if is_event_announcement(title):  # 세미나·포럼 등 제목 기반 보강 필터
                 continue
 
@@ -247,6 +263,12 @@ def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
                 else:
                     effective_date = extract_effective_date(body_text)
                 detail_fetches += 1
+            if effective_date is None:
+                try:
+                    if _parse_iso_date(published_at) > today:
+                        effective_date = published_at  # 2026-08-31: 미래 일정→schedules 노출
+                except ValueError:
+                    pass
 
             tier, trust_score, source_name = trust_of(url)
             doc_type = doc_type_of(title, tier)
@@ -254,6 +276,7 @@ def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
                 category=category, title=title, url=url, published_at=published_at,
                 doc_type=doc_type, effective_date=effective_date,
                 tier=tier, trust_score=trust_score, source_name=source_name,
+                is_meeting_schedule=True,
             ))
 
         if len(rows) < 10:  # 페이지당 10건 — 덜 찼으면 마지막 페이지

@@ -29,6 +29,7 @@ _VALID_ITEM = {
     "duplicate_count": 0,
     "duplicate_sources": [],
     "related_news": [],
+    "is_meeting_schedule": False,
 }
 
 _VALID_SCHEDULE = {
@@ -41,6 +42,7 @@ _VALID_SCHEDULE = {
     "description": "2026.01.01부터 적용.",
     "source": {"name": "기획재정부", "domain": "law.go.kr", "tier": 1, "type": "official"},
     "urls": {"news": None, "official": "https://law.go.kr/x"},
+    "is_meeting": False,
 }
 
 _VALID_DATA = {

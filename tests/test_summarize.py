@@ -75,3 +75,20 @@ class TestBuildImpact:
     def test_effective_date_takes_priority_over_doc_type_rule(self):
         result = summarize(_item(doc_type="질의회신", effective_date="2026-06-01", category="icfr"))
         assert "2026.06.01" in result["impact"]
+
+    # ── is_meeting_schedule (2026-08-31 사용자 지시: KASB 주요일정 문구 구분) ──
+    def test_meeting_schedule_uses_meeting_wording_not_takes_effect(self):
+        result = summarize(_item(effective_date="2026-09-04", category="kifrs",
+                                  is_meeting_schedule=True))
+        assert result["impact"] == "2026.09.04 위원회 회의 예정 · 안건 의결 시 시행일 별도 확인"
+        assert "부터 적용" not in result["impact"]
+
+    def test_non_meeting_schedule_keeps_existing_wording(self):
+        result = summarize(_item(effective_date="2026-09-04", category="kifrs",
+                                  is_meeting_schedule=False))
+        assert result["impact"] == "2026.09.04부터 적용. 회계팀 사전 검토 필요."
+
+    def test_meeting_schedule_summary_line_says_committee_meeting(self):
+        result = summarize(_item(effective_date="2026-09-04", is_meeting_schedule=True))
+        assert any("위원회 회의 2026.09.04" in line for line in result["summary"])
+        assert not any("시행일 2026.09.04" in line for line in result["summary"])

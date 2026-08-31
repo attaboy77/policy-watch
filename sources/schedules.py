@@ -61,6 +61,10 @@ def schedule_from_item(item: dict) -> dict:
         "description": _description_of(item),
         "source": item["source"],
         "urls": item["urls"],
+        # 2026-08-31 사용자 지시: 법제처 시행일과 위원회 회의 일정이 캘린더에
+        # 섞이면 헷갈린다 — is_meeting=true면 프론트가 "회의 예정"으로 구분
+        # 표시한다(kasb.py fetch_schedule() 참고).
+        "is_meeting": bool(item.get("is_meeting_schedule", False)),
     }
 
 
@@ -81,6 +85,7 @@ def _load_manual(path: str = MANUAL_PATH) -> list[dict]:
             entry.setdefault("id", f"sch_manual_{entry['category']}_{entry['effective_date']}")
             entry.setdefault("status", _status_of(entry["effective_date"]))
             entry.setdefault("urls", {"news": None, "official": None})
+            entry.setdefault("is_meeting", False)  # 수동 입력은 전부 실제 시행일정
             out.append(entry)
         return out
     except Exception as exc:  # noqa: BLE001 - 수동 파일 하나 깨져도 자동 수집분은 살린다

@@ -339,7 +339,15 @@
         dotsHtml = '<div class="cal-dots">' +
           shown.map(function (e) {
             var color = (CAT_META[e.category] || {}).color || "#94a3b8";
-            return '<span class="cal-dot" style="background:' + color + '"></span>';
+            // 2026-08-31 사용자 지시: 법제처 시행일과 위원회 회의 일정이 섞이면
+            // 헷갈린다 — 회의 일정은 속이 빈 고리(테두리만), 실제 시행일은
+            // 꽉 찬 점으로 구분한다(카테고리 색은 둘 다 그대로 유지).
+            var style = e.is_meeting
+              ? "border:1.5px solid " + color + ";background:transparent;"
+              : "background:" + color + ";";
+            var title = e.is_meeting ? "위원회 회의 예정" : "시행일";
+            return '<span class="cal-dot' + (e.is_meeting ? " cal-dot-meeting" : "") +
+              '" style="' + style + '" title="' + title + '"></span>';
           }).join("") +
           (evs.length > 3 ? '<span class="cal-more">+' + (evs.length - 3) + "</span>" : "") +
           "</div>";
@@ -380,9 +388,12 @@
     var n = dday(s.effective_date);
     var isPast = s.effective_date < todayISO();
     var ddayClass = s.importance === "high" ? " is-important" : "";
+    // 2026-08-31 사용자 지시: 법제처 시행일과 위원회 회의 일정이 캘린더에
+    // 섞이면 헷갈린다 — 회의 일정 항목은 뱃지로 명시한다.
+    var meetingBadge = s.is_meeting ? '<span class="badge badge-meeting">회의 예정</span>' : "";
     return (
       '<li class="sched-item' + (isPast ? " is-past" : "") + '" data-date="' + s.effective_date + '">' +
-      '<div class="sched-top"><span class="dday-badge' + ddayClass + ' tnum">' + ddayLabel(n) + "</span>" + catBadge(s.category) + "</div>" +
+      '<div class="sched-top"><span class="dday-badge' + ddayClass + ' tnum">' + ddayLabel(n) + "</span>" + catBadge(s.category) + meetingBadge + "</div>" +
       '<div class="sched-item-title">' + esc(s.title) + "</div>" +
       '<div class="sched-date tnum">' + esc(fmtDot(s.effective_date)) + "</div>" +
       '<div class="sched-desc">' + esc(s.description) + "</div>" +

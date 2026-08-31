@@ -44,6 +44,14 @@ class TestScheduleFromItem:
         assert sch["source"]["name"] == "금융위원회"
         assert sch["urls"]["official"] == "https://law.go.kr/x"
 
+    # ── is_meeting (2026-08-31 사용자 지시: 회의 일정/시행일정 캘린더 구분) ──
+    def test_defaults_to_not_meeting(self):
+        assert schedule_from_item(_item())["is_meeting"] is False
+
+    def test_carries_is_meeting_schedule_flag_through(self):
+        sch = schedule_from_item(_item(is_meeting_schedule=True))
+        assert sch["is_meeting"] is True
+
 
 class TestImportanceOf:
     @pytest.mark.parametrize("score,expected", [(85, "high"), (60, "medium"), (10, "low")])

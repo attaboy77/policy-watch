@@ -63,6 +63,7 @@ _ITEM_SCHEMA = {
         "trust_score", "keyword_score", "final_score", "matched_keywords",
         "urls", "law_meta",
         "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
+        "is_meeting_schedule",
     ],
     "properties": {
         "id": {"type": "string"},
@@ -95,13 +96,16 @@ _ITEM_SCHEMA = {
         "duplicate_sources": {"type": "array", "items": {"type": "string"}},
         # §4: 공식 항목에 연결된 관련 L3 기사(최대 3건). 비어있으면 렌더 생략.
         "related_news": {"type": "array", "items": _RELATED_NEWS_ITEM_SCHEMA, "maxItems": 3},
+        # effective_date가 "시행일"이 아니라 위원회 "회의 진행일자"면 true
+        # (kasb.py fetch_schedule(), 2026-08-31 사용자 지시).
+        "is_meeting_schedule": {"type": "boolean"},
     },
 }
 
 _SCHEDULE_SCHEMA = {
     "type": "object",
     "required": ["id", "category", "title", "effective_date", "status",
-                 "importance", "description", "source", "urls"],
+                 "importance", "description", "source", "urls", "is_meeting"],
     "properties": {
         "id": {"type": "string"},
         "category": {"enum": CATEGORY_KEYS},
@@ -112,6 +116,9 @@ _SCHEDULE_SCHEMA = {
         "description": {"type": "string"},
         "source": _SOURCE_SCHEMA,
         "urls": _URLS_SCHEMA,
+        # 법제처 시행일 등 실제 "시행일정"이면 false, 위원회 "회의 일정"이면
+        # true(2026-08-31 사용자 지시 — 캘린더에서 둘을 구분 표시).
+        "is_meeting": {"type": "boolean"},
     },
 }
 

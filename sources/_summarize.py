@@ -75,7 +75,13 @@ def _fact_lines(item: dict) -> list[str]:
         lines.append(_truncate(f"첨부파일 {len(attachments)}건"))
     effective_date = item.get("effective_date")
     if effective_date:
-        lines.append(_truncate(f"시행일 {effective_date.replace('-', '.')}"))
+        # 2026-08-31 사용자 지시: KASB 주요일정(fetch_schedule()) 항목은
+        # effective_date가 "시행일"이 아니라 위원회 "회의 진행일자"다 — 같은
+        # 문구를 쓰면 실제로 시행되는 것처럼 오해된다.
+        if item.get("is_meeting_schedule"):
+            lines.append(_truncate(f"위원회 회의 {effective_date.replace('-', '.')}"))
+        else:
+            lines.append(_truncate(f"시행일 {effective_date.replace('-', '.')}"))
     return lines
 
 
@@ -107,8 +113,14 @@ def _build_impact(item: dict) -> str | None:
     effective_date = item.get("effective_date")
     category = item.get("category")
     if effective_date:
-        team = CATEGORIES.get(category, {}).get("team", "담당팀")
         formatted = effective_date.replace("-", ".")
+        # 2026-08-31 사용자 지시: KASB 주요일정(fetch_schedule()) 항목은
+        # effective_date가 위원회 "회의 진행일자"이지 실제 "시행일"이 아니다 —
+        # "~부터 적용"이라고 쓰면 그 날 규정이 시행되는 것처럼 오해된다. 안건이
+        # 회의에서 의결되더라도 실제 시행일은 보통 그 이후라 별도 확인이 필요.
+        if item.get("is_meeting_schedule"):
+            return f"{formatted} 위원회 회의 예정 · 안건 의결 시 시행일 별도 확인"
+        team = CATEGORIES.get(category, {}).get("team", "담당팀")
         return f"{formatted}부터 적용. {team} 사전 검토 필요."
     if item.get("doc_type") == "질의회신":
         # 매핑에 없는(알 수 없는) 카테고리면 억지로 만들지 않고 None.

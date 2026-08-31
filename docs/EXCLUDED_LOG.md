@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-08-31 15:15:37 +0900
+생성 시각: 2026-08-31 15:43:59 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -36,10 +36,4 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | kifrs | 한국공인회계사회 | 한국공인회계사회, '2025년 학교법인 회계감사 감리 지적사례' 게시 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBxWHI0MWNTaThpUmtDaHFQOWUyQ1UwQXpab0lxaXF2blgtTmNuaVZNZVRNcHZuNEJwLUlrcHoyV0pnXzBFZzhoVGN0b0t6ZUZsWEc1ZjgtRzMwVThxYnJRZ0VHMTg0SWZR?oc=5 |
-
-## excluded:smb_only (1건)
-
-| 카테고리 | 출처 | 제목 | 링크 |
-|---|---|---|---|
-| kifrs | 한국회계기준원 | 2026년 제8회 회계기준위원회(일반기업회계기준 개정 공개초안 – 제4장 연결재무제표 등) | https://www.kasb.or.kr/front/board/calView.do?seq=1121 |
 
