@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""한국회계기준원(kasb.or.kr) 수집기 — A1(소식) / A3(질의회신요약). (A2는 아래 참고, fetch()에서 제외)
+"""한국회계기준원(kasb.or.kr) 수집기 — A1(소식) / A3(질의회신요약) / C(주요일정).
+(A2는 아래 참고, fetch()에서 제외)
 
 docs/SOURCE_PROBE.md §A 조사 결과에 기반한다.
 
@@ -13,6 +14,10 @@ docs/SOURCE_PROBE.md §A 조사 결과에 기반한다.
   추적하지 않기로 함. FSS와 달리 평문 href가 아니라서 추적하려면 별도 JS 분석이 필요).
 - A2(기준서 목록)는 실측 결과 (1) 날짜 없는 정적 카탈로그이고 (2) 애초에 K-IFRS가
   아니라 "일반기업회계기준"이라 fetch()에서 뺐다 — `fetch_standards()` 함수 docstring 참고.
+- C(calList.do, "회계기준 주요일정")는 위원회 회의·세미나 등을 진행일자 기준으로
+  나열하는 캘린더 게시판(2026-08-31 사용자 지시로 추가). 2019년부터 누적된
+  ~1,100건짜리 아카이브라 서버 사이드 날짜필터(`s_date_start`/`s_date_end`) 없이
+  훑으면 안 된다 — `fetch_schedule()` 참고.
 """
 from __future__ import annotations
 
@@ -23,6 +28,7 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from .. import _http
+from .._config import COLLECT_WINDOW_DAYS
 from .._utils import (
     classify,
     doc_type_of,
@@ -41,6 +47,8 @@ NOTICE_LIST_URL = f"{BASE}/front/board/comm010List.do"
 NOTICE_VIEW_URL = f"{BASE}/front/board/comm010View.do"
 QNA_LIST_URL = f"{BASE}/front/board/allReplySummaryList.do"
 STANDARD_LIST_URLS = [f"{BASE}/front/board/List300{n}.do" for n in range(3, 9)]  # List3003~List3008
+CALENDAR_LIST_URL = f"{BASE}/front/board/calList.do"
+CALENDAR_VIEW_URL = f"{BASE}/front/board/calView.do"
 
 SLEEP_BETWEEN_REQUESTS = 1.0  # SPEC §4-6: 공식 사이트는 뉴스보다 여유 있게
 _KST = timezone(timedelta(hours=9))
@@ -51,6 +59,18 @@ _NOTICE_CATEGORY_MAP = {
     "지속가능성기준소식": "esg",
 }
 _EXCLUDED_NOTICE_CATEGORIES = {"공지사항"}  # 운영성 공지 — 사용자 지시로 제외
+
+# calList.do 중분류(<p class="cata03_..">) → 우리 category key. 실측 결과 KASB는
+# 회계기준·지속가능성기준 두 위원회만 운영하고(icfr/tax는 각각 FSS/NTS 소관이라
+# 이 게시판에 안 나옴), 나머지 중분류("세미나"/"포럼" 등 공통 행사)는 매핑에
+# 없으면 스킵한다 — A1과 달리 classify(title)로 대체 판정하지 않는다. 위원회
+# 회의가 아닌 행사 안내를 "혹시나" 우리 카테고리로 잘못 편입시키는 게 더 위험하다
+# 판단(§9-2류 과다 추정 방지 원칙의 반대 방향 — 여기선 과다 포함이 위험).
+_CALENDAR_CATEGORY_MAP = {
+    "회계기준위원회": "kifrs",
+    "지속가능성기준위원회": "esg",
+}
+CALENDAR_FORWARD_DAYS = 90  # 과거뿐 아니라 예정된 회의도 보여준다(조기 경보 가치, ADDENDUM-6 §3 근거와 동일한 논리)
 
 
 def probe() -> dict:
@@ -99,8 +119,10 @@ def _parse_iso_date(s: str) -> date:
     return datetime.strptime(s, "%Y-%m-%d").date()
 
 
-def _fetch_detail_body_text(seq: str) -> str:
-    resp = _http.get(NOTICE_VIEW_URL, params={"seq": seq})
+def _fetch_detail_body_text(seq: str, *, base_url: str = NOTICE_VIEW_URL) -> str:
+    """상세 페이지 본문 텍스트. calView.do도 comm010View.do와 같은 클래스
+    (.board_view_cont)를 쓰므로 `base_url`만 바꿔 재사용한다(fetch_schedule() 참고)."""
+    resp = _http.get(base_url, params={"seq": seq})
     soup = BeautifulSoup(resp.text, "html.parser")
     cont = soup.select_one(".board_view_cont")
     return cont.get_text(" ", strip=True) if cont else ""
@@ -155,6 +177,87 @@ def fetch_notices(*, fetch_detail: bool = True, max_detail_fetches: int = 30) ->
             doc_type=doc_type, effective_date=effective_date,
             tier=tier, trust_score=trust_score, source_name=source_name,
         ))
+    return items
+
+
+def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
+                    max_pages: int = 5) -> list[dict]:
+    """C: 회계기준 주요일정(calList.do) — 위원회 회의·세미나 등 진행일자 기준
+    캘린더(2026-08-31 사용자 지시로 추가).
+
+    `s_date_start`/`s_date_end`(YYYY-MM-DD)로 서버 사이드 날짜필터를 건다 —
+    COLLECT_WINDOW_DAYS(과거) ~ CALENDAR_FORWARD_DAYS(미래) 범위. 이 게시판은
+    2019년부터 누적된 ~1,100건짜리 아카이브라 필터 없이 훑으면 안 된다(실측
+    확인, 총 110페이지). `page` 쿼리 파라미터로 페이지네이션(실측 확인).
+
+    effective_date는 채우지 않는다 — 회의 진행일자는 "시행일"이 아니라 "논의일"
+    이라 의미가 다르다(우측 시행일 캘린더는 여전히 법령/공식 발표의 시행일만
+    다룬다). 상세 페이지 본문에서 `extract_effective_date()`를 시도는 하지만
+    (안건 목록 텍스트라 대개 실패해도 정상 — A1과 같은 패턴), 성공하면 그대로
+    채운다.
+
+    _CALENDAR_CATEGORY_MAP에 없는 중분류(세미나·포럼 등 공통 행사)는 스킵한다
+    (A1과 달리 classify(title)로 대체 판정하지 않음 — 위원회 회의가 아닌 행사를
+    우리 카테고리로 잘못 편입시키는 게 더 위험하다고 판단).
+    """
+    today = date.today()
+    start = today - timedelta(days=COLLECT_WINDOW_DAYS)
+    end = today + timedelta(days=CALENDAR_FORWARD_DAYS)
+
+    items: list[dict] = []
+    detail_fetches = 0
+    for page in range(1, max_pages + 1):
+        if page > 1:
+            time.sleep(SLEEP_BETWEEN_REQUESTS)
+        resp = _http.get(CALENDAR_LIST_URL, params={
+            "s_date_start": start.isoformat(), "s_date_end": end.isoformat(), "page": page,
+        })
+        soup = BeautifulSoup(resp.text, "html.parser")
+        rows = soup.select(".cal_board table tbody tr")
+        if not rows:
+            break
+
+        for row in rows:
+            cells = row.find_all("td")
+            if len(cells) < 5:
+                continue
+            published_at = cells[0].get_text(strip=True) or None
+            minor_p = cells[2].select_one("p")
+            minor = minor_p.get_text(strip=True) if minor_p else ""
+            category = _CALENDAR_CATEGORY_MAP.get(minor)
+            if category is None:
+                continue  # 세미나/포럼 등 위원회 회의가 아닌 공통 행사는 스킵
+            link = cells[3].find("a")
+            title = link.get_text(strip=True) if link else ""
+            m = re.search(r"fn_Detail\('(\d+)'\)", link.get("onclick", "") if link else "")
+            if not title or not m or not published_at:
+                continue
+            if is_event_announcement(title):  # 세미나·포럼 등 제목 기반 보강 필터
+                continue
+
+            seq = m.group(1)
+            url = f"{CALENDAR_VIEW_URL}?seq={seq}"
+            effective_date = None
+            if fetch_detail and detail_fetches < max_detail_fetches:
+                time.sleep(SLEEP_BETWEEN_REQUESTS)
+                try:
+                    body_text = _fetch_detail_body_text(seq, base_url=CALENDAR_VIEW_URL)
+                except Exception as exc:  # noqa: BLE001
+                    print(f"[kasb] calendar seq={seq} 상세 조회 실패: {exc}")
+                else:
+                    effective_date = extract_effective_date(body_text)
+                detail_fetches += 1
+
+            tier, trust_score, source_name = trust_of(url)
+            doc_type = doc_type_of(title, tier)
+            items.append(_build_item(
+                category=category, title=title, url=url, published_at=published_at,
+                doc_type=doc_type, effective_date=effective_date,
+                tier=tier, trust_score=trust_score, source_name=source_name,
+            ))
+
+        if len(rows) < 10:  # 페이지당 10건 — 덜 찼으면 마지막 페이지
+            break
     return items
 
 
@@ -247,12 +350,13 @@ def fetch_qna() -> list[dict]:
 
 
 def fetch(*, fetch_detail: bool = True) -> list[dict]:
-    """A1+A3. A2(fetch_standards)는 제외 — 위 fetch_standards() docstring 참고.
+    """A1+A3+C(주요일정). A2(fetch_standards)는 제외 — 위 fetch_standards() docstring 참고.
     소스 한 종류가 실패해도 나머지는 계속 진행한다(SPEC §9-4).
     """
     out: list[dict] = []
     for name, fn in (("notices", lambda: fetch_notices(fetch_detail=fetch_detail)),
-                      ("qna", fetch_qna)):
+                      ("qna", fetch_qna),
+                      ("schedule", lambda: fetch_schedule(fetch_detail=fetch_detail))):
         try:
             out.extend(fn())
         except Exception as exc:  # noqa: BLE001
@@ -278,3 +382,10 @@ if __name__ == "__main__":
     for it in qna[:5]:
         print(f"  [{it['doc_type']}] {it['published_at']} | {it['title'][:50]}")
     print(f"  총 {len(qna)}건")
+
+    print("\n=== C: 회계기준 주요일정(calList.do) ===")
+    schedule = fetch_schedule(fetch_detail=True, max_detail_fetches=10)
+    for it in schedule[:10]:
+        eff = f" | 시행/기한: {it['effective_date']}" if it["effective_date"] else ""
+        print(f"  [{it['category']:5s}] [{it['doc_type']:6s}] {it['published_at']} | {it['title'][:50]}{eff}")
+    print(f"  총 {len(schedule)}건")

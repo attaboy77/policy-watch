@@ -866,6 +866,11 @@ class TestIsForeignStandard:
     def test_no_foreign_body_passes(self):
         assert is_foreign_standard("KSSB, 지속가능성 공시기준 제2호 공개초안") is False
 
+    def test_domestic_committee_reporting_on_issb_passes(self):
+        # KASB "주요일정" 게시판 연동(2026-08-31) 이후 실측: 지속가능성기준위원회
+        # 자체 회의 안건에 ISSB가 언급돼도 국내 절차이지 해외기준이 아니다.
+        assert is_foreign_standard("2026년 제6회 지속가능성기준위원회(ISSB 6월 주요 논의내용 및 회의결과 보고 등)") is False
+
     def test_all_foreign_standard_bodies_individually_detected(self):
         for kw in FOREIGN_STANDARD_BODIES:
             assert is_foreign_standard(f"{kw} 공개초안 발표") is True, f"{kw}가 통과됨"
