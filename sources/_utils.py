@@ -290,16 +290,39 @@ def dedupe(items: list[dict]) -> list[dict]:
 
 
 # ── 7) 문서 종류 판정 (SPEC-ADDENDUM-2.md §4) ───────────────────────────────
+# "회의결과"/"논의결과"(공백 없는 복합명사)가 "의결"과 부분일치하는 걸 막는다.
+# doc_type_of() 참고 — 공백 유무와 무관한 문제라 _norm_keep_spaces()만으로는
+# 못 잡는다.
+_MEETING_RESULT_RE = re.compile(r"(?:회의|논의)\s*결과")
+
+
 def doc_type_of(title: str, source_tier: int = 1) -> str:
     """제목 기준 doc_type 판정. 어디에도 안 걸리고 tier>=4면 '기사', 아니면 '보도자료'.
 
     DOC_TYPE_RULES는 앞쪽 규칙이 우선이다("개정"보다 "공개초안"이 먼저 걸려야
     "K-IFRS 제1116호 개정안 공개초안"이 공개초안으로 판정된다).
+
+    `_norm()`이 아니라 `_norm_keep_spaces()`를 쓴다(2026-08-31 사용자 지시) —
+    다어절 키워드("평가 및 보고" 등)가 공백을 사이에 둔 서로 다른 두 단어와
+    우연히 부분일치하는 걸 막는다(예: 원래 `_norm()`은 "회의 결과"처럼 제목에
+    실제 공백이 있는 경우, 그 공백을 지워버려 "의결"과 겹치는 문제가 있었다).
+
+    **주의 — 이것만으로는 부족한 경우가 있다**: "…ISSB 6월 논의내용 및
+    회의결과 보고…"의 "회의결과"는 원문에 애초에 공백이 없는 한 단어(붙여
+    쓴 복합명사)라 `_norm_keep_spaces()`를 써도 그대로 "의결"과 부분일치한다
+    (실측으로 발견 — 처음엔 공백 제거가 원인인 줄 알았으나 원문 자체에 공백이
+    없었다). 공백 유무와 무관한 이 케이스는 `_MEETING_RESULT_RE`로 별도
+    방어한다: "회의결과"/"논의결과" 복합어가 있으면 "의결" 키워드만 예외로
+    빼고 매칭한다(다른 키워드는 그대로 정상 동작).
     """
-    t = _norm(title)
+    t = _norm_keep_spaces(title)
+    has_meeting_result = bool(_MEETING_RESULT_RE.search(title))
     for dtype, kws in DOC_TYPE_RULES:
-        if any(_norm(k) in t for k in kws):
-            return dtype
+        for kw in kws:
+            if kw == "의결" and has_meeting_result:
+                continue  # "회의결과"/"논의결과" 부분일치 오탐 방지
+            if _norm_keep_spaces(kw) in t:
+                return dtype
     return "기사" if source_tier >= 4 else "보도자료"
 
 
