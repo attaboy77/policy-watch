@@ -85,6 +85,18 @@ img{ display:none; } /* SPEC §7-5: 이미지 사용 금지 — 실수로 들어
 .nav-tabs button.is-active{ color:var(--navy-deep); border-bottom-color:var(--navy); font-weight:700; }
 .nav-updated{ font-size:12px; color:var(--muted); flex:0 0 auto; white-space:nowrap; }
 
+/* 2026-09-02: 헤더 아래 "오늘 챙길 것" 한 줄 — 가장 임박한 일정(D-day) + 이번 주
+   신규 건수만(사용자 요청, 다른 정보 섞지 않음). 눈에 띄되 nav-tabs보다는
+   가벼운 톤으로(옅은 남색 배경 + 진한 글자) — sticky는 아님(nav 밑에 한 번만). */
+.nav-highlight{
+  background:#eef2ff; border-bottom:1px solid var(--line);
+  padding:8px 24px; font-size:13px; font-weight:600; color:var(--navy-deep);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+@media (max-width:639px){
+  .nav-highlight{ padding:8px 16px; }
+}
+
 /* ── 화면 전환 (ADDENDUM-4 §5) ───────────────────────────────────── */
 .view{ display:none; }
 .view.is-active{ display:block; }

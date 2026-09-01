@@ -24,6 +24,12 @@
   <div class="nav-updated tnum" id="navUpdated">마지막 갱신 확인 중…</div>
 </header>
 
+<!-- 2026-09-02 사용자 요청: 헤더 아래 "오늘 챙길 것" 한 줄 — 가장 임박한 일정(D-day)과
+     이번 주 신규 건수만. 데이터 로드 전엔 숨김(renderHeaderHighlight()가 채운 뒤 노출). -->
+<div class="nav-highlight" id="navHighlight" hidden>
+  <span id="navHighlightText"></span>
+</div>
+
 <!-- ADDENDUM-4 §5: 오늘의 정책동향 — 기본 진입 화면 -->
 <section class="view view-today is-active" id="viewToday">
   <div class="today-header">

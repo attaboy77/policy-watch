@@ -85,6 +85,15 @@
   };
   var ddayLabel = function (n) { return n === 0 ? "D-DAY" : n > 0 ? "D-" + n : "D+" + (-n); };
 
+  // 2026-09-02: "오늘 챙길 것" 한 줄용 — dayISO가 속한 주(월요일 시작)의 시작일.
+  var startOfWeekISO = function (dayISO) {
+    var d = new Date(dayISO + "T00:00:00");
+    var dow = d.getDay(); // 0=일 ... 6=토
+    d.setDate(d.getDate() - (dow === 0 ? 6 : dow - 1));
+    var y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, "0"), day = String(d.getDate()).padStart(2, "0");
+    return y + "-" + m + "-" + day;
+  };
+
   // ADDENDUM-4 §5-4: 언론 보도 카드의 좌측 컬러바는 카테고리 색상의 40% 투명도.
   var hexToRgba = function (hex, alpha) {
     var h = (hex || "#64748b").replace("#", "");
@@ -978,6 +987,34 @@
     el.textContent = "마지막 갱신 " + y + "." + m + "." + day + " " + hh + ":" + mm;
   }
 
+  // 2026-09-02 사용자 요청: 헤더 아래 "오늘 챙길 것" 한 줄 — 가장 임박한 일정
+  // (D-day, 회의 예정/로드맵 포함 — sortSchedules()가 이미 미래 전체를 다룸)과
+  // 이번 주(월요일 시작) 신규 수집 건수만 보여준다. 기준일은 "오늘의 정책동향"과
+  // 동일하게 DATA.meta.generated_at(데이터가 실제로 언제 수집됐는지)을 우선
+  // 쓴다 — 클라이언트 로컬 날짜만 쓰면 크롤링이 늦어진 날 "이번 주 신규 0건"처럼
+  // 실제와 다르게 보일 수 있어서다.
+  function renderHeaderHighlight() {
+    var el = document.getElementById("navHighlight");
+    var textEl = document.getElementById("navHighlightText");
+    if (!el || !textEl) return;
+
+    var day = (DATA.meta && DATA.meta.generated_at) ? DATA.meta.generated_at.slice(0, 10) : todayISO();
+    var weekStart = startOfWeekISO(day);
+    var newCount = DATA.items.filter(function (it) {
+      return it.published_at >= weekStart && it.published_at <= day;
+    }).length;
+
+    var nearest = sortSchedules(DATA.schedules || []).future[0];
+    var parts = [];
+    if (nearest) {
+      parts.push(ddayLabel(dday(nearest.effective_date)) + " " + displayScheduleTitle(nearest.title));
+    }
+    parts.push("이번 주 신규 " + newCount + "건");
+
+    textEl.textContent = parts.join(" · ");
+    el.hidden = false;
+  }
+
   // ── 초기화 ───────────────────────────────────────────────────────────
   function init() {
     wireNavScroll();
@@ -997,6 +1034,7 @@
         setQuery(state.q);  // URL에 ?q=가 있었으면 입력창에 반영
         wireViews();
         renderMeta();
+        renderHeaderHighlight();
         renderCalendar();
         renderFullScheduleList();
         applyAndRender();
