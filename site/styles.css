@@ -227,7 +227,10 @@ main.view:not(.is-active){ display:none; }
 }
 
 /* ── 피드 ─────────────────────────────────────────────────────────── */
-.feed{ display:flex; flex-direction:column; gap:32px; }
+/* 2026-09-02 디자인 개선(여백 재구성): 날짜 그룹은 서로 다른 "섹션"이라
+   32px→44px로 넓혀 구분을 뚜렷하게 한다(카드 사이 12px, 카드 내부 8px과
+   대비되도록 — 아래 각 항목 참고). */
+.feed{ display:flex; flex-direction:column; gap:44px; }
 
 .date-group-header{
   display:flex; align-items:center; gap:12px;
@@ -263,7 +266,11 @@ main.view:not(.is-active){ display:none; }
 
 .badge-doctype{ background:transparent; border:1px solid var(--line); color:var(--muted); font-weight:600; }
 
-.badge-stage{ color:#fff; }
+/* 2026-09-02 디자인 개선(배지 위계): 예전엔 색을 꽉 채운 배경이라 카테고리
+   배지와 시선을 다퉜다 — outline으로 톤다운해 카드에서 카테고리 배지만
+   "색이 채워진" 유일한 배지로 남긴다. 실제 색(단계별)은 app.js가
+   style="border-color:...;color:..."로 인라인 지정. */
+.badge-stage{ background:transparent; border:1px solid; font-weight:700; }
 
 /* ADDENDUM-4 §2-3: 상설자료 뱃지(연회색) */
 .badge-static{ background:#f1f5f9; color:var(--muted); border:1px solid var(--line); font-weight:600; }
@@ -279,42 +286,56 @@ main.view:not(.is-active){ display:none; }
 .badge-ai{ background:#f5f3ff; color:#5b21b6; border:1px solid #ddd6fe; font-weight:600; }
 
 /* 2026-08-31: 캘린더의 "회의 예정"(KASB 주요일정) 뱃지 — 아직 확정된 시행일이
-   아니라는 의미로 "의견수렴" 단계와 같은 톤(--stage-opinion)을 재사용한다. */
-.badge-meeting{ background:transparent; border:1px solid var(--stage-opinion); color:var(--stage-opinion); font-weight:700; }
+   아니라는 의미. 2026-09-02 디자인 개선(색상 축소): 원래 --stage-opinion(주황)을
+   썼는데 "로드맵 예정"(당시 호박색 #b45309, 우연히 --c-icfr와 동일해 혼동
+   소지)과 색으로 구분하려 했던 것 자체가 불필요한 색 추가였다 — 캘린더에서는
+   이미 점 모양(실선 고리/점선 고리)으로 구분되고 있으므로, 배지 쪽은 텍스트
+   라벨만으로 충분히 구분된다. 둘 다 중립 톤(--muted)으로 통일. */
+.badge-meeting{ background:transparent; border:1px solid var(--muted); color:var(--muted); font-weight:700; }
 
-/* 2026-09-02: 캘린더의 "로드맵 예정"(esg_roadmap.yml 등 정책 로드맵 추정치)
-   뱃지 — "회의 예정"(주황)·"AI 요약"(보라)과도 겹치지 않는 호박색으로 확정
-   시행일(K-IFRS 등)과 시각적으로 확실히 구분한다. */
-.badge-roadmap{ background:transparent; border:1px solid #b45309; color:#b45309; font-weight:700; }
+/* 2026-09-02: 캘린더의 "로드맵 예정"(esg_roadmap.yml 등 정책 로드맵 추정치) 뱃지 —
+   위 badge-meeting과 같은 이유로 중립 톤(--muted) 통일, 텍스트 라벨로만 구분. */
+.badge-roadmap{ background:transparent; border:1px solid var(--muted); color:var(--muted); font-weight:700; }
 
 /* ADDENDUM-4 §3: "외 N건 보도" */
 .dup-tag{ color:var(--muted); }
 .dup-tag::before{ content:"· "; }
 
+/* 2026-09-02 디자인 개선(배지 위계): 꽉 채운 남색 배경 → outline으로 톤다운
+   (badge-stage와 같은 이유 — 카테고리 배지만 색이 채워진 배지로 남긴다). */
 .badge-official{
-  background:var(--navy); color:#fff; border-radius:4px; padding:2px 6px; font-size:10px; font-weight:700;
+  background:transparent; border:1px solid var(--navy); color:var(--navy);
+  border-radius:4px; padding:2px 6px; font-size:10px; font-weight:700;
 }
 
+/* 2026-09-02 디자인 개선(타이포 대비): 600→700으로 굵기만 올려 제목이
+   본문/요약보다 확실히 위계상 위에 있다는 걸 강화(크기는 카드 밀도 유지를
+   위해 그대로 둠). */
 .card-title{
-  font-size:17px; font-weight:600; color:var(--navy-deep);
+  font-size:17px; font-weight:700; color:var(--navy-deep);
   margin:0 0 8px;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
 }
 
+/* 2026-09-02 디자인 개선(타이포 대비): 요약은 카드의 핵심 "내용"이라 부가정보
+   (출처/날짜 등, 계속 --muted 유지)보다 대비를 높여 --ink로 승격. */
 .card-summary{
-  list-style:none; margin:0 0 10px; padding:0; font-size:14px; color:var(--muted);
+  list-style:none; margin:0 0 8px; padding:0; font-size:14px; color:var(--ink);
   display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
 }
 .card-summary li{ display:flex; gap:6px; margin-bottom:2px; }
 .card-summary li::before{ content:"·"; flex:0 0 auto; }
 
+/* 2026-09-02 디자인 개선(여백 재구성): 카드 내부 요소(요약/실무영향/토글류)는
+   "같은 카드에 속한 관련 항목"이라 14px→8px로 좁혀 붙인다(반대로 위 .feed의
+   날짜 그룹 간격은 넓혔다 — 관련 항목은 붙이고 섹션은 뗀다는 원칙). */
 .card-impact{
   border-left:3px solid var(--navy);
   background:#eef2ff;
   padding:8px 12px;
   font-size:13px; color:var(--ink);
   border-radius:0 4px 4px 0;
-  margin-bottom:14px;
+  margin-bottom:8px;
 }
 .card-impact b{ color:var(--navy-deep); }
 /* ADDENDUM-8 §5-1: AI가 생성한 요약/준비사항은 라벨과 색으로 구분한다. */
@@ -325,10 +346,10 @@ main.view:not(.is-active){ display:none; }
    검토했지만 회사와 무관하다고 판단한 경우) 카드가 텅 빈 것처럼 보여 헷갈린다는
    피드백 — 박스 없이 작은 안내 문구만 넣는다(card-impact처럼 박스로 강조하면
    "실제 내용이 있다"는 오해를 주므로 일부러 더 절제된 톤으로 뺐다). */
-.card-ai-empty{ font-size:12.5px; color:var(--muted); font-style:italic; margin:0 0 14px; }
+.card-ai-empty{ font-size:12.5px; color:var(--muted); font-style:italic; margin:0 0 8px; }
 
 /* ADDENDUM-4 §4: 관련 보도 접이식 목록 */
-.related-news{ margin-bottom:14px; }
+.related-news{ margin-bottom:8px; }
 .related-news summary{
   cursor:pointer; font-size:13px; font-weight:600; color:var(--navy);
   list-style:none; padding:2px 0;
@@ -346,7 +367,7 @@ main.view:not(.is-active){ display:none; }
 
 /* 2026-09-02: 법제처 개정이유 전문 접이식(revision_reason 있는 카드만 렌더) —
    .related-news와 같은 톤으로 통일, 기본 접힘·클릭 시 펼침(<details> 네이티브). */
-.revision-reason{ margin-bottom:14px; }
+.revision-reason{ margin-bottom:8px; }
 .revision-reason summary{
   cursor:pointer; font-size:13px; font-weight:600; color:var(--navy);
   list-style:none; padding:2px 0;
@@ -541,12 +562,14 @@ main.view:not(.is-active){ display:none; }
 .badge-org{ background:rgba(23,37,84,.08); color:var(--navy-deep); font-weight:700; }
 .badge-outlet{ background:transparent; border:1px solid var(--line); color:var(--muted); font-weight:600; }
 
+/* 2026-09-02 디자인 개선(타이포 대비): 전체 동향 탭의 .card-title/.card-summary와
+   같은 이유로 일관되게 적용(제목 굵기 700, 요약은 --ink로 대비 강화). */
 .today-card-title{
-  font-size:16px; font-weight:600; color:var(--navy-deep); margin:0 0 6px;
+  font-size:16px; font-weight:700; color:var(--navy-deep); margin:0 0 6px;
   display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
 }
 .today-card-summary{
-  font-size:14px; color:var(--muted); margin:0 0 8px; list-style:none; padding:0;
+  font-size:14px; color:var(--ink); margin:0 0 8px; list-style:none; padding:0;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
 }
 .today-card-summary li::before{ content:"· "; }

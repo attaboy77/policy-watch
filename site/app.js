@@ -324,8 +324,10 @@
 
   function renderCard(it) {
     var stage = displayStage(it);
+    // 2026-09-02 디자인 개선(배지 위계): 꽉 채운 배경 대신 outline(테두리+글자
+    // 색만)으로 톤다운 — .badge-stage 기본 스타일(styles.css) 참고.
     var stageBadge = stage
-      ? '<span class="badge badge-stage" style="background:' + STAGE_COLOR[stage] + '">' + esc(stage) + "</span>"
+      ? '<span class="badge badge-stage" style="border-color:' + STAGE_COLOR[stage] + ';color:' + STAGE_COLOR[stage] + '">' + esc(stage) + "</span>"
       : "";
     // ADDENDUM-4 §2-3: 상설자료 회색 뱃지.
     var staticBadge = it.is_static ? '<span class="badge badge-static">상설자료</span>' : "";
