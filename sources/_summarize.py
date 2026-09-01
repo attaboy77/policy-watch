@@ -108,10 +108,15 @@ def _esg_roadmap_summary_lines() -> list[str]:
         return []
     status = r.get("status", "예정")
     m0 = milestones[0]
-    # 핵심 사실(연도·대상·의무화 내용)을 앞에 두고 출처/상태는 뒤로 뺀다 —
+    # 핵심 사실(시기·대상·의무화 내용)을 앞에 두고 출처/상태는 뒤로 뺀다 —
     # _truncate()가 잘라도 알맹이는 남게(2026-09-02 실측: 출처를 앞에 두면
     # 정작 "10조원"이 잘려나가는 문제가 있었다).
-    year_tag = f"{m0.get('year')}년" + (f"(FY{m0.get('fiscal_year')})" if m0.get("fiscal_year") else "")
+    # date(명시적 시행일, 2026-09-02 사용자 지시로 추가)가 있으면 그걸 우선
+    # 쓰고, 없으면 기존처럼 연도만 표기한다(마일스톤별로 정밀도가 다를 수 있음).
+    if m0.get("date"):
+        year_tag = m0["date"].replace("-", ".") + (f"(FY{m0.get('fiscal_year')})" if m0.get("fiscal_year") else "")
+    else:
+        year_tag = f"{m0.get('year')}년" + (f"(FY{m0.get('fiscal_year')})" if m0.get("fiscal_year") else "")
     line1 = f"{year_tag} {m0.get('detail', m0.get('label', ''))} — 금융위 로드맵({status})"
     lines = [_truncate(line1)]
     if len(milestones) > 1:
