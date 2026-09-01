@@ -196,6 +196,20 @@ class TestTrustOf:
         tier, score, name = trust_of("moef.go.kr")
         assert (tier, score, name) == (1, 100, "기획재정부")
 
+    def test_exact_subdomain_override_beats_parent_suffix(self):
+        # 2026-09-01 실측 버그: "news.kicpa.or.kr"(CPA뉴스 칼럼이 실리는 포털)이
+        # tier1 "kicpa.or.kr"(한국공인회계사회 공식 사이트)의 suffix 규칙에 걸려
+        # 공식 자료로 오분류됐다. TRUST_TIERS에 등록된 정확 일치(exact match)가
+        # 상위 tier의 suffix 규칙보다 우선해야 한다.
+        tier, score, name = trust_of("https://news.kicpa.or.kr/news/article/1")
+        assert (tier, score, name) == (2, 80, "CPA뉴스")
+
+    def test_parent_domain_still_tier1(self):
+        # 위 오버라이드가 kicpa.or.kr 본 도메인 자체(공식 사이트)의 tier1
+        # 분류에는 영향을 주지 않아야 한다.
+        tier, score, name = trust_of("https://kicpa.or.kr/notice/1")
+        assert (tier, score, name) == (1, 100, "한국공인회계사회")
+
 
 # ── 최신성 / 최종 점수 ──────────────────────────────────────────────────
 class TestScoring:
@@ -414,6 +428,10 @@ class TestIsAdminNoise:
     def test_all_keywords_individually_detected(self):
         for kw in ADMIN_NOISE_KEYWORDS:
             assert is_admin_noise(f"{kw} 관련 공지") is True
+
+    def test_committee_appointment_excluded(self):
+        # 2026-09-01 사용자 지시: 위촉 소식은 제도 변경이 아닌 인사 소식.
+        assert is_admin_noise("회계기준원, 지속가능성기준 자문위원 10명 위촉") is True
 
     def test_noise_l3_applies_admin_noise_even_for_tier1(self):
         # tier==1(L1 공식기관)은 NOISE_KEYWORDS는 면제지만 admin noise는 아니다.
@@ -811,8 +829,11 @@ class TestIsCompanyEvent:
     # ── "상장"/"비상" 부분일치 오탐 회귀 테스트 (2026-08-31 실측으로 발견) ────
     def test_listed_company_noun_not_excluded(self):
         # "상장사"는 "상장 이벤트"가 아니라 그냥 "상장된 회사"를 가리키는 일반
-        # 명사 — 실측: 이 제목이 오탐 제외되던 걸 확인, K-IFRS 도입 관련 정상 기사.
-        assert is_company_event("상장사 감사의견 '적정' 97%…내년 새로운 K-IFRS 도입에 손익계산서 변경") is False
+        # 명사 — 퍼센트·통계 문구가 없는 제목으로 "상장" 부정 전방탐색만 검증한다
+        # (원래 이 테스트가 쓰던 "…감사의견 '적정' 97%…" 제목은 2026-09-01
+        # 사용자가 실제 화면에서 재확인해 통계 기사로 재분류했다 — 아래
+        # test_audit_opinion_statistics_with_kifrs_context_now_excluded 참고).
+        assert is_company_event("상장사 재고자산 평가 관련 새로운 K-IFRS 도입 검토") is False
 
     def test_non_listed_company_noun_not_excluded(self):
         # "비상장회사"도 "비상"(긴급) 오탐 + "상장"(공모) 오탐 둘 다 없어야 한다.
@@ -836,6 +857,45 @@ class TestIsCompanyEvent:
         ]
         kept = apply_company_event_filter(items)
         assert [it["title"] for it in kept] == ["K-IFRS 제1118호 개정 공표"]
+
+    # ── 제재·감리 결과 + 집계·통계성 보도 제외 (2026-09-01 사용자 지시) ────────
+    def test_named_company_sanction_excluded(self):
+        assert is_company_event("영풍 회계처리 위반 중징계") is True
+
+    def test_named_company_audit_finding_excluded(self):
+        assert is_company_event("증선위, 만호제강 회계기준 위반 적발") is True
+
+    def test_sanction_policy_change_passes_via_override(self):
+        # "제재" 자체는 목록에 없지만, 그 결과인 "과징금"이 있어도 "개정"/"의결"
+        # 같은 제도 변경 신호가 있으면 정책 기사로 보고 제외하지 않는다.
+        assert is_company_event("회계처리기준 위반 시 제재 양정기준 개정안 의결") is False
+
+    def test_audit_opinion_statistics_excluded(self):
+        # 실측: 사용자가 보고한 바로 그 헤드라인 — 정책 연결 없는 순수 통계 보도.
+        assert is_company_event("상장사 감사의견 '적정' 97%") is True
+
+    def test_audit_opinion_statistics_with_kifrs_context_now_excluded(self):
+        # 2026-08-31 세션은 이 제목을 "K-IFRS 오버라이드로 통과시켜야 할 정상
+        # 기사"로 판단했었는데, 2026-09-01 사용자가 실제 화면에서 이 기사를
+        # 다시 보고 "감사의견 통계 기사일 뿐"이라고 재확인해 결정을 뒤집었다 —
+        # 감사의견 통계 리드(_AUDIT_OPINION_STATS_RE)는 뒤에 K-IFRS가 언급돼도
+        # STRONG_SIGNALS 오버라이드 없이 항상 제외한다.
+        assert is_company_event(
+            "상장사 감사의견 '적정' 97%…내년 새로운 K-IFRS 도입에 손익계산서 변경"
+        ) is True
+
+    def test_generic_stat_signal_still_respects_override(self):
+        # _AUDIT_OPINION_STATS_RE(감사의견+의견유형+퍼센트)와 달리, 좀 더 느슨한
+        # "퍼센트 + STATISTICAL_REPORT_SIGNALS" 조합은 여전히 STRONG_SIGNALS
+        # 오버라이드를 존중한다 — 진짜 정책 기사(개정안)까지 지우면 안 되니까.
+        assert is_company_event(
+            "실태조사 결과 회계기준 위반 30%…양정기준 개정안 마련"
+        ) is False
+
+    def test_bare_percent_without_stat_signal_not_excluded(self):
+        # 퍼센트 수치만으로는 통계 보도로 안 본다(세율 인상 등 진짜 정책 기사가
+        # 훨씬 흔하다) — STATISTICAL_REPORT_SIGNALS과 함께 있을 때만 잡는다.
+        assert is_company_event("법인세율 25%로 인상하는 개정안 국회 통과") is False
 
 
 # ── 행사·포럼 안내 제외 보강 (SPEC-ADDENDUM-7.md §4) ─────────────────────────

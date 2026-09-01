@@ -59,6 +59,18 @@
     return tokens.every(function (t) { return hay.indexOf(t) !== -1; });
   }
 
+  // 2026-09-01 사용자 지시: 시행일 캘린더의 일정 제목 앞에 붙은 "OOOO년"은
+  // 시행일이 아니라 KASB 제개정현황(D) 소스가 붙인 "의결연도"다(같은
+  // 기준서가 여러 해에 걸쳐 제·개정되면 제목이 완전히 같아져서 dedupe()가
+  // 구분을 못 하는 문제를 막으려고 서버 쪽이 일부러 붙였다 — docs/NEXT.md
+  // 2026-08-31 세션 기록 참고). 옆의 sched-date가 실제 시행일을 보여주는데
+  // 제목의 연도와 달라 헷갈린다는 지적 — 원본 데이터(dedupe 근거)는 그대로
+  // 두고 화면에 그릴 때만 뗀다.
+  var _SCHEDULE_TITLE_YEAR_PREFIX_RE = /^(?:19|20)\d{2}년\s*/;
+  function displayScheduleTitle(title) {
+    return (title || "").replace(_SCHEDULE_TITLE_YEAR_PREFIX_RE, "");
+  }
+
   var WEEKDAY_KO = ["일", "월", "화", "수", "목", "금", "토"];
 
   var fmtDateHeader = function (iso) {
@@ -279,21 +291,33 @@
       return;
     }
 
-    // 정렬 기준이 '중요도순'이어도 날짜 그룹핑은 published_at 기준 내림차순 유지
-    var groups = [];
-    var byDate = {};
-    filtered.forEach(function (it) {
-      if (!byDate[it.published_at]) { byDate[it.published_at] = []; groups.push(it.published_at); }
-      byDate[it.published_at].push(it);
-    });
-    groups.sort().reverse();
+    // 2026-09-01 수정: 이전엔 정렬 기준이 '중요도순'이어도 날짜 그룹 자체는
+    // 항상 published_at 내림차순으로 고정돼 있었다 — sortItems()가 계산한
+    // final_score 순서가 그룹 내부에만 적용되고, 그룹 간 순서(=화면에서 실제로
+    // 보이는 큰 흐름)는 날짜가 덮어써서 "중요도순인데 화면은 날짜순으로만
+    // 내려간다"는 사용자 관측 그대로였다. '중요도순'일 때는 날짜 그룹을 없애고
+    // final_score 순서 그대로 평평한 목록으로 렌더링한다(각 카드에 날짜를
+    // 표기해 정보 손실은 없게 함 — renderCard 참고). '최신순'은 날짜 그룹이
+    // 곧 정렬 기준과 일치하므로 기존 방식을 유지한다.
+    var html;
+    if (state.sort === "importance") {
+      html = '<div class="card-list">' + filtered.map(renderCard).join("") + "</div>";
+    } else {
+      var groups = [];
+      var byDate = {};
+      filtered.forEach(function (it) {
+        if (!byDate[it.published_at]) { byDate[it.published_at] = []; groups.push(it.published_at); }
+        byDate[it.published_at].push(it);
+      });
+      groups.sort().reverse();
 
-    var html = groups.map(function (dateKey) {
-      var cards = byDate[dateKey].map(renderCard).join("");
-      return '<div class="date-group">' +
-        '<div class="date-group-header">' + esc(fmtDateHeader(dateKey)) + "</div>" +
-        '<div class="card-list">' + cards + "</div></div>";
-    }).join("");
+      html = groups.map(function (dateKey) {
+        var cards = byDate[dateKey].map(renderCard).join("");
+        return '<div class="date-group">' +
+          '<div class="date-group-header">' + esc(fmtDateHeader(dateKey)) + "</div>" +
+          '<div class="card-list">' + cards + "</div></div>";
+      }).join("");
+    }
 
     feedEl.innerHTML = html;
   }
@@ -328,7 +352,9 @@
       '<div class="card-top">' +
       '<div class="card-badges">' + catBadge(it.category) +
       '<span class="badge badge-doctype">' + esc(it.doc_type) + "</span>" + stageBadge + staticBadge + foreignBadge + "</div>" +
-      '<div class="card-source">출처: ' + esc(it.source ? it.source.name : "-") + officialTag + dupTag + "</div>" +
+      // '중요도순'에서는 날짜 그룹 헤더가 없으므로(renderFeed 참고) 카드 안에
+      // 날짜를 직접 표기한다 — '최신순'에서도 항상 보여 일관성 유지.
+      '<div class="card-source">' + esc(fmtDot(it.published_at)) + ' · 출처: ' + esc(it.source ? it.source.name : "-") + officialTag + dupTag + "</div>" +
       "</div>" +
       '<h3 class="card-title">' + esc(it.title) + "</h3>" +
       summaryHtml +
@@ -392,14 +418,19 @@
         var shown = evs.slice(0, 3);
         dotsHtml = '<div class="cal-dots">' +
           shown.map(function (e) {
-            var color = (CAT_META[e.category] || {}).color || "#94a3b8";
+            // 2026-09-01 사용자 지시: 시행 완료(과거) 항목은 카테고리 색 대신
+            // 회색으로 찍어 "이미 지난 일정"임을 한눈에 구분한다 — 지금까지는
+            // 과거/미래 구분 없이 전부 카테고리 색이라, 지난달 이전으로
+            // 넘겨봐도 시행 예정과 똑같이 보여 구분이 안 갔다.
+            var isPast = e.effective_date < today;
+            var color = isPast ? "#94a3b8" : ((CAT_META[e.category] || {}).color || "#94a3b8");
             // 2026-08-31 사용자 지시: 법제처 시행일과 위원회 회의 일정이 섞이면
             // 헷갈린다 — 회의 일정은 속이 빈 고리(테두리만), 실제 시행일은
             // 꽉 찬 점으로 구분한다(카테고리 색은 둘 다 그대로 유지).
             var style = e.is_meeting
               ? "border:1.5px solid " + color + ";background:transparent;"
               : "background:" + color + ";";
-            var title = e.is_meeting ? "위원회 회의 예정" : "시행일";
+            var title = e.is_meeting ? "위원회 회의 예정" : (isPast ? "시행 완료" : "시행 예정");
             return '<span class="cal-dot' + (e.is_meeting ? " cal-dot-meeting" : "") +
               '" style="' + style + '" title="' + title + '"></span>';
           }).join("") +
@@ -453,7 +484,7 @@
     return (
       '<li class="sched-item' + (isPast ? " is-past" : "") + '" data-date="' + s.effective_date + '">' +
       '<div class="sched-top">' + ddayHtml + catBadge(s.category) + meetingBadge + "</div>" +
-      '<div class="sched-item-title">' + esc(s.title) + "</div>" +
+      '<div class="sched-item-title">' + esc(displayScheduleTitle(s.title)) + "</div>" +
       '<div class="sched-date tnum">' + esc(fmtDot(s.effective_date)) + "</div>" +
       '<div class="sched-desc">' + esc(s.description) + "</div>" +
       '<div class="sched-actions">' + actionButtons(s.urls) + "</div>" +
@@ -489,8 +520,19 @@
   }
 
   // ── 시행일 캘린더 탭: 전체 일정 리스트(기간 제한 없음) ────────────────
-  // ADDENDUM-8 §2-3: 기본은 미래 전체 + 과거 10건. "과거 일정 더 보기"로 나머지 노출.
-  var PAST_SCHEDULE_DEFAULT_SHOW = 10;
+  // 2026-09-01 수정(사용자 지시): ADDENDUM-8 §2-3 원안은 과거 항목을 "최근
+  // 10건"이라는 고정 개수로 잘랐는데, KASB 제개정현황(List2006.do) 소스가
+  // 2016~2024년 과거 개정 이력까지 몰고 들어오면서 시행 완료가 71건까지
+  // 불어났다(실측). 개수 기준은 최근 몇 달에 몰려 있으면 오히려 정작 최근
+  // 것도 다 못 보여주고, 뜸한 시기엔 몇 년 전 것까지 끌고 오는 문제가 있어
+  // "최근 12개월 이내"라는 날짜 기준으로 바꿨다.
+  var PAST_SCHEDULE_RECENT_MONTHS = 12;
+
+  function pastScheduleCutoffISO() {
+    var d = new Date(); d.setHours(0, 0, 0, 0);
+    d.setMonth(d.getMonth() - PAST_SCHEDULE_RECENT_MONTHS);
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
 
   function renderFullScheduleList() {
     var g = sortSchedules(DATA.schedules);
@@ -505,14 +547,20 @@
     }
     if (g.past.length) {
       if (g.future.length) html += '<li class="sched-divider" aria-hidden="true"></li>';
+      // 이 라벨은 의도적으로 "필터 전" 총계(g.past.length)를 쓴다 — 아래
+      // recentPast/olderPast 분리는 "어느 항목을 보여줄지"만 정하고, 라벨은
+      // "시행 완료가 총 몇 건인지"를 알려주는 용도라 다른 숫자다(버그 아님).
       html += '<li class="sched-group-label">시행 완료 (' + g.past.length + "건)</li>";
-      html += g.past.slice(0, PAST_SCHEDULE_DEFAULT_SHOW).map(function (s) { return scheduleItemHtml(s, true); }).join("");
-      if (g.past.length > PAST_SCHEDULE_DEFAULT_SHOW) {
-        html += g.past.slice(PAST_SCHEDULE_DEFAULT_SHOW).map(function (s) {
+      var cutoff = pastScheduleCutoffISO();
+      var recentPast = g.past.filter(function (s) { return s.effective_date >= cutoff; });
+      var olderPast = g.past.filter(function (s) { return s.effective_date < cutoff; });
+      html += recentPast.map(function (s) { return scheduleItemHtml(s, true); }).join("");
+      if (olderPast.length) {
+        html += olderPast.map(function (s) {
           return scheduleItemHtml(s, true).replace('class="sched-item', 'class="sched-item is-more-past');
         }).join("");
-        html += '<li class="show-more-past-wrap"><button type="button" class="show-all-btn" id="pastMoreBtn">과거 일정 더 보기 (' +
-          (g.past.length - PAST_SCHEDULE_DEFAULT_SHOW) + "건)</button></li>";
+        html += '<li class="show-more-past-wrap"><button type="button" class="show-all-btn" id="pastMoreBtn">이전 일정 더 보기 (' +
+          olderPast.length + "건)</button></li>";
       }
     }
     if (!g.future.length && !g.past.length) {
@@ -549,23 +597,38 @@
     syncURL();
   }
 
-  // ── 오늘의 정책동향 (ADDENDUM-4 §5) ─────────────────────────────────
+  // ── 최근 정책동향 (ADDENDUM-4 §5, 2026-09-01 이름·로직 수정) ─────────────
+  // 사용자 지적: 원래 이름 "오늘의 정책동향"은 실측 결과 대부분의 날에 안 맞는다
+  // — K-IFRS/세법/내부회계/ESG를 통틀어도 공식 발행물이 "오늘" 나오는 날 자체가
+  // 드물어서(고정 3일로 확대해도 0건인 날이 흔함), 회계연도 내내 "오늘"이라는
+  // 이름이 사실과 다른 걸 보여주는 셈이었다. 두 가지로 대응한다:
+  // (1) 탭 이름을 "최근 정책동향"으로 바꿔 날짜 프레이밍 자체를 느슨하게 하고,
+  // (2) 고정 3일 대신 최소 5건이 찰 때까지 1→3→7→14→30일 순으로 점진적으로
+  //     기간을 넓힌다("최근"이라는 이름에 맞게 30일 이상은 안 넓힌다 — 그보다
+  //     오래된 건 "전체 동향" 탭에서 날짜를 직접 넓혀서 보면 된다).
+  // 헤더의 기간 안내도 "확대됐을 때만" 뜨던 걸 넓힌 기간을 항상 명시하도록 바꿨다.
+  var TODAY_VIEW_WINDOWS = [1, 3, 7, 14, 30];
+  var TODAY_VIEW_MIN_ITEMS = 5;
+
   function renderTodayView() {
-    // §5-2 "오늘"의 정의: 최근 수집 실행일(meta.generated_at)과 published_at이
-    // 같은 날. 그 날 5건 미만이면 최근 3일로 확대(안내 문구 표시). is_static 전부 제외.
     var day = (DATA.meta && DATA.meta.generated_at) ? DATA.meta.generated_at.slice(0, 10) : todayISO();
     var pool = DATA.items.filter(function (it) {
       return !it.is_static && it.doc_type !== "논의자료" && it.doc_type !== "해외기준";
     });
-    var todays = pool.filter(function (it) { return it.published_at === day; });
-    var expanded = false;
-    if (todays.length < 5) {
-      var from3 = addDaysISO(day, -2);
-      todays = pool.filter(function (it) { return it.published_at >= from3 && it.published_at <= day; });
-      expanded = true;
+
+    var windowDays = TODAY_VIEW_WINDOWS[0];
+    var from = day;
+    var todays = [];
+    for (var i = 0; i < TODAY_VIEW_WINDOWS.length; i++) {
+      windowDays = TODAY_VIEW_WINDOWS[i];
+      from = addDaysISO(day, -(windowDays - 1));
+      todays = pool.filter(function (it) { return it.published_at >= from && it.published_at <= day; });
+      if (todays.length >= TODAY_VIEW_MIN_ITEMS) break;
     }
-    // ADDENDUM-8 §1-1: 검색은 날짜 범위(오늘/최근 3일)를 정한 다음 그 안에서만
-    // 좁힌다 — 검색어 때문에 "최근 3일로 확대" 안내가 잘못 뜨지 않도록.
+    var expanded = windowDays > 1;
+
+    // ADDENDUM-8 §1-1: 검색은 날짜 범위를 정한 다음 그 안에서만 좁힌다 —
+    // 검색어 때문에 기간 확대 안내가 잘못 뜨지 않도록.
     if (state.q) todays = todays.filter(function (it) { return matchesQuery(it, state.q); });
 
     var official = todays.filter(function (it) { return it.source && it.source.type === "official"; });
@@ -574,9 +637,16 @@
     official.sort(function (a, b) { return (a.source.tier - b.source.tier) || (b.final_score - a.final_score); });
     news.sort(function (a, b) { return b.final_score - a.final_score; });
 
-    document.getElementById("todayTitle").textContent = fmtDateHeader(day) + " 소식";
+    document.getElementById("todayTitle").textContent = windowDays === 1
+      ? fmtDateHeader(day) + " 소식"
+      : "최근 " + windowDays + "일 소식";
     document.getElementById("todayCounts").textContent = "공식 " + official.length + "건 · 보도 " + news.length + "건";
-    document.getElementById("todayNotice").hidden = !expanded;
+    var noticeEl = document.getElementById("todayNotice");
+    noticeEl.hidden = !expanded;
+    if (expanded) {
+      noticeEl.textContent = "오늘 발표된 소식이 적어 최근 " + windowDays + "일(" +
+        fmtDot(from) + "~" + fmtDot(day) + ") 범위로 넓혀 보여줍니다.";
+    }
 
     var OFFICIAL_MAX = 12, NEWS_MAX = 12;
     document.getElementById("todayOfficialGrid").innerHTML = official.slice(0, OFFICIAL_MAX).map(renderTodayCard).join("");
@@ -597,7 +667,7 @@
       var clearBtn = document.getElementById("todayClearQueryBtn");
       if (clearBtn) clearBtn.addEventListener("click", function () { setQuery(""); applyAndRender(); });
     } else {
-      emptyText.textContent = "최근 3일간 새로 발표된 소식이 없습니다. 주말·공휴일이거나 아직 수집 전일 수 있습니다.";
+      emptyText.textContent = "최근 " + windowDays + "일간 새로 발표된 소식이 없습니다. 주말·공휴일이거나 아직 수집 전일 수 있습니다.";
       emptyActions.innerHTML = '<button type="button" class="btn btn-outline" id="todayGoAllBtn">전체 동향 보기</button>';
     }
     var goAllBtn = document.getElementById("todayGoAllBtn");
@@ -873,8 +943,8 @@
       .catch(function (err) {
         console.error("[policy-watch] 데이터 로드 완전 실패:", err);
         var msg = '<div class="error-state">데이터를 불러오지 못했습니다. 새로고침해 보시고, 계속되면 관리자에게 문의해 주세요.</div>';
-        // 기본 진입 화면(오늘의 정책동향)이 스켈레톤에 멈춰있지 않도록 거기에도 표시한다.
-        document.getElementById("todayTitle").textContent = "오늘의 정책동향";
+        // 기본 진입 화면(최근 정책동향)이 스켈레톤에 멈춰있지 않도록 거기에도 표시한다.
+        document.getElementById("todayTitle").textContent = "최근 정책동향";
         document.getElementById("todayOfficialGrid").innerHTML = msg;
         document.getElementById("todayNewsSection").hidden = true;
         document.getElementById("feed").innerHTML = msg;

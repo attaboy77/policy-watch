@@ -89,6 +89,14 @@ img{ display:none; } /* SPEC §7-5: 이미지 사용 금지 — 실수로 들어
 .view{ display:none; }
 .view.is-active{ display:block; }
 main.view.is-active{ display:grid; }  /* .layout(전체 동향)은 grid 유지 */
+/* 2026-09-01 버그 수정(사용자 실측: 시행일 캘린더 탭을 아래로 스크롤하면
+   전체 동향 탭 내용이 그대로 보임) — 아래 .layout{ display:grid; ... }가
+   .view{ display:none; }과 특이도가 똑같은 클래스 셀렉터 한 개(0,0,1,0)라서
+   소스 순서상 나중에 나오는 .layout이 항상 이겨버렸다. 즉 #viewAll(전체
+   동향, class="view layout")은 다른 탭이 활성화돼 is-active가 빠져도 계속
+   grid로 표시돼 있었다. main 태그를 더해 특이도를 (0,0,2,1)로 올려 강제로
+   숨긴다 — 위 main.view.is-active 규칙과 대칭을 이루는 짝. */
+main.view:not(.is-active){ display:none; }
 
 /* ── 레이아웃 ─────────────────────────────────────────────────────── */
 .layout{

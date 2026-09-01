@@ -15,7 +15,7 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       REGULATORY_SIGNALS, CORPORATE_PR_KEYWORDS, CORPORATE_PR_STRONG_SIGNALS,
                       APPLICABILITY, COMPANY_EVENTS, COMPANY_EVENT_STRONG_SIGNALS,
                       MANUFACTURING_ACCOUNTING_CONTEXT, EVENT_ANNOUNCEMENT_STRONG_SIGNALS,
-                      FOREIGN_STANDARD_BODIES)
+                      FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS)
 
 
 # ── 0-1) required_strong/required_weak 카테고리 지원 (SPEC-ADDENDUM-5.md §4) ─
@@ -214,9 +214,18 @@ def trust_of(url: str) -> tuple[int, int, str]:
     host = (urlparse(u).hostname or "").lower()
     if host.startswith("www."):
         host = host[4:]
+    # 정확 일치를 서브도메인(suffix) 일치보다 먼저 본다 — 2026-09-01 실측 버그:
+    # "news.kicpa.or.kr"(CPA뉴스 칼럼이 실리는 한국공인회계사회의 뉴스 포털
+    # 서브도메인)가 tier1 "kicpa.or.kr"의 suffix 규칙에 걸려 공식 자료로
+    # 오분류됐다. 두 번째 패스로 넘어가기 전에 exact-match 후보가 있으면
+    # 그게 우선이어야, 아래 TRUST_TIERS에 서브도메인을 별도 항목(예: tier2
+    # "CPA뉴스")으로 명시해도 상위 tier의 suffix 규칙에 먹히지 않는다.
+    for tier, score, domains in TRUST_TIERS:
+        if host in domains:
+            return tier, score, domains[host]
     for tier, score, domains in TRUST_TIERS:
         for dom, name in domains.items():
-            if host == dom or host.endswith("." + dom):
+            if host.endswith("." + dom):
                 return tier, score, name
     return DEFAULT_TIER, DEFAULT_TRUST, host or "기타"
 
@@ -499,23 +508,54 @@ def is_corporate_pr(title: str) -> bool:
 _LISTING_EVENT_RE = re.compile(r"상장(?!사|기업|법인|회사)")
 _EMERGENCY_RE = re.compile(r"비상(?!장)")
 
+# ── 집계·통계성 보도 (2026-09-01 사용자 지시) — is_company_event()가 함께 검사 ──
+# "감사의견" 근처에 의견 종류(적정/한정/부적정/의견거절)와 퍼센트가 같이 있으면
+# "상장사 감사의견 '적정' 97%"류의 연례 통계 기사로 본다. 사이 글자 수 제한은
+# 인용부호·수식어("…비율은")가 껴도 잡히게 넉넉히 잡았다.
+_AUDIT_OPINION_STATS_RE = re.compile(r"감사의견.{0,10}(적정|한정|부적정|의견거절).{0,15}\d+(\.\d+)?\s*%")
+# 퍼센트 수치 자체는 흔해서(세율 인상 등 진짜 정책 기사에도 나옴) 단독으로는
+# 안 쓰고, STATISTICAL_REPORT_SIGNALS(실태조사/설문조사 등 "집계 보도"임을
+# 밝히는 표현)와 함께 있을 때만 통계 기사로 본다.
+_PERCENT_STAT_RE = re.compile(r"\d+(\.\d+)?\s*%")
+
 
 def is_company_event(title: str) -> bool:
-    """개별 기업 소식·시황 기사 판정(§1-1). `is_corporate_pr()`이 홍보 동사(가동·
-    맞손)를 잡는다면, 이건 특정 기업의 자본시장 이벤트·실적·재무위기·시황을 잡는다
-    — "규제가 바뀐 게 아니라 한 회사의 개별 사정"인 기사(§0 공통 원인).
+    """개별 기업 소식·시황·집계 기사 판정(§1-1 + 2026-09-01 확장). `is_corporate_
+    pr()`이 홍보 동사(가동·맞손)를 잡는다면, 이건 특정 기업의 자본시장 이벤트·
+    실적·재무위기·시황·제재 결과, 그리고 업계 전체의 통계·집계 보도를 잡는다
+    — "규제가 바뀐 게 아니라 한 회사의 개별 사정이거나 그냥 숫자 발표"인 기사
+    (§0 공통 원인).
 
     §1-2 제조업 회계 예외: 개별 기업 사례라도 제조업 회계기준과 직결되면
     (재고자산·감가상각 등) 통과시킨다 — 실무 참고 가치가 크다는 사용자 요청.
+
+    통계성 판정 중 "퍼센트 + STATISTICAL_REPORT_SIGNALS"(느슨한 조합)는
+    COMPANY_EVENT_STRONG_SIGNALS 오버라이드를 그대로 존중해 진짜 정책 기사는
+    안 지운다. 다만 "감사의견 + 의견유형 + 퍼센트"(_AUDIT_OPINION_STATS_RE,
+    "상장사 감사의견 '적정' 97%…" 류)는 오버라이드 없이 항상 제외한다 —
+    2026-09-01 사용자가 실제 화면에서 이 유형의 기사를 직접 보고 "뒤에 K-IFRS가
+    언급돼도 그냥 통계 기사"라고 재확인했다(2026-08-31의 반대 결정을 뒤집음).
     """
     t = _norm(title)
+    is_stat_report = (bool(_AUDIT_OPINION_STATS_RE.search(title))
+                       or (bool(_PERCENT_STAT_RE.search(title))
+                           and any(_norm(k) in t for k in STATISTICAL_REPORT_SIGNALS)))
     has_event_kw = (any(_norm(k) in t for k in COMPANY_EVENTS)
                     or bool(_LISTING_EVENT_RE.search(title))
-                    or bool(_EMERGENCY_RE.search(title)))
+                    or bool(_EMERGENCY_RE.search(title))
+                    or is_stat_report)
     if not has_event_kw:
         return False
     if any(_norm(k) in t for k in MANUFACTURING_ACCOUNTING_CONTEXT):
         return False  # §1-2 예외
+    if _AUDIT_OPINION_STATS_RE.search(title):
+        # 2026-09-01 사용자 재확인: "상장사 감사의견 '적정' 97%…내년 새로운
+        # K-IFRS 도입에 손익계산서 변경"은 2026-08-31 세션에서 "K-IFRS 오버라이드로
+        # 통과시켜야 할 정상 기사"로 판단해 예외 처리했었는데, 실제 화면에서 이
+        # 기사를 다시 본 사용자가 "감사의견 통계 기사일 뿐"이라고 재확인해 결정을
+        # 뒤집었다 — 감사의견 통계 리드는 뒤에 K-IFRS가 언급돼도 오버라이드 없이
+        # 항상 제외한다(아래 일반 STRONG_SIGNALS 오버라이드는 이 케이스를 건너뛴다).
+        return True
     return not any(_norm(k) in t for k in COMPANY_EVENT_STRONG_SIGNALS)
 
 

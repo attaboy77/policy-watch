@@ -17,7 +17,7 @@
     <span class="nav-caption">팜한농 재경 규제 모니터링</span>
   </div>
   <nav class="nav-tabs" id="navTabs" aria-label="화면 전환">
-    <button type="button" data-view="today">오늘의 정책동향</button>
+    <button type="button" data-view="today">최근 정책동향</button>
     <button type="button" data-view="all">전체 동향</button>
     <button type="button" data-view="calendar">시행일 캘린더</button>
   </nav>
@@ -27,14 +27,14 @@
 <!-- ADDENDUM-4 §5: 오늘의 정책동향 — 기본 진입 화면 -->
 <section class="view view-today is-active" id="viewToday">
   <div class="today-header">
-    <span class="today-title" id="todayTitle">오늘의 정책동향 불러오는 중…</span>
+    <span class="today-title" id="todayTitle">최근 정책동향 불러오는 중…</span>
     <span class="today-counts tnum" id="todayCounts"></span>
     <div class="search-box">
       <input type="search" id="todaySearchInput" placeholder="제목, 기관명으로 검색" autocomplete="off" />
       <button type="button" class="search-clear" id="todaySearchClear" hidden aria-label="검색어 지우기">✕</button>
     </div>
   </div>
-  <p class="today-notice" id="todayNotice" hidden>최근 3일간의 소식입니다</p>
+  <p class="today-notice" id="todayNotice" hidden>최근 소식입니다</p>
 
   <div id="todayOfficialSection">
     <h2 class="today-section-title">공식 기관 발표</h2>
@@ -57,7 +57,7 @@
   </div>
 
   <div class="empty-state" id="todayEmpty" hidden>
-    <span id="todayEmptyText">최근 3일간 새로 발표된 소식이 없습니다. 주말·공휴일이거나 아직 수집 전일 수 있습니다.</span>
+    <span id="todayEmptyText">최근 발표된 소식이 없습니다. 주말·공휴일이거나 아직 수집 전일 수 있습니다.</span>
     <div id="todayEmptyActions"><button type="button" class="btn btn-outline" id="todayGoAllBtn">전체 동향 보기</button></div>
   </div>
 </section>
