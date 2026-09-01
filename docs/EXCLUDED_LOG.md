@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-01 17:36:50 +0900
+생성 시각: 2026-09-01 17:50:54 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -16,7 +16,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | kifrs | v.daum.net | 교보생명이 인수한 SBI저축은행, 회계 기준 바뀌자 순익 360억→19억 왜? - v.daum.net | https://news.google.com/rss/articles/CBMiT0FVX3lxTFBqOVBramVhY3JyaGdzUm1Hd3dHY0JrS0ptRnJuOUd5UkRxVTRUYXFsNUlSUVhrakhUOHcxTGF2cXdpNHRpdDM4ODA4bURTeUk?oc=5 |
 | icfr | news2day.co.kr | 한국캐피탈, 내부회계관리제도 고도화 나서…투명성·신뢰성 제고 - 뉴스투데이 | https://news.google.com/rss/articles/CBMiXkFVX3lxTE1fVjl2UnRnek5jelpoRk9reU55VW5IR2ZuSGpGbkVzNkVuYllnbExVWUZlMTU0N2JLalhEdmhwSmtPcDdYQ01ua3RJTkU0dFBxUVBQdEtmdHBaOWl5Z1E?oc=5 |
 | icfr | donga.com | 카드사 고위험업무 5년 초과 근무 못한다…여전업권 ‘내부통제 모범규준’ 시행 - 동아일보 | https://news.google.com/rss/articles/CBMidkFVX3lxTFB0NUVYMHh1RFBxTUpQTG9IbGVXRkRKRGQzcFdBanRCWUZsbkFlU0c2ZTVhYTdCWDZwRURKYkIyN1hIY1JtYjJyVnVBaW5VMWdteFNvZldWQkhlTHdrdVgyQlgzb1IzcW9uZlRtSGZXaXBkcnd4MFHSAWZBVV95cUxNMVltbFQybjRZSU5tN2w1X2ZOeWFnZ3gyVVFrTkJZTUNiU2NIZjQzc0JOYm40VlNibDVjYXZhTVNZRlgtMU1kWG05WUMzWVR2VXdoRk51QS1nc1JNR19MX3BEV0V5cGc?oc=5 |
-| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHc?oc=5 |
+| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
 
 ## excluded:foreign (2건)
 
@@ -29,7 +29,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| kifrs | aptn.co.kr | 미사용 공동주택지원금의 회계처리방법 - 아파트관리신문 | https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1jbk1KdXV0Z1lqRUxZcUJPNDktMFEwRkFHMkRudVoxMVRzYVJIeHBHOTV6Z1o3YmxZUkFEd3NYWDc2LUl5ZWJZQTBsYU5QZVNrbUZXS3lEQmNBTUtNSHk1NjctNV85V1XSAWtBVV95cUxQS2laUmpwNlZPRE95bG12QkRVVE1JYjRKRTZrSWZnTUdJdWVEa2xiZVFCZUh6bDVhdlREUkNuYjlZNVUwSURrOVYycndSTUNaMllpMWxVNnI3cHQ3SVBsVlNqN1pZR2hORnZzOA?oc=5 |
+| kifrs | CPA뉴스 | 한국공인회계사회, 2025년 공동주택 감리 지적사례 공개…"부실ㆍ과다수임 감리 강화" - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBBTW5vcUZyTzQ4QWNFUXlQcEVVZkNGZHBVS0xLOVdsOU50UmlNbFdJMUJhQk02dmt5ei1tNC05Ylp0UDdOOHdCNjBBWVNrYVdWTVMxa3FxYjhnN2N6WDFaZDZHbEFUWXRI?oc=5 |
 
 ## excluded:nonprofit (2건)
 
