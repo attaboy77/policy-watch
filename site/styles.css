@@ -316,6 +316,12 @@ main.view:not(.is-active){ display:none; }
 .card-impact.is-ai{ border-left-color:#7c3aed; background:#f5f3ff; }
 .card-impact.is-ai b{ color:#5b21b6; }
 
+/* 2026-09-02: "AI 요약" 뱃지는 있는데 summary/impact가 둘 다 비어있으면(=AI가
+   검토했지만 회사와 무관하다고 판단한 경우) 카드가 텅 빈 것처럼 보여 헷갈린다는
+   피드백 — 박스 없이 작은 안내 문구만 넣는다(card-impact처럼 박스로 강조하면
+   "실제 내용이 있다"는 오해를 주므로 일부러 더 절제된 톤으로 뺐다). */
+.card-ai-empty{ font-size:12.5px; color:var(--muted); font-style:italic; margin:0 0 14px; }
+
 /* ADDENDUM-4 §4: 관련 보도 접이식 목록 */
 .related-news{ margin-bottom:14px; }
 .related-news summary{

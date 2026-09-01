@@ -350,6 +350,12 @@
     var impactHtml = it.impact
       ? '<div class="card-impact' + (it.ai_generated ? " is-ai" : "") + '"><b>' + impactLabel + ':</b> ' + esc(it.impact) + "</div>"
       : "";
+    // 2026-09-02 사용자 피드백: "AI 요약" 뱃지는 있는데 summary/impact가 둘 다
+    // 비어있으면(=AI가 검토했지만 회사와 무관하다고 판단한 경우) 카드가 텅 빈
+    // 것처럼 보여 헷갈린다 — 짧은 안내 문구로 "검토는 했다"는 걸 알려준다.
+    var aiEmptyHtml = (it.ai_generated && !summaryHtml && !impactHtml)
+      ? '<div class="card-ai-empty">AI 검토 결과 팜한농 해당사항 없음</div>'
+      : "";
     var relatedHtml = renderRelatedNews(it.related_news);
 
     return (
@@ -364,6 +370,7 @@
       '<h3 class="card-title">' + esc(it.title) + "</h3>" +
       summaryHtml +
       impactHtml +
+      aiEmptyHtml +
       relatedHtml +
       '<div class="card-actions">' + actionButtons(it.urls) + "</div>" +
       "</article>"
@@ -697,6 +704,11 @@
     var impactHtml = it.impact
       ? '<div class="today-card-impact' + (it.ai_generated ? " is-ai" : "") + '">' + esc(it.impact) + "</div>"
       : "";
+    // 2026-09-02 사용자 피드백: renderCard()와 동일 — AI 검토는 했는데 둘 다
+    // 비어있으면 빈 카드처럼 보이니 짧은 안내 문구를 넣는다.
+    var aiEmptyHtml = (it.ai_generated && !summaryHtml && !impactHtml)
+      ? '<div class="card-ai-empty">AI 검토 결과 팜한농 해당사항 없음</div>'
+      : "";
     var relatedHtml = isOfficial ? renderRelatedNews(it.related_news) : "";
     var actionUrl = isOfficial ? (it.urls && it.urls.official) : (it.urls && it.urls.news);
     var actionLabel = isOfficial ? "원문 →" : "기사 보기 →";
@@ -708,7 +720,7 @@
       '<article class="today-card' + (isOfficial ? "" : " is-news") + '" style="border-left-color:' + borderColor + '">' +
       '<div class="today-card-badges">' + catBadge(it.category) + orgBadge + aiBadge + "</div>" +
       '<h3 class="today-card-title">' + esc(it.title) + "</h3>" +
-      summaryHtml + impactHtml + relatedHtml +
+      summaryHtml + impactHtml + aiEmptyHtml + relatedHtml +
       '<div class="today-card-bottom">' +
       "<span>" + esc(it.source ? it.source.name : "-") + " · " + esc(fmtDot(it.published_at)) + "</span>" +
       actionHtml +
