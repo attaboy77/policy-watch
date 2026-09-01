@@ -84,8 +84,16 @@ jobs:
         with:
           path: site
 
+  # 2026-09-02 버그 수정(#89 실측): needs: build만 있고 if가 없으면 GitHub의
+  # 기본 조건 success()가 build의 "직접" 결과가 아니라 build→crawl로 이어지는
+  # 전체 의존 그래프를 훑어본다 — crawl이 스킵(=success 아님)이면 build가
+  # 성공해도 deploy 전체가 스킵돼버렸다(실제로 push 트리거 실행 #89에서
+  # crawl:skipped, build:성공, deploy:skipped로 확인). build 잡과 똑같이
+  # needs.build.result만 명시적으로 보게 해서 crawl 스킵 여부와 무관하게
+  # build 성공 시 항상 돌게 한다.
   deploy:
     needs: build
+    if: always() && needs.build.result == 'success'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

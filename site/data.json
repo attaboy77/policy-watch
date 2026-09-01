@@ -1,7 +1,7 @@
 {
   "meta": {
     "schema_version": "1.0",
-    "generated_at": "2026-09-01T15:38:38+09:00",
+    "generated_at": "2026-09-01T15:56:01+09:00",
     "window_days": 90,
     "total_items": 156,
     "counts_by_category": {
@@ -18,10 +18,14 @@
       "fsc",
       "policy_briefing",
       "law_api",
-      "google_news",
-      "naver_news"
+      "google_news"
     ],
-    "sources_failed": []
+    "sources_failed": [
+      {
+        "name": "naver_news",
+        "reason": "결과 0건(자격증명 미설정 또는 응답 없음)"
+      }
+    ]
   },
   "categories": [
     {
@@ -62,7 +66,7 @@
       ],
       "impact": "공장부지 등 토지 보유 시 재무제표 주석에 공시지가 공시 의무가 신설될 수 있어 공개초안 발표 시 확인 필요",
       "published_at": "2026-09-04",
-      "collected_at": "2026-09-01T15:33:48+09:00",
+      "collected_at": "2026-09-01T15:53:58+09:00",
       "effective_date": "2026-09-04",
       "source": {
         "name": "한국회계기준원",
@@ -106,7 +110,7 @@
       ],
       "impact": "손상평가·충당부채 등 추정 불확실성이 큰 항목의 주석 공시 방식 참고자료 — 추후 공개초안 확인 필요",
       "published_at": "2026-06-12",
-      "collected_at": "2026-09-01T15:33:54+09:00",
+      "collected_at": "2026-09-01T15:54:02+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -151,7 +155,7 @@
       ],
       "impact": "2020.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-11-14",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -200,7 +204,7 @@
       ],
       "impact": "연결 실체인 팜한농은 평가범위에 포함할 종속회사 선정 시 이 가이드라인 기준 확인 필요",
       "published_at": "2024-06-05",
-      "collected_at": "2026-09-01T15:34:18+09:00",
+      "collected_at": "2026-09-01T15:54:19+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -244,7 +248,7 @@
       ],
       "impact": "2026.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2024-11-22",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -292,7 +296,7 @@
       ],
       "impact": "2017.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2016-05-27",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2017-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -337,7 +341,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -380,7 +384,7 @@
       ],
       "impact": "2026.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-12-22",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -427,7 +431,7 @@
       ],
       "impact": "2022.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-09-11",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -474,7 +478,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-04-27",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -521,7 +525,7 @@
       ],
       "impact": "2016.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-02-27",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -568,7 +572,7 @@
       ],
       "impact": "'25년부터 지침이 아닌 공식 기준으로 의무화됐으므로 최신 FAQ 기준 평가·보고 실무 재점검 필요",
       "published_at": "2025-12-23",
-      "collected_at": "2026-09-01T15:33:59+09:00",
+      "collected_at": "2026-09-01T15:54:05+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -610,7 +614,7 @@
       ],
       "impact": "'25년 기준 의무시행을 앞둔 최신판 — 평가·보고 실무 담당자는 신구대비표로 변경 조항 확인 필요",
       "published_at": "2025-01-08",
-      "collected_at": "2026-09-01T15:34:04+09:00",
+      "collected_at": "2026-09-01T15:54:08+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -649,7 +653,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-01-02",
-      "collected_at": "2026-09-01T15:34:09+09:00",
+      "collected_at": "2026-09-01T15:54:12+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -688,7 +692,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-06-05",
-      "collected_at": "2026-09-01T15:34:23+09:00",
+      "collected_at": "2026-09-01T15:54:22+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -727,7 +731,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -766,7 +770,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-05-11",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -805,7 +809,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-05-11",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -844,7 +848,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-02-07",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -883,7 +887,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-02-07",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -922,7 +926,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -961,7 +965,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -1003,7 +1007,7 @@
       ],
       "impact": "일반 제조법인도 세율 인상 대상 — 2026.07.01 개시 사업연도부터 법인세 부담 증가 반영 필요",
       "published_at": "2025-12-23",
-      "collected_at": "2026-09-01T15:36:52+09:00",
+      "collected_at": "2026-09-01T15:55:06+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "기획재정부",
@@ -1051,7 +1055,7 @@
       ],
       "impact": "조건부 판매계약이 있다면 손익 인식시점이 인도일→조건성취일로 바뀌므로 매출 인식 실무 재점검 필요",
       "published_at": "2026-02-27",
-      "collected_at": "2026-09-01T15:36:58+09:00",
+      "collected_at": "2026-09-01T15:55:08+09:00",
       "effective_date": "2026-02-27",
       "source": {
         "name": "기획재정부",
@@ -1099,7 +1103,7 @@
       ],
       "impact": "팜한농은 비중소기업이라 스마트공장·리츠 조항은 대체로 무관 — 온누리상품권 기업업무추진비 지출 시엔 손금 처리 기준 변경 확인 필요",
       "published_at": "2026-07-01",
-      "collected_at": "2026-09-01T15:37:03+09:00",
+      "collected_at": "2026-09-01T15:55:11+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "기획재정부",
@@ -1144,7 +1148,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-10-01",
-      "collected_at": "2026-09-01T15:37:10+09:00",
+      "collected_at": "2026-09-01T15:55:14+09:00",
       "effective_date": "2026-01-02",
       "source": {
         "name": "기획재정부",
@@ -1191,7 +1195,7 @@
       ],
       "impact": null,
       "published_at": "2026-02-27",
-      "collected_at": "2026-09-01T15:37:13+09:00",
+      "collected_at": "2026-09-01T15:55:16+09:00",
       "effective_date": "2026-02-27",
       "source": {
         "name": "기획재정부",
@@ -1238,7 +1242,7 @@
       ],
       "impact": null,
       "published_at": "2026-03-20",
-      "collected_at": "2026-09-01T15:37:17+09:00",
+      "collected_at": "2026-09-01T15:55:18+09:00",
       "effective_date": "2026-03-20",
       "source": {
         "name": "기획재정부",
@@ -1283,7 +1287,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-02-27",
-      "collected_at": "2026-09-01T15:33:44+09:00",
+      "collected_at": "2026-09-01T15:53:57+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -1321,7 +1325,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2025-11-25",
-      "collected_at": "2026-09-01T15:33:44+09:00",
+      "collected_at": "2026-09-01T15:53:57+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -1362,7 +1366,7 @@
       ],
       "impact": "2027년 시행 전 손익계산서 신규 구분표시 및 주석 병기 준비 필요, 조기적용 여부 확인 필요",
       "published_at": "2025-11-21",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2027-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1412,7 +1416,7 @@
       ],
       "impact": null,
       "published_at": "2023-10-13",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1458,7 +1462,7 @@
       ],
       "impact": "2024.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-03-17",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1504,7 +1508,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2022-12-02",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1550,7 +1554,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2021-09-10",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1596,7 +1600,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-10-16",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1642,7 +1646,7 @@
       ],
       "impact": "2022.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-04-24",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1688,7 +1692,7 @@
       ],
       "impact": "2020.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2019-04-19",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1734,7 +1738,7 @@
       ],
       "impact": "2016.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-05-26",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1784,7 +1788,7 @@
       ],
       "impact": "2016.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-05-08",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1850,7 +1854,7 @@
       ],
       "impact": "2016.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-02-06",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1893,7 +1897,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-15",
-      "collected_at": "2026-09-01T15:34:35+09:00",
+      "collected_at": "2026-09-01T15:54:30+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -1931,7 +1935,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-04-14",
-      "collected_at": "2026-09-01T15:34:35+09:00",
+      "collected_at": "2026-09-01T15:54:30+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -1969,7 +1973,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-04-11",
-      "collected_at": "2026-09-01T15:34:35+09:00",
+      "collected_at": "2026-09-01T15:54:30+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2007,7 +2011,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-04-07",
-      "collected_at": "2026-09-01T15:34:35+09:00",
+      "collected_at": "2026-09-01T15:54:30+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2045,7 +2049,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-03-31",
-      "collected_at": "2026-09-01T15:34:35+09:00",
+      "collected_at": "2026-09-01T15:54:30+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2083,7 +2087,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-04-01",
-      "collected_at": "2026-09-01T15:34:35+09:00",
+      "collected_at": "2026-09-01T15:54:30+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2121,7 +2125,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-03-18",
-      "collected_at": "2026-09-01T15:34:35+09:00",
+      "collected_at": "2026-09-01T15:54:30+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2159,7 +2163,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2019-03-27",
-      "collected_at": "2026-09-01T15:34:35+09:00",
+      "collected_at": "2026-09-01T15:54:30+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2197,7 +2201,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-03-27",
-      "collected_at": "2026-09-01T15:34:35+09:00",
+      "collected_at": "2026-09-01T15:54:30+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2235,7 +2239,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2017-08-02",
-      "collected_at": "2026-09-01T15:34:35+09:00",
+      "collected_at": "2026-09-01T15:54:30+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -2276,7 +2280,7 @@
       ],
       "impact": "법인세와는 무관하나 원천징수의무자로서 출산·육아 비과세 급여 한도 등 급여 실무 반영 필요",
       "published_at": "2025-12-23",
-      "collected_at": "2026-09-01T15:37:23+09:00",
+      "collected_at": "2026-09-01T15:55:22+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "기획재정부",
@@ -2322,7 +2326,7 @@
       ],
       "impact": null,
       "published_at": "2026-05-22",
-      "collected_at": "2026-09-01T15:37:28+09:00",
+      "collected_at": "2026-09-01T15:55:25+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "기획재정부",
@@ -2368,7 +2372,7 @@
       ],
       "impact": "퇴직소득 원천징수의무자로서 정산 서식 변경 확인 필요(경미)",
       "published_at": "2026-05-22",
-      "collected_at": "2026-09-01T15:37:33+09:00",
+      "collected_at": "2026-09-01T15:55:28+09:00",
       "effective_date": "2026-05-22",
       "source": {
         "name": "기획재정부",
@@ -2415,7 +2419,7 @@
       ],
       "impact": "법인지방소득세율 인상 대상 — 법인세율 인상분과 함께 2026.01.01부터 세부담 증가 반영 필요",
       "published_at": "2025-12-31",
-      "collected_at": "2026-09-01T15:37:59+09:00",
+      "collected_at": "2026-09-01T15:55:46+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "행정안전부",
@@ -2459,7 +2463,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-23",
-      "collected_at": "2026-09-01T15:38:03+09:00",
+      "collected_at": "2026-09-01T15:55:48+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "행정안전부",
@@ -2503,7 +2507,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-30",
-      "collected_at": "2026-09-01T15:33:50+09:00",
+      "collected_at": "2026-09-01T15:54:00+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -2541,7 +2545,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-24",
-      "collected_at": "2026-09-01T15:33:52+09:00",
+      "collected_at": "2026-09-01T15:54:01+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -2582,7 +2586,7 @@
       ],
       "impact": "2026.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2024-11-22",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2628,7 +2632,7 @@
       ],
       "impact": "2020.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-12-21",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2674,7 +2678,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-10-16",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2720,7 +2724,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-05-25",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2767,7 +2771,7 @@
       ],
       "impact": "고용세액공제·기업업무추진비 조항은 해당 — 미환류소득 특례는 대상 규모인지 별도 확인 필요",
       "published_at": "2025-12-23",
-      "collected_at": "2026-09-01T15:37:40+09:00",
+      "collected_at": "2026-09-01T15:55:33+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "기획재정부,행정안전부",
@@ -2811,7 +2815,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-23",
-      "collected_at": "2026-09-01T15:37:46+09:00",
+      "collected_at": "2026-09-01T15:55:37+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "기획재정부,행정안전부",
@@ -2858,7 +2862,7 @@
       ],
       "impact": "안전시설 투자 시 통합투자세액공제 대상 확대분(스마트 안전관제시설 등) 해당 여부 확인 필요",
       "published_at": "2026-03-20",
-      "collected_at": "2026-09-01T15:37:53+09:00",
+      "collected_at": "2026-09-01T15:55:42+09:00",
       "effective_date": "2026-03-20",
       "source": {
         "name": "기획재정부,행정안전부",
@@ -2902,7 +2906,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-01",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2940,7 +2944,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-06-01",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2978,7 +2982,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2012-12-01",
-      "collected_at": "2026-09-01T15:34:31+09:00",
+      "collected_at": "2026-09-01T15:54:27+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -3016,7 +3020,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-08-18",
-      "collected_at": "2026-09-01T15:33:44+09:00",
+      "collected_at": "2026-09-01T15:53:57+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3052,7 +3056,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-24",
-      "collected_at": "2026-09-01T15:33:43+09:00",
+      "collected_at": "2026-09-01T15:53:56+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3088,7 +3092,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-07-16",
-      "collected_at": "2026-09-01T15:33:44+09:00",
+      "collected_at": "2026-09-01T15:53:57+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3124,7 +3128,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-06-16",
-      "collected_at": "2026-09-01T15:33:44+09:00",
+      "collected_at": "2026-09-01T15:53:57+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3160,7 +3164,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-05-15",
-      "collected_at": "2026-09-01T15:33:44+09:00",
+      "collected_at": "2026-09-01T15:53:57+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3196,7 +3200,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2025-12-31",
-      "collected_at": "2026-09-01T15:33:44+09:00",
+      "collected_at": "2026-09-01T15:53:57+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3232,7 +3236,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2025-12-23",
-      "collected_at": "2026-09-01T15:33:44+09:00",
+      "collected_at": "2026-09-01T15:53:57+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3268,7 +3272,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2025-12-12",
-      "collected_at": "2026-09-01T15:33:44+09:00",
+      "collected_at": "2026-09-01T15:53:57+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3304,7 +3308,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2025-12-02",
-      "collected_at": "2026-09-01T15:33:44+09:00",
+      "collected_at": "2026-09-01T15:53:57+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3343,7 +3347,7 @@
       ],
       "impact": "2025.12.31부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2025-11-21",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2025-12-31",
       "source": {
         "name": "한국회계기준원",
@@ -3387,7 +3391,7 @@
       ],
       "impact": "2026.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2025-10-17",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3431,7 +3435,7 @@
       ],
       "impact": "2024.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-10-27",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3475,7 +3479,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-09-15",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3519,7 +3523,7 @@
       ],
       "impact": "2023.12.13부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-09-15",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2023-12-13",
       "source": {
         "name": "한국회계기준원",
@@ -3563,7 +3567,7 @@
       ],
       "impact": "2024.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2023-05-12",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3607,7 +3611,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2022-02-11",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3651,7 +3655,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2021-10-15",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3695,7 +3699,7 @@
       ],
       "impact": "2026.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2021-09-10",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3739,7 +3743,7 @@
       ],
       "impact": "2023.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2021-04-23",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3783,7 +3787,7 @@
       ],
       "impact": "2021.04.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2021-04-01",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2021-04-01",
       "source": {
         "name": "한국회계기준원",
@@ -3827,7 +3831,7 @@
       ],
       "impact": "2021.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-12-18",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2021-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3871,7 +3875,7 @@
       ],
       "impact": "2022.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-09-25",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3915,7 +3919,7 @@
       ],
       "impact": "2022.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-09-25",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3959,7 +3963,7 @@
       ],
       "impact": "2022.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-09-25",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4003,7 +4007,7 @@
       ],
       "impact": "2020.06.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2020-05-29",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2020-06-01",
       "source": {
         "name": "한국회계기준원",
@@ -4047,7 +4051,7 @@
       ],
       "impact": "2020.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2019-12-20",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4091,7 +4095,7 @@
       ],
       "impact": "2020.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2019-04-19",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4135,7 +4139,7 @@
       ],
       "impact": "2021.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-05-25",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2021-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4203,7 +4207,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-02-28",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4247,7 +4251,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2018-01-26",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4291,7 +4295,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2017-12-15",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4335,7 +4339,7 @@
       ],
       "impact": "2019.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2017-05-22",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4379,7 +4383,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2017-04-21",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4423,7 +4427,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2017-03-24",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4467,7 +4471,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2017-02-24",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4511,7 +4515,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2016-11-15",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4555,7 +4559,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2016-11-15",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4599,7 +4603,7 @@
       ],
       "impact": "2017.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2016-11-15",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2017-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4643,7 +4647,7 @@
       ],
       "impact": "2016.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-12-24",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4687,7 +4691,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-11-06",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4731,7 +4735,7 @@
       ],
       "impact": "2018.01.01부터 적용. 회계팀 사전 검토 필요.",
       "published_at": "2015-09-25",
-      "collected_at": "2026-09-01T15:33:56+09:00",
+      "collected_at": "2026-09-01T15:54:03+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4774,7 +4778,7 @@
       ],
       "impact": "해외 자회사 거래가 있다면 경정청구 서류 강화분 확인, 필라2는 연결매출 7.5억유로 이상 그룹 대상이라 해당 여부 별도 확인 필요",
       "published_at": "2025-12-23",
-      "collected_at": "2026-09-01T15:36:37+09:00",
+      "collected_at": "2026-09-01T15:54:57+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "기획재정부",
@@ -4818,7 +4822,7 @@
       ],
       "impact": null,
       "published_at": "2026-02-27",
-      "collected_at": "2026-09-01T15:36:41+09:00",
+      "collected_at": "2026-09-01T15:54:59+09:00",
       "effective_date": "2026-02-27",
       "source": {
         "name": "기획재정부",
@@ -4862,7 +4866,7 @@
       ],
       "impact": null,
       "published_at": "2026-03-20",
-      "collected_at": "2026-09-01T15:36:45+09:00",
+      "collected_at": "2026-09-01T15:55:02+09:00",
       "effective_date": "2026-03-20",
       "source": {
         "name": "기획재정부",
@@ -4904,7 +4908,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-02",
-      "collected_at": "2026-09-01T15:38:10+09:00",
+      "collected_at": "2026-09-01T15:55:53+09:00",
       "effective_date": "2026-06-02",
       "source": {
         "name": "행정안전부",
@@ -4946,7 +4950,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-11-04",
-      "collected_at": "2026-09-01T15:34:13+09:00",
+      "collected_at": "2026-09-01T15:54:15+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -4982,7 +4986,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-27",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5005,11 +5009,8 @@
       "attachments": null,
       "is_static": false,
       "date_estimated": false,
-      "duplicate_count": 1,
-      "duplicate_sources": [
-        "임팩트온",
-        "임팩트온"
-      ],
+      "duplicate_count": 0,
+      "duplicate_sources": [],
       "related_news": [],
       "is_meeting_schedule": false,
       "ai_generated": false,
@@ -5024,7 +5025,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-04-25",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "일간NTN",
@@ -5064,7 +5065,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-04-25",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -5107,7 +5108,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-26",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -5146,7 +5147,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-12-18",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "금융위원회",
@@ -5182,7 +5183,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-01",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5221,7 +5222,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-06",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5263,7 +5264,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-13",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5302,7 +5303,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-06",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -5341,7 +5342,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-09",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5380,7 +5381,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-08",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5419,7 +5420,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-24",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5458,7 +5459,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-08",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -5497,7 +5498,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-07",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5536,7 +5537,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-09",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -5575,7 +5576,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-18",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -5614,7 +5615,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-03",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -5653,7 +5654,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-11",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "일간NTN",
@@ -5687,11 +5688,11 @@
       "category": "kifrs",
       "doc_type": "보도자료",
       "stage": "참고",
-      "title": "한국공인회계사회, 올해 2분기 재무제표 회계투명성ㆍ감사품질 강화 유의사항 안내 - news.kicpa.or.kr",
+      "title": "한국공인회계사회, 올해 2분기 재무제표 회계투명성ㆍ감사품질 강화 유의사항 안내 - CPA뉴스",
       "summary": [],
       "impact": null,
       "published_at": "2026-07-09",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "CPA뉴스",
@@ -5729,7 +5730,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-08",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -5767,7 +5768,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-26",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "파이낸셜뉴스",
@@ -5790,10 +5791,11 @@
       "attachments": null,
       "is_static": false,
       "date_estimated": false,
-      "duplicate_count": 2,
+      "duplicate_count": 3,
       "duplicate_sources": [
         "파이낸셜뉴스",
         "newsis.com",
+        "news.nate.com",
         "news.nate.com"
       ],
       "related_news": [],
@@ -5810,7 +5812,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-03-19",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "PwC",
@@ -5848,7 +5850,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-12-28",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "매일경제",
@@ -5888,7 +5890,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-10-28",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "머니투데이",
@@ -5926,7 +5928,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-08-21",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "이데일리",
@@ -5964,7 +5966,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-03-06",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "매일경제",
@@ -6002,7 +6004,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-02-01",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "서울경제",
@@ -6040,7 +6042,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-10-07",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "lawleader.co.kr",
@@ -6081,7 +6083,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-04-25",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "ceoscoredaily.com",
@@ -6117,11 +6119,11 @@
       "category": "icfr",
       "doc_type": "모범규준",
       "stage": "확정",
-      "title": "금융당국, 여전사 내부통제 모범규준 시행...동일부서 5년 초과근무 금지 - 에너지경제신문",
+      "title": "금융당국, 여전사 내부통제 모범규준 시행...동일부서 5년 초과근무 금지 - ekn.kr",
       "summary": [],
       "impact": null,
       "published_at": "2024-04-25",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "m.ekn.kr",
@@ -6161,7 +6163,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-09-28",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "khan.co.kr",
@@ -6201,7 +6203,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-02-24",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "fntimes.com",
@@ -6241,7 +6243,7 @@
       "summary": [],
       "impact": "기존 회계처리 관행 재확인 필요.",
       "published_at": "2026-07-01",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "tfmedia.co.kr",
@@ -6280,7 +6282,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-19",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "imedialife.co.kr",
@@ -6318,7 +6320,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-20",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "christiandaily.co.kr",
@@ -6349,6 +6351,45 @@
       "revision_reason": null
     },
     {
+      "id": "8ffd776a841c9745",
+      "category": "tax",
+      "doc_type": "공개초안",
+      "stage": "의견수렴",
+      "title": "박용갑 의원, 지방세법 개정안 처리 촉구…\"지방재정 7조 원 지켜야\" - 행정수도뉴스",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-07-02",
+      "collected_at": "2026-09-01T15:55:59+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "capnews.kr",
+        "domain": "https://www.capnews.kr",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 30,
+      "final_score": 20.0,
+      "matched_keywords": [
+        "세법",
+        "개정안"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE8zbjBrZkJmVDlqYWh5QmxZT01CeTlEUzRKMWNZeDVpUF9DSV9lb1U1blB0VjlUQnh5djR5S3pGUksyclB4R2RheG5HcW9neWtZZlBWWHBOLUNzOENDdkM1bDRIc0JSa0U?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "is_static": false,
+      "date_estimated": false,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null
+    },
+    {
       "id": "4fb95814248440d4",
       "category": "tax",
       "doc_type": "공개초안",
@@ -6357,7 +6398,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-03",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "dailian.co.kr",
@@ -6391,45 +6432,6 @@
       "revision_reason": null
     },
     {
-      "id": "8ffd776a841c9745",
-      "category": "tax",
-      "doc_type": "공개초안",
-      "stage": "의견수렴",
-      "title": "박용갑 의원, 지방세법 개정안 처리 촉구…\"지방재정 7조 원 지켜야\" - 행정수도뉴스",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-07-02",
-      "collected_at": "2026-09-01T15:38:14+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "capnews.kr",
-        "domain": "https://www.capnews.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 30,
-      "final_score": 20.0,
-      "matched_keywords": [
-        "세법",
-        "개정안"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE8zbjBrZkJmVDlqYWh5QmxZT01CeTlEUzRKMWNZeDVpUF9DSV9lb1U1blB0VjlUQnh5djR5S3pGUksyclB4R2RheG5HcW9neWtZZlBWWHBOLUNzOENDdkM1bDRIc0JSa0U?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 0,
-      "duplicate_sources": [],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null
-    },
-    {
       "id": "6f5fca4f685868e2",
       "category": "tax",
       "doc_type": "공개초안",
@@ -6438,7 +6440,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-02",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "news1.kr",
@@ -6473,11 +6475,11 @@
       "category": "icfr",
       "doc_type": "공개초안",
       "stage": "의견수렴",
-      "title": "김현정 의원, 고의 분식 회사관계자의 과징금 상향하는 외감법 개정안 발의 - 뉴스투데이",
+      "title": "김현정 의원, 고의 분식 회사관계자의 과징금 상향하는 외감법 개정안 발의 - news2day.co.kr",
       "summary": [],
       "impact": null,
       "published_at": "2026-01-14",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "news2day.co.kr",
@@ -6516,7 +6518,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-09-11",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "medigatenews.com",
@@ -6555,7 +6557,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-10-07",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "lec.co.kr",
@@ -6594,7 +6596,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-06",
-      "collected_at": "2026-09-01T15:38:14+09:00",
+      "collected_at": "2026-09-01T15:55:59+09:00",
       "effective_date": null,
       "source": {
         "name": "lawtimes.co.kr",
