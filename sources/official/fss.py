@@ -25,7 +25,8 @@ from bs4 import BeautifulSoup
 
 from .. import _http, _gap_log
 from .._utils import (doc_type_of, extract_title_revision_date, is_event_announcement,
-                      keyword_score, matched_keywords, make_id_exact, final_score, recency_score)
+                      keyword_score, matched_keywords, make_id_exact, final_score, recency_score,
+                      has_fiscal_year_override)
 
 FSS_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
           "Chrome/124.0.0.0 Safari/537.36 (contact: alchem1024@gmail.com, project: policy-watch)")
@@ -164,7 +165,12 @@ def fetch_data_board(*, fetch_attachments: bool = True) -> list[dict]:
             except Exception as exc:  # noqa: BLE001 - 첨부파일 조회 실패해도 항목 자체는 살린다
                 print(f"[fss] 첨부파일 조회 실패({url}): {exc}")
         items.append(item)
-        _gap_log.record(source="금융감독원(fss.or.kr)", category="icfr", title=title, url=url)
+        # 2026-09-02 사용자 지시로 원문을 직접 확인해 effective_date를 수동
+        # 등록한 항목(_utils._FISCAL_YEAR_EFFECTIVE_DATES)은 이미 해결됐으니
+        # "검토 필요" 목록에 또 안 남게 건너뛴다(실측 버그: 이 필터 없이는
+        # finalize_item()이 나중에 채운 값과 무관하게 여기서 무조건 기록됨).
+        if not has_fiscal_year_override(item["id"]):
+            _gap_log.record(source="금융감독원(fss.or.kr)", category="icfr", title=title, url=url)
     return items
 
 

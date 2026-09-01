@@ -33,6 +33,7 @@ _VALID_ITEM = {
     "ai_generated": False,
     "revision_reason": None,
     "is_roadmap_estimate": False,
+    "effective_date_note": None,
 }
 
 _VALID_SCHEDULE = {

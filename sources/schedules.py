@@ -43,18 +43,27 @@ def _importance_of(item: dict) -> str:
 
 def _description_of(item: dict) -> str:
     if item.get("impact"):
-        return item["impact"]
-    summary = item.get("summary") or []
-    if summary:
-        return summary[0]
-    # 2026-09-02 사용자 지시: AI가 검토했지만 summary/impact를 둘 다 비운
-    # 항목(예: 지방세법 시행령 — 개정이유가 팜한농과 무관하다고 판단)은
-    # 여기서 item["title"]로 폴백하면 캘린더 카드에 제목이 두 번(위 제목
-    # 줄 + 이 설명 줄) 나온다 — 전체 동향 탭의 card-ai-empty와 문구를
-    # 통일해서 "제목 반복"이 아니라 "검토는 했다"는 걸 알 수 있게 한다.
-    if item.get("ai_generated"):
-        return "AI 검토 결과 팜한농 해당사항 없음"
-    return item["title"]
+        base = item["impact"]
+    else:
+        summary = item.get("summary") or []
+        if summary:
+            base = summary[0]
+        # 2026-09-02 사용자 지시: AI가 검토했지만 summary/impact를 둘 다 비운
+        # 항목(예: 지방세법 시행령 — 개정이유가 팜한농과 무관하다고 판단)은
+        # 여기서 item["title"]로 폴백하면 캘린더 카드에 제목이 두 번(위 제목
+        # 줄 + 이 설명 줄) 나온다 — 전체 동향 탭의 card-ai-empty와 문구를
+        # 통일해서 "제목 반복"이 아니라 "검토는 했다"는 걸 알 수 있게 한다.
+        elif item.get("ai_generated"):
+            base = "AI 검토 결과 팜한농 해당사항 없음"
+        else:
+            base = item["title"]
+    # 2026-09-02 사용자 지시: effective_date가 "N년 개시 사업연도부터 적용"
+    # 같은 회계연도 기준 근사치면(_utils._FISCAL_YEAR_EFFECTIVE_DATES), 확정
+    # 시행일과 성격이 다르다는 걸 카드에서 알 수 있게 원문 표현을 병기한다.
+    note = item.get("effective_date_note")
+    if note and note not in base:
+        return f"{base} ({note})"
+    return base
 
 
 def schedule_from_item(item: dict) -> dict:

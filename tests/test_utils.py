@@ -432,6 +432,23 @@ class TestFinalizeItem:
         assert out["effective_date"] is None
         assert out["is_roadmap_estimate"] is False
 
+    # ── 사업연도 기준 근사 시행일 (2026-09-02 사용자 지시) ────────────────────
+    # _FISCAL_YEAR_EFFECTIVE_DATES는 특정 id를 직접 키로 쓰는 수동 매핑이라
+    # 그 id 중 하나를 그대로 써서 검증한다.
+    def test_fiscal_year_mapped_id_gets_effective_date_and_note(self):
+        out = finalize_item(self._item(id="9204a2cb8d4f8a52", effective_date=None))
+        assert out["effective_date"] == "2024-01-01"
+        assert out["effective_date_note"] == "적용: 2024.1.1 이후 개시 사업연도부터"
+
+    def test_fiscal_year_mapping_does_not_override_existing_effective_date(self):
+        out = finalize_item(self._item(id="9204a2cb8d4f8a52", effective_date="2025-03-01"))
+        assert out["effective_date"] == "2025-03-01"
+        assert out["effective_date_note"] is None
+
+    def test_unmapped_id_gets_no_note(self):
+        out = finalize_item(self._item(id="some-other-id", effective_date=None))
+        assert out["effective_date_note"] is None
+
 
 # ── 조직 운영성 공지 제외 (ADDENDUM-4 §1) ────────────────────────────────────
 class TestIsAdminNoise:

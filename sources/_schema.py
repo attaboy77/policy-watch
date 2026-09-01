@@ -68,6 +68,7 @@ _ITEM_SCHEMA = {
         "urls", "law_meta",
         "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
         "is_meeting_schedule", "ai_generated", "revision_reason", "is_roadmap_estimate",
+        "effective_date_note",
     ],
     "properties": {
         "id": {"type": "string"},
@@ -119,6 +120,12 @@ _ITEM_SCHEMA = {
         # 확정 시행일과 캘린더에서 섞이면 안 되므로(사용자 지시) 프론트가
         # "로드맵 예정" 뱃지로 구분한다(finalize_item() 참고).
         "is_roadmap_estimate": {"type": "boolean"},
+        # 2026-09-02: 첨부파일에만 있는 "OO.1.1일 이후 개시 사업연도부터 적용"류
+        # 정보를 수동 확인해 effective_date를 채웠을 때, 그 원문 표현을 그대로
+        # 담는다(_utils._FISCAL_YEAR_EFFECTIVE_DATES 참고) — 특정 날짜의 확정
+        # 시행일이 아니라 회계연도 기준 근사치라는 걸 캘린더 카드에서 알 수
+        # 있게(schedules.py의 _description_of()가 description에 병기한다).
+        "effective_date_note": {"type": ["string", "null"]},
     },
 }
 

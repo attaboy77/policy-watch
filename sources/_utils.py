@@ -945,6 +945,7 @@ ITEM_FIELDS = [
     "urls", "law_meta", "attachments",
     "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
     "is_meeting_schedule", "ai_generated", "revision_reason", "is_roadmap_estimate",
+    "effective_date_note",
 ]
 
 # 2026-09-02 사용자 지시: KSSB 자발적용 기준서(doc_type="자발적용")는 자체
@@ -952,6 +953,32 @@ ITEM_FIELDS = [
 # 1차 마일스톤 날짜를 finalize_item()에서 채운다(단일 지점 원칙, 위
 # 논의자료/해외기준 재분류와 같은 이유). 프로세스 수명 동안 재사용.
 _ESG_ROADMAP = _esg_roadmap.load()
+
+# 2026-09-02 사용자 지시: docs/EFFECTIVE_DATE_GAPS.md에 남아있던 FSS(금감원)
+# 항목 중, 첨부파일(HWP/PDF)이라 자동 추출은 안 되지만 본문에 "OO.1.1일 이후
+# 시작되는 사업연도부터 적용"류 문구가 있는 걸 원문에서 직접 확인한 것만
+# 수동 등록한다. 팜한농이 12월 결산이라 "N년 개시 사업연도"를 "N-01-01"로
+# 매핑했다 — 이건 특정 날짜가 아니라 회계연도 기준 근사치이므로,
+# effective_date_note에 원문 표현을 그대로 남겨 캘린더에서 "확정 시행일"과
+# 성격이 다르다는 걸 알 수 있게 한다(schedules.py의 _description_of() 참고).
+# 본문에서 이 패턴을 못 찾은 항목(가이드라인 8d42db70, FAQ 6b80af08)은 그대로
+# EFFECTIVE_DATE_GAPS.md에 남겨뒀다 — 억지로 끼워맞추지 않음.
+_FISCAL_YEAR_EFFECTIVE_DATES = {
+    "9204a2cb8d4f8a52": ("2024-01-01", "적용: 2024.1.1 이후 개시 사업연도부터"),
+    "1a46fa331b9cd907": ("2024-01-01", "적용: 2024.1.1 이후 개시 사업연도부터"),
+    "69c2d4668fe23175": ("2024-01-01", "적용: 2024.1.1 이후 개시 사업연도부터"),
+    "2d985b567a9e6d86": ("2024-01-01", "적용: 2024.1.1 이후 개시 사업연도부터(24사업연도는 경과조치로 기존 제도 적용 가능)"),
+}
+
+
+def has_fiscal_year_override(item_id: str) -> bool:
+    """이 id가 _FISCAL_YEAR_EFFECTIVE_DATES에 수동 등록돼 있는지. 어댑터(예:
+    fss.py의 B2)가 수집 시점에 `_gap_log.record()`를 호출할지 판단할 때 쓴다 —
+    이미 사람이 원문을 확인해 effective_date를 채운 항목까지 "검토 필요"
+    목록에 계속 남으면 안 되므로(2026-09-02 실측: 안 걸러서 EFFECTIVE_DATE_
+    GAPS.md가 그대로였던 버그), 여기서 한 번 걸러준다.
+    """
+    return item_id in _FISCAL_YEAR_EFFECTIVE_DATES
 
 
 def finalize_item(item: dict) -> dict:
@@ -995,4 +1022,11 @@ def finalize_item(item: dict) -> dict:
         if roadmap_date:
             out["effective_date"] = roadmap_date
             out["is_roadmap_estimate"] = True
+    # 사업연도 기준 근사 시행일(위 _FISCAL_YEAR_EFFECTIVE_DATES 참고) — 이미
+    # 실제 effective_date가 있으면 덮어쓰지 않는다(다른 소스가 정확한 날짜를
+    # 채웠다면 그게 우선).
+    out["effective_date_note"] = None
+    fiscal = _FISCAL_YEAR_EFFECTIVE_DATES.get(item.get("id"))
+    if fiscal and not out.get("effective_date"):
+        out["effective_date"], out["effective_date_note"] = fiscal
     return out

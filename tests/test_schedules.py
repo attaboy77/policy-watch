@@ -73,6 +73,22 @@ class TestScheduleFromItem:
         sch = schedule_from_item(_item(is_roadmap_estimate=True))
         assert sch["is_roadmap_estimate"] is True
 
+    # ── effective_date_note (2026-09-02 사용자 지시: 사업연도 기준 근사 시행일) ──
+    def test_effective_date_note_appended_to_impact_description(self):
+        sch = schedule_from_item(_item(effective_date_note="적용: 2024.1.1 이후 개시 사업연도부터"))
+        assert sch["description"] == ("2027.01.01부터 적용. 내부회계관리팀 사전 검토 필요."
+                                       " (적용: 2024.1.1 이후 개시 사업연도부터)")
+
+    def test_effective_date_note_appended_when_falling_back_to_title(self):
+        sch = schedule_from_item(_item(impact=None, summary=[],
+                                        effective_date_note="적용: 2024.1.1 이후 개시 사업연도부터"))
+        assert sch["description"] == ("연결 내부회계관리제도 감사 의무 적용"
+                                       " (적용: 2024.1.1 이후 개시 사업연도부터)")
+
+    def test_no_note_leaves_description_unchanged(self):
+        sch = schedule_from_item(_item())
+        assert sch["description"] == "2027.01.01부터 적용. 내부회계관리팀 사전 검토 필요."
+
 
 class TestImportanceOf:
     @pytest.mark.parametrize("score,expected", [(85, "high"), (60, "medium"), (10, "low")])
