@@ -1,13 +1,61 @@
-# STATUS: Phase 0 스캐폴딩 placeholder — Phase 6에서 SPEC.md §1/§8 요구사항으로 구현 예정.
-# 최종 형태: cron '0 22 * * *' (07:00 KST) + workflow_dispatch,
-#           python -m sources.main 실행 → site/data.json 커밋 & 푸시.
-name: crawl
+name: 정책 수집 및 배포
+
+# 2026-09-01: Phase 6 placeholder를 실제 배포 워크플로로 교체.
+# 이 저장소가 예전에 완전히 별도 히스토리로 운영하던 crawler/ 기반 워크플로
+# (archive된 legacy-crawler-archive 브랜치 참고)의 스케줄·시크릿·Pages 배포
+# 구조를 그대로 재사용하고, 실행 대상만 crawler/main.py → sources.main으로
+# 바꿨다. SPEC.md §1/§8 설계(cron 07:00 KST)와도 일치한다.
 
 on:
+  schedule:
+    - cron: "0 22 * * *"  # 07:00 KST
   workflow_dispatch: {}
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
-  placeholder:
+  crawl:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Phase 6에서 구현 예정 (SPEC.md §8)"
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: 수집 실행
+        env:
+          LAW_API_OC: ${{ secrets.LAW_API_OC }}
+          PROXY_BASE: ${{ secrets.PROXY_BASE }}
+          NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+          NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+        run: python -m sources.main
+
+      - name: 변경사항 커밋
+        run: |
+          git config user.name "policy-watch-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add site/data.json docs/EFFECTIVE_DATE_GAPS.md docs/EXCLUDED_LOG.md
+          git diff --cached --quiet || git commit -m "chore: 정책 데이터 갱신 $(date +'%Y-%m-%d')"
+          git push
+
+      - name: Pages 아티팩트 업로드
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: crawl
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
