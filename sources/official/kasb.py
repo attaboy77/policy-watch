@@ -64,6 +64,17 @@ CALENDAR_VIEW_URL = f"{BASE}/front/board/calViewA.do"
 # `<tr>`을 style="display:none"으로 숨기는 방식)이므로 쿼리 파라미터 없이 그냥
 # GET 한 번이면 전체 행(73건, 2026-08-31 기준)이 다 온다 — 페이지네이션 없음.
 REVISION_LIST_URL = f"{BASE}/front/board/List2006.do"
+# E: KSSB(지속가능성기준) 공시기준서 "자발적용가능" 목록(2026-09-02 사용자
+# 지시로 추가). sstnb_stndrList.do는 "시행중"(A)/"자발적용가능"(B) 탭 2개짜리
+# 게시판 — <form id="frm" method="GET">의 hidden input #tab 기본값이 "A"라
+# 쿼리 없이 GET하면 A(시행중) 결과(현재는 빈 목록)만 온다. 실측 확인: B탭은
+# `?tab=B&siteCd=002000000000000&bu=B`를 붙여야 자발적용가능 목록(현재 KSSB
+# 제1호/제2호 2건)이 온다. 상세 페이지(View3012.do)는 `fn_Detail(gubun,
+# accstdSeq)`가 넘기는 두 파라미터로 접근하며, "최종제(개)정일" 필드가
+# 곧 의결일(제정 의결·공표가 같은 날)이다 — 시행일 필드 자체가 없다(사용자가
+# 미리 알려준 대로: "의결일자는 있는데 시행일자가 없음").
+KSSB_STANDARD_LIST_URL = f"{BASE}/front/board/sstnb_stndrList.do"
+KSSB_STANDARD_VIEW_URL = f"{BASE}/front/board/View3012.do"
 
 SLEEP_BETWEEN_REQUESTS = 1.0  # SPEC §4-6: 공식 사이트는 뉴스보다 여유 있게
 _KST = timezone(timedelta(hours=9))
@@ -401,6 +412,74 @@ def fetch_revisions() -> list[dict]:
     return items
 
 
+_KSSB_DETAIL_LINK_RE = re.compile(r"fn_Detail\('(\d+)'\s*,\s*'(\d+)'\)")
+
+
+def fetch_kssb_voluntary_standards() -> list[dict]:
+    """E: KSSB 공시기준서 "자발적용가능" 목록(sstnb_stndrList.do, 2026-09-02
+    사용자 지시로 추가). B탭(자발적용가능)만 수집한다 — A탭(시행중)은 실측
+    결과 아직 빈 목록이다(어떤 KSSB 기준서도 시행일이 확정되지 않았다는 뜻).
+
+    목록 행의 `fn_Detail(gubun, accstdSeq)`에서 상세 페이지(View3012.do) 접근에
+    필요한 두 파라미터를 뽑고, 상세 페이지의 "최종제(개)정일"을 published_at으로
+    쓴다(제정 의결과 공표가 같은 날 — "최종 공표일"과 항상 동일해 published_at
+    하나로 충분). **시행일자는 없다** — 상세 페이지 자체에 그 필드가 없어
+    effective_date는 항상 None으로 둔다(_gap_log에도 안 남긴다 — 다른 소스의
+    "파싱 실패"와 달리 애초에 없는 값이라 수동 확인 대상이 아니다).
+    """
+    resp = _http.get(KSSB_STANDARD_LIST_URL, params={
+        "tab": "B", "siteCd": "002000000000000", "bu": "B",
+    })
+    soup = BeautifulSoup(resp.text, "html.parser")
+    tier, trust_score, source_name = trust_of(KSSB_STANDARD_LIST_URL)
+
+    items: list[dict] = []
+    rows = soup.select("table tbody tr")
+    for i, row in enumerate(rows):
+        link = row.select_one("td.left a")
+        if link is None:
+            continue
+        title = link.get_text(strip=True)
+        m = _KSSB_DETAIL_LINK_RE.search(link.get("onclick", ""))
+        if not title or not m:
+            continue
+        gubun, accstd_seq = m.group(1), m.group(2)
+        url = f"{KSSB_STANDARD_VIEW_URL}?siteCd=002000000000000&gubun={gubun}&accstdSeq={accstd_seq}"
+
+        if i > 0:
+            time.sleep(SLEEP_BETWEEN_REQUESTS)
+        try:
+            detail_resp = _http.get(url)
+        except Exception as exc:  # noqa: BLE001 - 상세 하나 실패해도 나머지는 계속(SPEC §9-4)
+            print(f"[kasb] KSSB 자발적용 상세 조회 실패({title}): {exc}")
+            continue
+        detail_soup = BeautifulSoup(detail_resp.text, "html.parser")
+
+        published_at = None
+        for th in detail_soup.select("table th"):
+            if th.get_text(strip=True) == "최종제(개)정일":
+                td = th.find_next_sibling("td")
+                date_el = td.select_one(".board_date") if td else None
+                text = (date_el or td).get_text(strip=True) if td else None
+                if text and re.match(r"^\d{4}-\d{2}-\d{2}$", text):
+                    published_at = text
+                break
+
+        attachments = [
+            {"name": a.get_text(strip=True), "url": None}
+            for a in detail_soup.select(".board_view_file_wrap a[onclick*='fileDownload']")
+            if a.get_text(strip=True)
+        ] or None
+
+        items.append(_build_item(
+            category="esg", title=title, url=url, published_at=published_at,
+            doc_type="자발적용", effective_date=None,
+            tier=tier, trust_score=trust_score, source_name=source_name,
+            attachments=attachments,
+        ))
+    return items
+
+
 def fetch_standards() -> list[dict]:
     """A2: List3003~List3008 게시판. **fetch()에서 제외됨 — 아래 참고.**
 
@@ -490,15 +569,16 @@ def fetch_qna() -> list[dict]:
 
 
 def fetch(*, fetch_detail: bool = True) -> list[dict]:
-    """A1+A3+C(주요일정)+D(제개정현황). A2(fetch_standards)는 제외 — 위
-    fetch_standards() docstring 참고. 소스 한 종류가 실패해도 나머지는 계속
-    진행한다(SPEC §9-4).
+    """A1+A3+C(주요일정)+D(제개정현황)+E(KSSB 자발적용가능). A2(fetch_standards)는
+    제외 — 위 fetch_standards() docstring 참고. 소스 한 종류가 실패해도 나머지는
+    계속 진행한다(SPEC §9-4).
     """
     out: list[dict] = []
     for name, fn in (("notices", lambda: fetch_notices(fetch_detail=fetch_detail)),
                       ("qna", fetch_qna),
                       ("schedule", lambda: fetch_schedule(fetch_detail=fetch_detail)),
-                      ("revisions", fetch_revisions)):
+                      ("revisions", fetch_revisions),
+                      ("kssb_voluntary", fetch_kssb_voluntary_standards)):
         try:
             out.extend(fn())
         except Exception as exc:  # noqa: BLE001
@@ -538,3 +618,10 @@ if __name__ == "__main__":
         eff = f" | 시행일: {it['effective_date']}" if it["effective_date"] else " | 시행일 파싱 실패"
         print(f"  [{it['doc_type']:6s}] {it['published_at']} | {it['title'][:60]}{eff}")
     print(f"  총 {len(revisions)}건")
+
+    print("\n=== E: KSSB 자발적용가능(sstnb_stndrList.do) ===")
+    kssb = fetch_kssb_voluntary_standards()
+    for it in kssb:
+        print(f"  [{it['doc_type']}] 의결/공표: {it['published_at']} | 시행일: {it['effective_date']} | {it['title']}")
+        print(f"    첨부: {it['attachments']}")
+    print(f"  총 {len(kssb)}건")

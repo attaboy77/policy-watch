@@ -14,11 +14,15 @@ from jsonschema import Draft202012Validator
 
 # SPEC-ADDENDUM-2.md §2-1 doc_type 14종 열거값 + "논의자료"(2026-08-28 사용자
 # 피드백 — TF·실무그룹 중간 산출물, `_utils.is_discussion_material()` 참고) +
-# "해외기준"(SPEC-ADDENDUM-7.md §3 안 A — IASB/ISSB, `_utils.is_foreign_standard()`)
+# "해외기준"(SPEC-ADDENDUM-7.md §3 안 A — IASB/ISSB, `_utils.is_foreign_standard()`) +
+# "자발적용"(2026-09-02 사용자 지시 — KASB sstnb_stndrList.do "자발적용가능" 탭.
+# KSSB 공시기준서는 제정·공표는 됐지만 시행일이 아직 없어 강제 적용 대상이
+# 아니다. 의무 적용 확정물인 "제·개정"과 구분하려고 별도 타입으로 뺐다 —
+# stage는 compute_stage()의 기본값("참고")으로 자동 처리된다.)
 DOC_TYPES = [
     "제·개정", "공개초안", "검토의견", "적용지침", "모범규준", "질의회신", "FAQ",
     "예시서식", "감사·검토기준", "해설·교육자료", "로드맵·일정", "보도자료",
-    "결정례·판례", "기사", "논의자료", "해외기준",
+    "결정례·판례", "기사", "논의자료", "해외기준", "자발적용",
 ]
 # SPEC-ADDENDUM-2.md §2-2 stage. data.json에는 "확정"까지만 저장(시행예정/시행중은 프론트 계산)
 STAGES = ["의견수렴", "확정", "참고"]

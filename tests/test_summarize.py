@@ -134,3 +134,36 @@ class TestSummaryCache:
         result = summarize(_item(id="x1"), cache=cache)
         assert result["impact"] is None
         assert result["ai_generated"] is True
+
+
+# ── KSSB 자발적용 → ESG 로드맵 규칙 기반 요약 (2026-09-02 사용자 지시) ─────────
+# doc_type="자발적용"(KSSB 공시기준서)은 effective_date가 늘 None이라 기존
+# 규칙으로는 summary/impact가 둘 다 비었다 — data/esg_roadmap.yml(수동 관리)을
+# 대신 재료로 쓴다. 실제 파일 내용에 결합하지 않도록(파일이 나중에 갱신돼도
+# 안 깨지게) 구조적 특성만 검증한다.
+class TestKssbVoluntaryRoadmap:
+    def test_voluntary_doc_type_gets_non_empty_summary(self):
+        result = summarize(_item(category="esg", doc_type="자발적용", effective_date=None))
+        assert result["summary"]  # 로드맵이 등록돼 있으면 빈 요약이면 안 된다
+        assert result["ai_generated"] is False
+
+    def test_voluntary_doc_type_impact_mentions_parent_company_context(self):
+        # SPEC: "우리는 1차 대상은 아니나 모회사 연결 공시 대응 필요" 맥락.
+        result = summarize(_item(category="esg", doc_type="자발적용", effective_date=None))
+        assert result["impact"] is not None
+        assert "모회사" in result["impact"]
+
+    def test_voluntary_doc_type_cache_hit_still_takes_priority(self):
+        # AI 요약 캐시가 있으면 로드맵 규칙보다 우선한다(기존 캐시 우선 원칙 유지).
+        cache = {"x1": {"summary": ["AI가 직접 쓴 요약"], "impact": None, "model": "m"}}
+        result = summarize(_item(id="x1", category="esg", doc_type="자발적용"), cache=cache)
+        assert result["summary"] == ["AI가 직접 쓴 요약"]
+        assert result["impact"] is None
+        assert result["ai_generated"] is True
+
+    def test_non_voluntary_doc_type_unaffected_by_roadmap(self):
+        # doc_type이 "자발적용"이 아니면 기존 동작(빈 요약) 그대로여야 한다 —
+        # 로드맵 분기가 다른 doc_type까지 잘못 건드리지 않는지 확인.
+        result = summarize(_item(category="esg", doc_type="제·개정", effective_date=None))
+        assert result["summary"] == []
+        assert result["impact"] is None

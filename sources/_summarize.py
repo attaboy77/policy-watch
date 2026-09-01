@@ -21,13 +21,18 @@ from __future__ import annotations
 import re
 
 from ._config import CATEGORIES
-from . import _summary_cache
+from . import _esg_roadmap, _summary_cache
 
 MAX_LINE_LEN = 60
 MAX_SUMMARY_LINES = 3
 
 # main.py 한 번 실행(프로세스 수명) 동안 재사용 — 항목마다 파일을 다시 읽지 않는다.
 _CACHE = _summary_cache.load()
+# 2026-09-02 사용자 지시: KSSB 자발적용 항목(doc_type="자발적용")은 기준서
+# 자체에 시행일이 없어 규칙 기반 impact가 늘 None이었다 — data/esg_roadmap.yml
+# (수동 관리, _esg_roadmap.py docstring 참고)을 규칙 기반 summary/impact의
+# 재료로 쓴다. 캐시(AI 요약)가 있으면 여전히 그게 우선이다(summarize() 참고).
+_ESG_ROADMAP = _esg_roadmap.load()
 
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?다요])\s+")
 
@@ -94,7 +99,36 @@ def _fact_lines(item: dict) -> list[str]:
     return lines
 
 
+def _esg_roadmap_summary_lines() -> list[str]:
+    """KSSB 자발적용 항목용 로드맵 요약 2줄. 로드맵 파일이 없거나 마일스톤이
+    비어 있으면 빈 리스트(호출부가 기존 _fact_lines()로 폴백)."""
+    r = _ESG_ROADMAP
+    milestones = r.get("milestones") or []
+    if not milestones:
+        return []
+    status = r.get("status", "예정")
+    m0 = milestones[0]
+    # 핵심 사실(연도·대상·의무화 내용)을 앞에 두고 출처/상태는 뒤로 뺀다 —
+    # _truncate()가 잘라도 알맹이는 남게(2026-09-02 실측: 출처를 앞에 두면
+    # 정작 "10조원"이 잘려나가는 문제가 있었다).
+    year_tag = f"{m0.get('year')}년" + (f"(FY{m0.get('fiscal_year')})" if m0.get("fiscal_year") else "")
+    line1 = f"{year_tag} {m0.get('detail', m0.get('label', ''))} — 금융위 로드맵({status})"
+    lines = [_truncate(line1)]
+    if len(milestones) > 1:
+        m1 = milestones[1]
+        line2 = f"{m1.get('year')}년 {m1.get('detail', m1.get('label', ''))}"
+        notes = r.get("notes") or []
+        if notes:
+            line2 += ", " + notes[0]
+        lines.append(_truncate(line2))
+    return lines
+
+
 def _build_summary(item: dict) -> list[str]:
+    if item.get("doc_type") == "자발적용":
+        roadmap_lines = _esg_roadmap_summary_lines()
+        if roadmap_lines:
+            return roadmap_lines[:MAX_SUMMARY_LINES]
     lines = _summary_from_body(item)
     # 본문 기반 요약이 없거나(0줄) 3줄 미만이면 사실 라인으로 보충한다(있는 것만).
     # 본문도 사실도 전혀 없으면 빈 리스트를 그대로 반환 — 프론트가 요약 영역을 숨긴다.
@@ -121,6 +155,15 @@ def _build_impact(item: dict) -> str | None:
     """SPEC §6 규칙. 해당 없으면 억지로 만들지 않고 None."""
     effective_date = item.get("effective_date")
     category = item.get("category")
+    # 2026-09-02 사용자 지시: KSSB 자발적용 항목은 자체 시행일이 없어 이 함수가
+    # 늘 None을 냈다 — data/esg_roadmap.yml의 company_note(팜한농 관점 문구)를
+    # 그대로 쓴다. 로드맵 status가 "예정"이면 그 사실을 괄호로 명시(§6 "확정
+    # 여부를 분명히 한다" 원칙과 동일).
+    if item.get("doc_type") == "자발적용":
+        note = _ESG_ROADMAP.get("company_note")
+        if note:
+            status = _ESG_ROADMAP.get("status", "예정")
+            return f"{note}(금융위 로드맵 {status} 기준)"
     if effective_date:
         formatted = effective_date.replace("-", ".")
         # 2026-08-31 사용자 지시: KASB 주요일정(fetch_schedule()) 항목은
