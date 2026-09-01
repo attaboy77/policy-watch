@@ -339,6 +339,24 @@ main.view:not(.is-active){ display:none; }
 .related-date{ color:var(--muted); margin-left:4px; }
 .related-date::before{ content:"· "; }
 
+/* 2026-09-02: 법제처 개정이유 전문 접이식(revision_reason 있는 카드만 렌더) —
+   .related-news와 같은 톤으로 통일, 기본 접힘·클릭 시 펼침(<details> 네이티브). */
+.revision-reason{ margin-bottom:14px; }
+.revision-reason summary{
+  cursor:pointer; font-size:13px; font-weight:600; color:var(--navy);
+  list-style:none; padding:2px 0;
+}
+.revision-reason summary::-webkit-details-marker{ display:none; }
+.revision-reason summary::before{ content:"▸ "; }
+.revision-reason[open] summary::before{ content:"▾ "; }
+.revision-reason-body{
+  margin:8px 0 0; padding:10px 12px; background:var(--bg);
+  border-radius:6px; font-size:13px; line-height:1.6; color:var(--ink);
+  max-height:360px; overflow-y:auto;
+}
+.revision-reason-body p{ margin:0 0 8px; }
+.revision-reason-body p:last-child{ margin-bottom:0; }
+
 .card-actions{ display:flex; gap:8px; flex-wrap:wrap; }
 
 .btn{

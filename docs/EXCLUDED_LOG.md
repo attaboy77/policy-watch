@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-01 17:03:35 +0900
+생성 시각: 2026-09-01 17:13:05 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -25,10 +25,16 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | esg | 한국회계기준원 | EFRAG, 비EU 기업 대상 ESRS-40a (N-ESRS) 공개초안 발표 및 의견조회 개시 | https://www.kasb.or.kr/front/board/comm010View.do?seq=2172 |
 | kifrs | coindesk.com | 미국 회계 기준 기관, 스테이블코인을 '현금 등가물'로 인식하는 방안 제안 - CoinDesk | https://news.google.com/rss/articles/CBMixgFBVV95cUxQTXd5QVJqQ2pOR2dqUi1NMWJBV01COU04UXRmZER4RXNNdzdfMmJzZXpNU3pnZmNxQ25CQUhxcDJNdTJJbTd5QlI5TFdRaXMxbFRvOXdUZWtGaVdGazFHUFFIazVZMFJ6ZzZSQzNSS0FmTW9iUUg1Yy1qUkRIU05xM1k4MVpITmF0bmNaNlBtV3hUM3AzX1BXaGZnWXA4YWJXR3l5OGJ2S2d2LXNybW05eGsyaFBaa2xhLU1HMzlROFZnRXh2Tnc?oc=5 |
 
+## excluded:industry_specific (1건)
+
+| 카테고리 | 출처 | 제목 | 링크 |
+|---|---|---|---|
+| kifrs | CPA뉴스 | 한국공인회계사회, 2025년 공동주택 감리 지적사례 공개…"부실ㆍ과다수임 감리 강화" - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBBTW5vcUZyTzQ4QWNFUXlQcEVVZkNGZHBVS0xLOVdsOU50UmlNbFdJMUJhQk02dmt5ei1tNC05Ylp0UDdOOHdCNjBBWVNrYVdWTVMxa3FxYjhnN2N6WDFaZDZHbEFUWXRI?oc=5 |
+
 ## excluded:nonprofit (2건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| kifrs | news.nate.com | 영림원소프트랩, 신한은행과 공익법인 ERP 사용료 낮춘다…6개월간 최대 60만원 지원 - news.nate.com | https://news.google.com/rss/articles/CBMiU0FVX3lxTE1KTTVld1pnZHJEQWkyTks2c1p0NFF5SENUbm1xODVZelZRdDZxU3dFVDVDckVUanRuYXQ5dzdvdzBCTFh6b0JQaGF4RkNvdnUwS3NJ?oc=5 |
+| kifrs | news.nate.com | 영림원소프트랩, 신한은행과 공익법인 ERP 사용료 낮춘다…6개월간 최대 60만원 지원 - 네이트 | https://news.google.com/rss/articles/CBMiU0FVX3lxTE1KTTVld1pnZHJEQWkyTks2c1p0NFF5SENUbm1xODVZelZRdDZxU3dFVDVDckVUanRuYXQ5dzdvdzBCTFh6b0JQaGF4RkNvdnUwS3NJ?oc=5 |
 | kifrs | CPA뉴스 | 한국공인회계사회, '2025년 학교법인 회계감사 감리 지적사례' 게시 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBxWHI0MWNTaThpUmtDaHFQOWUyQ1UwQXpab0lxaXF2blgtTmNuaVZNZVRNcHZuNEJwLUlrcHoyV0pnXzBFZzhoVGN0b0t6ZUZsWEc1ZjgtRzMwVThxYnJRZ0VHMTg0SWZR?oc=5 |
 

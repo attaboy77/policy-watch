@@ -30,19 +30,12 @@ from ._utils import keyword_score, matched_keywords, make_id_exact, final_score,
 
 SEARCH_URL = "https://www.law.go.kr/DRF/lawSearch.do"
 SERVICE_URL = "https://www.law.go.kr/DRF/lawService.do"
-VIEW_URL = "https://www.law.go.kr/LSW/lsInfoP.do"  # SPEC.md §4 urls.official 예시와 동일 패턴 — lsiSeq 없을 때만 폴백으로 씀
-# 2026-09-02 사용자 지시("관련 기관 공식 원문 보기"를 누르면 제정·개정이유가
-# 바로 보이면 좋겠다) — 실측 확인: lsInfoP.do는 탭 전환이 순수 클릭 JS
-# (sideInfo())라 URL 쿼리로 초기 탭을 지정할 방법이 없다(location.hash도,
-# urlMode류 파라미터도 안 읽는다 — 페이지 로드 시 항상 lsBdy(본문)로 고정).
-# 대신 그 탭이 AJAX로 불러오는 실제 엔드포인트(lsRvsDocInfoR.do)가 lsiSeq만
-# 넘기면 단독 페이지로도 정상 렌더링된다는 걸 확인했다(법인세법/법인세법
-# 시행규칙 2건 실측 — "【제정·개정이유】"+"【제정·개정문】" 내용이 그대로 나옴).
-# 사이트 전체 메뉴·헤더는 없는 더 좁은 페이지(원래 팝업창용으로 설계된 것으로
-# 보임)라 조문 본문·신구조문대비표 등 다른 탭으로는 그 페이지 안에서 못
-# 넘어간다 — "개정이유를 바로 보여주는 것"과 "전체 법령 페이지 그대로"를
-# 동시에 만족할 방법은 없었다(사용자 지시: 안 되는 걸 억지로 만들지 말 것).
-REASON_VIEW_URL = "https://www.law.go.kr/LSW/lsRvsDocInfoR.do"
+VIEW_URL = "https://www.law.go.kr/LSW/lsInfoP.do"  # SPEC.md §4 urls.official 예시와 동일 패턴
+# 2026-09-02: "관련 기관 공식 원문 보기"를 lsRvsDocInfoR.do(제정·개정이유
+# 단독 페이지, 조문·신구조문대비표로 못 넘어감)로 잠깐 바꿨다가 사용자 지시로
+# 되돌렸다 — 오히려 불편하다는 판단. 개정이유는 대신 카드 안의 접이식
+# "개정이유 전문 보기" 토글로 보여준다(revision_reason 필드 그대로, app.js
+# 참고) — urls.official은 다시 전체 법령 페이지(lsInfoP.do) 하나로 고정.
 
 # TAX_SUBJECTS(data/tax_subjects.yml)가 비어있을 때(설정 파일 없음/파싱 실패)의 폴백.
 # ADDENDUM-3 §4-1: "조회 대상 법령은 tax_subjects.yml의 laws: 필드를 모두 합친 목록".
@@ -210,17 +203,11 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
             # 공동소관 법령은 "재정경제부,행정안전부"처럼 콤마로 여러 부처가 온다 — 토큰별로 정규화.
             ministry = ",".join(_MINISTRY_NAME_FIX.get(p, p) for p in raw_ministry.split(","))
             url = f"{VIEW_URL}?lsiSeq={m['법령일련번호']}" if m.get("법령일련번호") else f"{VIEW_URL}?efYd=&lsNm={title}"
-            # 2026-09-02: "관련 기관 공식 원문 보기"는 제정·개정이유가 바로 보이는
-            # REASON_VIEW_URL로 바꾸되, id는 반드시 기존 url(lsInfoP.do?lsiSeq=)
-            # 그대로 써서 만든다 — id가 바뀌면 data/summary_cache.json에 이미
-            # 채워둔 AI 요약들(법인세법 등 18건)이 전부 고아가 된다(id 불변 원칙).
-            lsi_seq = m.get("법령일련번호")
-            official_url = f"{REASON_VIEW_URL}?lsiSeq={lsi_seq}" if lsi_seq else url
 
             kw = keyword_score(title, "tax")
             rec = recency_score(_parse_iso_date(promulgation)) if promulgation else 0
             items.append({
-                "id": make_id_exact(url),  # lsInfoP.do?lsiSeq=가 유일 식별자(이 버그로 dedupe에서 18건이 1건으로 뭉개졌었음) — official_url이 바뀌어도 이 값은 고정
+                "id": make_id_exact(url),  # lsInfoP.do?lsiSeq=가 유일 식별자(이 버그로 dedupe에서 18건이 1건으로 뭉개졌었음)
                 "category": "tax",
                 "doc_type": "제·개정",
                 "title": title,
@@ -234,7 +221,7 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
                 "keyword_score": kw,
                 "final_score": final_score(100, kw, rec),
                 "matched_keywords": matched_keywords(title, "tax"),
-                "urls": {"news": None, "official": official_url},
+                "urls": {"news": None, "official": url},
                 "revision_reason": detail.get("제개정이유"),
                 "law_meta": {
                     "law_name": title,

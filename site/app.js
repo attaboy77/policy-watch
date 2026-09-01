@@ -357,6 +357,7 @@
       ? '<div class="card-ai-empty">AI 검토 결과 팜한농 해당사항 없음</div>'
       : "";
     var relatedHtml = renderRelatedNews(it.related_news);
+    var revisionReasonHtml = renderRevisionReason(it);
 
     return (
       '<article class="card">' +
@@ -371,6 +372,7 @@
       summaryHtml +
       impactHtml +
       aiEmptyHtml +
+      revisionReasonHtml +
       relatedHtml +
       '<div class="card-actions">' + actionButtons(it.urls) + "</div>" +
       "</article>"
@@ -393,6 +395,31 @@
       '<details class="related-news">' +
       '<summary>관련 보도 ' + relatedNews.length + "건</summary>" +
       '<ul class="related-news-list">' + rows + "</ul>" +
+      "</details>"
+    );
+  }
+
+  // 2026-09-02: 법제처 개정이유 원문(law_api.py가 채우는 revision_reason,
+  // law.go.kr 항목만 있음) — 빈 줄 2개 이상을 문단 구분으로 보고 <p>로
+  // 나눈다. 원문 자체가 "◇ 개정이유" 같은 소제목·항목마다 빈 줄로 떨어져
+  // 있어(법제처 원문 서식), 이렇게 나누면 그 구조가 대체로 그대로 산다.
+  function formatRevisionReason(text) {
+    return text
+      .split(/\n\s*\n/)
+      .map(function (p) { return p.trim(); })
+      .filter(Boolean)
+      .map(function (p) { return "<p>" + esc(p).replace(/\n/g, "<br>") + "</p>"; })
+      .join("");
+  }
+
+  // revision_reason이 없는 항목(법제처 소스가 아니거나 파싱 실패)은 토글 자체를
+  // 렌더하지 않는다 — 빈 토글을 눌렀다가 아무것도 안 나오는 상황 방지.
+  function renderRevisionReason(it) {
+    if (!it.revision_reason) return "";
+    return (
+      '<details class="revision-reason">' +
+      "<summary>개정이유 전문 보기</summary>" +
+      '<div class="revision-reason-body">' + formatRevisionReason(it.revision_reason) + "</div>" +
       "</details>"
     );
   }
@@ -710,6 +737,7 @@
       ? '<div class="card-ai-empty">AI 검토 결과 팜한농 해당사항 없음</div>'
       : "";
     var relatedHtml = isOfficial ? renderRelatedNews(it.related_news) : "";
+    var revisionReasonHtml = renderRevisionReason(it);
     var actionUrl = isOfficial ? (it.urls && it.urls.official) : (it.urls && it.urls.news);
     var actionLabel = isOfficial ? "원문 →" : "기사 보기 →";
     var actionHtml = actionUrl
@@ -720,7 +748,7 @@
       '<article class="today-card' + (isOfficial ? "" : " is-news") + '" style="border-left-color:' + borderColor + '">' +
       '<div class="today-card-badges">' + catBadge(it.category) + orgBadge + aiBadge + "</div>" +
       '<h3 class="today-card-title">' + esc(it.title) + "</h3>" +
-      summaryHtml + impactHtml + aiEmptyHtml + relatedHtml +
+      summaryHtml + impactHtml + aiEmptyHtml + revisionReasonHtml + relatedHtml +
       '<div class="today-card-bottom">' +
       "<span>" + esc(it.source ? it.source.name : "-") + " · " + esc(fmtDot(it.published_at)) + "</span>" +
       actionHtml +
