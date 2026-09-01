@@ -1,7 +1,54 @@
 # 다음에 이어서 할 일 (NEXT)
 
-마지막 갱신: 2026-08-31, SPEC-ADDENDUM-8.md §1(검색)+§2(캘린더 정렬) 구현·§4(AI 요약) 재설계 커밋(`d846cda`) 직후 기준.
-현재 `site/data.json`: 163건(K-IFRS 81 / 세법 33 / 내부회계 32 / ESG 17), 일정 73건. 테스트 313개 통과.
+마지막 갱신: 2026-09-01, K-IFRS 업종 특화 기준서 제외 커밋(`5d2c780`) 직후 기준. **Phase 6(GitHub Pages 자동 배포) 완료·운영 중.**
+현재 `site/data.json`: 152건(K-IFRS 68 / 세법 33 / 내부회계 32 / ESG 19), 일정 73건. 테스트 345개 통과. AI 요약 캐시 43건.
+
+## 2026-09-01 세션 요약 (커밋 `685a55f`~`5d2c780`, 21개 커밋 — 실제 배포 후 첫 세션)
+
+사용자가 배포된 사이트(github.com/attaboy77/policy-watch, GitHub Pages)를 직접 브라우저로 보면서
+발견한 버그들을 순서대로 고쳤고, 그 과정에서 **Phase 6 배포 자체도 이번 세션에 처음 완료**했다.
+KSSB 자발적용 기준서 수집, 법제처 개정이유 수집, AI 요약 43건 누적도 이 세션에서 진행했다.
+아래는 주제별로 묶어서 요약(각 항목의 실제 커밋 해시는 괄호 안 참고).
+
+- **K-IFRS 오분류·정렬 버그 3건 + 캘린더 3건 + 탭 전환 CSS 버그 + 최근 정책동향 개선** (`685a55f`)
+  - K-IFRS 탭 상위 3건이 잘못 분류된 걸 사용자가 직접 발견: (1) CPA뉴스 연재 칼럼이 "공식" 배지로 뜬 건 — `trust_of()`가 `.endswith()` 접미사 매칭이라 `news.kicpa.or.kr`가 `kicpa.or.kr`(tier1)을 그대로 상속받은 버그. 정확 일치를 우선 검사하는 2단계 루프로 수정. (2) "회계기준원, ...자문위원 10명 위촉" 같은 인사 소식이 안 걸러진 건 — `ADMIN_NOISE_KEYWORDS`에 "위촉" 추가. (3) 정렬을 "중요도순"으로 바꿔도 화면은 날짜 그룹으로만 내려가던 건 — `renderFeed()`가 정렬 기준과 무관하게 항상 날짜 그룹핑을 하던 버그. 중요도순일 때는 그룹 헤더 없이 플랫 리스트로 렌더링하도록 분기 추가.
+  - 캘린더: 시행 완료 71건이 전부 노출되던 걸 12개월 컷오프 + "이전 일정 더보기" 토글로 정리, 일정 제목의 "N년" 의결연도 접두사를 표시 전용으로 제거(원본 데이터는 dedup 때문에 그대로 둠), 미니 달력에 과거 시행 항목도 회색 점으로 표시.
+  - CSS 버그: `.layout{display:grid}`(단일 클래스)와 `.view{display:none}`가 명시도(specificity)가 같아서 소스 순서상 `.layout`이 항상 이겨 탭을 바꿔도 이전 탭 내용이 스크롤 시 드러나던 문제 — `main.view:not(.is-active){display:none}`(요소+클래스+가상클래스, 더 높은 명시도) 추가로 해결.
+  - "오늘의 정책동향"을 "최근 정책동향" 개념으로 개선 — 1/3/7/14/30일 순으로 최소 5건 채워질 때까지 창을 넓히고, 실제 사용한 기간을 안내 문구에 명시. 개별 기업 제재·감리 뉴스("영풍 회계처리 위반 중징계" 등)와 집계형 통계 기사("상장사 감사의견 '적정' 97%" 등)를 `is_company_event()`에 `_AUDIT_OPINION_STATS_RE`/`STATISTICAL_REPORT_SIGNALS` 추가해 제외(통계 기사는 다른 강한 신호보다 우선하는 무조건 제외로 처리 — 사용자가 재확인).
+  - 디버그용 `console.log` 4줄(캘린더 "더보기" 버튼 원인 조사용)은 추가 후 문제 우선순위가 낮아져 전부 제거 확인(`grep -c "console.log"` → 0).
+
+- **Phase 6 — GitHub Pages 자동 배포 완료** (`d302ed0`, `f0078fc`, `57d5b11`)
+  - 원격(github.com/attaboy77/policy-watch)이 2개월 전 `crawler/` 구조인 걸 발견 → 사용자 확인 후 `legacy-crawler-archive` 브랜치로 백업하고 로컬 `sources/` 구조로 교체(데이터 손실 없이 되돌릴 수 있게).
+  - `.github/workflows/crawl.yml`을 Phase 0 placeholder에서 실제 3-job(crawl/build/deploy) 워크플로로 재작성 — cron(07:00 KST) + `workflow_dispatch` + `push`(site/**, data/** 경로) 트리거, 시크릿(`LAW_API_OC`/`PROXY_BASE`/`NAVER_CLIENT_ID`/`NAVER_CLIENT_SECRET`) 연결.
+  - **버그**: push 트리거로 실행하면 `crawl`은 의도대로 skip되는데 `deploy`도 같이 skip됨. 원인은 `deploy`가 `needs: build`만 쓰고 `if:`를 안 써서 기본값 `success()`가 적용됐고, 이건 직접 needs뿐 아니라 **전체 의존 그래프**(build→crawl)를 다 확인하는데 `crawl`이 skipped라 false가 된 것. `if: always() && needs.build.result == 'success'`로 명시해 해결 — push #89 재실행에서 deploy까지 초록으로 확인.
+  - `data/summary_cache.json`(요약 10건 등 미커밋 파일들)도 함께 push해 배포 사이트에 요약이 반영되도록 함.
+
+- **법제처 개정이유(revision_reason) 수집 + 카드 토글 UI** (`cc8a587`, `7c91bf7`→`aa1f7d3`)
+  - `law_api.py`가 `lawService.do` XML API에서 `<제개정이유내용>`도 함께 파싱해 `revision_reason` 필드로 저장(id 생성은 계속 `lsInfoP.do` URL 기준으로 안정적으로 유지 — 캐시 연결 안 깨지게).
+  - 세법 탭 "관련 기관 공식 원문 보기"를 법제처 URL의 `#tab` 파라미터로 "제·개정이유" 탭 우선 노출을 시도 → 실측 결과 `lsRvsDocInfoR.do`로 바꾸면 가능했으나, **바로 다음 요청에서 사용자가 되돌림**: 이 페이지는 조문/신구조문대비표로 못 넘어가서 오히려 불편 → `lsInfoP.do`(법령 본문)로 원복하고, 대신 카드에 "개정이유 전문 보기" `<details>` 토글 추가(기본 접힘, `revision_reason` 있는 항목에만 노출).
+
+- **KSSB 자발적용 기준서 수집 + ESG 로드맵 연결** (`cf477ef`, `6193a1e`, `127c2fe`)
+  - `kasb.py`에 `fetch_kssb_voluntary_standards()` 신설 — KASB "자발적용가능" 탭(제1호/제2호)을 esg 카테고리, `doc_type="자발적용"`, `effective_date=None`으로 수집.
+  - 시행일은 크롤링 대상이 아니라(FSC 보도자료가 KSSB 기준서 번호를 직접 언급하지 않음 — 별도 조사 결론) `data/esg_roadmap.yml`로 수동 관리(1차 2028.01.01/FY2027, 2차 2030년, 금융위 로드맵 출처·상태 "예정" 명시). 이후 사용자 요청으로 1차 시행일을 2028-01-01로 명시 갱신.
+  - `finalize_item()`에서 `doc_type=="자발적용"`이고 `effective_date`가 비어있으면 로드맵 1차 시행일로 채우되 `is_roadmap_estimate=True`를 함께 표시 — 캘린더에 "로드맵 예정"(점선 테두리 점 + 배지)으로 확정 시행일과 시각적으로 구분. `_summarize.py`도 로드맵 정보를 요약/impact에 자동 반영("팜한농은 1차 대상은 아니나 모회사 연결 공시 대응 필요" 문구 포함).
+  - **버그**: 지방세법 시행령 캘린더 카드에 제목이 두 번 나오던 문제 — 요약이 없을 때 설명란이 제목으로 폴백되는데 이미 카드 제목도 표시되고 있어 중복. 전체 동향 탭과 통일해 `ai_generated`인데 요약/impact가 없으면 "AI 검토 결과 팜한농 해당사항 없음"으로 채우도록 `_description_of()` 수정.
+
+- **AI 요약 43건 누적 + 빈 카드 안내 문구** (`6b0571e`, `cc8a587`, `36fc766`, `acfdde5`, 다수)
+  - 요약 대상(kifrs/icfr/esg/tax 후보)을 원문 직접 읽고 summary 2줄 + impact 1줄(팜한농 제조업·연결 실체 관점, 무관하면 impact는 null로 두고 억지로 안 만듦) 방식으로 여러 배치에 걸쳐 채움: 10건 → +25(kifrs4/tax18/icfr3) → +17(kifrs15/icfr2) 등, 누적 43건.
+  - **뉴스(L3) 기사는 요약 대상에서 명시적으로 제외하기로 결정** — 공식/L1/L2 문서만 AI 요약.
+  - "AI 요약" 뱃지는 있는데 summary/impact가 둘 다 비어있어 헷갈리던 카드에 "AI 검토 결과 팜한농 해당사항 없음" 한 줄을 표시 전용으로 추가(원본 데이터는 그대로 빈 상태 유지 — 표시 레이어에서만 처리).
+
+- **첨부파일 전용 시행일(사업연도 기준) 4건 캘린더 반영** (`a6e6806`)
+  - "N년 이후 개시 사업연도부터 적용"처럼 특정 시행일 없이 사업연도 기준으로만 적혀 있는 항목 4건을, 팜한농이 12월 결산이므로 해당 연도 1/1로 근사 시행일을 부여 — `_FISCAL_YEAR_EFFECTIVE_DATES` 수동 매핑(id→(date, 원문 표현 그대로 병기한 note)). 카드에는 "적용: 2024.1.1 이후 개시 사업연도부터" 형태로 날짜의 성격이 드러나게 병기.
+  - **버그**: `_gap_log.record()`가 `fss.py`의 수집 루프에서 `finalize_item()`보다 먼저·독립적으로 호출돼서, 위 매핑을 추가해도 `EFFECTIVE_DATE_GAPS.md`가 그대로였음(6건 불변) — `fss.py`에 `has_fiscal_year_override(id)` 가드를 추가해 매핑된 항목은 애초에 gap-log에 안 남도록 수정. 재검증: 6건→2건.
+
+- **K-IFRS 업종 특화 기준서 3종 제외** (`5d2c780`)
+  - 사용자가 캘린더에서 "제1117호 보험계약"이 팜한농(보험업 아님)과 무관하다고 지적 → 현재 수집분 전수 조사 후 목록·의견 제시, 사용자가 "제외" 방식(별도 표시 아님) 확정.
+  - `APPLICABILITY.excluded_entities.industry_specific`에 `"제1117호"`(보험계약)·`"제1104호"`(보험계약, 구기준)·`"제2115호"`(부동산건설약정) 3개 키워드 추가. 애매해서 넣지 않은 것(제1106호/제2120호/제2112호/제1041호/이자율지표 개혁)은 사용자가 "농림어업은 종자 사업 때문에 실제로 걸릴 수 있다"며 그대로 두기로 확정.
+  - **주의**: 제1104호는 "2020년 이자율지표 개혁 - 2단계"(업종 무관, 유지해야 함) 제목과 겹칠 위험이 있어 `is_applicable()`에 `if k == "제1104호" and "이자율지표" in title: continue` 가드를 넣어 충돌 방지(실측 8건 전수 확인).
+  - 제외 결과는 `docs/EXCLUDED_LOG.md`의 `excluded:industry_specific` 버킷에 기록(과다 필터링 검토용). **참고**: 이번에 추가한 키워드는 3개(제1117호/제1104호/제2115호)이고, "제1011호"는 키워드로 넣지 않았다 — 2015년 건설계약 공시 항목 제목에 제1011호/제1037호/제1115호/제2115호가 함께 나열돼 있어 제2115호 매칭으로 그 항목 전체가 제외됐을 뿐, 제1011호 자체가 독립 제외 키워드로 등록된 건 아니다.
+
+- **디자인 개선 — 계획 제시까지, 미구현**: 배지 위계(카테고리만 항상 강조, 나머지는 톤다운)·여백 재구성(관련 항목은 붙이고 섹션은 떼기)·타이포 대비 강화·색상 축소 4가지 방향의 구체안을 `styles.css` 범위로 제시했으나, 사용자 승인 전에 이번 커밋 시점(NEXT.md 갱신 요청)이 와서 **아직 파일에 반영 안 함**. `/mnt/skills/public/frontend-design/SKILL.md`는 이 환경에 존재하지 않아 직접 디자인 판단으로 대체한다고 사용자에게 알린 상태.
 
 ## 2026-08-31 세션 요약 (커밋 `00ef998`~`d846cda`, 8개 커밋)
 
@@ -99,10 +146,17 @@
 
 ## 다음 순서
 
-### 사용자 확인 대기 (최우선)
-- **브라우저 렌더링 확인이 계속 누적되고 있다.** 이 환경엔 여러 세션째 브라우저 구동 도구(chromium-cli/Node/Claude in Chrome)가 없어서 프론트엔드는 전부 코드 리뷰로만 검증했다. 특히 이번 세션(ADDENDUM-8)에서 새로 생긴 검색창 2개(오늘의 정책동향/전체 동향), "시행일 캘린더" 탭의 미래/과거 구분+"과거 일정 더 보기", "(AI 생성)" 라벨은 아직 한 번도 실제 화면에서 못 봤다. `python -m http.server`(사용법은 아래 "브라우저 확인" 참고)로 직접 열어서 확인 필요.
-- **AI 요약**: `data/summary_cache.json`이 비어있어 전부 규칙 기반 문구다. "요약 생성해줘"라고 시키면 `python -m sources.summary_candidates`로 대상(현재 30건)을 뽑아 직접 읽고 채운다 — §5-3("생성된 요약 10건을 사용자가 직접 검토")은 실제로 몇 건 생성한 뒤에 적용할 것.
-- SPEC-ADDENDUM-5.md §6(관련성 점수)·§8(`data/filters.yml` 설정파일화)은 여전히 미착수 — §1~§5·§7 위주 addendum들이 뒤이어 나오면서 우선순위가 밀렸다. 필요하면 사용자가 순서 지시.
+사용자가 2026-09-01 세션 마지막에 정리한 "남은 일" 그대로:
+
+- **디자인 개선 마무리 및 확인** — 위 세션 요약의 4가지 방향(배지 위계/여백 재구성/타이포 대비/색상 축소) 계획을 사용자 승인 받고 `styles.css`에 반영, 반영 후 실제 화면 확인.
+- **헤더에 "오늘 챙길 것" 요약 줄 추가** — 아직 설계 전. 어떤 기준으로 "오늘 챙길 것"을 뽑을지(예: 시행 임박 D-day, 신규 AI 요약 건수 등) 논의 필요.
+- **요약은 주 1~2회 몰아서 처리** — 매일 크롤링에서 새 후보가 계속 쌓이므로, 그때그때가 아니라 주기적으로 배치 처리하는 운영 방식으로 확정.
+- **시행완료 "더보기" 버튼 미표시** — 원인 조사(console.log 계측)까지 했으나 우선순위 낮음으로 확정, 보류 중.
+- **뉴스(L3) 기사는 AI 요약 대상에서 제외하기로 확정** — 공식/L1/L2 문서만 요약.
+
+그 외 이전부터 미착수:
+- SPEC-ADDENDUM-5.md §6(관련성 점수)·§8(`data/filters.yml` 설정파일화) — 여전히 미착수, 우선순위 계속 밀림.
+- **PROXY_BASE 실전 검증** — Secrets에는 등록됐으나(2026-09-01), GitHub Actions 크롤링 실행에서 `law.go.kr` 등 차단 시 실제로 우회하는지는 아직 로그로 확인 안 함.
 
 ### 브라우저 확인 (사용자가 직접)
 ```
@@ -110,11 +164,7 @@ cd C:\policy-watch\site
 python -m http.server 8791
 # 이후 브라우저에서 http://localhost:8791 열기
 ```
-
-### Phase 6 — GitHub Actions + Pages
-- `.github/workflows/crawl.yml`도 확인 결과 아직 Phase 0 placeholder 그대로다(`workflow_dispatch`만 있고 `echo` 한 줄이 전부). SPEC.md §1 설계대로 cron(`0 22 * * *` = 07:00 KST) + `python -m sources.main` 실행 → `site/data.json` 커밋·푸시 + 시크릿(`LAW_API_OC`/`PROXY_BASE`/`NAVER_CLIENT_ID`/`NAVER_CLIENT_SECRET`) 연결까지 전부 새로 작성해야 한다.
-- **PROXY_BASE 실전 미검증**: `sources/_http.py`의 `get_govt()`가 프록시 경유 로직은 갖고 있지만, 로컬(한국 IP)에서는 프록시 없이도 다 되기 때문에 실제 프록시 경유 자체는 한 번도 검증 못 했다. GitHub Actions에서 처음 돌릴 때 `law.go.kr` 등이 차단되는지, 차단된다면 `PROXY_BASE`가 실제로 우회해주는지 확인 필요.
-- **fss.or.kr 전용 UA도 Actions IP에서 미검증**. 로컬에선 브라우저형 UA로 차단을 피했는데(SOURCE_PROBE.md 참고), 이게 UA 문자열만 보는 필터인지 IP 평판까지 보는 필터인지는 Actions에서 실행해봐야 안다.
+Phase 6 배포 완료 후로는 실제 배포 사이트(GitHub Pages)에서도 확인 가능 — 이번 세션 버그 대부분이 사용자가 배포 사이트를 직접 보다가 찾은 것.
 
 ## 운영 준비물 (시크릿/설정)
 
@@ -122,10 +172,11 @@ python -m http.server 8791
 |---|---|---|
 | `LAW_API_OC` | 미설정 — 법제처 공개 테스트용 "test"로 대체 동작 중(실제 데이터는 나오지만 사용량 제한 가능성) | 실 서비스 전환 전에 정식 OC 코드 발급 |
 | `NAVER_CLIENT_ID`/`NAVER_CLIENT_SECRET` | 미설정 — `naver_news.py` 전체가 매 실행 스킵됨(graceful degradation 정상 동작) | 발급 후 GitHub Secrets에 등록 |
-| `PROXY_BASE` | 미설정, 로직만 구현 | Cloudflare Worker 배포 후 URL 등록 + Actions에서 실동작 확인 |
-| `data/schedules_manual.yml` | 비어있음(`[]`) | `docs/EFFECTIVE_DATE_GAPS.md` 검토해서 필요한 항목 수동 추가(아래 참고) |
-| `data/summary_cache.json` | 비어있음(`{}`) — ADDENDUM-8 §4 재설계로 **API 키 불필요**(Claude Code가 직접 생성) | 사용자가 "요약 생성해줘"라고 시키면 `python -m sources.summary_candidates`로 대상 뽑아서 채움 |
-| ~~`ANTHROPIC_API_KEY`~~ | **불필요** — §4 원안(유료 API)을 사용자 지시로 재설계해 폐기 | 없음 |
+| `PROXY_BASE` | **GitHub Secrets에 등록됨(2026-09-01)** — Actions에서 실제 우회 동작은 아직 로그로 미확인 | 다음 Actions 실행 로그에서 law.go.kr 등 정상 수집되는지 확인 |
+| `data/schedules_manual.yml` | 비어있음(`[]`) — 사업연도 기준 근사 시행일은 `_FISCAL_YEAR_EFFECTIVE_DATES`(코드 내 수동 매핑)로 대신 처리해서 아직 이 파일을 쓸 일이 없었음 | `docs/EFFECTIVE_DATE_GAPS.md`(현재 2건) 검토해서 필요하면 수동 추가 |
+| `data/esg_roadmap.yml` | **신규** — KSSB/ESG 공시 로드맵(금융위 발표 기준, 1차 2028-01-01/FY2027) 수동 관리 중 | 금융위 로드맵이 실제로 바뀌면(확정 등) 수동 갱신 |
+| `data/summary_cache.json` | **43건 채워짐**(Claude Code가 원문 읽고 직접 작성 — API 키 불필요) | 새 후보 생길 때마다 사용자가 "요약해줘"로 배치 요청(주 1~2회 목표) |
+| ~~`ANTHROPIC_API_KEY`~~ | **불필요** — 유료 API 대신 Claude Code가 직접 요약 생성하는 방식으로 재설계 완료 | 없음 |
 
 ## 알려진 이슈 / 기술 부채 (심각도순은 아님)
 
@@ -134,8 +185,9 @@ python -m http.server 8791
 3. **C3(KSSB 기준서 목록) 전용 게시판 미특정.** 지금은 A1(KASB 소식) 게시판에서 "제N호"/KSSB 키워드로 대체 필터링 중. kasb.or.kr을 더 뒤져서 정확한 게시판을 찾으면 개선 가능.
 4. **예규·유권해석/판례/조세심판원 심판례 미구현.** SPEC-ADDENDUM-3.md §5에서 MVP 제외로 확정한 항목. `data/tax_subjects.yml`의 `features.collect_rulings`/`collect_precedents`/`collect_tribunal`이 전부 `false`로 준비는 돼 있으나, 실제 `sources/official/nts_rulings.py` 등 어댑터 파일 자체가 아직 없다(ADDENDUM-3 §5-1: "파일은 만들되 flag가 false면 빈 리스트 반환"까지가 원래 지침 — 파일 생성 자체를 안 함).
 5. **정책브리핑(policy_briefing.py, L2)이 실측 기준 기여도가 거의 0에 가깝다.** 국세청·금융위원회가 정책브리핑 전체 게시물 중 비중이 작아(300건 중 2건 수준, SOURCE_PROBE.md 참고) 실행할 때마다 0건이 나오는 경우가 흔하다. 국세청은 D2(nts.py)가 있어 상관없지만, 금융위원회는 fsc.py가 이미 있어 실질적으로 중복 안전망 역할만 한다 — 문제는 아니지만 참고.
-6. **`data/schedules_manual.yml`이 비어있다.** `docs/EFFECTIVE_DATE_GAPS.md`(매 실행 갱신됨, 최근 6건)를 보고 관리자가 판단해서 채워 넣는 운영 프로세스가 아직 한 번도 실행 안 됨.
-7. **"부분일치 오탐" 클래스 버그가 이 저장소에서 세 번 나왔다**(`is_discussion_material`의 "회의 결과"/"의결", `doc_type_of`의 "회의결과"/"의결", `is_company_event`의 "공포"·"상장"/"비상"). 전부 `_norm()`이 공백을 지우거나 두 단어가 우연히 이어 붙어 생겼다. **새 키워드를 `_config.py`에 추가할 때는 기존 키워드 목록과 부분일치 충돌이 없는지 먼저 확인하는 습관이 필요** — 특히 2글자짜리 흔한 단어(의결/공포/상장/비상 등)는 위험도가 높다.
+6. **`data/schedules_manual.yml`이 비어있다.** `docs/EFFECTIVE_DATE_GAPS.md`(매 실행 갱신됨, 2026-09-01 기준 2건 — 사업연도 근사 시행일 4건은 `_FISCAL_YEAR_EFFECTIVE_DATES`로 별도 처리해 여기서 빠짐)를 보고 관리자가 판단해서 채워 넣는 운영 프로세스가 아직 한 번도 실행 안 됨.
+7. **"부분일치 오탐" 클래스 버그가 이 저장소에서 계속 나온다**(`is_discussion_material`의 "회의 결과"/"의결", `doc_type_of`의 "회의결과"/"의결", `is_company_event`의 "공포"·"상장"/"비상", `trust_of`의 `news.kicpa.or.kr`↔`kicpa.or.kr` 접미사 오상속, `is_applicable`의 "제1104호"↔"이자율지표 개혁"). 전부 `_norm()`이 공백을 지우거나, 두 단어가 우연히 이어 붙거나, 문자열 접미사/부분 매칭이 의도보다 넓게 걸려서 생겼다. **새 키워드를 `_config.py`에 추가할 때는 기존 키워드 목록과 부분일치 충돌이 없는지 먼저 확인하는 습관이 필요** — 특히 짧은 흔한 단어·도메인 접미사·기준서 번호는 위험도가 높다.
+8. **시행완료 목록 "더보기" 버튼이 조건에 따라 안 보이는 경우가 있다** — 원인 조사(console.log 계측)까지 했으나 사용자가 우선순위를 낮게 판단해 보류 중(2026-09-01).
 
 ## 참고 문서
 
