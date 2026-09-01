@@ -5,19 +5,40 @@ name: 정책 수집 및 배포
 # (archive된 legacy-crawler-archive 브랜치 참고)의 스케줄·시크릿·Pages 배포
 # 구조를 그대로 재사용하고, 실행 대상만 crawler/main.py → sources.main으로
 # 바꿨다. SPEC.md §1/§8 설계(cron 07:00 KST)와도 일치한다.
+#
+# 2026-09-02: site/·data/ 변경분을 push해도(예: Claude Code가 로컬에서
+# summary_cache.json 반영 후 site/data.json을 수동 커밋·push하는 경우) 사이트가
+# 그대로였다 — 배포가 오직 crawl 잡 완료 후에만 일어났기 때문. `push` 트리거를
+# 추가하되, "수집은 다시 안 돌고 배포만" 되도록 crawl 잡을 push 이벤트에서는
+# 건너뛴다(crawl.if). build 잡을 새로 분리해 아티팩트 업로드를 전담시키고,
+# crawl이 스킵돼도(push 트리거) build/deploy는 정상 진행되게 needs 조건을 조정.
 
 on:
   schedule:
     - cron: "0 22 * * *"  # 07:00 KST
   workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "data/**"
 
 permissions:
   contents: write
   pages: write
   id-token: write
 
+# Pages 배포는 동시에 여러 개 돌면 안 된다(GitHub 권장 패턴) — cron/dispatch로
+# 수집이 도는 중에 누가 site/를 push해도 서로 덮어쓰지 않고 순서대로 처리한다.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
+  # schedule/workflow_dispatch에서만 돈다 — push 트리거는 이미 완성된
+  # site/data.json을 그대로 배포만 하면 되므로 재수집이 필요 없다.
   crawl:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -45,13 +66,26 @@ jobs:
           git diff --cached --quiet || git commit -m "chore: 정책 데이터 갱신 $(date +'%Y-%m-%d')"
           git push
 
+  # 아티팩트 업로드 전담 — crawl이 돈 경우(schedule/dispatch)엔 그 잡이 push한
+  # 최신 커밋을, push 트리거인 경우엔 push된 커밋을 그대로 checkout한다.
+  # crawl이 건너뛰어져도(push 트리거) 이 잡은 정상 진행돼야 하므로 needs.crawl.
+  # result가 'skipped'인 경우도 허용한다.
+  build:
+    needs: crawl
+    if: always() && (needs.crawl.result == 'success' || needs.crawl.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
       - name: Pages 아티팩트 업로드
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
   deploy:
-    needs: crawl
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
