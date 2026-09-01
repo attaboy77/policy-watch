@@ -179,7 +179,16 @@ def is_applicable(title: str, body: str = "") -> tuple[bool, str | None]:
     t = _norm(title + " " + body)
 
     for scope, kws in APPLICABILITY["excluded_entities"].items():
-        if any(_norm(k) in t for k in kws):
+        for k in kws:
+            if _norm(k) not in t:
+                continue
+            # 2026-09-02 사용자 지시: "제1104호"(보험계약, 舊 기준서)는 업종특화로
+            # 제외 대상이지만, "2020년 이자율지표 개혁 - 2단계"류 항목은 여러
+            # 개정 대상 기준서 중 하나로 제1104호를 나열할 뿐 내용 자체는 금리
+            # 지표 개혁(모든 업종의 변동금리 금융상품·헤지회계에 영향)이라
+            # 제외하면 안 된다(실측: 이 가드 없이는 오탐 제외됨).
+            if k == "제1104호" and "이자율지표" in title:
+                continue
             return False, f"excluded:{scope}"
 
     if any(_norm(k) in t for k in APPLICABILITY["foreign_jurisdiction"]):

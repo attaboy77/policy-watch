@@ -842,6 +842,45 @@ class TestIsApplicable:
         assert ok is True
         assert reason is None
 
+    # ── K-IFRS 업종 특화 기준서 제외 (2026-09-02 사용자 지시) ──────────────────
+    def test_insurance_standard_1117_excluded(self):
+        ok, reason = is_applicable("2025년 제1117호 보험계약")
+        assert ok is False
+        assert reason == "excluded:industry_specific"
+
+    def test_insurance_standard_1104_excluded(self):
+        ok, reason = is_applicable("2017년 제1104호 '보험계약'과 제1109호 '금융상품'의 동시 적용")
+        assert ok is False
+        assert reason == "excluded:industry_specific"
+
+    def test_construction_arrangement_2115_excluded(self):
+        ok, reason = is_applicable(
+            "2015년 건설계약 공시 (제1011호 건설계약, 제2115호 부동산건설약정)"
+        )
+        assert ok is False
+        assert reason == "excluded:industry_specific"
+
+    def test_interest_rate_benchmark_reform_not_excluded_despite_mentioning_1104(self):
+        # 실측 오탐 방지: "이자율지표 개혁" 항목은 제1104호(보험계약)를 여러
+        # 개정 대상 기준서 중 하나로만 나열할 뿐, 내용은 금리지표 개혁(모든
+        # 업종의 변동금리 금융상품·헤지회계에 영향)이라 제외하면 안 된다.
+        ok, reason = is_applicable(
+            "2020년 이자율지표 개혁 - 2단계 (제1039호 금융상품: 인식과측정, "
+            "제1104호 보험계약, 제1107호 금융상품: 공시, 제1109호 금융상품, 제1116호 리스)"
+        )
+        assert ok is True
+        assert reason is None
+
+    def test_agriculture_annual_improvements_not_excluded(self):
+        # 농림어업(제1041호)은 애매해서(종자 사업 관련 가능성) 목록에 안 넣었다
+        # — 이 회귀 테스트가 그 결정을 고정한다.
+        ok, reason = is_applicable(
+            "2020년 한국채택국제회계기준 2018-2020 연차개선 (제1041호 농림어업, "
+            "제1101호 한국채택국제회계기준의 최초채택, 제1109호 금융상품, 제1116호 리스)"
+        )
+        assert ok is True
+        assert reason is None
+
 
 # ── 개별 기업 소식 제외 (SPEC-ADDENDUM-7.md §1) ──────────────────────────────
 class TestIsCompanyEvent:
