@@ -466,11 +466,19 @@
             // 2026-08-31 사용자 지시: 법제처 시행일과 위원회 회의 일정이 섞이면
             // 헷갈린다 — 회의 일정은 속이 빈 고리(테두리만), 실제 시행일은
             // 꽉 찬 점으로 구분한다(카테고리 색은 둘 다 그대로 유지).
+            // 2026-09-02 사용자 지시: 로드맵 예정(is_roadmap_estimate)도 확정
+            // 시행일과 섞이면 안 된다 — 회의 일정(실선 고리)과도 구분되게
+            // 점선 고리로 세 번째 스타일을 준다.
             var style = e.is_meeting
               ? "border:1.5px solid " + color + ";background:transparent;"
+              : e.is_roadmap_estimate
+              ? "border:1.5px dashed " + color + ";background:transparent;"
               : "background:" + color + ";";
-            var title = e.is_meeting ? "위원회 회의 예정" : (isPast ? "시행 완료" : "시행 예정");
-            return '<span class="cal-dot' + (e.is_meeting ? " cal-dot-meeting" : "") +
+            var extraClass = e.is_meeting ? " cal-dot-meeting" : (e.is_roadmap_estimate ? " cal-dot-roadmap" : "");
+            var title = e.is_meeting ? "위원회 회의 예정"
+              : e.is_roadmap_estimate ? "로드맵 예정(미확정)"
+              : (isPast ? "시행 완료" : "시행 예정");
+            return '<span class="cal-dot' + extraClass +
               '" style="' + style + '" title="' + title + '"></span>';
           }).join("") +
           (evs.length > 3 ? '<span class="cal-more">+' + (evs.length - 3) + "</span>" : "") +
@@ -518,11 +526,16 @@
     // 2026-08-31 사용자 지시: 법제처 시행일과 위원회 회의 일정이 캘린더에
     // 섞이면 헷갈린다 — 회의 일정 항목은 뱃지로 명시한다.
     var meetingBadge = s.is_meeting ? '<span class="badge badge-meeting">회의 예정</span>' : "";
+    // 2026-09-02 사용자 지시: KSSB 자발적용 기준서처럼 esg_roadmap.yml 예정
+    // 날짜로 채운 effective_date는 K-IFRS 같은 확정 시행일과 섞이면 안 된다
+    // — 별도 뱃지로 명시한다(같은 항목이 회의 일정이면서 로드맵 예정일 수는
+    // 없으므로 meetingBadge와 배타적으로 취급해도 무방).
+    var roadmapBadge = s.is_roadmap_estimate ? '<span class="badge badge-roadmap">로드맵 예정</span>' : "";
     var ddayHtml = (isPast && hideDdayIfPast) ? "" :
       '<span class="dday-badge' + ddayClass + ' tnum">' + ddayLabel(dday(s.effective_date)) + "</span>";
     return (
       '<li class="sched-item' + (isPast ? " is-past" : "") + '" data-date="' + s.effective_date + '">' +
-      '<div class="sched-top">' + ddayHtml + catBadge(s.category) + meetingBadge + "</div>" +
+      '<div class="sched-top">' + ddayHtml + catBadge(s.category) + meetingBadge + roadmapBadge + "</div>" +
       '<div class="sched-item-title">' + esc(displayScheduleTitle(s.title)) + "</div>" +
       '<div class="sched-date tnum">' + esc(fmtDot(s.effective_date)) + "</div>" +
       '<div class="sched-desc">' + esc(s.description) + "</div>" +

@@ -410,6 +410,28 @@ class TestFinalizeItem:
         out = finalize_item(self._item(published_at="2025-01-01"))
         assert out["published_at"] == "2025-01-01"
 
+    # ── KSSB 자발적용 → esg_roadmap.yml 시행일 채움 (2026-09-02 사용자 지시) ──
+    # 실제 파일 내용에 값을 결합하지 않도록 로드맵을 직접 읽어 기대값을 만든다
+    # (나중에 esg_roadmap.yml의 날짜가 바뀌어도 이 테스트는 안 깨진다).
+    def test_kssb_voluntary_gets_roadmap_effective_date(self):
+        from sources._esg_roadmap import load as load_roadmap
+        expected_date = load_roadmap()["milestones"][0]["date"]
+        out = finalize_item(self._item(doc_type="자발적용", effective_date=None))
+        assert out["effective_date"] == expected_date
+        assert out["is_roadmap_estimate"] is True
+
+    def test_kssb_voluntary_does_not_override_existing_effective_date(self):
+        # 이미 진짜 시행일이 있으면(향후 다른 소스가 채울 수도 있음) 로드맵으로
+        # 덮어쓰지 않고, is_roadmap_estimate도 false로 둔다(그건 확정 시행일이므로).
+        out = finalize_item(self._item(doc_type="자발적용", effective_date="2027-06-01"))
+        assert out["effective_date"] == "2027-06-01"
+        assert out["is_roadmap_estimate"] is False
+
+    def test_non_voluntary_doc_type_unaffected_by_roadmap(self):
+        out = finalize_item(self._item(doc_type="제·개정", effective_date=None))
+        assert out["effective_date"] is None
+        assert out["is_roadmap_estimate"] is False
+
 
 # ── 조직 운영성 공지 제외 (ADDENDUM-4 §1) ────────────────────────────────────
 class TestIsAdminNoise:

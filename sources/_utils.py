@@ -16,6 +16,7 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       APPLICABILITY, COMPANY_EVENTS, COMPANY_EVENT_STRONG_SIGNALS,
                       MANUFACTURING_ACCOUNTING_CONTEXT, EVENT_ANNOUNCEMENT_STRONG_SIGNALS,
                       FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS)
+from . import _esg_roadmap
 
 
 # ── 0-1) required_strong/required_weak 카테고리 지원 (SPEC-ADDENDUM-5.md §4) ─
@@ -943,8 +944,14 @@ ITEM_FIELDS = [
     "trust_score", "keyword_score", "final_score", "matched_keywords",
     "urls", "law_meta", "attachments",
     "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
-    "is_meeting_schedule", "ai_generated", "revision_reason",
+    "is_meeting_schedule", "ai_generated", "revision_reason", "is_roadmap_estimate",
 ]
+
+# 2026-09-02 사용자 지시: KSSB 자발적용 기준서(doc_type="자발적용")는 자체
+# 시행일이 없어 캘린더(schedules[])에 아예 안 떴다 — data/esg_roadmap.yml의
+# 1차 마일스톤 날짜를 finalize_item()에서 채운다(단일 지점 원칙, 위
+# 논의자료/해외기준 재분류와 같은 이유). 프로세스 수명 동안 재사용.
+_ESG_ROADMAP = _esg_roadmap.load()
 
 
 def finalize_item(item: dict) -> dict:
@@ -976,4 +983,16 @@ def finalize_item(item: dict) -> dict:
     out["duplicate_count"] = int(item.get("duplicate_count") or 0)
     out["duplicate_sources"] = item.get("duplicate_sources") or []
     out["related_news"] = item.get("related_news") or []
+    # KSSB 자발적용 기준서에 로드맵 1차 마일스톤 날짜를 채운다. 이미 실제
+    # effective_date가 있으면(향후 다른 소스가 채울 수도 있으니) 덮어쓰지
+    # 않는다 — is_roadmap_estimate는 "이 effective_date가 확정이 아니라
+    # 로드맵 추정"이라는 뜻이라, 실제 시행일이 생기면 이 플래그 없이 그
+    # 값을 써야 한다.
+    out["is_roadmap_estimate"] = False
+    if doc_type == "자발적용" and not out.get("effective_date"):
+        milestones = _ESG_ROADMAP.get("milestones") or []
+        roadmap_date = milestones[0].get("date") if milestones else None
+        if roadmap_date:
+            out["effective_date"] = roadmap_date
+            out["is_roadmap_estimate"] = True
     return out

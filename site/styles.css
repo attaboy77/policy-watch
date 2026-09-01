@@ -282,6 +282,11 @@ main.view:not(.is-active){ display:none; }
    아니라는 의미로 "의견수렴" 단계와 같은 톤(--stage-opinion)을 재사용한다. */
 .badge-meeting{ background:transparent; border:1px solid var(--stage-opinion); color:var(--stage-opinion); font-weight:700; }
 
+/* 2026-09-02: 캘린더의 "로드맵 예정"(esg_roadmap.yml 등 정책 로드맵 추정치)
+   뱃지 — "회의 예정"(주황)·"AI 요약"(보라)과도 겹치지 않는 호박색으로 확정
+   시행일(K-IFRS 등)과 시각적으로 확실히 구분한다. */
+.badge-roadmap{ background:transparent; border:1px solid #b45309; color:#b45309; font-weight:700; }
+
 /* ADDENDUM-4 §3: "외 N건 보도" */
 .dup-tag{ color:var(--muted); }
 .dup-tag::before{ content:"· "; }
@@ -420,6 +425,8 @@ main.view:not(.is-active){ display:none; }
 /* 2026-08-31: 위원회 회의 일정은 속이 빈 고리로 — 시행일(꽉 찬 점)과 구분.
    box-sizing 없이 border를 더하면 점이 커져 보이므로 border-box로 크기 고정. */
 .cal-dot-meeting{ box-sizing:border-box; }
+/* 2026-09-02: 로드맵 예정(점선 고리)도 회의 일정과 같은 이유로 border-box 고정. */
+.cal-dot-roadmap{ box-sizing:border-box; }
 .cal-more{ font-size:8px; color:var(--muted); }
 
 /* ── 사이드바: 시행 예정 일정 ─────────────────────────────────────── */

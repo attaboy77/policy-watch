@@ -47,6 +47,13 @@ def _description_of(item: dict) -> str:
     summary = item.get("summary") or []
     if summary:
         return summary[0]
+    # 2026-09-02 사용자 지시: AI가 검토했지만 summary/impact를 둘 다 비운
+    # 항목(예: 지방세법 시행령 — 개정이유가 팜한농과 무관하다고 판단)은
+    # 여기서 item["title"]로 폴백하면 캘린더 카드에 제목이 두 번(위 제목
+    # 줄 + 이 설명 줄) 나온다 — 전체 동향 탭의 card-ai-empty와 문구를
+    # 통일해서 "제목 반복"이 아니라 "검토는 했다"는 걸 알 수 있게 한다.
+    if item.get("ai_generated"):
+        return "AI 검토 결과 팜한농 해당사항 없음"
     return item["title"]
 
 
@@ -65,6 +72,11 @@ def schedule_from_item(item: dict) -> dict:
         # 섞이면 헷갈린다 — is_meeting=true면 프론트가 "회의 예정"으로 구분
         # 표시한다(kasb.py fetch_schedule() 참고).
         "is_meeting": bool(item.get("is_meeting_schedule", False)),
+        # 2026-09-02 사용자 지시: KSSB 자발적용 기준서처럼 esg_roadmap.yml
+        # 예정 날짜로 effective_date를 채운 항목이면 true — K-IFRS 등 확정
+        # 시행일과 캘린더에서 섞이면 안 되므로 프론트가 "로드맵 예정"으로
+        # 구분 표시한다(_utils.finalize_item() 참고).
+        "is_roadmap_estimate": bool(item.get("is_roadmap_estimate", False)),
     }
 
 
@@ -86,6 +98,7 @@ def _load_manual(path: str = MANUAL_PATH) -> list[dict]:
             entry.setdefault("status", _status_of(entry["effective_date"]))
             entry.setdefault("urls", {"news": None, "official": None})
             entry.setdefault("is_meeting", False)  # 수동 입력은 전부 실제 시행일정
+            entry.setdefault("is_roadmap_estimate", False)  # 수동 입력은 전부 확정 시행일정
             out.append(entry)
         return out
     except Exception as exc:  # noqa: BLE001 - 수동 파일 하나 깨져도 자동 수집분은 살린다

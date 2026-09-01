@@ -67,7 +67,7 @@ _ITEM_SCHEMA = {
         "trust_score", "keyword_score", "final_score", "matched_keywords",
         "urls", "law_meta",
         "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
-        "is_meeting_schedule", "ai_generated", "revision_reason",
+        "is_meeting_schedule", "ai_generated", "revision_reason", "is_roadmap_estimate",
     ],
     "properties": {
         "id": {"type": "string"},
@@ -114,13 +114,19 @@ _ITEM_SCHEMA = {
         # 사례) 기계적으로 자르지 않고, 요약 캐시 파이프라인(summary/impact)이
         # 이 필드를 원문 삼아 건별로 판단한 결과만 카드에 보인다.
         "revision_reason": {"type": ["string", "null"]},
+        # 2026-09-02: KSSB 자발적용 기준서처럼 data/esg_roadmap.yml의 예정
+        # 마일스톤 날짜로 effective_date를 채운 항목이면 true — K-IFRS 등
+        # 확정 시행일과 캘린더에서 섞이면 안 되므로(사용자 지시) 프론트가
+        # "로드맵 예정" 뱃지로 구분한다(finalize_item() 참고).
+        "is_roadmap_estimate": {"type": "boolean"},
     },
 }
 
 _SCHEDULE_SCHEMA = {
     "type": "object",
     "required": ["id", "category", "title", "effective_date", "status",
-                 "importance", "description", "source", "urls", "is_meeting"],
+                 "importance", "description", "source", "urls", "is_meeting",
+                 "is_roadmap_estimate"],
     "properties": {
         "id": {"type": "string"},
         "category": {"enum": CATEGORY_KEYS},
@@ -134,6 +140,9 @@ _SCHEDULE_SCHEMA = {
         # 법제처 시행일 등 실제 "시행일정"이면 false, 위원회 "회의 일정"이면
         # true(2026-08-31 사용자 지시 — 캘린더에서 둘을 구분 표시).
         "is_meeting": {"type": "boolean"},
+        # item의 is_roadmap_estimate를 그대로 옮겨온다(schedules.py 참고) —
+        # 로드맵 예정 날짜면 true, K-IFRS 등 확정 시행일이면 false.
+        "is_roadmap_estimate": {"type": "boolean"},
     },
 }
 

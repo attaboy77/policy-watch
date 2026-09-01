@@ -39,6 +39,19 @@ class TestScheduleFromItem:
         sch = schedule_from_item(_item(impact=None, summary=[]))
         assert sch["description"] == "연결 내부회계관리제도 감사 의무 적용"
 
+    # 2026-09-02 사용자 지시: AI가 검토했지만 둘 다 비운 항목(예: 지방세법
+    # 시행령)이 title로 폴백하면 캘린더 카드에 제목이 두 번 나온다 —
+    # ai_generated=True면 title 대신 전체 동향 탭과 같은 문구를 쓴다.
+    def test_ai_generated_empty_falls_back_to_notice_not_title(self):
+        sch = schedule_from_item(_item(impact=None, summary=[], ai_generated=True))
+        assert sch["description"] == "AI 검토 결과 팜한농 해당사항 없음"
+        assert sch["description"] != "연결 내부회계관리제도 감사 의무 적용"
+
+    def test_non_ai_generated_empty_still_falls_back_to_title(self):
+        # ai_generated가 아니면(예: 규칙 기반 폴백) 기존 동작 그대로 유지.
+        sch = schedule_from_item(_item(impact=None, summary=[], ai_generated=False))
+        assert sch["description"] == "연결 내부회계관리제도 감사 의무 적용"
+
     def test_carries_source_and_urls_through(self):
         sch = schedule_from_item(_item())
         assert sch["source"]["name"] == "금융위원회"
@@ -51,6 +64,14 @@ class TestScheduleFromItem:
     def test_carries_is_meeting_schedule_flag_through(self):
         sch = schedule_from_item(_item(is_meeting_schedule=True))
         assert sch["is_meeting"] is True
+
+    # ── is_roadmap_estimate (2026-09-02 사용자 지시: KSSB 자발적용 로드맵 예정) ──
+    def test_defaults_to_not_roadmap_estimate(self):
+        assert schedule_from_item(_item())["is_roadmap_estimate"] is False
+
+    def test_carries_is_roadmap_estimate_flag_through(self):
+        sch = schedule_from_item(_item(is_roadmap_estimate=True))
+        assert sch["is_roadmap_estimate"] is True
 
 
 class TestImportanceOf:

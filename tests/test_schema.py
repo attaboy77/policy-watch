@@ -32,6 +32,7 @@ _VALID_ITEM = {
     "is_meeting_schedule": False,
     "ai_generated": False,
     "revision_reason": None,
+    "is_roadmap_estimate": False,
 }
 
 _VALID_SCHEDULE = {
@@ -45,6 +46,7 @@ _VALID_SCHEDULE = {
     "source": {"name": "기획재정부", "domain": "law.go.kr", "tier": 1, "type": "official"},
     "urls": {"news": None, "official": "https://law.go.kr/x"},
     "is_meeting": False,
+    "is_roadmap_estimate": False,
 }
 
 _VALID_DATA = {
