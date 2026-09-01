@@ -331,6 +331,9 @@
     var staticBadge = it.is_static ? '<span class="badge badge-static">상설자료</span>' : "";
     // ADDENDUM-7 §3 안 A: 해외기준(IASB/ISSB) 회색 뱃지.
     var foreignBadge = it.doc_type === "해외기준" ? '<span class="badge badge-foreign">해외기준</span>' : "";
+    // 2026-09-02: impact가 null이어도(예: 법제처 항목의 개정이유가 회사와
+    // 무관하다고 판단한 경우) AI가 요약했다는 사실 자체는 뱃지로 항상 보이게.
+    var aiBadge = it.ai_generated ? '<span class="badge badge-ai">AI 요약</span>' : "";
     var officialTag = it.source && it.source.tier === 1 ? '<span class="badge-official">공식</span>' : "";
     // ADDENDUM-4 §3: "외 N건 보도" — 유사 기사가 병합된 경우.
     var dupTag = it.duplicate_count > 0 ? '<span class="dup-tag">외 ' + it.duplicate_count + '건 보도</span>' : "";
@@ -339,9 +342,11 @@
     var summaryHtml = (it.summary && it.summary.length)
       ? '<ul class="card-summary">' + it.summary.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ul>"
       : "";
-    // ADDENDUM-8 §5-1: AI가 생성한 요약/준비사항임을 카드에서 인지할 수 있게
-    // 라벨에 "(AI 생성)"을 병기하고 박스 색도 바꾼다.
-    var impactLabel = it.ai_generated ? "준비사항 (AI 생성)" : "실무 영향";
+    // ADDENDUM-8 §5-1: AI가 생성한 준비사항은 박스 색을 바꿔 구분한다("AI 요약"
+    // 뱃지가 위쪽 배지 줄에 따로 붙으므로 여기 텍스트에 "(AI 생성)"을 또 반복하진
+    // 않는다 — 2026-09-02 정리, impact가 null인 경우까지 뱃지로 커버하려고
+    // 이 표시를 배지 자리로 옮겼다).
+    var impactLabel = it.ai_generated ? "준비사항" : "실무 영향";
     var impactHtml = it.impact
       ? '<div class="card-impact' + (it.ai_generated ? " is-ai" : "") + '"><b>' + impactLabel + ':</b> ' + esc(it.impact) + "</div>"
       : "";
@@ -351,7 +356,7 @@
       '<article class="card">' +
       '<div class="card-top">' +
       '<div class="card-badges">' + catBadge(it.category) +
-      '<span class="badge badge-doctype">' + esc(it.doc_type) + "</span>" + stageBadge + staticBadge + foreignBadge + "</div>" +
+      '<span class="badge badge-doctype">' + esc(it.doc_type) + "</span>" + stageBadge + staticBadge + foreignBadge + aiBadge + "</div>" +
       // '중요도순'에서는 날짜 그룹 헤더가 없으므로(renderFeed 참고) 카드 안에
       // 날짜를 직접 표기한다 — '최신순'에서도 항상 보여 일관성 유지.
       '<div class="card-source">' + esc(fmtDot(it.published_at)) + ' · 출처: ' + esc(it.source ? it.source.name : "-") + officialTag + dupTag + "</div>" +
@@ -682,13 +687,15 @@
     var orgBadge = isOfficial
       ? '<span class="badge badge-org">공식기관</span>'
       : '<span class="badge badge-outlet">' + esc(it.source ? it.source.name : "") + "</span>";
+    // 2026-09-02: impact가 null이어도(예: 법제처 항목의 개정이유가 회사와
+    // 무관하다고 판단한 경우) AI가 요약했다는 사실 자체는 뱃지로 항상 보이게
+    // — renderCard()와 동일한 이유로 impact 박스 안이 아니라 뱃지 자리로 옮김.
+    var aiBadge = it.ai_generated ? '<span class="badge badge-ai">AI 요약</span>' : "";
     var summaryHtml = (it.summary && it.summary.length)
       ? '<ul class="today-card-summary">' + it.summary.slice(0, 2).map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ul>"
       : "";
-    // ADDENDUM-8 §5-1: AI 생성 라벨 병기.
-    var aiTag = it.ai_generated ? '<b>(AI 생성)</b> ' : "";
     var impactHtml = it.impact
-      ? '<div class="today-card-impact' + (it.ai_generated ? " is-ai" : "") + '">' + aiTag + esc(it.impact) + "</div>"
+      ? '<div class="today-card-impact' + (it.ai_generated ? " is-ai" : "") + '">' + esc(it.impact) + "</div>"
       : "";
     var relatedHtml = isOfficial ? renderRelatedNews(it.related_news) : "";
     var actionUrl = isOfficial ? (it.urls && it.urls.official) : (it.urls && it.urls.news);
@@ -699,7 +706,7 @@
 
     return (
       '<article class="today-card' + (isOfficial ? "" : " is-news") + '" style="border-left-color:' + borderColor + '">' +
-      '<div class="today-card-badges">' + catBadge(it.category) + orgBadge + "</div>" +
+      '<div class="today-card-badges">' + catBadge(it.category) + orgBadge + aiBadge + "</div>" +
       '<h3 class="today-card-title">' + esc(it.title) + "</h3>" +
       summaryHtml + impactHtml + relatedHtml +
       '<div class="today-card-bottom">' +

@@ -943,7 +943,7 @@ ITEM_FIELDS = [
     "trust_score", "keyword_score", "final_score", "matched_keywords",
     "urls", "law_meta", "attachments",
     "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
-    "is_meeting_schedule", "ai_generated",
+    "is_meeting_schedule", "ai_generated", "revision_reason",
 ]
 
 

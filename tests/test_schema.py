@@ -31,6 +31,7 @@ _VALID_ITEM = {
     "related_news": [],
     "is_meeting_schedule": False,
     "ai_generated": False,
+    "revision_reason": None,
 }
 
 _VALID_SCHEDULE = {

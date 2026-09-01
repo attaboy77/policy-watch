@@ -271,6 +271,13 @@ main.view:not(.is-active){ display:none; }
 /* ADDENDUM-7 §3 안 A: 해외기준(IASB/ISSB) 뱃지(연회색, 상설자료와 동일 톤) */
 .badge-foreign{ background:#f1f5f9; color:var(--muted); border:1px solid var(--line); font-weight:600; }
 
+/* 2026-09-02: "AI 요약" 뱃지 — .card-impact.is-ai와 같은 보라색 톤(ADDENDUM-8
+   §5-1). 기존엔 이 표시가 impact 박스 안에만 있어서, impact가 null인 항목
+   (예: 개정이유가 회사와 무관하다고 판단한 법제처 항목)은 summary가 AI가 쓴
+   건데도 표시가 아예 안 보이는 문제가 있었다 — badge 자리로 옮겨 summary만
+   있어도, 심지어 둘 다 없어도(무관 판정) 뱃지 자체는 보이게 한다. */
+.badge-ai{ background:#f5f3ff; color:#5b21b6; border:1px solid #ddd6fe; font-weight:600; }
+
 /* 2026-08-31: 캘린더의 "회의 예정"(KASB 주요일정) 뱃지 — 아직 확정된 시행일이
    아니라는 의미로 "의견수렴" 단계와 같은 톤(--stage-opinion)을 재사용한다. */
 .badge-meeting{ background:transparent; border:1px solid var(--stage-opinion); color:var(--stage-opinion); font-weight:700; }

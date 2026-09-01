@@ -139,7 +139,15 @@ def search_law(law_name: str, *, oc: str | None = None, wanted: set[str] | None 
 
 
 def law_detail(law_name: str, *, oc: str | None = None) -> dict | None:
-    """lawService.do 본문 상세. `<시행일자>`가 구조화된 필드로 바로 나온다."""
+    """lawService.do 본문 상세. `<시행일자>`가 구조화된 필드로 바로 나온다.
+
+    2026-09-02: `<제개정이유><제개정이유내용>`도 함께 뽑는다 — 법제처 사람용
+    페이지(`lsInfoP.do`)의 "제·개정이유" 탭과 동일한 텍스트인데, 그 페이지는
+    JS로 렌더링되는 SPA라 스크래핑이 안 되는 반면 이 API 응답엔 처음부터
+    구조화된 필드로 들어있다(실측 확인: 법인세법/법인세법 시행령/법인세법
+    시행규칙/부가가치세법 4건 전부 정상 추출). `_tag_text()`가 첫 매치만
+    반환하므로 이 필드는 항상 하나만 온다(실측상 여러 건인 사례 없음).
+    """
     resp = _http.get_govt(SERVICE_URL, params={
         "OC": oc or _oc(), "target": "law", "type": "XML", "LM": law_name,
     })
@@ -148,9 +156,11 @@ def law_detail(law_name: str, *, oc: str | None = None) -> dict | None:
     if result_code is not None and result_code != "00":
         return None
     # lawService.do는 <법령><기본정보><시행일자>...처럼 한 단계 더 들어가 있다(lawSearch.do와 다름).
+    reason = _tag_text(root, ".//제개정이유내용")
     return {
         "시행일자": _tag_text(root, ".//시행일자"),
         "공포일자": _tag_text(root, ".//공포일자"),
+        "제개정이유": reason,
     }
 
 
@@ -207,6 +217,7 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
                 "final_score": final_score(100, kw, rec),
                 "matched_keywords": matched_keywords(title, "tax"),
                 "urls": {"news": None, "official": url},
+                "revision_reason": detail.get("제개정이유"),
                 "law_meta": {
                     "law_name": title,
                     "law_id": m.get("법령ID"),

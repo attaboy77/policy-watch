@@ -63,7 +63,7 @@ _ITEM_SCHEMA = {
         "trust_score", "keyword_score", "final_score", "matched_keywords",
         "urls", "law_meta",
         "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
-        "is_meeting_schedule", "ai_generated",
+        "is_meeting_schedule", "ai_generated", "revision_reason",
     ],
     "properties": {
         "id": {"type": "string"},
@@ -103,6 +103,13 @@ _ITEM_SCHEMA = {
         # data/summary_cache.json(Claude Code가 직접 작성)에서 왔으면 true —
         # 프론트가 "(AI 생성)" 라벨을 붙인다.
         "ai_generated": {"type": "boolean"},
+        # 2026-09-02: law_api.py가 lawService.do의 <제개정이유내용>을 그대로
+        # 담는 필드(law.go.kr 항목만 채워짐, 그 외 소스는 null). 원문을 그대로
+        # 카드에 노출하지 않는다 — "타법개정"이면 개정 대상 법과 전혀 무관한
+        # 내용(예: 정부조직법 개편)이 들어올 수 있어(실측 확인: 부가가치세법
+        # 사례) 기계적으로 자르지 않고, 요약 캐시 파이프라인(summary/impact)이
+        # 이 필드를 원문 삼아 건별로 판단한 결과만 카드에 보인다.
+        "revision_reason": {"type": ["string", "null"]},
     },
 }
 
