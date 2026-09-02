@@ -111,9 +111,12 @@ class TestBuildSubject:
         assert nm.build_subject(0, "2026.09.02") == "[Policy Watch] 신규 0건 - 2026.09.02"
 
 
-class TestBuildBody:
+class TestBuildBodyText:
+    """plain text 대체본 — HTML을 못 읽는 클라이언트용. 여긴 원래대로 raw URL을
+    "링크: ..." 형태로 보여준다(대체본이라 링크를 제목에 걸 방법이 없음)."""
+
     def test_official_only_has_official_section_not_news(self):
-        body = nm.build_body([_item()], [], "https://dash.example")
+        body = nm.build_body_text([_item()], [], "https://dash.example")
         assert "공식 기관 발표" in body
         assert "언론 보도" not in body
         assert "https://dash.example" in body
@@ -121,7 +124,7 @@ class TestBuildBody:
     def test_news_only_has_news_section_not_official(self):
         news_item = _item(source={"type": "news"}, summary=[], impact=None,
                            urls={"official": None, "news": "https://news.example/x1"})
-        body = nm.build_body([], [news_item], "https://dash.example")
+        body = nm.build_body_text([], [news_item], "https://dash.example")
         assert "언론 보도" in body
         assert "공식 기관 발표" not in body
         assert "https://news.example/x1" in body
@@ -129,23 +132,90 @@ class TestBuildBody:
     def test_news_section_excludes_summary_text(self):
         news_item = _item(source={"type": "news"}, summary=["이 요약은 보이면 안 됨"],
                            urls={"official": None, "news": "https://news.example/x1"})
-        body = nm.build_body([], [news_item], "https://dash.example")
+        body = nm.build_body_text([], [news_item], "https://dash.example")
         assert "이 요약은 보이면 안 됨" not in body
 
     def test_both_sections_present_official_before_news(self):
         news_item = _item(id="n1", source={"type": "news"},
                            urls={"official": None, "news": "https://news.example/n1"})
-        body = nm.build_body([_item()], [news_item], "https://dash.example")
+        body = nm.build_body_text([_item()], [news_item], "https://dash.example")
         assert body.index("공식 기관 발표") < body.index("언론 보도")
 
     def test_forced_empty_mentions_test_send(self):
-        body = nm.build_body([], [], "https://dash.example", forced=True)
+        body = nm.build_body_text([], [], "https://dash.example", forced=True)
         assert "테스트" in body
         assert "https://dash.example" in body
 
     def test_not_forced_empty_has_no_test_note_but_still_has_dashboard(self):
-        body = nm.build_body([], [], "https://dash.example", forced=False)
+        body = nm.build_body_text([], [], "https://dash.example", forced=False)
         assert "https://dash.example" in body
+
+    def test_footer_note_present(self):
+        body = nm.build_body_text([_item()], [], "https://dash.example")
+        assert "이 메일은 신규 항목이 있을 때만 발송됩니다" in body
+
+
+class TestBuildBodyHtml:
+    """HTML 버전 — 2026-09-02 지시: URL을 그대로 노출하지 않고 제목 자체에
+    링크를 건다(구글 뉴스 RSS 링크가 200자 넘어가는 문제 해결)."""
+
+    def test_title_is_wrapped_in_anchor_with_href(self):
+        it = _item(title="K-IFRS 제1118호 제정", urls={"official": "https://official.example/x1", "news": None})
+        body = nm.build_body_html([it], [], "https://dash.example")
+        assert '<a href="https://official.example/x1"' in body
+        assert "K-IFRS 제1118호 제정</a>" in body
+
+    def test_raw_url_not_shown_as_visible_link_label(self):
+        # "링크: https://..." 같은 plain-text 전용 라벨이 HTML에는 없어야 한다
+        # (제목 자체가 링크이므로 URL을 별도로 또 안 보여준다).
+        it = _item(urls={"official": "https://official.example/x1", "news": None})
+        body = nm.build_body_html([it], [], "https://dash.example")
+        assert "링크:" not in body
+
+    def test_news_only_has_news_section_not_official(self):
+        news_item = _item(source={"type": "news"}, summary=[], impact=None,
+                           urls={"official": None, "news": "https://news.example/x1"})
+        body = nm.build_body_html([], [news_item], "https://dash.example")
+        assert "언론 보도" in body
+        assert "공식 기관 발표" not in body
+        assert '<a href="https://news.example/x1"' in body
+
+    def test_news_section_excludes_summary_text(self):
+        news_item = _item(source={"type": "news"}, summary=["이 요약은 보이면 안 됨"],
+                           urls={"official": None, "news": "https://news.example/x1"})
+        body = nm.build_body_html([], [news_item], "https://dash.example")
+        assert "이 요약은 보이면 안 됨" not in body
+
+    def test_both_sections_present_official_before_news(self):
+        news_item = _item(id="n1", source={"type": "news"},
+                           urls={"official": None, "news": "https://news.example/n1"})
+        body = nm.build_body_html([_item()], [news_item], "https://dash.example")
+        assert body.index("공식 기관 발표") < body.index("언론 보도")
+
+    def test_forced_empty_mentions_test_send(self):
+        body = nm.build_body_html([], [], "https://dash.example", forced=True)
+        assert "테스트" in body
+
+    def test_footer_note_present(self):
+        body = nm.build_body_html([_item()], [], "https://dash.example")
+        assert "이 메일은 신규 항목이 있을 때만 발송됩니다" in body
+
+    def test_dashboard_link_is_anchor(self):
+        body = nm.build_body_html([_item()], [], "https://dash.example")
+        assert '<a href="https://dash.example"' in body
+
+    def test_title_special_chars_are_escaped(self):
+        it = _item(title="A & B <제정>", urls={"official": None, "news": None})
+        body = nm.build_body_html([it], [], "https://dash.example")
+        assert "A & B <제정>" not in body
+        assert "A &amp; B &lt;제정&gt;" in body
+
+    def test_missing_link_falls_back_to_bold_text_no_anchor(self):
+        # 대시보드 링크(<a href>)는 항상 있으므로, 이 항목의 제목 자체가
+        # 앵커 없이(<b>) 렌더링됐는지를 직접 확인한다.
+        it = _item(title="링크없는제목", urls={"official": None, "news": None})
+        body = nm.build_body_html([it], [], "https://dash.example")
+        assert "<b>링크없는제목</b>" in body
 
 
 class TestRunGating:
@@ -197,7 +267,7 @@ class TestRunGating:
         monkeypatch.setenv("PREV_DATA_JSON", str(prev))
         nm._run()
         assert len(calls) == 1
-        (subject, body, recipients, user, password), _ = calls[0]
+        (subject, text_body, html_body, recipients, user, password), _ = calls[0]
         assert "신규 1건" in subject
         assert recipients == ["a@x.com", "b@x.com"]
 

@@ -28,11 +28,14 @@
 """
 from __future__ import annotations
 
+import html
 import json
 import os
 import smtplib
 from datetime import datetime, timezone, timedelta
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.utils import formataddr
 
 from ._config import CATEGORIES
 
@@ -102,56 +105,112 @@ def build_subject(count: int, date_str: str | None = None) -> str:
     return f"[Policy Watch] 신규 {count}건 - {date_str or _now_kst_date_str()}"
 
 
-def _official_section(new_official: list[dict]) -> str:
-    lines = ["■ 공식 기관 발표", ""]
-    for label, group_items in group_by_category(new_official):
-        lines.append(f"[{label}] ({len(group_items)}건)")
-        for it in group_items:
-            lines.append(f"- {it.get('title', '')}")
-            for s in (it.get("summary") or []):
-                lines.append(f"    · {s}")
-            if it.get("impact"):
-                lines.append(f"    실무영향: {it['impact']}")
-            link = _item_link(it)
-            if link:
-                lines.append(f"    링크: {link}")
-        lines.append("")
-    return "\n".join(lines)
+_FOOTER_NOTE = "이 메일은 신규 항목이 있을 때만 발송됩니다."
 
 
-def _news_section(new_news: list[dict]) -> str:
-    lines = ["■ 언론 보도", ""]
-    for label, group_items in group_by_category(new_news):
-        lines.append(f"[{label}] ({len(group_items)}건)")
-        for it in group_items:
-            lines.append(f"- {it.get('title', '')}")
-            link = _item_link(it)
-            if link:
-                lines.append(f"    링크: {link}")
-        lines.append("")
-    return "\n".join(lines)
-
-
-def build_body(new_official: list[dict], new_news: list[dict], dashboard_url: str, forced: bool = False) -> str:
-    sections = []
-    if forced and not new_official and not new_news:
-        sections.append(
-            "신규 항목이 없습니다. (workflow_dispatch의 force_mail 옵션으로 강제 발송된 테스트 메일입니다.)"
-        )
+def _sections(new_official: list[dict], new_news: list[dict]):
+    """텍스트/HTML 두 렌더러가 같은 구조를 공유하도록 공통 추출.
+    (섹션 제목, 카테고리별 그룹 목록, 요약 표시 여부) 튜플의 리스트.
+    공식은 요약/실무영향까지, 언론은 제목+링크만(요약 없음, 2026-09-02 지시)."""
+    out = []
     if new_official:
-        sections.append(_official_section(new_official))
+        out.append(("공식 기관 발표", group_by_category(new_official), True))
     if new_news:
-        sections.append(_news_section(new_news))
-    sections.append("──────────")
-    sections.append(f"대시보드: {dashboard_url}")
-    return "\n".join(sections)
+        out.append(("언론 보도", group_by_category(new_news), False))
+    return out
 
 
-def send_via_gmail(subject: str, body: str, recipients: list[str], user: str, app_password: str) -> None:
-    msg = MIMEText(body, "plain", "utf-8")
+def build_body_text(new_official: list[dict], new_news: list[dict], dashboard_url: str, forced: bool = False) -> str:
+    """HTML을 못 읽는 클라이언트용 대체본. 링크를 제목에 걸 수 없으니 원문
+    그대로("링크: URL") 표시한다 — HTML 버전과 달리 이건 정상(주 경로가 아님)."""
+    lines = []
+    if forced and not new_official and not new_news:
+        lines.append("신규 항목이 없습니다. (workflow_dispatch의 force_mail 옵션으로 강제 발송된 테스트 메일입니다.)")
+        lines.append("")
+    for section_title, groups, show_summary in _sections(new_official, new_news):
+        lines.append(f"■ {section_title}")
+        lines.append("")
+        for label, group_items in groups:
+            lines.append(f"[{label}] ({len(group_items)}건)")
+            for it in group_items:
+                lines.append(f"- {it.get('title', '')}")
+                if show_summary:
+                    for s in (it.get("summary") or []):
+                        lines.append(f"    · {s}")
+                    if it.get("impact"):
+                        lines.append(f"    실무영향: {it['impact']}")
+                link = _item_link(it)
+                if link:
+                    lines.append(f"    링크: {link}")
+            lines.append("")
+    lines.append("──────────")
+    lines.append(f"대시보드: {dashboard_url}")
+    lines.append(_FOOTER_NOTE)
+    return "\n".join(lines)
+
+
+def _esc(s) -> str:
+    return html.escape(str(s or ""))
+
+
+# 2026-09-02 사용자 지시: 구글 뉴스 RSS 링크가 200자를 넘어가서 본문에 URL을
+# 그대로 노출하면(위 build_body_text 방식) 메일이 안 읽힌다 — HTML로 보내
+# 제목 자체에 링크를 걸고(<a href>), URL 문자열은 화면에 아예 안 보이게 한다.
+# 아웃룩(Word 렌더링 엔진)에서 깨지지 않도록 <div>/<p>/<a>/<b>/<hr> 같은 기본
+# 태그 + 인라인 style만 쓰고, flexbox/grid/외부 CSS/이미지는 쓰지 않는다.
+def build_body_html(new_official: list[dict], new_news: list[dict], dashboard_url: str, forced: bool = False) -> str:
+    parts = ['<div style="font-family:Arial, Helvetica, sans-serif; font-size:14px; '
+             'color:#111111; line-height:1.6;">']
+    if forced and not new_official and not new_news:
+        parts.append(
+            '<p style="color:#b45309; margin:0 0 16px;">신규 항목이 없습니다. '
+            '(workflow_dispatch의 force_mail 옵션으로 강제 발송된 테스트 메일입니다.)</p>'
+        )
+    for section_title, groups, show_summary in _sections(new_official, new_news):
+        parts.append(f'<h2 style="font-size:16px; margin:20px 0 8px;">■ {_esc(section_title)}</h2>')
+        for label, group_items in groups:
+            parts.append(
+                f'<h3 style="font-size:14px; color:#1e3a8a; margin:14px 0 6px;">'
+                f'[{_esc(label)}] ({len(group_items)}건)</h3>'
+            )
+            for it in group_items:
+                title = _esc(it.get("title", ""))
+                link = _item_link(it)
+                title_html = (
+                    f'<a href="{_esc(link)}" style="color:#1a73e8; text-decoration:none; font-weight:bold;">{title}</a>'
+                    if link else f'<b>{title}</b>'
+                )
+                parts.append(f'<p style="margin:0 0 10px;">{title_html}')
+                if show_summary:
+                    for s in (it.get("summary") or []):
+                        parts.append(f'<br><span style="color:#555555;">· {_esc(s)}</span>')
+                    if it.get("impact"):
+                        parts.append(f'<br><span style="color:#333333;">실무영향: {_esc(it["impact"])}</span>')
+                parts.append("</p>")
+    parts.append('<hr style="border:none; border-top:1px solid #e2e8f0; margin:20px 0;">')
+    parts.append(
+        f'<p style="margin:0 0 8px;"><a href="{_esc(dashboard_url)}" style="color:#1a73e8;">'
+        f'대시보드: {_esc(dashboard_url)}</a></p>'
+    )
+    parts.append(f'<p style="color:#888888; font-size:12px; margin:0;">{_esc(_FOOTER_NOTE)}</p>')
+    parts.append("</div>")
+    return "".join(parts)
+
+
+def send_via_gmail(subject: str, text_body: str, html_body: str, recipients: list[str],
+                    user: str, app_password: str) -> None:
+    # 2026-09-02 사용자 지시: 발신자 표시 이름을 "Policy Watch"로 — formataddr가
+    # "Policy Watch <user@gmail.com>" 형식을 만들어준다(RFC 2822 준수, 특수문자
+    # 이스케이프까지 알아서 처리).
+    msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
-    msg["From"] = user
+    msg["From"] = formataddr(("Policy Watch", user))
     msg["To"] = ", ".join(recipients)
+    # alternative 컨테이너는 "단순한 것부터" 순서로 붙인다 — 클라이언트가 이해하는
+    # 마지막 파트를 렌더링하므로(RFC 2046), text/plain을 먼저·text/html을 나중에
+    # 붙여야 HTML을 지원하는 클라이언트는 HTML을, 아니면 plain text를 보여준다.
+    msg.attach(MIMEText(text_body, "plain", "utf-8"))
+    msg.attach(MIMEText(html_body, "html", "utf-8"))
     with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
         server.login(user, app_password)
         server.sendmail(user, recipients, msg.as_string())
@@ -196,9 +255,10 @@ def _run() -> None:
 
     dashboard_url = os.environ.get("DASHBOARD_URL", DEFAULT_DASHBOARD_URL)
     subject = build_subject(len(new_official) + len(new_news))
-    body = build_body(new_official, new_news, dashboard_url, forced=forced)
+    text_body = build_body_text(new_official, new_news, dashboard_url, forced=forced)
+    html_body = build_body_html(new_official, new_news, dashboard_url, forced=forced)
 
-    send_via_gmail(subject, body, recipients, gmail_user, gmail_password)
+    send_via_gmail(subject, text_body, html_body, recipients, gmail_user, gmail_password)
     print(f"[notify_mail] 메일 발송 완료: 공식 {len(new_official)}건, 언론 {len(new_news)}건 → {len(recipients)}명")
 
 

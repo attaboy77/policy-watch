@@ -154,6 +154,11 @@ KSSB 자발적용 기준서 수집, 법제처 개정이유 수집, AI 요약 43�
   - `.github/workflows/crawl.yml`: `workflow_dispatch.inputs.force_mail`(boolean, 기본 false) 추가 — 신규 없어도 강제 발송(테스트용, 신규 생길 때까지 기다릴 필요 없게). `crawl` 잡에 "이전 data.json 백업"(수집 실행 전, `/tmp/pw_prev_data.json`) → "수집 실행" → "신규 항목 메일 알림"(`python -m sources.notify_mail`) 3단계로 재배치.
   - `tests/test_notify_mail.py` 신규 33개(diff/그룹핑/제목·본문/수신자 파싱/발송 게이팅 — SMTP는 전부 monkeypatch로 대체, 실제 메일 발송 없음). 테스트 345→378개 통과.
   - **미검증**: 실제 GitHub Actions에서 Gmail 발송이 정말 되는지(시크릿은 사용자가 이미 등록함) — `workflow_dispatch`에서 `force_mail: true`로 한 번 수동 실행해 확인 필요.
+  - **2026-09-02 후속 수정 3건**(발송 조건은 그대로 유지, 형식만 개선):
+    1. 구글 뉴스 RSS 링크가 200자 넘어 plain text 메일이 안 읽히던 문제 — **HTML 메일**(제목 자체에 `<a href>` 링크, URL 문자열은 화면에 안 보임) + **plain text 대체본**(alternative, HTML 못 읽는 클라이언트용, 여기는 원래대로 "링크: URL" 노출) 이중 발송으로 전환. 아웃룩 호환을 위해 `<div>/<p>/<a>/<b>/<hr>` 기본 태그 + 인라인 style만 사용(flexbox/grid/이미지 없음). `build_body_text()`/`build_body_html()`로 분리, 공통 구조(`_sections()`)를 공유해 두 렌더러가 어긋나지 않게 함.
+    2. 발신자 표시 이름 `"Policy Watch <GMAIL_USER>"` — `email.utils.formataddr()` 사용.
+    3. 메일 하단에 "이 메일은 신규 항목이 있을 때만 발송됩니다" 고정 문구(`_FOOTER_NOTE`) 추가.
+    - 테스트 44개(11개 추가: HTML 이스케이프·앵커·섹션순서 등), 전체 389개 통과.
 
 - **헤더 "오늘 챙길 것" 한 줄 추가** — 사용자가 형식 지정("D-3 회계기준위원회 회의 · 이번 주 신규 5건", 가장 임박한 일정 + 최근 신규 건수만). `.nav` 바로 아래 `.nav-highlight` 줄 신설. 가장 임박한 일정은 `sortSchedules().future[0]`(회의 예정/로드맵 예정 포함, D-day는 기존 `dday()`/`ddayLabel()` 재사용), 신규 건수는 "이번 주"(월요일 시작)를 `DATA.meta.generated_at` 기준일로 계산(클라이언트 로컬 날짜가 아니라 실제 수집일 기준 — "오늘의 정책동향"과 동일 원칙). 실측(2026-09-02 데이터 기준): "D-2 제9회 회계기준위원회(...) · 이번 주 신규 1건". 테스트 345개 통과, 정적 파일 200 확인. **미검증**: 브라우저 렌더링(줄바꿈 없이 ellipsis로 잘리는지 등) — 사용자 확인 필요.
 
