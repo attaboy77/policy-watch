@@ -8483,5 +8483,238 @@
       "is_meeting": false,
       "is_roadmap_estimate": true
     }
-  ]
+  ],
+  "current_standards": {
+    "kifrs": {
+      "catalog_url": "https://db.kasb.or.kr/standard",
+      "recent": [
+        {
+          "standard_no": "제1118호",
+          "title": "2025년 제1118호 재무제표 표시와 공시",
+          "latest_revision_date": "2025-11-21",
+          "effective_date": "2027-01-01",
+          "url": "https://kasb.or.kr/front/board/comm020View.do?boardMngNo=&boardNo=&cmtreadSeq=&seq=494&siteCd=002000000000000"
+        },
+        {
+          "standard_no": "제1107호",
+          "title": "2025년 자연에 의존하는 전력과 관련된 계약 (제1107호 금융상품: 공시, 제1109호 금융상품)",
+          "latest_revision_date": "2025-10-17",
+          "effective_date": "2026-01-01",
+          "url": "https://kasb.or.kr/front/board/comm020View.do?boardMngNo=&boardNo=&cmtreadSeq=&seq=494&siteCd=002000000000000"
+        },
+        {
+          "standard_no": "제1109호",
+          "title": "2025년 자연에 의존하는 전력과 관련된 계약 (제1107호 금융상품: 공시, 제1109호 금융상품)",
+          "latest_revision_date": "2025-10-17",
+          "effective_date": "2026-01-01",
+          "url": "https://kasb.or.kr/front/board/comm020View.do?boardMngNo=&boardNo=&cmtreadSeq=&seq=494&siteCd=002000000000000"
+        },
+        {
+          "standard_no": "제1007호",
+          "title": "2024년 한국채택국제회계기준 2021-2023 연차개선 (제1007호 현금흐름표, 제1101호 한국채택국제회계기준의 최초채택, 제1107호 금융상품: 공시, 제1109호 금융상품, 제1110호 연결재무제표)",
+          "latest_revision_date": "2024-11-22",
+          "effective_date": "2026-01-01",
+          "url": "https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=442&searchfield=ALL&searchword=%EA%B0%9C%EC%A0%95&s_date_start=&s_date_end="
+        },
+        {
+          "standard_no": "제1101호",
+          "title": "2024년 한국채택국제회계기준 2021-2023 연차개선 (제1007호 현금흐름표, 제1101호 한국채택국제회계기준의 최초채택, 제1107호 금융상품: 공시, 제1109호 금융상품, 제1110호 연결재무제표)",
+          "latest_revision_date": "2024-11-22",
+          "effective_date": "2026-01-01",
+          "url": "https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=442&searchfield=ALL&searchword=%EA%B0%9C%EC%A0%95&s_date_start=&s_date_end="
+        }
+      ]
+    },
+    "esg": {
+      "catalog_url": "https://db.kasb.or.kr/esg",
+      "recent": [
+        {
+          "title": "KSSB 공시기준서 제1호 일반 요구사항",
+          "issued_date": "2026-02-26",
+          "effective_date": "2028-01-01",
+          "is_roadmap_estimate": true,
+          "url": "https://www.kasb.or.kr/front/board/View3012.do?siteCd=002000000000000&gubun=3012&accstdSeq=3748"
+        },
+        {
+          "title": "KSSB 공시기준서 제2호 기후 관련 공시",
+          "issued_date": "2026-02-26",
+          "effective_date": "2028-01-01",
+          "is_roadmap_estimate": true,
+          "url": "https://www.kasb.or.kr/front/board/View3012.do?siteCd=002000000000000&gubun=3012&accstdSeq=3749"
+        }
+      ]
+    },
+    "tax": {
+      "laws": [
+        {
+          "law_name": "법인세법",
+          "promulgation_date": "2025-12-23",
+          "enforcement_date": "2026-01-01",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=280349"
+        },
+        {
+          "law_name": "법인세법 시행령",
+          "promulgation_date": "2026-02-27",
+          "enforcement_date": "2026-02-27",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=283635"
+        },
+        {
+          "law_name": "법인세법 시행규칙",
+          "promulgation_date": "2026-07-01",
+          "enforcement_date": "2026-07-01",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=287787"
+        },
+        {
+          "law_name": "부가가치세법",
+          "promulgation_date": "2025-10-01",
+          "enforcement_date": "2026-01-02",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=276117"
+        },
+        {
+          "law_name": "부가가치세법 시행령",
+          "promulgation_date": "2026-02-27",
+          "enforcement_date": "2026-02-27",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=283641"
+        },
+        {
+          "law_name": "부가가치세법 시행규칙",
+          "promulgation_date": "2026-03-20",
+          "enforcement_date": "2026-03-20",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=284995"
+        },
+        {
+          "law_name": "소득세법",
+          "promulgation_date": "2025-12-23",
+          "enforcement_date": "2026-01-01",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=280405"
+        },
+        {
+          "law_name": "소득세법 시행령",
+          "promulgation_date": "2026-05-22",
+          "enforcement_date": "2026-07-01",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=286211"
+        },
+        {
+          "law_name": "소득세법 시행규칙",
+          "promulgation_date": "2026-05-22",
+          "enforcement_date": "2026-05-22",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=286379"
+        },
+        {
+          "law_name": "지방세법",
+          "promulgation_date": "2025-12-31",
+          "enforcement_date": "2026-01-01",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=282559"
+        },
+        {
+          "law_name": "지방세법 시행령",
+          "promulgation_date": "2026-06-23",
+          "enforcement_date": "2026-07-01",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=287223"
+        },
+        {
+          "law_name": "지방세특례제한법",
+          "promulgation_date": "2026-06-02",
+          "enforcement_date": "2026-06-02",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=286607"
+        },
+        {
+          "law_name": "조세특례제한법",
+          "promulgation_date": "2025-12-23",
+          "enforcement_date": "2026-01-01",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=280409"
+        },
+        {
+          "law_name": "조세특례제한법 시행령",
+          "promulgation_date": "2026-06-23",
+          "enforcement_date": "2026-07-01",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=287181"
+        },
+        {
+          "law_name": "조세특례제한법 시행규칙",
+          "promulgation_date": "2026-03-20",
+          "enforcement_date": "2026-03-20",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=284611"
+        },
+        {
+          "law_name": "국제조세조정에 관한 법률",
+          "promulgation_date": "2025-12-23",
+          "enforcement_date": "2026-01-01",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=280389"
+        },
+        {
+          "law_name": "국제조세조정에 관한 법률 시행령",
+          "promulgation_date": "2026-02-27",
+          "enforcement_date": "2026-02-27",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=283629"
+        },
+        {
+          "law_name": "국제조세조정에 관한 법률 시행규칙",
+          "promulgation_date": "2026-03-20",
+          "enforcement_date": "2026-03-20",
+          "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=284973"
+        }
+      ]
+    },
+    "icfr": {
+      "catalog_url": "https://www.k-icfr.org/sub/menu/guideline.asp",
+      "buckets": [
+        {
+          "label": "모범규준",
+          "documents": [
+            {
+              "title": "내부회계관리제도 설계 및 운영 개념체계 전문(2021.10.1. 개정)",
+              "revision_date": "2021-10-01",
+              "url": "https://www.k-icfr.org/sub/menu/guideline.asp?rWork=TblRead&rNo=34&rGotoPage=1&rSchText=&rType=1"
+            }
+          ]
+        },
+        {
+          "label": "평가·보고 기준",
+          "documents": [
+            {
+              "title": "내부회계관리제도 평가·보고 지침 Clean ver. ('24.12.23 개정)",
+              "revision_date": "2025-01-08",
+              "url": "https://www.fss.or.kr/fss/bbs/B0000155/view.do?nttId=189616&menuNo=201177&pageIndex=1"
+            },
+            {
+              "title": "내부회계관리제도 평가 및 보고 모범규준 전문(2021.10.1. 개정)",
+              "revision_date": "2021-10-01",
+              "url": "https://www.k-icfr.org/sub/menu/guideline.asp?rWork=TblRead&rNo=35&rGotoPage=1&rSchText=&rType=1"
+            }
+          ]
+        },
+        {
+          "label": "적용지침",
+          "documents": [
+            {
+              "title": "연결내부회계관리제도 평가·보고 대상범위 선정 가이드라인 ('23.12.29 배포)",
+              "revision_date": "2024-06-05",
+              "url": "https://www.fss.or.kr/fss/bbs/B0000155/view.do?nttId=136467&menuNo=201177&pageIndex=1"
+            },
+            {
+              "title": "중소기업 내부회계관리제도 평가 및 보고 적용기법 전문(2022.2.7. 개정)",
+              "revision_date": "2022-02-07",
+              "url": "https://www.k-icfr.org/sub/menu/guideline.asp?rWork=TblRead&rNo=41&rGotoPage=1&rSchText=&rType=1"
+            },
+            {
+              "title": "내부회계관리제도 평가 및 보고 적용기법 전문(2022.2.7. 개정)",
+              "revision_date": "2022-02-07",
+              "url": "https://www.k-icfr.org/sub/menu/guideline.asp?rWork=TblRead&rNo=40&rGotoPage=1&rSchText=&rType=1"
+            },
+            {
+              "title": "중소기업 내부회계관리제도 설계 및 운영 적용기법 전문(2021.5.11. 제정)",
+              "revision_date": "2021-05-11",
+              "url": "https://www.k-icfr.org/sub/menu/guideline.asp?rWork=TblRead&rNo=38&rGotoPage=1&rSchText=&rType=1"
+            },
+            {
+              "title": "내부회계관리제도 설계 및 운영 적용기법 전문(2021.5.11. 개정)",
+              "revision_date": "2021-05-11",
+              "url": "https://www.k-icfr.org/sub/menu/guideline.asp?rWork=TblRead&rNo=36&rGotoPage=1&rSchText=&rType=1"
+            }
+          ]
+        }
+      ]
+    }
+  }
 }
