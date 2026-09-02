@@ -146,6 +146,15 @@ KSSB 자발적용 기준서 수집, 법제처 개정이유 수집, AI 요약 43�
 
 ## 2026-09-02 세션 진행 중
 
+- **신규 항목 메일 알림 신설** — GitHub Actions 수집 완료 후 신규 항목이 있으면 메일 발송.
+  - `sources/notify_mail.py` 신규: `find_new_items()`(id 기준, 수집 실행 "전" 백업한 이전 data.json과 비교) → `is_official()`로 공식(L1/L2, `source.type=="official"`) vs 언론(L3) 분리 → 카테고리별 그룹핑(`group_by_category()`, `_config.CATEGORIES` 선언 순서) → 제목/본문 조립 → `send_via_gmail()`(표준 `smtplib`, 의존성 추가 없음).
+  - **발송 조건**(2026-09-02 사용자 지시로 최초안에서 변경): 공식만이 아니라 **공식 또는 언론 둘 중 하나라도 신규가 있으면 발송**(뉴스는 매일 들어오는 게 아니라 도배 걱정 없다고 판단). 본문은 "공식 기관 발표"(제목+요약+실무영향+링크) 섹션이 위, "언론 보도"(제목+링크만, 요약 없음) 섹션이 아래 — 한쪽이 0건이면 그 섹션 자체를 뺀다. 제목 `"[Policy Watch] 신규 N건 - YYYY.MM.DD"`의 N은 공식+언론 합계.
+  - `MAIL_TO`는 쉼표로 분리해 수신자 목록으로 처리(`parse_recipients()`, 향후 여러 명 대비 — 사용자 지시).
+  - 시크릿(`GMAIL_USER`/`GMAIL_APP_PASSWORD`/`MAIL_TO`) 중 하나라도 없으면 조용히 스킵, 발송 자체가 실패해도(SMTP 오류 등) `main()`이 전체를 try/except로 감싸 **exit 0 유지** — 메일 기능이 수집·배포 파이프라인을 절대 막지 않는다.
+  - `.github/workflows/crawl.yml`: `workflow_dispatch.inputs.force_mail`(boolean, 기본 false) 추가 — 신규 없어도 강제 발송(테스트용, 신규 생길 때까지 기다릴 필요 없게). `crawl` 잡에 "이전 data.json 백업"(수집 실행 전, `/tmp/pw_prev_data.json`) → "수집 실행" → "신규 항목 메일 알림"(`python -m sources.notify_mail`) 3단계로 재배치.
+  - `tests/test_notify_mail.py` 신규 33개(diff/그룹핑/제목·본문/수신자 파싱/발송 게이팅 — SMTP는 전부 monkeypatch로 대체, 실제 메일 발송 없음). 테스트 345→378개 통과.
+  - **미검증**: 실제 GitHub Actions에서 Gmail 발송이 정말 되는지(시크릿은 사용자가 이미 등록함) — `workflow_dispatch`에서 `force_mail: true`로 한 번 수동 실행해 확인 필요.
+
 - **헤더 "오늘 챙길 것" 한 줄 추가** — 사용자가 형식 지정("D-3 회계기준위원회 회의 · 이번 주 신규 5건", 가장 임박한 일정 + 최근 신규 건수만). `.nav` 바로 아래 `.nav-highlight` 줄 신설. 가장 임박한 일정은 `sortSchedules().future[0]`(회의 예정/로드맵 예정 포함, D-day는 기존 `dday()`/`ddayLabel()` 재사용), 신규 건수는 "이번 주"(월요일 시작)를 `DATA.meta.generated_at` 기준일로 계산(클라이언트 로컬 날짜가 아니라 실제 수집일 기준 — "오늘의 정책동향"과 동일 원칙). 실측(2026-09-02 데이터 기준): "D-2 제9회 회계기준위원회(...) · 이번 주 신규 1건". 테스트 345개 통과, 정적 파일 200 확인. **미검증**: 브라우저 렌더링(줄바꿈 없이 ellipsis로 잘리는지 등) — 사용자 확인 필요.
 
 - **디자인 개선 4종 반영 완료**(`0d3cfef`) — 지난 세션엔 계획만 있고 파일엔 없었던 걸, 현재 `styles.css`/`app.js`를 다시 보고 구체안(아래 4가지) 재정리 후 사용자 승인받아 반영:
@@ -184,6 +193,7 @@ Phase 6 배포 완료 후로는 실제 배포 사이트(GitHub Pages)에서도 �
 | `data/schedules_manual.yml` | 비어있음(`[]`) — 사업연도 기준 근사 시행일은 `_FISCAL_YEAR_EFFECTIVE_DATES`(코드 내 수동 매핑)로 대신 처리해서 아직 이 파일을 쓸 일이 없었음 | `docs/EFFECTIVE_DATE_GAPS.md`(현재 2건) 검토해서 필요하면 수동 추가 |
 | `data/esg_roadmap.yml` | **신규** — KSSB/ESG 공시 로드맵(금융위 발표 기준, 1차 2028-01-01/FY2027) 수동 관리 중 | 금융위 로드맵이 실제로 바뀌면(확정 등) 수동 갱신 |
 | `data/summary_cache.json` | **43건 채워짐**(Claude Code가 원문 읽고 직접 작성 — API 키 불필요) | 새 후보 생길 때마다 사용자가 "요약해줘"로 배치 요청(주 1~2회 목표) |
+| `GMAIL_USER`/`GMAIL_APP_PASSWORD`/`MAIL_TO` | **GitHub Secrets에 등록됨(2026-09-02)** — `sources/notify_mail.py` 실전 발송은 아직 미확인 | `workflow_dispatch`에서 `force_mail: true`로 수동 실행해 실제 메일 수신 확인 |
 | ~~`ANTHROPIC_API_KEY`~~ | **불필요** — 유료 API 대신 Claude Code가 직접 요약 생성하는 방식으로 재설계 완료 | 없음 |
 
 ## 알려진 이슈 / 기술 부채 (심각도순은 아님)
