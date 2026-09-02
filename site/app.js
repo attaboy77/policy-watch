@@ -141,7 +141,7 @@
   // ── URL 쿼리 동기화 ──────────────────────────────────────────────────
   function stateFromURL() {
     var p = new URLSearchParams(location.search);
-    if (p.get("view") === "today" || p.get("view") === "all" || p.get("view") === "calendar") state.view = p.get("view");
+    if (["today", "all", "calendar", "standards"].indexOf(p.get("view")) !== -1) state.view = p.get("view");
     if (p.get("cat")) state.cats = p.get("cat").split(",").filter(Boolean);
     if (p.get("doctype")) state.doctypes = p.get("doctype").split(",").filter(Boolean);
     if (p.get("from")) state.from = p.get("from");
@@ -644,8 +644,104 @@
     }
   }
 
-  // ── 화면 전환: 오늘의 정책동향 / 전체 동향 / 시행일 캘린더 (ADDENDUM-4 §5-1) ──
-  var VIEW_IDS = { today: "viewToday", all: "viewAll", calendar: "viewCalendar" };
+  // ── "현행 기준" (2026-09-02 사용자 요청) ────────────────────────────────
+  // DATA.current_standards(sources/current_standards.py가 새로 크롤링 없이
+  // 기존 수집 데이터에서 조립)를 그대로 표로 렌더링만 한다 — 필터/검색 상태와
+  // 무관한 정적 참고 화면이라 다른 뷰처럼 switchView()마다 다시 그릴 필요
+  // 없이 init()에서 한 번만 렌더링한다.
+  function _stdEmptyRow(colspan, text) {
+    return '<tr><td colspan="' + colspan + '" class="std-empty">' + esc(text) + "</td></tr>";
+  }
+
+  function _stdLinkCell(url) {
+    return url
+      ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">원문</a>'
+      : '<span class="std-no-link">-</span>';
+  }
+
+  function renderKifrsStandards(section) {
+    var s = section || { catalog_url: "", recent: [] };
+    var rows = s.recent.length
+      ? s.recent.map(function (r) {
+          return "<tr><td>" + esc(r.standard_no) + "</td>" +
+            '<td class="tnum">' + esc(fmtDot(r.latest_revision_date)) + "</td>" +
+            '<td class="tnum">' + esc(fmtDot(r.effective_date)) + "</td>" +
+            "<td>" + _stdLinkCell(r.url) + "</td></tr>";
+        }).join("")
+      : _stdEmptyRow(4, "표시할 개정 이력이 없습니다.");
+    document.getElementById("stdKifrs").innerHTML =
+      '<h2 class="std-title">K-IFRS</h2>' +
+      '<a class="std-catalog-link" href="' + esc(s.catalog_url) + '" target="_blank" rel="noopener">전체 기준서 목록 보기(회계기준원) →</a>' +
+      '<p class="std-note">아래는 개정 이력이 있는 기준서 중 최근 5건만 표시합니다 — 전체 기준서 목록은 위 링크를 참고하세요.</p>' +
+      '<div class="std-table-wrap"><table class="std-table"><thead><tr><th>기준서</th><th>최종 개정일</th><th>시행일</th><th>링크</th></tr></thead>' +
+      "<tbody>" + rows + "</tbody></table></div>";
+  }
+
+  function renderEsgStandards(section) {
+    var s = section || { catalog_url: "", recent: [] };
+    var rows = s.recent.length
+      ? s.recent.map(function (r) {
+          var eff = esc(fmtDot(r.effective_date)) + (r.is_roadmap_estimate ? " (로드맵 예정)" : "");
+          return "<tr><td>" + esc(r.title) + "</td>" +
+            '<td class="tnum">' + esc(fmtDot(r.issued_date)) + "</td>" +
+            '<td class="tnum">' + eff + "</td>" +
+            "<td>" + _stdLinkCell(r.url) + "</td></tr>";
+        }).join("")
+      : _stdEmptyRow(4, "표시할 공시기준서가 없습니다.");
+    document.getElementById("stdEsg").innerHTML =
+      '<h2 class="std-title">지속가능성 공시</h2>' +
+      '<a class="std-catalog-link" href="' + esc(s.catalog_url) + '" target="_blank" rel="noopener">전체 공시기준서 목록 보기(회계기준원) →</a>' +
+      '<div class="std-table-wrap"><table class="std-table"><thead><tr><th>기준서</th><th>제정일</th><th>시행(예정)</th><th>링크</th></tr></thead>' +
+      "<tbody>" + rows + "</tbody></table></div>";
+  }
+
+  function renderTaxStandards(section) {
+    var s = section || { laws: [] };
+    var rows = s.laws.length
+      ? s.laws.map(function (r) {
+          return "<tr><td>" + esc(r.law_name) + "</td>" +
+            '<td class="tnum">' + esc(fmtDot(r.promulgation_date)) + "</td>" +
+            '<td class="tnum">' + esc(fmtDot(r.enforcement_date)) + "</td>" +
+            "<td>" + _stdLinkCell(r.url) + "</td></tr>";
+        }).join("")
+      : _stdEmptyRow(4, "표시할 법령이 없습니다.");
+    document.getElementById("stdTax").innerHTML =
+      '<h2 class="std-title">세법</h2>' +
+      '<p class="std-note">법제처 국가법령정보 현행 조문 기준입니다(본법/시행령/시행규칙).</p>' +
+      '<div class="std-table-wrap"><table class="std-table"><thead><tr><th>법령명</th><th>최종 개정일</th><th>현행 시행일</th><th>링크</th></tr></thead>' +
+      "<tbody>" + rows + "</tbody></table></div>";
+  }
+
+  function renderIcfrStandards(section) {
+    var s = section || { catalog_url: "", buckets: [] };
+    var bucketsHtml = s.buckets.map(function (b) {
+      var rows = b.documents.length
+        ? b.documents.map(function (d) {
+            return "<tr><td>" + esc(d.title) + "</td>" +
+              '<td class="tnum">' + esc(fmtDot(d.revision_date)) + "</td>" +
+              "<td>" + _stdLinkCell(d.url) + "</td></tr>";
+          }).join("")
+        : _stdEmptyRow(3, "표시할 문서가 없습니다.");
+      return '<div class="std-bucket"><h3 class="std-bucket-title">' + esc(b.label) + "</h3>" +
+        '<div class="std-table-wrap"><table class="std-table"><thead><tr><th>문서명</th><th>개정일</th><th>링크</th></tr></thead>' +
+        "<tbody>" + rows + "</tbody></table></div></div>";
+    }).join("");
+    document.getElementById("stdIcfr").innerHTML =
+      '<h2 class="std-title">내부회계</h2>' +
+      '<a class="std-catalog-link" href="' + esc(s.catalog_url) + '" target="_blank" rel="noopener">k-icfr.org 바로가기 →</a>' +
+      bucketsHtml;
+  }
+
+  function renderCurrentStandards() {
+    var cs = DATA.current_standards || {};
+    renderKifrsStandards(cs.kifrs);
+    renderEsgStandards(cs.esg);
+    renderTaxStandards(cs.tax);
+    renderIcfrStandards(cs.icfr);
+  }
+
+  // ── 화면 전환: 오늘의 정책동향 / 전체 동향 / 시행일 캘린더 / 현행 기준 (ADDENDUM-4 §5-1) ──
+  var VIEW_IDS = { today: "viewToday", all: "viewAll", calendar: "viewCalendar", standards: "viewStandards" };
 
   function switchView(view) {
     state.view = view;
@@ -1037,6 +1133,7 @@
         renderHeaderHighlight();
         renderCalendar();
         renderFullScheduleList();
+        renderCurrentStandards();
         applyAndRender();
         switchView(state.view);  // URL의 ?view= 반영 + 진입 화면 렌더(기본값 today, 캘린더 탭도 여기서 필요시 렌더)
       })

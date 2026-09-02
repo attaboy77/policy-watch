@@ -50,6 +50,16 @@ _VALID_SCHEDULE = {
     "is_roadmap_estimate": False,
 }
 
+# 2026-09-02: "현행 기준" 탭(sources/current_standards.py). 각 하위 리스트는
+# 비어있어도 스키마상 유효하다(required는 키 자체지 내용물이 아님) — 최소
+# 구조만 맞춘다.
+_VALID_CURRENT_STANDARDS = {
+    "kifrs": {"catalog_url": "https://db.kasb.or.kr/standard", "recent": []},
+    "esg": {"catalog_url": "https://db.kasb.or.kr/esg", "recent": []},
+    "tax": {"laws": []},
+    "icfr": {"catalog_url": "https://www.k-icfr.org/sub/menu/guideline.asp", "buckets": []},
+}
+
 _VALID_DATA = {
     "meta": {
         "schema_version": "1.0",
@@ -68,6 +78,7 @@ _VALID_DATA = {
     ],
     "items": [_VALID_ITEM],
     "schedules": [_VALID_SCHEDULE],
+    "current_standards": _VALID_CURRENT_STANDARDS,
 }
 
 

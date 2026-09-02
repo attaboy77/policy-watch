@@ -160,6 +160,18 @@ KSSB 자발적용 기준서 수집, 법제처 개정이유 수집, AI 요약 43�
     3. 메일 하단에 "이 메일은 신규 항목이 있을 때만 발송됩니다" 고정 문구(`_FOOTER_NOTE`) 추가.
     - 테스트 44개(11개 추가: HTML 이스케이프·앵커·섹션순서 등), 전체 389개 통과.
 
+- **"현행 기준" 탭 신설** — 4개 분야(K-IFRS/지속가능성 공시/세법/내부회계)의 "지금 유효한 기준·법령"을 새로 크롤링 없이 기존 수집 데이터에서 조립해 보여주는 4번째 탭(최근 정책동향/전체 동향/시행일 캘린더 다음).
+  - `sources/current_standards.py` 신규 — 분야별 접근이 전부 다르다:
+    - **K-IFRS**: `kasb.py` D(List2006.do 제·개정 이력)에서 제목의 "제NNNN호"를 정규식 추출해 기준서 번호별 최신 개정 1건만 남기고 **최근 5건만** 노출(`build_kifrs_standards()`). 전체 기준서(100여 종) 목록이 아니라 "개정 이력이 있는 것"만이라는 한계가 있어, 목록보다 **"전체 목록 보기" 링크**(`https://db.kasb.or.kr/standard`, 사용자 지정)를 우선하고 최근 개정은 참고용으로 아래 붙임.
+    - **지속가능성 공시(KSSB)**: 제1호/제2호 그대로(`build_esg_standards()`) + `https://db.kasb.or.kr/esg` 전체 목록 링크.
+    - **세법**: `law_api.py`(법제처)가 매 실행마다 이미 채워주는 현재 스냅샷(법인세법/부가가치세법/소득세법/지방세법/지방세특례제한법/조세특례제한법/국제조세조정에 관한 법률 각 본법+시행령+시행규칙, 18건)을 법령명 순서(요청 5개 법 우선 + 보너스 2개, 본법→시행령→시행규칙)로 정리(`build_tax_laws()`). 날짜 없으면 사용자 지시대로 빈 문자열.
+    - **내부회계**: k-icfr.org에 모범규준/평가·보고 기준/적용지침 3분류별 안정 URL이 없다는 걸 확인(전체 진입점 1개 + 신/구버전 인덱스 2개뿐, 3분류 구분 없음) → 제목 키워드로 직접 분류(`build_icfr_documents()`, "개념체계"→모범규준, "적용기법"/"가이드라인"→적용지침, "평가"+"보고"+("모범규준"/"지침")→평가·보고 기준, 판정 우선순위는 이 순서로 검사해야 함 — 적용기법 문서에도 "평가"+"보고"가 섞여있는 경우가 많아서). 같은 문서의 재게시본(날짜만 다른 "Clean ver." 등)은 정규화 후 최신 published_at 하나만 남김.
+  - `main.py`의 `build_data_json()`에서 `finalized` 리스트로 호출해 `data.json`에 최상위 `current_standards` 필드로 저장. `_schema.py`에 스키마 추가(4개 분야 구조가 서로 달라 분야별로 따로 정의).
+  - 프론트: `index.html`에 4번째 nav 탭(`data-view="standards"`) + `<section id="viewStandards">`(4개 `<section class="std-section">`), `app.js`에 `renderKifrsStandards()`/`renderEsgStandards()`/`renderTaxStandards()`/`renderIcfrStandards()` + `renderCurrentStandards()`(init()에서 한 번만 렌더 — 필터/검색과 무관한 정적 참고 화면), `styles.css`에 `.std-table` 등 표 스타일 신규.
+  - **버그 발견·수정**: `stateFromURL()`의 `?view=` 파서가 `today`/`all`/`calendar` 하드코딩 허용목록이라 `standards`가 빠져있었음 — `?view=standards` URL을 직접 열면 조용히 `today`로 리셋되는 문제. 배열 기반 `indexOf` 체크로 수정.
+  - `tests/test_current_standards.py` 신규 23개(합성 데이터 — 실제 크롤링 결과에 테스트가 흔들리지 않도록), `tests/test_schema.py`에 `current_standards` 최소 픽스처 추가. 테스트 389→412개 통과. 실제 `site/data.json`(153건)에 대입해 스키마 0 errors 확인.
+  - **미검증**: 브라우저 렌더링(Claude in Chrome 확장 설치를 사용자가 재차 거절 — 이번 세션엔 다시 권하지 않기로 함). 코드 리뷰(HTML id 교차검증, JS 문법 재확인)로만 확인한 상태 — 사용자가 직접 열어서 4개 섹션 표가 제대로 나오는지 확인 필요.
+
 - **헤더 "오늘 챙길 것" 한 줄 추가** — 사용자가 형식 지정("D-3 회계기준위원회 회의 · 이번 주 신규 5건", 가장 임박한 일정 + 최근 신규 건수만). `.nav` 바로 아래 `.nav-highlight` 줄 신설. 가장 임박한 일정은 `sortSchedules().future[0]`(회의 예정/로드맵 예정 포함, D-day는 기존 `dday()`/`ddayLabel()` 재사용), 신규 건수는 "이번 주"(월요일 시작)를 `DATA.meta.generated_at` 기준일로 계산(클라이언트 로컬 날짜가 아니라 실제 수집일 기준 — "오늘의 정책동향"과 동일 원칙). 실측(2026-09-02 데이터 기준): "D-2 제9회 회계기준위원회(...) · 이번 주 신규 1건". 테스트 345개 통과, 정적 파일 200 확인. **미검증**: 브라우저 렌더링(줄바꿈 없이 ellipsis로 잘리는지 등) — 사용자 확인 필요.
 
 - **디자인 개선 4종 반영 완료**(`0d3cfef`) — 지난 세션엔 계획만 있고 파일엔 없었던 걸, 현재 `styles.css`/`app.js`를 다시 보고 구체안(아래 4가지) 재정리 후 사용자 승인받아 반영:

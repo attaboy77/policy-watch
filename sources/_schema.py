@@ -153,10 +153,110 @@ _SCHEDULE_SCHEMA = {
     },
 }
 
+# 2026-09-02: "현행 기준" 탭(sources/current_standards.py) — 4개 분야별로
+# 형태가 다르다(K-IFRS/ESG는 목록 링크+최근 개정 몇 건, 세법은 법령 목록,
+# 내부회계는 3분류 버킷)는 사용자 확정 화면구성 그대로 반영.
+_CURRENT_STANDARDS_SCHEMA = {
+    "type": "object",
+    "required": ["kifrs", "esg", "tax", "icfr"],
+    "properties": {
+        "kifrs": {
+            "type": "object",
+            "required": ["catalog_url", "recent"],
+            "properties": {
+                "catalog_url": {"type": "string"},
+                "recent": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": ["standard_no", "title", "latest_revision_date", "effective_date", "url"],
+                        "properties": {
+                            "standard_no": {"type": "string"},
+                            "title": {"type": "string"},
+                            "latest_revision_date": {"type": ["string", "null"]},
+                            "effective_date": {"type": ["string", "null"]},
+                            "url": {"type": ["string", "null"]},
+                        },
+                    },
+                },
+            },
+        },
+        "esg": {
+            "type": "object",
+            "required": ["catalog_url", "recent"],
+            "properties": {
+                "catalog_url": {"type": "string"},
+                "recent": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": ["title", "issued_date", "effective_date", "is_roadmap_estimate", "url"],
+                        "properties": {
+                            "title": {"type": "string"},
+                            "issued_date": {"type": ["string", "null"]},
+                            "effective_date": {"type": ["string", "null"]},
+                            "is_roadmap_estimate": {"type": "boolean"},
+                            "url": {"type": ["string", "null"]},
+                        },
+                    },
+                },
+            },
+        },
+        "tax": {
+            "type": "object",
+            "required": ["laws"],
+            "properties": {
+                "laws": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": ["law_name", "promulgation_date", "enforcement_date", "url"],
+                        "properties": {
+                            "law_name": {"type": "string"},
+                            "promulgation_date": {"type": "string"},  # 없으면 "" — 사용자 지시("빈칸으로")
+                            "enforcement_date": {"type": "string"},
+                            "url": {"type": ["string", "null"]},
+                        },
+                    },
+                },
+            },
+        },
+        "icfr": {
+            "type": "object",
+            "required": ["catalog_url", "buckets"],
+            "properties": {
+                "catalog_url": {"type": "string"},
+                "buckets": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": ["label", "documents"],
+                        "properties": {
+                            "label": {"type": "string"},
+                            "documents": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "required": ["title", "revision_date", "url"],
+                                    "properties": {
+                                        "title": {"type": "string"},
+                                        "revision_date": {"type": ["string", "null"]},
+                                        "url": {"type": ["string", "null"]},
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    },
+}
+
 DATA_SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
-    "required": ["meta", "categories", "items", "schedules"],
+    "required": ["meta", "categories", "items", "schedules", "current_standards"],
     "properties": {
         "meta": {
             "type": "object",
@@ -187,6 +287,7 @@ DATA_SCHEMA = {
         },
         "items": {"type": "array", "items": _ITEM_SCHEMA},
         "schedules": {"type": "array", "items": _SCHEDULE_SCHEMA},
+        "current_standards": _CURRENT_STANDARDS_SCHEMA,
     },
 }
 

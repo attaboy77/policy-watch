@@ -118,5 +118,14 @@ window.POLICY_DATA = {
       source: { name: "금융위원회", domain: "fsc.go.kr", tier: 1, type: "official" },
       urls: { news: null, official: null }
     }
-  ]
+  ],
+  // 2026-09-02: "현행 기준" 탭용(sources/current_standards.py 참고). 폴백
+  // 표본이라 실제 목록은 비워두고 링크만 채운다 — app.js의 renderXxxStandards()가
+  // 빈 리스트도 "표시할 ~ 없습니다" 문구로 안전하게 처리한다.
+  current_standards: {
+    kifrs: { catalog_url: "https://db.kasb.or.kr/standard", recent: [] },
+    esg: { catalog_url: "https://db.kasb.or.kr/esg", recent: [] },
+    tax: { laws: [] },
+    icfr: { catalog_url: "https://www.k-icfr.org/sub/menu/guideline.asp", buckets: [] }
+  }
 };

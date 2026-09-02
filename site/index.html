@@ -20,6 +20,7 @@
     <button type="button" data-view="today">최근 정책동향</button>
     <button type="button" data-view="all">전체 동향</button>
     <button type="button" data-view="calendar">시행일 캘린더</button>
+    <button type="button" data-view="standards">현행 기준</button>
   </nav>
   <div class="nav-updated tnum" id="navUpdated">마지막 갱신 확인 중…</div>
 </header>
@@ -86,6 +87,22 @@
       </div>
       <ul class="sched-list is-expanded" id="calFullSchedList"></ul>
     </div>
+  </div>
+</section>
+
+<!-- "현행 기준" — 2026-09-02 사용자 요청. 4개 분야 현재 유효한 기준·법령
+     목록(site/data.json의 current_standards, 새로 크롤링 없이 기존 수집
+     데이터에서 조립됨 — sources/current_standards.py 참고). -->
+<section class="view view-standards" id="viewStandards">
+  <div class="standards-header">
+    <h1 class="standards-title">현행 기준</h1>
+    <p class="standards-sub">4개 분야의 현재 유효한 기준·법령과 원문 링크입니다. 새로 크롤링하지 않고 기존 수집 데이터에서 정리했습니다.</p>
+  </div>
+  <div class="standards-grid">
+    <section class="std-section" id="stdKifrs"><div class="skeleton-card"></div></section>
+    <section class="std-section" id="stdEsg"><div class="skeleton-card"></div></section>
+    <section class="std-section" id="stdTax"><div class="skeleton-card"></div></section>
+    <section class="std-section" id="stdIcfr"><div class="skeleton-card"></div></section>
   </div>
 </section>
 

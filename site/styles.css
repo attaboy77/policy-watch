@@ -611,6 +611,48 @@ main.view:not(.is-active){ display:none; }
 .cal-full-card .cal-cell{ font-size:13px; }
 .cal-full-list-card .sched-list{ max-height:none; }
 
+/* ── 현행 기준 (2026-09-02 사용자 요청) ───────────────────────────────── */
+.view-standards{ max-width:1440px; margin:0 auto; padding:var(--gap); }
+.standards-header{ margin-bottom:20px; }
+.standards-title{ font-size:20px; font-weight:700; color:var(--navy-deep); margin:0 0 6px; }
+.standards-sub{ font-size:13px; color:var(--muted); margin:0; }
+
+.standards-grid{ display:flex; flex-direction:column; gap:24px; }
+.std-section{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--r);
+  padding:20px 24px;
+}
+.std-title{ font-size:16px; font-weight:700; color:var(--navy-deep); margin:0 0 8px; }
+.std-catalog-link{
+  display:inline-block; color:var(--navy); font-weight:600; font-size:13px;
+  text-decoration:underline; text-underline-offset:2px; margin-bottom:10px;
+}
+.std-note{ font-size:12.5px; color:var(--muted); margin:0 0 12px; }
+
+.std-table-wrap{ overflow-x:auto; }
+.std-table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+.std-table th{
+  text-align:left; font-size:12px; font-weight:700; color:var(--muted);
+  padding:6px 10px; border-bottom:1px solid var(--line); white-space:nowrap;
+}
+.std-table td{
+  padding:8px 10px; border-bottom:1px solid var(--line); color:var(--ink);
+}
+.std-table tbody tr:last-child td{ border-bottom:none; }
+.std-table a{ color:var(--navy); font-weight:600; text-decoration:none; }
+.std-table a:hover{ text-decoration:underline; }
+.std-no-link{ color:var(--muted); }
+.std-empty{ text-align:center; color:var(--muted); font-style:italic; padding:16px 10px; }
+
+.std-bucket{ margin-top:18px; }
+.std-bucket:first-of-type{ margin-top:14px; }
+.std-bucket-title{ font-size:13.5px; font-weight:700; color:var(--muted); margin:0 0 6px; }
+
+@media (max-width:639px){
+  .view-standards{ padding:16px; }
+  .std-section{ padding:16px; }
+}
+
 /* ── 푸터 (ADDENDUM-4 §6) ─────────────────────────────────────────── */
 .site-footer{
   background:var(--navy-deep);

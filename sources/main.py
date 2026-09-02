@@ -17,6 +17,7 @@ from . import _excluded_log, _gap_log
 from ._config import CATEGORIES, COLLECT_WINDOW_DAYS
 from ._schema import validate as validate_schema
 from ._summarize import summarize
+from .current_standards import build_current_standards
 from ._utils import (apply_applicability_gate, apply_category_caps,
                      apply_company_event_filter, apply_corporate_pr_filter,
                      apply_regulatory_gate, attach_related_news, dedupe,
@@ -151,10 +152,15 @@ def build_data_json(items: list[dict]) -> dict:
         for key, c in CATEGORIES.items()
     ]
 
+    # 2026-09-02: "현행 기준" 탭용 — 새로 크롤링하지 않고 위 finalized(최종
+    # 확정 아이템)에서 바로 뽑는다(sources/current_standards.py 참고).
+    current_standards = build_current_standards(finalized)
+
     return {
         "categories": categories,
         "items": finalized,
         "schedules": schedules,
+        "current_standards": current_standards,
         "_counts_by_category": counts_by_category,  # main()에서 meta 조립용, 최종 출력엔 안 들어감
     }
 
