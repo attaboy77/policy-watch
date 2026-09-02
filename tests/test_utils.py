@@ -42,10 +42,16 @@ from sources._utils import (
     apply_company_event_filter,
     is_event_announcement,
     is_foreign_standard,
+    is_local_gov_petition,
+    apply_local_gov_petition_filter,
+    is_foreign_news_only,
+    apply_foreign_news_filter,
+    apply_corporate_pr_filter,
 )
 from sources._config import (CATEGORIES, NOISE_KEYWORDS, ADMIN_NOISE_KEYWORDS,
                              REGULATORY_SIGNALS, APPLICABILITY, COMPANY_EVENTS,
-                             FOREIGN_STANDARD_BODIES)
+                             FOREIGN_STANDARD_BODIES, LOCAL_GOV_PETITION_KEYWORDS,
+                             FOREIGN_NEWS_SIGNALS)
 
 
 # ── 쿼리 생성 ────────────────────────────────────────────────────────────
@@ -520,9 +526,10 @@ class TestTitleSimilarity:
 
 
 class TestDedupeSimilarNews:
-    def _news(self, id_, title, score, published_at="2026-08-20", category="icfr"):
+    def _news(self, id_, title, score, published_at="2026-08-20", category="icfr", trust_score=0):
         return {
             "id": id_, "category": category, "title": title, "final_score": score,
+            "trust_score": trust_score,
             "published_at": published_at, "source": {"name": id_}, "layer": "L3",
         }
 
@@ -608,6 +615,46 @@ class TestDedupeSimilarNews:
         ]
         out = dedupe_similar_news(items)
         assert out == items
+
+    def test_local_gov_subject_merges_below_normal_subject_threshold(self):
+        # 2026-09-02 사용자 지시 — 실측: 두 기사 모두 주체는 "송파구"로 정확히
+        # 일치하지만 어절 유사도가 0.25로 일반 SUBJECT_SIMILARITY_THRESHOLD(0.35)
+        # 에 못 미친다. 기초자치단체 주체는 LOCAL_GOV_SUBJECT_SIMILARITY_
+        # THRESHOLD(0.20)를 적용해 병합돼야 한다.
+        items = [
+            self._news("gukjenews", "송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의",
+                       80.0, category="tax", published_at="2026-08-24"),
+            self._news("jeonmae", "송파구, 신축주택 과세표준 상한 적용 건의",
+                       60.0, category="tax", published_at="2026-08-24"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 1
+        assert out[0]["duplicate_count"] == 1
+
+    def test_non_local_gov_subject_still_uses_normal_threshold(self):
+        # 위 완화가 "주체 일치 + 낮은 유사도"를 전부 다 묶어버리는 건 아니어야
+        # 한다 — 위 송파구 예시와 같은 구조(같은 어절 집합, 주체만 교체)를
+        # 기업 주체(남부발전)로 바꿔 유사도 0.25를 유지한 채로 확인: 기업
+        # 주체는 기존 임계값(0.35) 그대로라 병합되면 안 된다.
+        items = [
+            self._news("a", "남부발전, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의",
+                       80.0, category="tax", published_at="2026-08-24"),
+            self._news("b", "남부발전, 신축주택 과세표준 상한 적용 건의",
+                       60.0, category="tax", published_at="2026-08-24"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 2  # 유사도 0.25 < 0.35 + 기업 주체라 병합 안 됨(기존 동작 유지)
+
+    def test_higher_trust_source_survives_even_with_lower_final_score(self):
+        # 2026-09-02 사용자 지시 — "신뢰도 높은 매체를 우선". trust_score가 높으면
+        # final_score가 더 낮아도 대표로 남아야 한다(기존엔 final_score만 봄).
+        items = [
+            self._news("low_trust_high_score", "동일한 제목의 기사입니다", 90.0, trust_score=20),
+            self._news("high_trust_low_score", "동일한 제목의 기사입니다", 50.0, trust_score=80),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 1
+        assert out[0]["id"] == "high_trust_low_score"
 
 
 # ── 공식-뉴스 연결 (ADDENDUM-4 §4) ───────────────────────────────────────────
@@ -1147,6 +1194,142 @@ class TestIsCorporatePr:
 
     def test_explanation_session_without_signal_is_pr(self):
         assert is_corporate_pr("회계기준원, ESG 공시기준 설명회 개최") is True
+
+    # 2026-09-02 사용자 지시 — 개별 기업 ESG 홍보(실측 예시들).
+    def test_individual_company_sustainability_report_is_pr(self):
+        assert is_corporate_pr("지오영, 창사 첫 지속가능경영보고서 발간") is True
+
+    def test_esg_roadmap_presentation_is_pr(self):
+        assert is_corporate_pr("OO그룹, 2030 ESG 로드맵 제시") is True
+
+
+class TestApplyCorporatePrFilter:
+    """2026-09-02 사용자 지시로 (통과분, 제외분) 튜플 반환으로 변경."""
+
+    def _item(self, title, layer="L3", tier=5):
+        return {"category": "esg", "title": title, "layer": layer,
+                "source": {"tier": tier}, "urls": {"news": "https://x", "official": None}}
+
+    def test_splits_kept_and_excluded(self):
+        items = [
+            self._item("지오영, 창사 첫 지속가능경영보고서 발간"),
+            self._item("금감원, 내부회계관리제도 평가 지침 개정"),
+        ]
+        kept, excluded = apply_corporate_pr_filter(items)
+        assert [it["title"] for it in kept] == ["금감원, 내부회계관리제도 평가 지침 개정"]
+        assert len(excluded) == 1
+        assert excluded[0]["excluded_reason"] == "excluded:corporate_pr"
+
+    def test_l1_exempt(self):
+        items = [self._item("지오영, 창사 첫 지속가능경영보고서 발간", layer="L1", tier=1)]
+        kept, excluded = apply_corporate_pr_filter(items)
+        assert len(kept) == 1
+        assert excluded == []
+
+
+# ── 지자체 건의·민원 제외 (2026-09-02 사용자 지시) ──────────────────────────
+class TestIsLocalGovPetition:
+    def test_real_example_excluded(self):
+        assert is_local_gov_petition("송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의") is True
+
+    def test_all_petition_keywords_individually_detected(self):
+        for kw in LOCAL_GOV_PETITION_KEYWORDS:
+            assert is_local_gov_petition(f"강남구, 지방세법 개정 {kw}") is True, f"{kw}가 통과됨"
+
+    def test_local_gov_subject_without_petition_keyword_passes(self):
+        # 지자체가 주체여도 "건의" 류 표현이 없으면(예: 실제 시행 소식) 통과.
+        assert is_local_gov_petition("강남구, 지방세법 개정 시행 안내") is False
+
+    def test_petition_keyword_without_local_gov_subject_passes(self):
+        # 주체가 지자체가 아니면(기업·중앙부처 등) 이 필터 대상이 아니다.
+        assert is_local_gov_petition("대한상공회의소, 지방세법 개정 건의") is False
+
+    def test_no_subject_passes(self):
+        assert is_local_gov_petition("지방세법 개정 건의 잇따라") is False
+
+    def test_metropolitan_gov_not_matched(self):
+        # 사용자 지시 범위: 기초자치단체(구/시/군)만. 광역단체는 포함 안 함.
+        assert is_local_gov_petition("경기도, 지방세법 개정 건의") is False
+
+
+class TestApplyLocalGovPetitionFilter:
+    def _item(self, title, layer="L3", tier=5):
+        return {"category": "tax", "title": title, "layer": layer,
+                "source": {"tier": tier}, "urls": {"news": "https://x", "official": None}}
+
+    def test_splits_kept_and_excluded(self):
+        items = [
+            self._item("송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의"),
+            self._item("기획재정부, 법인세법 시행령 개정"),
+        ]
+        kept, excluded = apply_local_gov_petition_filter(items)
+        assert [it["title"] for it in kept] == ["기획재정부, 법인세법 시행령 개정"]
+        assert len(excluded) == 1
+        assert excluded[0]["excluded_reason"] == "excluded:local_gov_petition"
+
+    def test_l1_exempt(self):
+        items = [self._item("송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의",
+                             layer="L1", tier=1)]
+        kept, excluded = apply_local_gov_petition_filter(items)
+        assert len(kept) == 1
+        assert excluded == []
+
+
+# ── 해외 전용 뉴스 제외 (2026-09-02 사용자 지시) ────────────────────────────
+class TestIsForeignNewsOnly:
+    def test_real_example_excluded(self):
+        assert is_foreign_news_only("서클 CEO 美 디지털자산 회계기준 개정") is True
+
+    def test_all_signals_individually_detected(self):
+        for kw in FOREIGN_NEWS_SIGNALS:
+            assert is_foreign_news_only(f"{kw} 회계기준 개정 소식") is True, f"{kw}가 통과됨"
+
+    def test_domestic_adoption_context_passes(self):
+        assert is_foreign_news_only("EU 회계기준 국내 도입 영향 검토") is False
+
+    def test_no_foreign_signal_passes(self):
+        assert is_foreign_news_only("K-IFRS 제1118호 재무제표 표시 개정") is False
+
+    def test_iasb_not_excluded_by_this_filter(self):
+        # ADDENDUM-7 §3(안 A) — IASB/ISSB는 doc_type="해외기준"으로 유지·분류
+        # 하기로 이미 결정했다. 여기서 완전 제외하면 그 결정과 충돌한다.
+        assert is_foreign_news_only("IASB, 새 공개초안 발표") is False
+
+    def test_foreign_domain_excluded_regardless_of_title(self):
+        assert is_foreign_news_only("K-IFRS 관련 국내 기사", domain="fr.tradingview.com") is True
+
+    def test_korean_domain_not_excluded(self):
+        assert is_foreign_news_only("서클 CEO 美 디지털자산 회계기준 개정", domain=None) is True
+        assert is_foreign_news_only("K-IFRS 국내 소식", domain="hankyung.com") is False
+
+
+class TestApplyForeignNewsFilter:
+    def _item(self, title, layer="L3", tier=5, domain=None):
+        return {"category": "kifrs", "title": title, "layer": layer,
+                "source": {"tier": tier, "domain": domain},
+                "urls": {"news": "https://x", "official": None}}
+
+    def test_splits_kept_and_excluded(self):
+        items = [
+            self._item("서클 CEO 美 디지털자산 회계기준 개정"),
+            self._item("회계기준원, K-IFRS 제1118호 제정"),
+        ]
+        kept, excluded = apply_foreign_news_filter(items)
+        assert [it["title"] for it in kept] == ["회계기준원, K-IFRS 제1118호 제정"]
+        assert len(excluded) == 1
+        assert excluded[0]["excluded_reason"] == "excluded:foreign_news"
+
+    def test_l1_exempt(self):
+        items = [self._item("서클 CEO 美 디지털자산 회계기준 개정", layer="L1", tier=1)]
+        kept, excluded = apply_foreign_news_filter(items)
+        assert len(kept) == 1
+        assert excluded == []
+
+    def test_foreign_domain_excluded_even_without_keyword(self):
+        items = [self._item("국내 회계 소식 헤드라인", domain="fr.tradingview.com")]
+        kept, excluded = apply_foreign_news_filter(items)
+        assert kept == []
+        assert excluded[0]["excluded_reason"] == "excluded:foreign_news"
 
 
 if __name__ == "__main__":

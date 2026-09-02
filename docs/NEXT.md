@@ -146,6 +146,15 @@ KSSB 자발적용 기준서 수집, 법제처 개정이유 수집, AI 요약 43�
 
 ## 2026-09-02 세션 진행 중
 
+- **"최근 정책동향" 뉴스 필터 4종 추가 + 실전 검증(실제 크롤링 실행)** — 사용자가 배포 사이트에서 "최근 정책동향 5건 중 4건이 무관"하다고 지적한 실제 사례 4건 기반.
+  1. **지자체 건의·민원 제외** — 기초자치단체(OO구/OO시/OO군)가 주체이고 건의/촉구/요구/요청/요망이 붙은 기사 제외(`_utils.is_local_gov_petition()`, 주체 판정은 `extract_subject()` + `_LOCAL_GOV_SUBJECT_RE`). 실측: "송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의" 제외 확인.
+  2. **해외 전용 뉴스 제외** — 해외 도메인(`FOREIGN_NEWS_DOMAINS`, 실측 `fr.tradingview.com`) 또는 제목에 美/미국/EU/FASB/SEC가 있으면서 국내 도입 맥락(`APPLICABILITY.foreign_exception_context` 재사용) 없으면 제외(`_utils.is_foreign_news_only()`). **IASB는 일부러 트리거 목록에서 뺐다** — ADDENDUM-7 §3(안 A)이 IASB/ISSB를 doc_type="해외기준"으로 유지·분류하기로 이미 결정했고, 여기 넣으면 그 결정과 충돌한다. 실측: "서클 CEO 美 디지털자산 회계기준 개정"(fr.tradingview.com) 제외 확인.
+  3. **개별 기업 ESG 홍보 제외** — 기존 §3(`is_corporate_pr`/`CORPORATE_PR_KEYWORDS`)에 "지속가능경영보고서 발간"/"창사 첫"/"ESG 로드맵 제시" 문구 추가(새 함수 아님 — 기존 §3 메커니즘 확장). 실측: "지오영, 창사 첫 지속가능경영보고서 발간" + 보너스로 "롯데건설, …지속가능경영보고서 발간" 2건 제외 확인.
+  4. **같은 사건 중복 제거 개선** — `dedupe_similar_news()` 2건 수정: (a) 주체가 기초자치단체(구/시/군)면 병합 임계값을 0.35→0.20(`LOCAL_GOV_SUBJECT_SIMILARITY_THRESHOLD`)로 완화 — 실측: "송파구" 관련 두 매체(국제뉴스/전매신문) 기사가 주체는 일치해도 어절 유사도 0.25로 기존 임계값 미달이라 안 묶였던 걸 확인 후 수정. (b) 대표 항목 선택을 `final_score` 단독 → `(trust_score desc, final_score desc)`로 변경("신뢰도 높은 매체 우선" 지시 반영, 기존엔 키워드 점수가 신뢰도보다 앞설 수 있었음).
+  - **아키텍처 결정**: 위 4개 전부 (통과분, 제외분) 튜플을 반환해 `main.py`가 공유 헬퍼 `_record_excluded()`로 `EXCLUDED_LOG.md`에 기록(사용자 지시 — 과다 필터링 검토용). 기존 `apply_regulatory_gate`/`apply_company_event_filter`는 이번에 손 안 댐(로깅 없이 그대로) — `apply_corporate_pr_filter`만 이번에 (kept, excluded) 튜플 반환으로 리팩터링(2번 필터가 이 메커니즘을 확장하는 김에 같이 처리).
+  - **부수 버그 수정**: `python -m sources.main`을 로컬(Windows, cp949 콘솔)에서 직접 돌려 이 필터들을 실측 검증하려다가 `print("✓ 스키마 검증 통과")`의 "✓"(U+2713)에서 `UnicodeEncodeError`로 죽는 걸 발견 — `main()` 최상단에 `sys.stdout.reconfigure(encoding="utf-8", errors="replace")` 추가로 해결(GitHub Actions는 Ubuntu/UTF-8이라 원래 안 겪던 문제, 로컬 검증만 막고 있었음).
+  - **실전 검증**: 실제로 `python -m sources.main` 전체 실행(네트워크 크롤링 포함, 423건 원본 → 217건, kifrs 66/tax 33/icfr 32/esg 19 최종). 4개 필터 각각 EXCLUDED_LOG.md에서 정확히 위 실제 사례로 기록된 것 확인. **최근 14일(2026-08-20~09-02) 뉴스(L3)는 필터 적용 후 1건**(esg 카테고리) — 다만 이건 새 필터의 효과라기보다 이번 수집 사이클에서 Google/Naver 뉴스가 애초에 최근 2주 내 항목을 별로 못 찾은 것으로 보임(뉴스 40건 중 최신이 2026-08-27, 대부분 6~8월). 테스트 416→441개 통과.
+
 - **신규 항목 메일 알림 신설** — GitHub Actions 수집 완료 후 신규 항목이 있으면 메일 발송.
   - `sources/notify_mail.py` 신규: `find_new_items()`(id 기준, 수집 실행 "전" 백업한 이전 data.json과 비교) → `is_official()`로 공식(L1/L2, `source.type=="official"`) vs 언론(L3) 분리 → 카테고리별 그룹핑(`group_by_category()`, `_config.CATEGORIES` 선언 순서) → 제목/본문 조립 → `send_via_gmail()`(표준 `smtplib`, 의존성 추가 없음).
   - **발송 조건**(2026-09-02 사용자 지시로 최초안에서 변경): 공식만이 아니라 **공식 또는 언론 둘 중 하나라도 신규가 있으면 발송**(뉴스는 매일 들어오는 게 아니라 도배 걱정 없다고 판단). 본문은 "공식 기관 발표"(제목+요약+실무영향+링크) 섹션이 위, "언론 보도"(제목+링크만, 요약 없음) 섹션이 아래 — 한쪽이 0건이면 그 섹션 자체를 뺀다. 제목 `"[Policy Watch] 신규 N건 - YYYY.MM.DD"`의 N은 공식+언론 합계.

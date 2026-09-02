@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from datetime import datetime, timezone, timedelta
 
 from . import _excluded_log, _gap_log
@@ -20,6 +21,7 @@ from ._summarize import summarize
 from .current_standards import build_current_standards
 from ._utils import (apply_applicability_gate, apply_category_caps,
                      apply_company_event_filter, apply_corporate_pr_filter,
+                     apply_foreign_news_filter, apply_local_gov_petition_filter,
                      apply_regulatory_gate, attach_related_news, dedupe,
                      dedupe_similar_news, finalize_item, normalize_news_item)
 from .schedules import build_schedules
@@ -97,20 +99,9 @@ def _log_stage(stage: str, items: list[dict]) -> None:
     print(f"  [필터] {stage}: 합계 {len(items)}건 ({parts})")
 
 
-def build_data_json(items: list[dict]) -> dict:
-    """수집된 raw item 리스트 → site/data.json 전체 구조(메타 제외 조립은 main()에서).
-
-    필터 순서: ADDENDUM-6 §1(적용 대상 게이트, 전 계층) → dedupe(정확일치) →
-    ADDENDUM-5 §5(유사기사 병합) → §1(규제성 게이트) → ADDENDUM-7 §1(개별 기업
-    소식 제외) → ADDENDUM-5 §3(홍보성 제외) → 상한 적용. §1(적용 대상)을
-    맨 앞에 두는 건 §1-1 설계 그대로("카테고리 분류 직후, 다른 모든 필터
-    이전")다. ADDENDUM-5 §1/§3을 §5 뒤로 옮긴 것은 2026-08-31 사용자 지시
-    (SPEC-ADDENDUM-5.md §7 원안은 §1→§3→...→§5 순서였음) — 그래야 §1/§3에
-    걸려 사라질 기사도 §5 중복 병합의 후보에 먼저 포함된다. ADDENDUM-7 §1
-    (개별 기업 소식)은 그 원안 §5 처리순서(규제성 게이트 다음, 홍보성 제외
-    이전)대로 §1과 §3 사이에 끼워 넣는다.
-    """
-    items, excluded = apply_applicability_gate(items)  # ADDENDUM-6 §1, 전 계층
+def _record_excluded(excluded: list[dict]) -> None:
+    """excluded_reason이 채워진 항목들을 _excluded_log에 기록(과다 필터링 검토용).
+    apply_applicability_gate()와 2026-09-02 신규 필터 3종이 공유하는 헬퍼."""
     for it in excluded:
         _excluded_log.record(
             category=it.get("category", ""), title=it.get("title", ""),
@@ -118,6 +109,27 @@ def build_data_json(items: list[dict]) -> dict:
             source=(it.get("source") or {}).get("name"),
             reason=it["excluded_reason"],
         )
+
+
+def build_data_json(items: list[dict]) -> dict:
+    """수집된 raw item 리스트 → site/data.json 전체 구조(메타 제외 조립은 main()에서).
+
+    필터 순서: ADDENDUM-6 §1(적용 대상 게이트, 전 계층) → dedupe(정확일치) →
+    ADDENDUM-5 §5(유사기사 병합) → §1(규제성 게이트) → ADDENDUM-7 §1(개별 기업
+    소식 제외) → 2026-09-02 지자체 건의·민원 제외 → 해외 전용 뉴스 제외 →
+    ADDENDUM-5 §3(홍보성 제외, ESG 개별기업 홍보 문구 포함) → 상한 적용.
+    §1(적용 대상)을 맨 앞에 두는 건 §1-1 설계 그대로("카테고리 분류 직후,
+    다른 모든 필터 이전")다. ADDENDUM-5 §1/§3을 §5 뒤로 옮긴 것은 2026-08-31
+    사용자 지시(SPEC-ADDENDUM-5.md §7 원안은 §1→§3→...→§5 순서였음) — 그래야
+    §1/§3에 걸려 사라질 기사도 §5 중복 병합의 후보에 먼저 포함된다.
+    ADDENDUM-7 §1(개별 기업 소식)은 그 원안 §5 처리순서(규제성 게이트 다음,
+    홍보성 제외 이전)대로 §1과 §3 사이에 끼워 넣는다. 2026-09-02 신규 필터
+    2종(지자체 건의·해외 뉴스)도 같은 자리(§1 이후, §3 이전)에 끼워 넣는다 —
+    개별 기업 소식 제외와 같은 성격("규제 자체가 아니라 프레이밍 문제")이라
+    같은 처리 단계가 맞다.
+    """
+    items, excluded = apply_applicability_gate(items)  # ADDENDUM-6 §1, 전 계층
+    _record_excluded(excluded)
     _log_stage("ADDENDUM-6 §1(적용 대상) 게이트 후", items)
     deduped = dedupe(items)
     deduped = dedupe_similar_news(deduped)  # ADDENDUM-5 §5: L3 유사 기사 병합
@@ -126,7 +138,14 @@ def build_data_json(items: list[dict]) -> dict:
     _log_stage("§1 규제성 게이트 후", deduped)
     deduped = apply_company_event_filter(deduped)  # ADDENDUM-7 §1
     _log_stage("ADDENDUM-7 §1(개별 기업 소식) 제외 후", deduped)
-    deduped = apply_corporate_pr_filter(deduped)  # ADDENDUM-5 §3
+    deduped, excluded = apply_local_gov_petition_filter(deduped)  # 2026-09-02
+    _record_excluded(excluded)
+    _log_stage("지자체 건의·민원 제외 후", deduped)
+    deduped, excluded = apply_foreign_news_filter(deduped)  # 2026-09-02
+    _record_excluded(excluded)
+    _log_stage("해외 전용 뉴스 제외 후", deduped)
+    deduped, excluded = apply_corporate_pr_filter(deduped)  # ADDENDUM-5 §3
+    _record_excluded(excluded)
     _log_stage("§3 홍보성 제외 후", deduped)
     capped = apply_category_caps(deduped)
     # ADDENDUM-4 §4: 공식(L1/L2) 항목에 관련 L3 기사를 연결하고, 그렇게 붙은 L3는
@@ -166,6 +185,14 @@ def build_data_json(items: list[dict]) -> dict:
 
 
 def main() -> None:
+    # 2026-09-02: Windows 콘솔(cp949 등)에서 "✓"/"—" 같은 유니코드 기호를
+    # print()하면 UnicodeEncodeError로 죽는 문제 방지(실측 확인 — 로컬에서
+    # 이 필터 작업을 검증하려고 직접 돌리다 발견). GitHub Actions(Ubuntu,
+    # UTF-8 기본)엔 영향 없음 — reconfigure는 이미 UTF-8이면 사실상 no-op.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # noqa: BLE001 - 콘솔 재설정 실패해도 수집 자체는 계속
+        pass
     print("=== Policy Watch 수집 시작 ===")
     _gap_log.clear()  # 이 프로세스 실행 동안 모인 gap만 반영(재실행 시 누적 방지)
     _excluded_log.clear()  # ADDENDUM-6 §1: 이번 실행에서 제외된 항목만 반영

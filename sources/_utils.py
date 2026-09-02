@@ -9,13 +9,14 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       INCIDENT_KEYWORDS, PROCEDURAL_KEYWORDS, TAX_INVESTIGATION_COMBO,
                       TAX_SUBJECTS, MAX_NEWS_PER_CATEGORY, MAX_TIER4_PER_CATEGORY,
                       ADMIN_NOISE_KEYWORDS, SIMILARITY_THRESHOLD, SUBJECT_SIMILARITY_THRESHOLD,
-                      SIMILARITY_DAY_WINDOW,
+                      SIMILARITY_DAY_WINDOW, LOCAL_GOV_SUBJECT_SIMILARITY_THRESHOLD,
                       RELATED_NEWS_MAX, RELATED_NEWS_DAY_WINDOW, RELATED_NEWS_MIN_SIMILARITY,
                       DISCUSSION_MATERIAL_KEYWORDS, DISCUSSION_OVERRIDE_KEYWORDS,
                       REGULATORY_SIGNALS, CORPORATE_PR_KEYWORDS, CORPORATE_PR_STRONG_SIGNALS,
                       APPLICABILITY, COMPANY_EVENTS, COMPANY_EVENT_STRONG_SIGNALS,
                       MANUFACTURING_ACCOUNTING_CONTEXT, EVENT_ANNOUNCEMENT_STRONG_SIGNALS,
-                      FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS)
+                      FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS,
+                      LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS)
 from . import _esg_roadmap
 
 
@@ -817,10 +818,19 @@ def dedupe_similar_news(items: list[dict]) -> list[dict]:
     (ADDENDUM-5 §5-3):
       (a) title_similarity(정제본) >= SIMILARITY_THRESHOLD(0.55) — 날짜 무관
       (b) extract_subject()가 서로 같고 + published_at이 SIMILARITY_DAY_WINDOW일
-          이내 + title_similarity(정제본) >= SUBJECT_SIMILARITY_THRESHOLD(0.35)
+          이내 + title_similarity(정제본) >= SUBJECT_SIMILARITY_THRESHOLD(0.35).
+          단, 그 주체가 기초자치단체(OO구/OO시/OO군, `_LOCAL_GOV_SUBJECT_RE`)면
+          임계값을 LOCAL_GOV_SUBJECT_SIMILARITY_THRESHOLD(0.20)로 낮춘다
+          (2026-09-02 사용자 지시 — 실측: "송파구, 신축주택 재산세 급증
+          막는다…지방세법 시행령 개정 건의"(국제뉴스) vs "송파구, 신축주택
+          과세표준 상한 적용 건의"(전매신문)가 주체는 일치해도 어절 유사도
+          0.25로 기존 임계값 0.35에 못 미쳐 병합 안 됐다 — 지자체 뉴스는
+          매체마다 리드 문장이 크게 갈려도 같은 사안일 가능성이 높다).
 
-    final_score가 가장 높은 것만 남기고, 남은 항목에 `duplicate_count`/
-    `duplicate_sources`를 기록한다("외 N건 보도" 표시용).
+    살아남는 대표 항목은 신뢰도(trust_score) 우선, 동률이면 final_score
+    우선으로 고른다(2026-09-02 사용자 지시 — "신뢰도 높은 매체를 우선"; 기존엔
+    final_score만 봐서 키워드 점수가 신뢰도보다 앞설 수 있었다). 남은 항목에
+    `duplicate_count`/`duplicate_sources`를 기록한다("외 N건 보도" 표시용).
     """
     news = [it for it in items if layer_of(it) == "L3"]
     others = [it for it in items if layer_of(it) != "L3"]
@@ -831,13 +841,18 @@ def dedupe_similar_news(items: list[dict]) -> list[dict]:
 
     kept: list[dict] = []
     for cat_items in by_cat.values():
-        cat_items = sorted(cat_items, key=lambda x: -x.get("final_score", 0))
+        cat_items = sorted(cat_items, key=lambda x: (-x.get("trust_score", 0), -x.get("final_score", 0)))
         absorbed: set[int] = set()
         for i, it in enumerate(cat_items):
             if i in absorbed:
                 continue
             sources = [it["source"]["name"]]
             subject_i = extract_subject(it["title"])
+            subject_threshold = (
+                LOCAL_GOV_SUBJECT_SIMILARITY_THRESHOLD
+                if subject_i and _LOCAL_GOV_SUBJECT_RE.match(subject_i)
+                else SUBJECT_SIMILARITY_THRESHOLD
+            )
             for j in range(i + 1, len(cat_items)):
                 if j in absorbed:
                     continue
@@ -845,7 +860,7 @@ def dedupe_similar_news(items: list[dict]) -> list[dict]:
                 sim = title_similarity(it["title"], other["title"])
                 is_dup = sim >= SIMILARITY_THRESHOLD  # 조건 (a)
                 if not is_dup and subject_i and subject_i == extract_subject(other["title"]):
-                    if (sim >= SUBJECT_SIMILARITY_THRESHOLD
+                    if (sim >= subject_threshold
                             and _within_days(it.get("published_at"), other.get("published_at"), SIMILARITY_DAY_WINDOW)):
                         is_dup = True  # 조건 (b)
                 if is_dup:
@@ -872,9 +887,93 @@ def apply_regulatory_gate(items: list[dict]) -> list[dict]:
     return [it for it in items if _l3_gate_exempt(it) or has_regulatory_signal(it["title"])]
 
 
-def apply_corporate_pr_filter(items: list[dict]) -> list[dict]:
-    """ADDENDUM-5 §3. §1 통과분 중 타사 홍보성 보도를 제외한다."""
-    return [it for it in items if _l3_gate_exempt(it) or not is_corporate_pr(it["title"])]
+def apply_corporate_pr_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """ADDENDUM-5 §3. §1 통과분 중 타사 홍보성 보도를 제외한다.
+
+    2026-09-02 사용자 지시로 (통과분, 제외분) 튜플 반환으로 변경(기존엔 리스트
+    단독 반환) — 개별 기업 ESG 홍보(예: "지오영, 창사 첫 지속가능경영보고서
+    발간")도 이 함수가 잡도록 CORPORATE_PR_KEYWORDS에 문구를 추가했는데,
+    사용자가 이번 세션 신규 필터 전부에 EXCLUDED_LOG.md 기록을 요청해서
+    맞춰 리팩터링했다(과다 필터링 검토용)."""
+    kept, excluded = [], []
+    for it in items:
+        if _l3_gate_exempt(it) or not is_corporate_pr(it["title"]):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:corporate_pr"))
+    return kept, excluded
+
+
+# ── 지자체 건의·민원 제외 (2026-09-02 사용자 지시) ──────────────────────────
+# "OO구"/"OO시"/"OO군" 형태의 기초자치단체명 단독 주체만 매칭한다(광역단체
+# "서울특별시"/"경기도" 등은 포함 안 함 — 사용자가 예로 든 건 기초자치단체
+# 뉴스라 범위를 그만큼만 좁혔다).
+_LOCAL_GOV_SUBJECT_RE = re.compile(r"^[가-힣]{1,8}(?:구|시|군)$")
+
+
+def is_local_gov_petition(title: str) -> bool:
+    """기초자치단체가 주체이고 건의/촉구/요구/요청/요망이 붙은 기사인지.
+    실측: "송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의" —
+    지방세 자체는 여전히 대상이지만, 지자체가 중앙부처에 "건의"하는 단계는
+    아직 확정된 규제가 아니라 실무적으로 챙길 게 없다(2026-09-02 사용자 지시).
+    """
+    subject = extract_subject(title)
+    if not subject or not _LOCAL_GOV_SUBJECT_RE.match(subject):
+        return False
+    t = _norm(title)
+    return any(_norm(k) in t for k in LOCAL_GOV_PETITION_KEYWORDS)
+
+
+def apply_local_gov_petition_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """L3 전용(공식 소스가 "건의" 단계 뉴스를 낼 일은 없음)."""
+    kept, excluded = [], []
+    for it in items:
+        if _l3_gate_exempt(it) or not is_local_gov_petition(it.get("title", "")):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:local_gov_petition"))
+    return kept, excluded
+
+
+# ── 해외 전용 뉴스 제외 (2026-09-02 사용자 지시) ────────────────────────────
+def _is_foreign_news_domain(domain: str | None) -> bool:
+    if not domain:
+        return False
+    host = domain.lower()
+    if host.startswith("www."):
+        host = host[4:]
+    return any(host == d or host.endswith("." + d) for d in FOREIGN_NEWS_DOMAINS)
+
+
+def is_foreign_news_only(title: str, domain: str | None = None) -> bool:
+    """해외 도메인이거나(예: fr.tradingview.com), 제목에 美/미국/EU/FASB/SEC가
+    있으면서 국내 도입 맥락(APPLICABILITY.foreign_exception_context — 기존
+    "해외기준" 게이트와 같은 목록 재사용)이 없으면 제외 대상.
+
+    IASB는 트리거 목록(FOREIGN_NEWS_SIGNALS)에 없다 — ADDENDUM-7 §3(안 A)이
+    IASB/ISSB를 doc_type="해외기준"으로 유지·분류하기로 이미 결정했고
+    (`is_foreign_standard()` 참고), 여기서 완전 제외하면 그 결정과 충돌한다.
+    실측: "서클 CEO 美 디지털자산 회계기준 개정"(국내 도입 언급 없음).
+    """
+    if _is_foreign_news_domain(domain):
+        return True
+    t = _norm(title)
+    if not any(_norm(k) in t for k in FOREIGN_NEWS_SIGNALS):
+        return False
+    return not any(_norm(k) in t for k in APPLICABILITY["foreign_exception_context"])
+
+
+def apply_foreign_news_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """L3 전용 — 공식 소스(L1/L2)가 해외 도메인이거나 국내 도입 맥락 없이 미국/
+    EU 규제만 다룰 일은 없다."""
+    kept, excluded = [], []
+    for it in items:
+        domain = (it.get("source") or {}).get("domain")
+        if _l3_gate_exempt(it) or not is_foreign_news_only(it.get("title", ""), domain):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:foreign_news"))
+    return kept, excluded
 
 
 def apply_company_event_filter(items: list[dict]) -> list[dict]:
