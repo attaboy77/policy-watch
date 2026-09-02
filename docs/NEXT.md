@@ -171,6 +171,11 @@ KSSB 자발적용 기준서 수집, 법제처 개정이유 수집, AI 요약 43�
   - **버그 발견·수정**: `stateFromURL()`의 `?view=` 파서가 `today`/`all`/`calendar` 하드코딩 허용목록이라 `standards`가 빠져있었음 — `?view=standards` URL을 직접 열면 조용히 `today`로 리셋되는 문제. 배열 기반 `indexOf` 체크로 수정.
   - `tests/test_current_standards.py` 신규 23개(합성 데이터 — 실제 크롤링 결과에 테스트가 흔들리지 않도록), `tests/test_schema.py`에 `current_standards` 최소 픽스처 추가. 테스트 389→412개 통과. 실제 `site/data.json`(153건)에 대입해 스키마 0 errors 확인.
   - **미검증**: 브라우저 렌더링(Claude in Chrome 확장 설치를 사용자가 재차 거절 — 이번 세션엔 다시 권하지 않기로 함). 코드 리뷰(HTML id 교차검증, JS 문법 재확인)로만 확인한 상태 — 사용자가 직접 열어서 4개 섹션 표가 제대로 나오는지 확인 필요.
+  - **버그**: 사용자가 실제로 열어보니 4개 표가 전부 비어있었음 — 원인은 `site/data.json`이 이 기능 커밋보다 먼저 돈 그날 아침 크롤링 결과라 `current_standards` 필드 자체가 없었던 것(코드 버그 아님). 재크롤링 없이 기존 커밋된 items에 `build_current_standards()`를 그대로 적용해 필드만 백필(순수 추가 diff 234줄, 스키마 0 errors) — 다음 실제 크롤링부터는 `main.py`가 자동으로 채운다.
+  - **화면 확인 후 수정 2건**(사용자 지시):
+    1. 내부회계 적용지침에서 **"중소기업" 문서 2건 제외**(팜한농은 중소기업 아님) — `build_icfr_documents()`에 제목 필터 추가.
+    2. KSSB 시행(예정) 칸에 **대상 범위 병기** — "2028.01.01 (연결자산 10조원 이상 코스피부터)" 형태. `data/esg_roadmap.yml` 1차 마일스톤에 `scope_note` 필드 신규 추가(단일 출처), `current_standards.py`가 `is_roadmap_estimate`인 항목에만 `effective_date_scope_note`로 붙여 반환 — 확정 시행일과 섞이지 않게.
+  - 테스트 412→416개(SME 제외 1건 + scope_note 3건), `site/data.json` 재백필 완료.
 
 - **헤더 "오늘 챙길 것" 한 줄 추가** — 사용자가 형식 지정("D-3 회계기준위원회 회의 · 이번 주 신규 5건", 가장 임박한 일정 + 최근 신규 건수만). `.nav` 바로 아래 `.nav-highlight` 줄 신설. 가장 임박한 일정은 `sortSchedules().future[0]`(회의 예정/로드맵 예정 포함, D-day는 기존 `dday()`/`ddayLabel()` 재사용), 신규 건수는 "이번 주"(월요일 시작)를 `DATA.meta.generated_at` 기준일로 계산(클라이언트 로컬 날짜가 아니라 실제 수집일 기준 — "오늘의 정책동향"과 동일 원칙). 실측(2026-09-02 데이터 기준): "D-2 제9회 회계기준위원회(...) · 이번 주 신규 1건". 테스트 345개 통과, 정적 파일 200 확인. **미검증**: 브라우저 렌더링(줄바꿈 없이 ellipsis로 잘리는지 등) — 사용자 확인 필요.
 

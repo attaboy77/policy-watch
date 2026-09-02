@@ -681,7 +681,10 @@
     var s = section || { catalog_url: "", recent: [] };
     var rows = s.recent.length
       ? s.recent.map(function (r) {
-          var eff = esc(fmtDot(r.effective_date)) + (r.is_roadmap_estimate ? " (로드맵 예정)" : "");
+          // 2026-09-02 사용자 지시: 시행 예정일만 보이면 팜한농 자체 적용일로
+          // 오독할 수 있어(팜한농은 1차 대상이 아니라 후속 단계) 대상 범위를
+          // 괄호로 병기한다 — "(로드맵 예정)" 같은 모호한 표현보다 구체적.
+          var eff = esc(fmtDot(r.effective_date)) + (r.effective_date_scope_note ? " (" + esc(r.effective_date_scope_note) + ")" : "");
           return "<tr><td>" + esc(r.title) + "</td>" +
             '<td class="tnum">' + esc(fmtDot(r.issued_date)) + "</td>" +
             '<td class="tnum">' + eff + "</td>" +

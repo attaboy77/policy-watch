@@ -77,6 +77,26 @@ class TestBuildEsgStandards:
                         is_roadmap_estimate=True)]
         assert cs.build_esg_standards(items)["recent"][0]["is_roadmap_estimate"] is True
 
+    def test_scope_note_attached_when_roadmap_estimate(self, monkeypatch):
+        # 2026-09-02 사용자 지시: 시행 예정일만 보면 팜한농 자체 적용일로
+        # 오독할 수 있어 대상 범위(data/esg_roadmap.yml의 scope_note)를
+        # 병기한다 — 실제 yml 파일 문구에 테스트가 흔들리지 않도록 monkeypatch.
+        monkeypatch.setattr(cs._esg_roadmap, "load", lambda: {"milestones": [{"scope_note": "테스트 대상 범위"}]})
+        items = [_item(category="esg", doc_type="자발적용", title="제1호", is_roadmap_estimate=True)]
+        assert cs.build_esg_standards(items)["recent"][0]["effective_date_scope_note"] == "테스트 대상 범위"
+
+    def test_scope_note_absent_when_not_roadmap_estimate(self, monkeypatch):
+        # 확정 시행일(로드맵 추정이 아닌 경우)에는 "대상 범위" 개념 자체가
+        # 없다 — 붙이면 안 된다.
+        monkeypatch.setattr(cs._esg_roadmap, "load", lambda: {"milestones": [{"scope_note": "테스트 대상 범위"}]})
+        items = [_item(category="esg", doc_type="자발적용", title="제1호", is_roadmap_estimate=False)]
+        assert cs.build_esg_standards(items)["recent"][0]["effective_date_scope_note"] is None
+
+    def test_scope_note_none_when_roadmap_yml_missing_field(self, monkeypatch):
+        monkeypatch.setattr(cs._esg_roadmap, "load", lambda: {})
+        items = [_item(category="esg", doc_type="자발적용", title="제1호", is_roadmap_estimate=True)]
+        assert cs.build_esg_standards(items)["recent"][0]["effective_date_scope_note"] is None
+
     def test_catalog_url_present(self):
         assert cs.build_esg_standards([])["catalog_url"] == cs.ESG_CATALOG_URL
 
@@ -181,13 +201,25 @@ class TestBuildIcfrDocuments:
         assert docs[0]["revision_date"] == "2025-01-08"
 
     def test_distinct_documents_with_same_date_not_merged(self):
-        # "중소기업" 유무로 실제 서로 다른 문서 — 날짜가 같아도 따로 남아야 한다.
+        # 접두어 유무로 실제 서로 다른 문서 — 날짜가 같아도 따로 남아야 한다.
+        # ("중소기업" 접두어는 아래 SME 제외 테스트가 따로 검증하므로 여기서는
+        # 일부러 다른 접두어를 쓴다.)
         items = [
             self._icfr_item("내부회계관리제도 설계 및 운영 적용기법 전문(2021.5.11. 개정)", doc_type="적용지침"),
-            self._icfr_item("중소기업 내부회계관리제도 설계 및 운영 적용기법 전문(2021.5.11. 제정)", doc_type="적용지침"),
+            self._icfr_item("지주회사 내부회계관리제도 설계 및 운영 적용기법 전문(2021.5.11. 제정)", doc_type="적용지침"),
         ]
         buckets = {b["label"]: b["documents"] for b in cs.build_icfr_documents(items)["buckets"]}
         assert len(buckets["적용지침"]) == 2
+
+    def test_excludes_sme_titled_documents(self):
+        # 2026-09-02 사용자 지시: 팜한농은 중소기업이 아니므로 "중소기업"
+        # 문서는 다른 조건과 무관하게 제외한다.
+        items = [
+            self._icfr_item("중소기업 내부회계관리제도 설계 및 운영 적용기법 전문(2021.5.11. 제정)", doc_type="적용지침"),
+            self._icfr_item("중소기업 내부회계관리제도 평가 및 보고 적용기법 전문(2022.2.7. 개정)", doc_type="적용지침"),
+        ]
+        buckets = {b["label"]: b["documents"] for b in cs.build_icfr_documents(items)["buckets"]}
+        assert all(docs == [] for docs in buckets.values())
 
     def test_display_order_is_fixed_regardless_of_input_order(self):
         items = [

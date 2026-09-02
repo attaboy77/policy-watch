@@ -23,6 +23,8 @@ from __future__ import annotations
 import re
 from typing import Callable
 
+from . import _esg_roadmap
+
 KIFRS_CATALOG_URL = "https://db.kasb.or.kr/standard"
 ESG_CATALOG_URL = "https://db.kasb.or.kr/esg"
 ICFR_CATALOG_URL = "https://www.k-icfr.org/sub/menu/guideline.asp"
@@ -65,14 +67,25 @@ def build_kifrs_standards(items: list[dict]) -> dict:
     return {"catalog_url": KIFRS_CATALOG_URL, "recent": recent}
 
 
+def _esg_roadmap_scope_note() -> str | None:
+    """data/esg_roadmap.yml 1차 마일스톤의 대상 범위 문구. 2026-09-02 사용자
+    지시 — 시행 예정일만 보이면 팜한농 자체 적용일로 오독할 수 있어(팜한농은
+    1차 대상이 아니라 후속 단계) 표에 "2028.01.01 (연결자산 10조원 이상
+    코스피부터)"처럼 대상 범위를 병기한다."""
+    milestones = (_esg_roadmap.load().get("milestones") or [])
+    return milestones[0].get("scope_note") if milestones else None
+
+
 def build_esg_standards(items: list[dict]) -> dict:
     """KSSB 자발적용 기준서(제1호/제2호) — 있는 만큼 전부."""
+    scope_note = _esg_roadmap_scope_note()
     recent = sorted(
         (
             {
                 "title": it["title"],
                 "issued_date": it.get("published_at"),
                 "effective_date": it.get("effective_date"),
+                "effective_date_scope_note": scope_note if it.get("is_roadmap_estimate") else None,
                 "is_roadmap_estimate": bool(it.get("is_roadmap_estimate")),
                 "url": _item_link(it),
             }
@@ -160,13 +173,18 @@ def _icfr_doc_base_title(title: str) -> str:
 def build_icfr_documents(items: list[dict]) -> dict:
     """모범규준/적용지침 doc_type 항목 중 3분류 키워드에 걸리는 것만 채택하고,
     같은 문서의 재게시본(날짜만 다른 동일 base title)은 최신 published_at
-    하나만 남긴다."""
+    하나만 남긴다.
+
+    2026-09-02 사용자 지시: 제목에 "중소기업"이 들어간 문서(중소기업 전용
+    적용기법 등)는 제외한다 — 팜한농은 중소기업이 아니라 해당 없음."""
     latest_by_base: dict[str, dict] = {}
     bucket_of_base: dict[str, str] = {}
     for it in items:
         if it.get("category") != "icfr" or it.get("doc_type") not in ("모범규준", "적용지침"):
             continue
         title = it.get("title", "")
+        if "중소기업" in title:
+            continue
         bucket = _icfr_bucket_of(title)
         if not bucket:
             continue

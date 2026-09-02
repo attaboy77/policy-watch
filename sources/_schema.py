@@ -190,11 +190,14 @@ _CURRENT_STANDARDS_SCHEMA = {
                     "type": "array",
                     "items": {
                         "type": "object",
-                        "required": ["title", "issued_date", "effective_date", "is_roadmap_estimate", "url"],
+                        "required": ["title", "issued_date", "effective_date", "effective_date_scope_note", "is_roadmap_estimate", "url"],
                         "properties": {
                             "title": {"type": "string"},
                             "issued_date": {"type": ["string", "null"]},
                             "effective_date": {"type": ["string", "null"]},
+                            # 2026-09-02: 로드맵 추정 시행일의 대상 범위 설명(예: "연결자산
+                            # 10조원 이상 코스피부터") — 확정 시행일이면 null.
+                            "effective_date_scope_note": {"type": ["string", "null"]},
                             "is_roadmap_estimate": {"type": "boolean"},
                             "url": {"type": ["string", "null"]},
                         },
