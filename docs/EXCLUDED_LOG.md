@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-02 08:46:34 +0900
+생성 시각: 2026-09-02 13:41:34 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -14,7 +14,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 |---|---|---|---|
 | kifrs | v.daum.net | 교보생명이 인수한 SBI저축은행, 회계 기준 바뀌자 순익 360억→19억 왜? - v.daum.net | https://news.google.com/rss/articles/CBMiT0FVX3lxTFBqOVBramVhY3JyaGdzUm1Hd3dHY0JrS0ptRnJuOUd5UkRxVTRUYXFsNUlSUVhrakhUOHcxTGF2cXdpNHRpdDM4ODA4bURTeUk?oc=5 |
 | icfr | news2day.co.kr | 한국캐피탈, 내부회계관리제도 고도화 나서…투명성·신뢰성 제고 - 뉴스투데이 | https://news.google.com/rss/articles/CBMiXkFVX3lxTE1fVjl2UnRnek5jelpoRk9reU55VW5IR2ZuSGpGbkVzNkVuYllnbExVWUZlMTU0N2JLalhEdmhwSmtPcDdYQ01ua3RJTkU0dFBxUVBQdEtmdHBaOWl5Z1E?oc=5 |
-| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - sedaily.com | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
+| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
 | esg | segye.com | 증권사 지속가능경영…‘포괄적 ESG 활동’서 본업 연계 ‘지속가능금융... | https://www.segye.com/newsView/20260824517331?OutUrl=naver |
 
 ## excluded:foreign (2건)
@@ -22,7 +22,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | esg | 한국회계기준원 | EFRAG, 비EU 기업 대상 ESRS-40a (N-ESRS) 공개초안 발표 및 의견조회 개시 | https://www.kasb.or.kr/front/board/comm010View.do?seq=2172 |
-| kifrs | coindesk.com | 미국 회계 기준 기관, 스테이블코인을 '현금 등가물'로 인식하는 방안 제안 - CoinDesk | https://news.google.com/rss/articles/CBMixgFBVV95cUxQTXd5QVJqQ2pOR2dqUi1NMWJBV01COU04UXRmZER4RXNNdzdfMmJzZXpNU3pnZmNxQ25CQUhxcDJNdTJJbTd5QlI5TFdRaXMxbFRvOXdUZWtGaVdGazFHUFFIazVZMFJ6ZzZSQzNSS0FmTW9iUUg1Yy1qUkRIU05xM1k4MVpITmF0bmNaNlBtV3hUM3AzX1BXaGZnWXA4YWJXR3l5OGJ2S2d2LXNybW05eGsyaFBaa2xhLU1HMzlROFZnRXh2Tnc?oc=5 |
+| kifrs | coindesk.com | 미국 회계 기준 기관, 스테이블코인을 '현금 등가물'로 인식하는 방안 제안 - coindesk.com | https://news.google.com/rss/articles/CBMixgFBVV95cUxQTXd5QVJqQ2pOR2dqUi1NMWJBV01COU04UXRmZER4RXNNdzdfMmJzZXpNU3pnZmNxQ25CQUhxcDJNdTJJbTd5QlI5TFdRaXMxbFRvOXdUZWtGaVdGazFHUFFIazVZMFJ6ZzZSQzNSS0FmTW9iUUg1Yy1qUkRIU05xM1k4MVpITmF0bmNaNlBtV3hUM3AzX1BXaGZnWXA4YWJXR3l5OGJ2S2d2LXNybW05eGsyaFBaa2xhLU1HMzlROFZnRXh2Tnc?oc=5 |
 
 ## excluded:industry_specific (7건)
 
