@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-07 13:46:56 +0900
+생성 시각: 2026-09-07 14:58:22 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -8,20 +8,27 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 있으면(오제외) 해당 키워드를 `sources/_config.py`의 `APPLICABILITY`에서
 빼거나 예외 조건을 추가할 것(§9-2).
 
-## excluded:corporate_pr (3건)
+## excluded:corporate_pr (8건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | kifrs | news.koreanbar.or.kr | [로펌소식] 지평, ‘AI회계감리대응센터’ 확대 개편… 회계 관련 규제 대응 강화 - 법조신문 | https://news.google.com/rss/articles/CBMib0FVX3lxTE12bVNaT28xenRLNXZMRTZFN2JWRTNDdjY5d3RmTG9iQlBsN3l6RWZxQUdnZzVjSmlBdzMyWXprTHJlOUNMT2tSeXZRLUwxSENTTXpEYUVUQW51bU8wemZTQ1FZTjVtNDRPbHdSNjhsaw?oc=5 |
 | esg | 임팩트온 | 【클릭ESG】“누가 읽기는 하나요”…지속가능경영보고서 발간 뒤의 씁쓸한 뒷맛 - 임팩트온 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE00Y0xzY3VmTWd3c2pfSWJJcEpJbXZhTGpiSTBOV29ZWk9pdDRoTHAzNHpsUWFnV3hEdlQ3WVJOVTdmZ1l5V3J6ZFdKTFcwcF9CdXBQVE1FTVFQcEI5bFpQeGNNRndHdzYz0gFsQVVfeXFMTUI0Sm1uSk1GbXJWYVZ6U3MyaldBVUN2czEwMm9lT0VSTnVaT1BZQ1NLdm9hQ29VRWZqS2k3ZlRPUTR6UkE4WlFiMTk0WHVZOW9VQkRXSzZTcVNQSHdMV0t1VVVsTVV0SU9VMDNp?oc=5 |
-| esg | v.daum.net | 지오영, 창사 첫 지속가능경영보고서 발간...ESG 중장기 로드맵 제시 - v.daum.net | https://news.google.com/rss/articles/CBMiRkFVX3lxTE5WWmdYRDg2N0QyUzhUNGFfMjJMWWxTRDdFRTBsNHhPU1lMXzQ0UnQzMVBZWmdyTmRjMjY5b1ZtOGZXajZnNHc?oc=5 |
+| esg | 한국경제 | 오스템임플란트, 지속가능경영보고서 발간…이중중대성 평가 도입 | https://www.hankyung.com/article/202608138384i |
+| esg | cenews.kr | 롯데건설, 글로벌 ESG 공시 기준 담은 지속가능경영보고서 발간 - 건설이코노미뉴스 | https://news.google.com/rss/articles/CBMiZkFVX3lxTFA2MHZhNXlOZncwT2hiUEYzeHUyeUhsci1lQTlLTmxHRzliR21Hc284ck8yaVgxSmJQT2ttRnZncGRJc3pOM0FwQWlpTUhGOXNXeU5OWVNQM2tFempCS25rQ1JINEhrZw?oc=5 |
+| esg | newsis.com | "중장기 로드맵"…지오영, 지속가능경영보고서 발간 - 뉴시스 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE0yM2NHUkp4SGtoT2xlRUtrWERLMlBTbF9ZOHUxLWRZWnR5UUYyd1h3Mmg2Y3p1aG9selZmWHEtZkQtOVlmMXhSYUFPeWhoN05kcWFiYnpHd1hjVmNENWVvdNIBeEFVX3lxTFAtbVZ3elkxUkYyQkwzMnp5b3RvdUZhclROdkdFU0s4c2dPeENyeHM2ZE9qOWdPTGRBQnM2VWR6Z18zZW10Mmd3MDJ6dWZVOUlULUFOVzNOVnpST0doVC1CYlJRWTlOVDU2T2pRWFFHLXZfa1QzcnJsTQ?oc=5 |
+| esg | cstimes.com | 오스템임플란트, ESG 공시 항목 70% 확대…지속가능경영보고서 발간 | https://www.cstimes.com/news/articleView.html?idxno=716698 |
+| esg | kpenews.com | 오스템임플란트, ESG 성과 담은 중장기 로드맵 공개..‘지속가능경영 보... | https://kpenews.com/View.aspx?No=4184683 |
+| esg | youthdaily.co.kr | 지속가능경영 고도화·글로벌 경쟁력 강화…오스템임플란트, '글로벌 To... | https://www.youthdaily.co.kr/news/article.html?no=225235 |
 
-## excluded:financial (2건)
+## excluded:financial (4건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| kifrs | etnews.com | 수협, 91개 조합 회계기준 표준화…상호금융 위험관리 정교화 - 전자신문 | https://news.google.com/rss/articles/CBMiTkFVX3lxTFBWYllUdGlNdlNWZTR5NU9yMlVNY3ZMZndyYUNYUkhmRHVOcG9wUHRvOHp4NldiVTJWYWhpdWc0ekN0bVB4aUhLU0RlTzhxUQ?oc=5 |
+| kifrs | etnews.com | 수협, 91개 조합 회계기준 표준화…상호금융 위험관리 정교화 - etnews.com | https://news.google.com/rss/articles/CBMiTkFVX3lxTFBWYllUdGlNdlNWZTR5NU9yMlVNY3ZMZndyYUNYUkhmRHVOcG9wUHRvOHp4NldiVTJWYWhpdWc0ekN0bVB4aUhLU0RlTzhxUQ?oc=5 |
 | kifrs | v.daum.net | 교보생명이 인수한 SBI저축은행, 회계 기준 바뀌자 순익 360억→19억 왜? - v.daum.net | https://news.google.com/rss/articles/CBMiT0FVX3lxTFBqOVBramVhY3JyaGdzUm1Hd3dHY0JrS0ptRnJuOUd5UkRxVTRUYXFsNUlSUVhrakhUOHcxTGF2cXdpNHRpdDM4ODA4bURTeUk?oc=5 |
+| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
+| esg | segye.com | 증권사 지속가능경영…‘포괄적 ESG 활동’서 본업 연계 ‘지속가능금융... | https://www.segye.com/newsView/20260824517331?OutUrl=naver |
 
 ## excluded:foreign (1건)
 
