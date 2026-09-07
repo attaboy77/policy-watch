@@ -1,55 +1,55 @@
 {
   "kasb": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-07T14:51:34+09:00",
+    "last_success_at": "2026-09-08T08:52:00+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
   "fss": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-07T14:51:34+09:00",
+    "last_success_at": "2026-09-08T08:52:00+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
   "moef": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-07T14:51:34+09:00",
+    "last_success_at": "2026-09-08T08:52:00+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
   "nts": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-07T14:51:34+09:00",
+    "last_success_at": "2026-09-08T08:52:00+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
   "fsc": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-07T14:51:34+09:00",
+    "last_success_at": "2026-09-08T08:52:00+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
   "policy_briefing": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-07T14:51:34+09:00",
+    "last_success_at": "2026-09-08T08:52:00+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
   "law_api": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-07T14:51:34+09:00",
+    "last_success_at": "2026-09-08T08:52:00+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
   "google_news": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-07T14:51:34+09:00",
+    "last_success_at": "2026-09-08T08:52:00+09:00",
     "last_failure_at": "2026-09-07T13:41:35+09:00",
     "last_failure_reason": null
   },
   "naver_news": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-07T14:51:34+09:00",
+    "last_success_at": "2026-09-08T08:52:00+09:00",
     "last_failure_at": "2026-09-07T13:44:17+09:00",
     "last_failure_reason": null
   }
