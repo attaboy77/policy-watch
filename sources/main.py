@@ -14,8 +14,8 @@ import os
 import sys
 from datetime import datetime, timezone, timedelta
 
-from . import _excluded_log, _gap_log
-from ._config import CATEGORIES, COLLECT_WINDOW_DAYS
+from . import _excluded_log, _gap_log, _source_health
+from ._config import CATEGORIES, COLLECT_WINDOW_DAYS, SOURCE_LABELS
 from ._schema import validate as validate_schema
 from ._summarize import summarize
 from .current_standards import build_current_standards
@@ -55,38 +55,74 @@ def _now_kst_iso() -> str:
     return datetime.now(_KST).isoformat(timespec="seconds")
 
 
+def _use_fallback(name: str, reason: str, cache: dict, health: dict, now_iso: str,
+                   items: list[dict], sources_failed: list[dict]) -> None:
+    """소스 실패 공통 처리(2026-09-07): 연속 실패 횟수 갱신 + 캐시에 어제 성공분이
+    있으면 그대로 이번 실행 items에 합쳐 "그 소스만 0건"이 되는 걸 막는다.
+    캐시가 없으면(이 소스가 아직 한 번도 성공한 적 없음) 어쩔 수 없이 0건 그대로."""
+    consecutive = _source_health.record_failure(health, name, reason, now_iso)
+    label = SOURCE_LABELS.get(name, name)
+    fallback_items = cache.get(name) or []
+    entry = {"name": name, "reason": reason, "consecutive_failures": consecutive}
+    if fallback_items:
+        items.extend(fallback_items)
+        entry["used_fallback"] = True
+        entry["fallback_count"] = len(fallback_items)
+        print(f"[main] {label}({name}) 수집 실패({reason}) → 전일 캐시 {len(fallback_items)}건으로 대체 "
+              f"(연속 {consecutive}일째 실패)")
+    else:
+        entry["used_fallback"] = False
+        print(f"[main] {label}({name}) 수집 실패({reason}) → 캐시된 이전 데이터 없음, 0건 "
+              f"(연속 {consecutive}일째 실패)")
+    sources_failed.append(entry)
+
+
 def collect_all() -> tuple[list[dict], list[str], list[dict]]:
-    """모든 소스를 독립적으로 수집한다. 하나가 죽어도 나머지는 계속 진행(SPEC §9-4)."""
+    """모든 소스를 독립적으로 수집한다. 하나가 죽어도 나머지는 계속 진행(SPEC §9-4).
+
+    2026-09-07: 소스가 실패하면 예전처럼 0건으로 두지 않고, 마지막으로 성공했을
+    때 캐시해둔 결과(`data/source_cache.json`)를 그대로 쓴다 — id가 유지되므로
+    다음 실행에서 그 소스가 다시 살아나도 notify_mail이 "신규"로 오판하지 않는다.
+    """
     items: list[dict] = []
     sources_ok: list[str] = []
     sources_failed: list[dict] = []
+    cache = _source_health.load_cache()
+    health = _source_health.load_health()
+    now_iso = _now_kst_iso()
 
     for name, fetch_fn in OFFICIAL_SOURCES:
         try:
             got = fetch_fn()
             items.extend(got)
             sources_ok.append(name)
+            cache[name] = got
+            _source_health.record_success(health, name, now_iso)
         except Exception as exc:  # noqa: BLE001 - 소스 단위 격리
-            print(f"[main] {name} 수집 실패: {exc}")
-            sources_failed.append({"name": name, "reason": str(exc)})
+            _use_fallback(name, str(exc), cache, health, now_iso, items, sources_failed)
 
     for name, fetch_all_fn, source_type in NEWS_SOURCES:
         try:
             by_category = fetch_all_fn()
-            got_any = False
-            for _cat, raw_items in by_category.items():
-                for raw in raw_items:
-                    items.append(normalize_news_item(raw, source_type=source_type))
-                    got_any = True
-            if got_any:
+            normalized = [
+                normalize_news_item(raw, source_type=source_type)
+                for raw_items in by_category.values()
+                for raw in raw_items
+            ]
+            if normalized:
+                items.extend(normalized)
                 sources_ok.append(name)
+                cache[name] = normalized
+                _source_health.record_success(health, name, now_iso)
             else:
                 # 전부 빈 결과 — naver_news는 자격증명 없으면 조용히 빈 dict를 준다(graceful degradation).
-                sources_failed.append({"name": name, "reason": "결과 0건(자격증명 미설정 또는 응답 없음)"})
+                _use_fallback(name, "결과 0건(자격증명 미설정 또는 응답 없음)",
+                              cache, health, now_iso, items, sources_failed)
         except Exception as exc:  # noqa: BLE001
-            print(f"[main] {name} 수집 실패: {exc}")
-            sources_failed.append({"name": name, "reason": str(exc)})
+            _use_fallback(name, str(exc), cache, health, now_iso, items, sources_failed)
 
+    _source_health.save_cache(cache)
+    _source_health.save_health(health)
     return items, sources_ok, sources_failed
 
 

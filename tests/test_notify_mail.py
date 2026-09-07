@@ -58,6 +58,62 @@ class TestFindNewItems:
         assert nm.find_new_items(prev, current) == []
 
 
+class TestLoadMeta:
+    def test_missing_path_returns_empty(self, tmp_path):
+        assert nm.load_meta(str(tmp_path / "nope.json")) == {}
+
+    def test_none_path_returns_empty(self):
+        assert nm.load_meta(None) == {}
+
+    def test_malformed_json_returns_empty_not_raise(self, tmp_path):
+        p = tmp_path / "broken.json"
+        p.write_text("{not valid", encoding="utf-8")
+        assert nm.load_meta(str(p)) == {}
+
+    def test_reads_meta_field(self, tmp_path):
+        p = tmp_path / "data.json"
+        p.write_text(json.dumps({"items": [], "meta": {"sources_ok": ["kasb"]}}), encoding="utf-8")
+        assert nm.load_meta(str(p)) == {"sources_ok": ["kasb"]}
+
+    def test_missing_meta_field_returns_empty(self, tmp_path):
+        p = tmp_path / "data.json"
+        p.write_text(json.dumps({"items": []}), encoding="utf-8")
+        assert nm.load_meta(str(p)) == {}
+
+
+class TestFallbackNoticeLines:
+    def test_no_sources_failed_returns_empty(self):
+        assert nm.fallback_notice_lines({}) == []
+
+    def test_failed_without_fallback_ignored(self):
+        meta = {"sources_failed": [{"name": "naver_news", "reason": "x", "used_fallback": False}]}
+        assert nm.fallback_notice_lines(meta) == []
+
+    def test_fallback_used_produces_line_with_known_label(self):
+        meta = {"sources_failed": [
+            {"name": "nts", "reason": "timeout", "used_fallback": True, "consecutive_failures": 1},
+        ]}
+        lines = nm.fallback_notice_lines(meta)
+        assert lines == ["국세청 수집 실패로 전일 데이터 사용 (연속 1일째)"]
+
+    def test_unknown_source_name_falls_back_to_raw_name(self):
+        meta = {"sources_failed": [
+            {"name": "mystery_source", "reason": "x", "used_fallback": True, "consecutive_failures": 3},
+        ]}
+        lines = nm.fallback_notice_lines(meta)
+        assert lines == ["mystery_source 수집 실패로 전일 데이터 사용 (연속 3일째)"]
+
+    def test_multiple_fallback_sources_each_get_a_line(self):
+        meta = {"sources_failed": [
+            {"name": "nts", "reason": "x", "used_fallback": True, "consecutive_failures": 1},
+            {"name": "google_news", "reason": "y", "used_fallback": True, "consecutive_failures": 2},
+        ]}
+        assert nm.fallback_notice_lines(meta) == [
+            "국세청 수집 실패로 전일 데이터 사용 (연속 1일째)",
+            "구글 뉴스 수집 실패로 전일 데이터 사용 (연속 2일째)",
+        ]
+
+
 class TestIsOfficial:
     def test_official_type_true(self):
         assert nm.is_official(_item(source={"type": "official"})) is True
@@ -154,6 +210,16 @@ class TestBuildBodyText:
         body = nm.build_body_text([_item()], [], "https://dash.example")
         assert "이 메일은 신규 항목이 있을 때만 발송됩니다" in body
 
+    def test_no_fallback_lines_by_default(self):
+        body = nm.build_body_text([_item()], [], "https://dash.example")
+        assert "전일 데이터 사용" not in body
+
+    def test_fallback_lines_appear_before_dashboard(self):
+        body = nm.build_body_text([_item()], [], "https://dash.example",
+                                   fallback_lines=["국세청 수집 실패로 전일 데이터 사용 (연속 1일째)"])
+        assert "국세청 수집 실패로 전일 데이터 사용 (연속 1일째)" in body
+        assert body.index("전일 데이터 사용") < body.index("https://dash.example")
+
 
 class TestBuildBodyHtml:
     """HTML 버전 — 2026-09-02 지시: URL을 그대로 노출하지 않고 제목 자체에
@@ -203,6 +269,16 @@ class TestBuildBodyHtml:
     def test_dashboard_link_is_anchor(self):
         body = nm.build_body_html([_item()], [], "https://dash.example")
         assert '<a href="https://dash.example"' in body
+
+    def test_no_fallback_lines_by_default(self):
+        body = nm.build_body_html([_item()], [], "https://dash.example")
+        assert "전일 데이터 사용" not in body
+
+    def test_fallback_lines_appear_before_dashboard(self):
+        body = nm.build_body_html([_item()], [], "https://dash.example",
+                                   fallback_lines=["국세청 수집 실패로 전일 데이터 사용 (연속 1일째)"])
+        assert "국세청 수집 실패로 전일 데이터 사용 (연속 1일째)" in body
+        assert body.index("전일 데이터 사용") < body.index("https://dash.example")
 
     def test_title_special_chars_are_escaped(self):
         it = _item(title="A & B <제정>", urls={"official": None, "news": None})
@@ -329,6 +405,31 @@ class TestRunGating:
         monkeypatch.setenv("PREV_DATA_JSON", str(tmp_path / "nope.json"))
         nm._run()
         assert calls == []
+
+    def test_fallback_notice_reaches_sent_body(self, monkeypatch, tmp_path):
+        """2026-09-07: meta.sources_failed에 used_fallback=True가 있으면 실제로
+        발송되는 본문(text/html 둘 다)에 안내 줄이 들어가는지 종단 검증."""
+        calls = self._patch_send(monkeypatch)
+        monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
+        monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
+        monkeypatch.setenv("MAIL_TO", "a@x.com")
+        monkeypatch.delenv("FORCE_MAIL", raising=False)
+        current = tmp_path / "current.json"
+        prev = tmp_path / "prev.json"
+        current.write_text(json.dumps({
+            "items": [_item(id="a"), _item(id="b")],
+            "meta": {"sources_failed": [
+                {"name": "nts", "reason": "timeout", "used_fallback": True, "consecutive_failures": 2},
+            ]},
+        }), encoding="utf-8")
+        self._write_data(prev, [_item(id="a")])
+        monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
+        monkeypatch.setenv("PREV_DATA_JSON", str(prev))
+        nm._run()
+        assert len(calls) == 1
+        (_subject, text_body, html_body, *_rest), _ = calls[0]
+        assert "국세청 수집 실패로 전일 데이터 사용 (연속 2일째)" in text_body
+        assert "국세청 수집 실패로 전일 데이터 사용 (연속 2일째)" in html_body
 
     def test_send_failure_does_not_raise_via_main(self, monkeypatch, tmp_path):
         monkeypatch.setattr(nm, "send_via_gmail", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("smtp down")))

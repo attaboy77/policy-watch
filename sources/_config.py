@@ -392,6 +392,21 @@ DEFAULT_TIER, DEFAULT_TRUST = 5, 20
 
 COLLECT_WINDOW_DAYS = 90     # 수집 기간
 
+# 2026-09-07: 소스 실패 로그/메일 알림에서 사람이 읽을 이름으로 쓰기 위한 매핑
+# (main.py의 OFFICIAL_SOURCES/NEWS_SOURCES 키 → 한글 표시명). _source_health.py와
+# notify_mail.py가 공유한다 — 새 소스를 추가하면 여기도 같이 추가할 것.
+SOURCE_LABELS = {
+    "kasb": "회계기준원(KASB)",
+    "fss": "k-icfr.org(내부회계 모범규준)",
+    "moef": "기획재정부",
+    "nts": "국세청",
+    "fsc": "금융위원회",
+    "policy_briefing": "정책브리핑",
+    "law_api": "법제처",
+    "google_news": "구글 뉴스",
+    "naver_news": "네이버 뉴스",
+}
+
 # ── 계층별 상한 (SPEC-ADDENDUM.md §1) ───────────────────────────────────────
 # L1(공식 원문)/L2(공식 보도자료)는 무조건 노출·노이즈 필터 면제·상한 미적용.
 # L3(뉴스)만 상한을 적용한다 — 기존 MAX_ITEMS_PER_CATEGORY(60)를 대체.

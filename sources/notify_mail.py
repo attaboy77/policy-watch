@@ -37,7 +37,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
 
-from ._config import CATEGORIES
+from ._config import CATEGORIES, SOURCE_LABELS
 
 _KST = timezone(timedelta(hours=9))
 DEFAULT_DASHBOARD_URL = "https://attaboy77.github.io/policy-watch/"
@@ -59,6 +59,33 @@ def load_items(path: str | None) -> list[dict]:
     except (OSError, json.JSONDecodeError) as exc:
         print(f"[notify_mail] {path} 읽기 실패: {exc}")
         return []
+
+
+def load_meta(path: str | None) -> dict:
+    """load_items()와 짝 — 같은 파일에서 meta만 뽑아온다(sources_failed 확인용)."""
+    if not path or not os.path.exists(path):
+        return {}
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f).get("meta", {})
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"[notify_mail] {path} 읽기 실패: {exc}")
+        return {}
+
+
+def fallback_notice_lines(meta: dict) -> list[str]:
+    """2026-09-07: meta.sources_failed 중 전일 캐시로 대체된(used_fallback) 소스를
+    "OO 수집 실패로 전일 데이터 사용" 한 줄씩으로 뽑는다. 연속 실패 중이면
+    "(연속 N일째)"를 붙여 며칠째 안 고쳐지고 있는지 바로 보이게 한다."""
+    lines = []
+    for src in meta.get("sources_failed") or []:
+        if not src.get("used_fallback"):
+            continue
+        label = SOURCE_LABELS.get(src.get("name"), src.get("name"))
+        consecutive = src.get("consecutive_failures")
+        streak = f" (연속 {consecutive}일째)" if consecutive else ""
+        lines.append(f"{label} 수집 실패로 전일 데이터 사용{streak}")
+    return lines
 
 
 def find_new_items(prev_items: list[dict], current_items: list[dict]) -> list[dict]:
@@ -120,7 +147,8 @@ def _sections(new_official: list[dict], new_news: list[dict]):
     return out
 
 
-def build_body_text(new_official: list[dict], new_news: list[dict], dashboard_url: str, forced: bool = False) -> str:
+def build_body_text(new_official: list[dict], new_news: list[dict], dashboard_url: str, forced: bool = False,
+                     fallback_lines: list[str] | None = None) -> str:
     """HTML을 못 읽는 클라이언트용 대체본. 링크를 제목에 걸 수 없으니 원문
     그대로("링크: URL") 표시한다 — HTML 버전과 달리 이건 정상(주 경로가 아님)."""
     lines = []
@@ -144,6 +172,10 @@ def build_body_text(new_official: list[dict], new_news: list[dict], dashboard_ur
                     lines.append(f"    링크: {link}")
             lines.append("")
     lines.append("──────────")
+    for note in (fallback_lines or []):
+        lines.append(f"⚠ {note}")
+    if fallback_lines:
+        lines.append("")
     lines.append(f"대시보드: {dashboard_url}")
     lines.append(_FOOTER_NOTE)
     return "\n".join(lines)
@@ -158,7 +190,8 @@ def _esc(s) -> str:
 # 제목 자체에 링크를 걸고(<a href>), URL 문자열은 화면에 아예 안 보이게 한다.
 # 아웃룩(Word 렌더링 엔진)에서 깨지지 않도록 <div>/<p>/<a>/<b>/<hr> 같은 기본
 # 태그 + 인라인 style만 쓰고, flexbox/grid/외부 CSS/이미지는 쓰지 않는다.
-def build_body_html(new_official: list[dict], new_news: list[dict], dashboard_url: str, forced: bool = False) -> str:
+def build_body_html(new_official: list[dict], new_news: list[dict], dashboard_url: str, forced: bool = False,
+                     fallback_lines: list[str] | None = None) -> str:
     parts = ['<div style="font-family:Arial, Helvetica, sans-serif; font-size:14px; '
              'color:#111111; line-height:1.6;">']
     if forced and not new_official and not new_news:
@@ -188,6 +221,8 @@ def build_body_html(new_official: list[dict], new_news: list[dict], dashboard_ur
                         parts.append(f'<br><span style="color:#333333;">실무영향: {_esc(it["impact"])}</span>')
                 parts.append("</p>")
     parts.append('<hr style="border:none; border-top:1px solid #e2e8f0; margin:20px 0;">')
+    for note in (fallback_lines or []):
+        parts.append(f'<p style="color:#b45309; font-size:12px; margin:0 0 4px;">⚠ {_esc(note)}</p>')
     parts.append(
         f'<p style="margin:0 0 8px;"><a href="{_esc(dashboard_url)}" style="color:#1a73e8;">'
         f'대시보드: {_esc(dashboard_url)}</a></p>'
@@ -253,10 +288,12 @@ def _run() -> None:
         print("[notify_mail] 신규 항목이 없어 메일을 보내지 않습니다.")
         return
 
+    fallback_lines = fallback_notice_lines(load_meta(current_path))
+
     dashboard_url = os.environ.get("DASHBOARD_URL", DEFAULT_DASHBOARD_URL)
     subject = build_subject(len(new_official) + len(new_news))
-    text_body = build_body_text(new_official, new_news, dashboard_url, forced=forced)
-    html_body = build_body_html(new_official, new_news, dashboard_url, forced=forced)
+    text_body = build_body_text(new_official, new_news, dashboard_url, forced=forced, fallback_lines=fallback_lines)
+    html_body = build_body_html(new_official, new_news, dashboard_url, forced=forced, fallback_lines=fallback_lines)
 
     send_via_gmail(subject, text_body, html_body, recipients, gmail_user, gmail_password)
     print(f"[notify_mail] 메일 발송 완료: 공식 {len(new_official)}건, 언론 {len(new_news)}건 → {len(recipients)}명")
