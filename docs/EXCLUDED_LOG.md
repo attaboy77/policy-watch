@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-08 08:58:44 +0900
+생성 시각: 2026-09-08 16:35:59 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -8,12 +8,11 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 있으면(오제외) 해당 키워드를 `sources/_config.py`의 `APPLICABILITY`에서
 빼거나 예외 조건을 추가할 것(§9-2).
 
-## excluded:corporate_pr (7건)
+## excluded:corporate_pr (6건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | kifrs | news.koreanbar.or.kr | [로펌소식] 지평, ‘AI회계감리대응센터’ 확대 개편… 회계 관련 규제 대응 강화 - 법조신문 | https://news.google.com/rss/articles/CBMib0FVX3lxTE12bVNaT28xenRLNXZMRTZFN2JWRTNDdjY5d3RmTG9iQlBsN3l6RWZxQUdnZzVjSmlBdzMyWXprTHJlOUNMT2tSeXZRLUwxSENTTXpEYUVUQW51bU8wemZTQ1FZTjVtNDRPbHdSNjhsaw?oc=5 |
-| esg | 임팩트온 | 【클릭ESG】“누가 읽기는 하나요”…지속가능경영보고서 발간 뒤의 씁쓸한 뒷맛 - 임팩트온 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE00Y0xzY3VmTWd3c2pfSWJJcEpJbXZhTGpiSTBOV29ZWk9pdDRoTHAzNHpsUWFnV3hEdlQ3WVJOVTdmZ1l5V3J6ZFdKTFcwcF9CdXBQVE1FTVFQcEI5bFpQeGNNRndHdzYz0gFsQVVfeXFMTUI0Sm1uSk1GbXJWYVZ6U3MyaldBVUN2czEwMm9lT0VSTnVaT1BZQ1NLdm9hQ29VRWZqS2k3ZlRPUTR6UkE4WlFiMTk0WHVZOW9VQkRXSzZTcVNQSHdMV0t1VVVsTVV0SU9VMDNp?oc=5 |
 | esg | 한국경제 | 오스템임플란트, 지속가능경영보고서 발간…이중중대성 평가 도입 | https://www.hankyung.com/article/202608138384i |
 | esg | cenews.kr | 롯데건설, 글로벌 ESG 공시 기준 담은 지속가능경영보고서 발간 - 건설이코노미뉴스 | https://news.google.com/rss/articles/CBMiZkFVX3lxTFA2MHZhNXlOZncwT2hiUEYzeHUyeUhsci1lQTlLTmxHRzliR21Hc284ck8yaVgxSmJQT2ttRnZncGRJc3pOM0FwQWlpTUhGOXNXeU5OWVNQM2tFempCS25rQ1JINEhrZw?oc=5 |
 | esg | v.daum.net | 지오영, 창사 첫 지속가능경영보고서 발간...ESG 중장기 로드맵 제시 - v.daum.net | https://news.google.com/rss/articles/CBMiRkFVX3lxTE5WWmdYRDg2N0QyUzhUNGFfMjJMWWxTRDdFRTBsNHhPU1lMXzQ0UnQzMVBZWmdyTmRjMjY5b1ZtOGZXajZnNHc?oc=5 |
