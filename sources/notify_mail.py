@@ -73,6 +73,29 @@ def load_meta(path: str | None) -> dict:
         return {}
 
 
+# 2026-09-08: 구글 뉴스 URL 복원 실패율이 이 값을 넘으면 메일 하단에 경고를
+# 띄운다 — 사용자 지시("실패율이 높아지면 알 수 있게"). 시도 건수가 너무
+# 적으면(예: 1건 중 1건 실패=100%) 노이즈가 크므로 최소 시도 건수도 같이 본다.
+DECODE_FAIL_RATE_THRESHOLD = 0.3
+DECODE_MIN_ATTEMPTS_FOR_WARNING = 5
+
+
+def decode_notice_lines(meta: dict) -> list[str]:
+    """meta.google_decode_stats를 보고 구글 뉴스 URL 복원 실패율이 높으면
+    경고 한 줄을 만든다(임계값 미만이거나 시도 건수가 적으면 빈 리스트)."""
+    stats = meta.get("google_decode_stats") or {}
+    attempted = stats.get("attempted") or 0
+    success = stats.get("success") or 0
+    if attempted < DECODE_MIN_ATTEMPTS_FOR_WARNING:
+        return []
+    failed = attempted - success
+    fail_rate = failed / attempted
+    if fail_rate <= DECODE_FAIL_RATE_THRESHOLD:
+        return []
+    pct = round(fail_rate * 100)
+    return [f"구글 뉴스 URL 복원 실패율 높음: {failed}/{attempted}건 실패({pct}%) — 원문 링크가 구글 리다이렉트 링크로 남아있을 수 있습니다."]
+
+
 def fallback_notice_lines(meta: dict) -> list[str]:
     """2026-09-07: meta.sources_failed 중 전일 캐시로 대체된(used_fallback) 소스를
     "OO 수집 실패로 전일 데이터 사용" 한 줄씩으로 뽑는다. 연속 실패 중이면
@@ -288,7 +311,8 @@ def _run() -> None:
         print("[notify_mail] 신규 항목이 없어 메일을 보내지 않습니다.")
         return
 
-    fallback_lines = fallback_notice_lines(load_meta(current_path))
+    current_meta = load_meta(current_path)
+    fallback_lines = fallback_notice_lines(current_meta) + decode_notice_lines(current_meta)
 
     dashboard_url = os.environ.get("DASHBOARD_URL", DEFAULT_DASHBOARD_URL)
     subject = build_subject(len(new_official) + len(new_news))

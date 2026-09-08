@@ -273,6 +273,15 @@ DATA_SCHEMA = {
                 "counts_by_category": {"type": "object"},
                 "sources_ok": {"type": "array", "items": {"type": "string"}},
                 "sources_failed": {"type": "array", "items": {"type": "object"}},
+                # 2026-09-08: 구글 뉴스 리다이렉트 URL → 원문 URL 디코딩 성공/시도
+                # 건수(옵션 필드 — google_news에서 시도한 게 있을 때만 채워짐).
+                "google_decode_stats": {
+                    "type": "object",
+                    "properties": {
+                        "attempted": {"type": "integer"},
+                        "success": {"type": "integer"},
+                    },
+                },
             },
         },
         "categories": {

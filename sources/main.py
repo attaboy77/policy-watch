@@ -196,6 +196,12 @@ def build_data_json(items: list[dict]) -> dict:
         it["ai_generated"] = s["ai_generated"]  # ADDENDUM-8 §5-1: 카드에 "(AI 생성)" 라벨 표시용
         finalized.append(finalize_item(it))
 
+    # 2026-09-08: 위 필터를 전부 통과해 실제로 살아남은 항목만 대상으로 구글
+    # 뉴스 리다이렉트 링크(news.google.com/rss/articles/...)를 실제 원문 URL로
+    # 디코딩한다(파이프라인 초입에서 하면 나중에 걸러질 항목까지 구글에
+    # 요청을 보내게 됨). 실패하면 항목을 버리지 않고 원래 링크를 그대로 둔다.
+    google_news.resolve_finalized_urls(finalized)
+
     schedules = build_schedules(finalized)
 
     counts_by_category = {c: 0 for c in CATEGORIES}
@@ -235,8 +241,11 @@ def main() -> None:
     raw_items, sources_ok, sources_failed = collect_all()
     print(f"  원본 수집: {len(raw_items)}건 (성공 소스 {len(sources_ok)}개, 실패 {len(sources_failed)}개)")
 
-    built = build_data_json(raw_items)
+    built = build_data_json(raw_items)  # 내부에서 google_news.resolve_finalized_urls() 호출
     counts_by_category = built.pop("_counts_by_category")
+    # 2026-09-08: build_data_json()이 방금 채운 모듈 전역 통계를 읽어온다 —
+    # collect_all()처럼 반환값 시그니처를 바꾸면 기존 테스트가 깨지므로 피한다.
+    google_decode_stats = google_news.get_decode_stats()
 
     data = {
         "meta": {
@@ -247,6 +256,7 @@ def main() -> None:
             "counts_by_category": counts_by_category,
             "sources_ok": sources_ok,
             "sources_failed": sources_failed,
+            "google_decode_stats": google_decode_stats,
         },
         **built,
     }

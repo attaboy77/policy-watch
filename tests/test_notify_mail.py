@@ -114,6 +114,30 @@ class TestFallbackNoticeLines:
         ]
 
 
+class TestDecodeNoticeLines:
+    def test_no_stats_returns_empty(self):
+        assert nm.decode_notice_lines({}) == []
+
+    def test_below_min_attempts_returns_empty_even_if_all_failed(self):
+        # 시도 4건(임계 5건 미만)은 전부 실패해도 경고 안 띄움 — 표본이 너무 작음.
+        meta = {"google_decode_stats": {"attempted": 4, "success": 0}}
+        assert nm.decode_notice_lines(meta) == []
+
+    def test_low_fail_rate_returns_empty(self):
+        meta = {"google_decode_stats": {"attempted": 40, "success": 38}}  # 5% 실패
+        assert nm.decode_notice_lines(meta) == []
+
+    def test_high_fail_rate_produces_warning_line(self):
+        meta = {"google_decode_stats": {"attempted": 38, "success": 20}}  # 47% 실패
+        lines = nm.decode_notice_lines(meta)
+        assert len(lines) == 1
+        assert "18/38건 실패(47%)" in lines[0]
+
+    def test_exactly_at_threshold_returns_empty(self):
+        meta = {"google_decode_stats": {"attempted": 10, "success": 7}}  # 정확히 30% 실패
+        assert nm.decode_notice_lines(meta) == []
+
+
 class TestIsOfficial:
     def test_official_type_true(self):
         assert nm.is_official(_item(source={"type": "official"})) is True
