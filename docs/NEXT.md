@@ -1,7 +1,51 @@
 # 다음에 이어서 할 일 (NEXT)
 
-마지막 갱신: 2026-09-08, 구글 뉴스 URL 디코딩 세션 직후 기준(`c49cdcf`, origin/main의 09-07 자동 크롤링 커밋에 rebase 후 백필 재적용). **Phase 6(GitHub Pages 자동 배포) 완료·운영 중.**
-현재 `site/data.json`: 149건(K-IFRS 67 / 세법 31 / 내부회계 32 / ESG 19), 일정 72건. 테스트 496개 통과.
+마지막 갱신: 2026-09-08, 크롤링 안정성 세션(구글 뉴스 링크·소스 타임아웃·프록시·law_api 요청량) 직후 기준(`b242632`). **Phase 6(GitHub Pages 자동 배포) 완료·운영 중.**
+현재 `site/data.json`: 140건(K-IFRS 68 / 세법 21 / 내부회계 32 / ESG 19, law_api 실패로 세법이 평소보다 적음 — 아래 "남은 일" 참고), 일정 72건. 테스트 513개 통과.
+
+## 2026-09-08 세션 요약 — 크롤링 안정성 4건 (구글 링크·소스 타임아웃·프록시·law_api 요청량)
+
+사용자가 배포 사이트에서 구글 뉴스 링크가 구글 차단 페이지로 연결된다고 보고한 것을
+계기로, 실제 GitHub Actions 크롤링을 여러 차례 수동 실행해가며 발견된 문제를 순서대로
+해결한 세션. 아래 4건 전부 실측(로컬 네트워크 재현 + 실제 Actions 로그) 기반.
+
+1. **구글 뉴스 RSS 링크 차단 해결** — `news.google.com/rss/articles/...` 리다이렉트를
+   구글 내부 `batchexecute` 엔드포인트로 디코딩해 실제 원문 URL로 교체
+   (`sources/_google_decode.py` 신규, `google_news.resolve_finalized_urls()`가
+   필터 파이프라인 끝에서 최종 생존 항목만 처리). 실패 시 원래 링크로 폴백,
+   성공/실패 건수를 로그·`meta.google_decode_stats`에 기록. 기존 데이터 38건
+   소급 백필. **Actions 실측: 37/37건 복원, 실패 0건 확인 완료.**
+2. **소스별 60초 타임아웃 상한 추가** — GitHub Actions crawl 잡이 12분+ 멈춰
+   사용자가 취소한 사고 대응. `sources/main.py`에 `_fetch_with_timeout()`
+   신설(스레드+`concurrent.futures` 데드라인), 소스 시작 직전 "수집 시도: ..."
+   로그 추가. **Actions 실측: 실행시간 12분→4분45초로 확인 완료.**
+3. **moef/nts/fsc/policy_briefing(korea.kr) 프록시 연결** — 2개월 전 만든
+   `PROXY_BASE`(Cloudflare Workers)가 실제로는 `law_api.py` 하나에만 연결돼
+   있었고 나머지 4개 정부 사이트는 계속 직접 접속 중이었던 걸 발견. 전부
+   `_http.get_govt()`로 전환 + `PROXY_BASE` 미설정 시 경고 로그 추가.
+   **Actions 실측: 4개 전부 성공(성공 소스 4→8개) 확인 완료.**
+4. **law_api 요청 25회→14회 축소** — 프록시가 붙었는데도 law_api만 이틀 연속
+   "60초 초과"로 실패한 원인 진단 — 세목 6개 × 법/시행령/시행규칙 때문에
+   검색 7회+상세조회 18회=25회 요청 구조였음. `lawSearch.do` 응답에 이미 있는
+   `<시행일자>`를 재사용해 상세조회를 본법 7개로만 축소(요청 14회, sleep
+   24초→13초). 로컬 실측: 요청 14회/sleep 13회/13.5초, 18개 항목 전부
+   effective_date 정상(데이터 손실 없음), revision_reason은 본법 7건에만.
+   **Actions 실측 아직 안 함 — 남은 일 참고.**
+
+테스트 496→513개(신규: `test_google_decode.py` 8개, `test_http.py` 7개,
+`test_law_api.py` 5개, `google_news.py`/`main.py`/`notify_mail.py` 기존 파일에
+추가된 것 다수). 각 항목의 커밋 해시·상세 진단 과정은 아래 "2026-09-08 세션
+진행 중" 절 참고.
+
+### 남은 일 (2026-09-08 세션 마지막에 사용자가 정리)
+- **시행령/시행규칙 개정이유는 최근 30일 내 개정분만 상세 조회 검토** — 위 4번에서
+  전부 생략했는데, 최근 개정된 것만이라도 `law_detail()`을 호출해 개정이유를
+  살리는 절충안 검토(예: `공포일자`가 최근 30일 이내인 시행령/시행규칙만 추가
+  상세조회). 아직 미착수.
+- **GitHub Actions에서 law_api 포함 성공 9개/실패 0개 확인 (미검증)** — 위 4번
+  수정이 실제 Actions에서도 60초 안에 끝나는지, `sources_ok`가
+  9개(kasb/fss/moef/nts/fsc/policy_briefing/law_api/google_news/naver_news)가
+  되는지 아직 실측 안 됨 — 다음 `workflow_dispatch`로 확인 필요.
 
 ## 2026-09-08 세션 요약 — 구글 뉴스 RSS 링크 "We're sorry... automated queries" 차단 수정
 
@@ -377,7 +421,7 @@ KSSB 자발적용 기준서 수집, 법제처 개정이유 수집, AI 요약 43�
 
 그 외 이전부터 미착수:
 - SPEC-ADDENDUM-5.md §6(관련성 점수)·§8(`data/filters.yml` 설정파일화) — 여전히 미착수, 우선순위 계속 밀림.
-- **PROXY_BASE 실전 검증** — Secrets에는 등록됐으나(2026-09-01), GitHub Actions 크롤링 실행에서 `law.go.kr` 등 차단 시 실제로 우회하는지는 아직 로그로 확인 안 함.
+- ~~PROXY_BASE 실전 검증~~ — **2026-09-08 완료**(위 세션 요약 참고): moef/nts/fsc/policy_briefing 4개도 프록시 연결, Actions 실측으로 4개 전부 성공 확인. law_api만 요청량 문제로 별도 수정(같은 세션, Actions 재확인은 아직 미검증).
 - **`google_news.py` title 재검증 게이트**(알려진 이슈 #1) — 노이즈 사례 실측됐으나 진행 여부 미정.
 
 ## 정기 요약 작업 절차 (주 1~2회 목표, ADDENDUM-8 §4 설계, 2026-09-02 명문화)
@@ -404,8 +448,8 @@ Phase 6 배포 완료 후로는 실제 배포 사이트(GitHub Pages)에서도 �
 | 항목 | 현재 상태 | 필요 조치 |
 |---|---|---|
 | `LAW_API_OC` | 미설정 — 법제처 공개 테스트용 "test"로 대체 동작 중(실제 데이터는 나오지만 사용량 제한 가능성) | 실 서비스 전환 전에 정식 OC 코드 발급 |
-| `NAVER_CLIENT_ID`/`NAVER_CLIENT_SECRET` | 미설정 — `naver_news.py` 전체가 매 실행 스킵됨(graceful degradation 정상 동작) | 발급 후 GitHub Secrets에 등록 |
-| `PROXY_BASE` | 값 재등록(2026-09-08) — 프록시(`policy-proxy.epsillon.workers.dev`)는 직접 실측 확인(정상). moef/nts/fsc/korea.kr도 이번에 `get_govt()`로 전환해 5개 정부 사이트 전부 프록시 경유하도록 통일 | 다음 Actions 실행 로그에서 "PROXY_BASE 미설정" 경고가 안 뜨는지 + 5개 소스 전부 수집 성공하는지 확인 |
+| `NAVER_CLIENT_ID`/`NAVER_CLIENT_SECRET` | **등록된 것으로 보임** — 2026-09-08 Actions 로그의 `sources_ok`에 `naver_news`가 포함됨(로컬 문서엔 "미설정"으로 남아있던 게 갱신 안 된 것뿐). 로컬은 여전히 미설정이라 `naver_news.py`가 스킵됨(정상) | 다음 Actions 로그에서 naver_news 항목이 실제로 몇 건 수집되는지 확인 |
+| `PROXY_BASE` | **2026-09-08 완료** — 값 재등록 후 프록시(`policy-proxy.epsillon.workers.dev`) 정상 확인, moef/nts/fsc/korea.kr도 `get_govt()`로 전환해 5개 정부 사이트 전부 프록시 경유. Actions 실측: 4개(moef/nts/fsc/policy_briefing) 성공 확인, law_api는 요청량 문제로 별도 수정(Actions 재확인 미검증) | law_api 포함 5개 전부 성공하는지 다음 Actions 실행에서 확인 |
 | `data/schedules_manual.yml` | 비어있음(`[]`) — 사업연도 기준 근사 시행일은 `_FISCAL_YEAR_EFFECTIVE_DATES`(코드 내 수동 매핑)로 대신 처리해서 아직 이 파일을 쓸 일이 없었음 | `docs/EFFECTIVE_DATE_GAPS.md`(현재 2건) 검토해서 필요하면 수동 추가 |
 | `data/esg_roadmap.yml` | **신규** — KSSB/ESG 공시 로드맵(금융위 발표 기준, 1차 2028-01-01/FY2027) 수동 관리 중 | 금융위 로드맵이 실제로 바뀌면(확정 등) 수동 갱신 |
 | `data/summary_cache.json` | **43건 채워짐**(Claude Code가 원문 읽고 직접 작성 — API 키 불필요) | 새 후보 생길 때마다 사용자가 "요약해줘"로 배치 요청(주 1~2회 목표) |
