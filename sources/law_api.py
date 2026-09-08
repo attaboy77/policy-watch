@@ -120,6 +120,12 @@ def search_law(law_name: str, *, oc: str | None = None, wanted: set[str] | None 
 
     lawSearch.do의 query는 부분일치라 "지방세법"이 "지방교부세법"도 끌고 오는
     것까지 실측 확인했다(SOURCE_PROBE.md D4) — 여기서 정확일치로 한 번 더 거른다.
+
+    2026-09-08: `<시행일자>`도 이 응답에 이미 들어있다(실측 확인) — 예전엔 이걸
+    안 뽑고 매 법령마다 `law_detail()`(lawService.do, 별도 요청)을 또 불러서
+    시행일자를 얻었는데, `fetch()`의 요청량(25회)이 소스 타임아웃(60초) 예산을
+    거의 다 써버리는 원인이었다. 여기서 바로 뽑아두면 `law_detail()` 호출
+    자체가 필요 없어진다(그건 검색 응답에 없는 `제개정이유내용`용으로만 남음).
     """
     resp = _http.get_govt(SEARCH_URL, params={
         "OC": oc or _oc(), "target": "law", "type": "XML", "query": law_name,
@@ -139,6 +145,7 @@ def search_law(law_name: str, *, oc: str | None = None, wanted: set[str] | None 
             "공포번호": _tag_text(law, "공포번호"),
             "제개정구분명": _tag_text(law, "제개정구분명"),
             "소관부처명": _tag_text(law, "소관부처명"),
+            "시행일자": _tag_text(law, "시행일자"),
         })
     return out
 
@@ -174,6 +181,14 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
     수집한다. 검색은 법령 루트(본법) 단위로 한 번씩만 호출하고(같은 API 호출로
     시행령·시행규칙까지 딸려오므로), `law_names`에 정확히 속하는 것만 채택한다.
     법령 하나 조회가 실패해도 나머지는 계속 진행한다(SPEC §9-4).
+
+    2026-09-08: 상세 조회(`law_detail()`, lawService.do)는 **본법(검색 루트와
+    이름이 같은 항목)에만** 한다 — 시행일자는 이제 `search_law()` 응답에서
+    바로 나오므로(위 docstring 참고) 시행령/시행규칙까지 상세 조회할 필요가
+    없고, 상세 조회의 유일한 존재 이유는 검색 응답에 없는 `제개정이유내용`
+    뿐이다. 사용자 지시로 시행령/시행규칙의 개정이유는 포기(대체로 본법
+    개정이유에 함께 언급되는 경우가 많다는 게 사용자 판단) — 요청 25회→14회,
+    강제 sleep 24초→13초로 줄어 소스 타임아웃(60초) 안에 여유 있게 끝난다.
     """
     oc = _oc()
     items: list[dict] = []
@@ -189,15 +204,17 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
             print(f"[law_api] '{root_name}' 검색 실패: {exc}")
             continue
         for m in matches:
-            time.sleep(SLEEP_BETWEEN_REQUESTS)
-            try:
-                detail = law_detail(m["법령명한글"], oc=oc) or {}
-            except Exception as exc:  # noqa: BLE001
-                print(f"[law_api] '{m['법령명한글']}' 상세 조회 실패: {exc}")
-                detail = {}
+            detail = {}
+            if m["법령명한글"] == root_name:  # 본법만 상세 조회(개정이유 목적)
+                time.sleep(SLEEP_BETWEEN_REQUESTS)
+                try:
+                    detail = law_detail(m["법령명한글"], oc=oc) or {}
+                except Exception as exc:  # noqa: BLE001
+                    print(f"[law_api] '{m['법령명한글']}' 상세 조회 실패: {exc}")
+                    detail = {}
 
             promulgation = _yyyymmdd_to_iso(m.get("공포일자") or detail.get("공포일자"))
-            effective = _yyyymmdd_to_iso(detail.get("시행일자"))
+            effective = _yyyymmdd_to_iso(m.get("시행일자") or detail.get("시행일자"))
             title = m["법령명한글"]
             raw_ministry = m.get("소관부처명") or "국가법령정보센터"
             # 공동소관 법령은 "재정경제부,행정안전부"처럼 콤마로 여러 부처가 온다 — 토큰별로 정규화.
