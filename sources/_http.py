@@ -45,6 +45,15 @@ def proxy_base() -> str | None:
     return os.environ.get("PROXY_BASE") or None
 
 
+# 2026-09-08: PROXY_BASE 미설정 시 get_govt()가 조용히 직접 호출로 빠지다 보니,
+# 정부 사이트가 전부 타임아웃 나도 "프록시를 안 탄 것"인지 "프록시를 탔는데도
+# 안 되는 것"인지 로그로 구분이 안 됐다(사용자 실측 보고: law_api도 나머지
+# 4개 미연동 소스와 똑같은 connect timeout 패턴으로 실패 — 프록시 미사용
+# 정황). get_govt() 호출마다(소스당 여러 번) 매번 찍으면 로그가 도배되므로
+# 프로세스당 한 번만 경고한다.
+_warned_no_proxy = False
+
+
 def get_govt(url: str, *, params: dict | None = None, headers: dict | None = None,
              timeout: int = DEFAULT_TIMEOUT, retries: int = DEFAULT_RETRIES) -> requests.Response:
     """정부 사이트(law.go.kr 등) 전용 GET. `PROXY_BASE`가 설정돼 있으면 그 경유로,
@@ -58,6 +67,10 @@ def get_govt(url: str, *, params: dict | None = None, headers: dict | None = Non
     """
     base = proxy_base()
     if base is None:
+        global _warned_no_proxy
+        if not _warned_no_proxy:
+            print("[_http] PROXY_BASE 미설정 - 직접 접속으로 진행")
+            _warned_no_proxy = True
         return get(url, params=params, headers=headers, timeout=timeout, retries=retries)
     # 프록시 경유 시 쿼리스트링을 원본 URL에 먼저 합쳐 넣는다(프록시는 target url 하나만 받음).
     target = url

@@ -36,7 +36,7 @@ _KST = timezone(timedelta(hours=9))
 
 def probe() -> dict:
     try:
-        resp = _http.get(LIST_URL, params={"mi": MI, "bbsId": BBS_ID})
+        resp = _http.get_govt(LIST_URL, params={"mi": MI, "bbsId": BBS_ID})
         ok = resp.status_code == 200 and 'data-table="subject"' in resp.text
         return {"ok": ok, "method": "html", "note": f"selectNttList.do HTTP {resp.status_code}"}
     except Exception as exc:  # noqa: BLE001
@@ -64,7 +64,7 @@ def _parse_iso_date(s: str) -> date:
 
 def fetch() -> list[dict]:
     """D2: 개정세법 해설 게시판 전체. 게시판 자체가 세법 전용이라 classify() 불필요."""
-    resp = _http.get(LIST_URL, params={"mi": MI, "bbsId": BBS_ID})
+    resp = _http.get_govt(LIST_URL, params={"mi": MI, "bbsId": BBS_ID})
     soup = BeautifulSoup(resp.text, "html.parser")
     items: list[dict] = []
 

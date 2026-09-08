@@ -49,7 +49,7 @@ def _classify_own_press(title: str) -> str | None:
 
 def probe() -> dict:
     try:
-        resp = _http.get(LIST_URL)
+        resp = _http.get_govt(LIST_URL)
         ok = resp.status_code == 200 and 'class="day"' in resp.text
         return {"ok": ok, "method": "html", "note": f"no010101 HTTP {resp.status_code}"}
     except Exception as exc:  # noqa: BLE001
@@ -77,7 +77,7 @@ def _extract_attachments(li) -> list[dict] | None:
 
 
 def fetch_page(page: int = 1) -> list[dict]:
-    resp = _http.get(LIST_URL, params={"curPage": page})
+    resp = _http.get_govt(LIST_URL, params={"curPage": page})
     soup = BeautifulSoup(resp.text, "html.parser")
     items: list[dict] = []
 

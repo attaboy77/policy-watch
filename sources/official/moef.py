@@ -43,7 +43,7 @@ _SELECT_RE = re.compile(r"fn_egov_select\('([^']+)'\)")
 
 def probe() -> dict:
     try:
-        resp = _http.get(PRESS_LIST_URL, params={"bbsId": BBS_ID, "menuNo": MENU_NO})
+        resp = _http.get_govt(PRESS_LIST_URL, params={"bbsId": BBS_ID, "menuNo": MENU_NO})
         ok = resp.status_code == 200 and "fn_egov_select" in resp.text
         return {"ok": ok, "method": "html", "note": f"nesdta.do HTTP {resp.status_code}"}
     except Exception as exc:  # noqa: BLE001
@@ -98,7 +98,7 @@ def _build_item(*, category: str, title: str, url: str, published_at: str | None
 
 def fetch(*, max_items: int | None = None) -> list[dict]:
     """D1: 보도·참고자료 게시판. 우리 카테고리(주로 tax)에 안 걸리는 항목은 버린다."""
-    resp = _http.get(PRESS_LIST_URL, params={"bbsId": BBS_ID, "menuNo": MENU_NO})
+    resp = _http.get_govt(PRESS_LIST_URL, params={"bbsId": BBS_ID, "menuNo": MENU_NO})
     soup = BeautifulSoup(resp.text, "html.parser")
     items: list[dict] = []
 

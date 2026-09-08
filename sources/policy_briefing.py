@@ -45,7 +45,7 @@ _KST = timezone(timedelta(hours=9))
 
 def probe() -> dict:
     try:
-        resp = _http.get(LIST_URL)
+        resp = _http.get_govt(LIST_URL)
         ok = resp.status_code == 200 and 'class="source"' in resp.text
         return {"ok": ok, "method": "html", "note": f"pressReleaseList.do HTTP {resp.status_code}"}
     except Exception as exc:  # noqa: BLE001
@@ -102,7 +102,7 @@ def _build_item(*, category: str, dept: str, title: str, lead: str, url: str,
 
 
 def fetch_page(page_index: int) -> list[dict]:
-    resp = _http.get(LIST_URL, params={"pageIndex": page_index})
+    resp = _http.get_govt(LIST_URL, params={"pageIndex": page_index})
     soup = BeautifulSoup(resp.text, "html.parser")
     items: list[dict] = []
 

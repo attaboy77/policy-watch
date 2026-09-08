@@ -87,6 +87,46 @@
   확인, (b) 60초 초과 시 정말 넘어가는지, (c) 그 다음 구글 뉴스 디코딩 단계까지
   도달하는지 함께 확인 필요 — 여전히 사용자가 수동으로 "Run workflow" 실행 필요.
 
+### 후속: 60초 타임아웃 도입 후 재실행 — 구글 디코딩 성공(37/37), 정부 사이트 5개 전부 connect timeout
+
+타임아웃 수정 덕에 이번엔 12분+ 멈추지 않고 끝까지 돌았다. 구글 뉴스 디코딩은
+`37/37건, 실패 0건`으로 완전히 성공(지난 세션 작업 검증 완료). 하지만 moef/nts/
+fsc/korea.kr(정책브리핑)/law_api **5개 정부 사이트가 전부 "connect timeout=15"**로
+실패 — 살아남은 공식 소스는 kasb/k-icfr(fss)뿐이었다.
+
+- **진단(구현 전, 사용자 요청으로 먼저 분석만)**: `PROXY_BASE`/`get_govt()`가
+  실제로 연결된 소스는 `law_api.py` 하나뿐이었다(moef/nts/fsc/policy_briefing은
+  전부 프록시를 모르는 `_http.get()`만 사용 — 애초에 우회 경로 자체가 없었음).
+  law_api는 코드상 `get_govt()`를 쓰는데도 나머지 4개(확실히 미연결)와
+  **완전히 같은 connect timeout 패턴**으로 실패한 게 결정적 단서 — 진짜 프록시를
+  탔다면 접속 대상이 Cloudflare 엣지(`policy-proxy.epsillon.workers.dev`)라
+  connect timeout이 나기 어렵다. `PROXY_BASE` 환경변수가 그 시점엔 비어있었을
+  것으로 추정. 프록시 자체는 직접 curl로 실측 — `?url=`에 law_api.py가 실제로
+  만드는 것과 동일한 lawSearch.do 요청을 넣어 1.18초 만에 정상 XML(법인세법 등
+  3건) 응답 확인 — **프록시는 죽지 않았고, 그 시점에 "안 타고 있었다"**는 쪽에
+  무게.
+  - 사용자 확인: `PROXY_BASE` 시크릿은 등록은 돼 있었으나 값을 재입력함(오타/공백
+    등 있었을 가능성 — GitHub 쪽이라 실제 원인은 끝까지 확정 못 함).
+- **수정**: `moef.py`/`nts.py`/`fsc.py`/`policy_briefing.py`(korea.kr) 4개
+  전부 `_http.get()` → `_http.get_govt()`로 전환(각 파일 `probe()`+실제 fetch
+  함수 2곳씩, 총 8곳). 이제 5개 정부 사이트 전부 같은 프록시 경로를 탄다.
+  - `_http.get_govt()`에 "PROXY_BASE 미설정 - 직접 접속으로 진행" 경고 로그
+    추가(사용자 지시) — 프로세스당 한 번만(소스마다 여러 번 호출되므로 도배
+    방지, `_warned_no_proxy` 모듈 플래그).
+  - `tests/test_http.py` 신규 7개(라우팅/트레일링 슬래시 처리/경고 1회만/
+    proxy_base() 빈 문자열→None 등). 이 4개 어댑터는 애초에 단위테스트가
+    없었어서(기존 실측 검증만) 이번 변경으로 깨진 테스트는 없음.
+  - 로컬(PROXY_BASE 미설정)에서 4개 어댑터 전부 예외 없이 실행 확인 —
+    `get_govt()`가 `PROXY_BASE` 없을 때 기존 `get()` 호출과 완전히 동일한
+    시그니처로 폴백하므로 로컬 동작은 이 변경 전후로 동일(수집 건수 0건은
+    이 샌드박스 환경 자체의 기존 특성으로 보임, 이번 변경과 무관 — law_api도
+    이 환경에서 DNS 실패로 원래 0건이었음).
+  - 전체 테스트 501→508개 통과.
+- **미검증 — 다음 확인 필요**: GitHub Actions에서 push 후 `workflow_dispatch`로
+  재실행해 성공 소스가 4개(kasb/fss/google/naver)에서 9개로 돌아오는지 확인.
+  안 되면 "PROXY_BASE 미설정 - 직접 접속으로 진행" 로그가 뜨는지부터 봐서
+  시크릿 값이 실제로 프로세스까지 전달되는지 다시 가려야 함.
+
 ## 2026-09-01 세션 요약 (커밋 `685a55f`~`5d2c780`, 21개 커밋 — 실제 배포 후 첫 세션)
 
 사용자가 배포된 사이트(github.com/attaboy77/policy-watch, GitHub Pages)를 직접 브라우저로 보면서
@@ -320,7 +360,7 @@ Phase 6 배포 완료 후로는 실제 배포 사이트(GitHub Pages)에서도 �
 |---|---|---|
 | `LAW_API_OC` | 미설정 — 법제처 공개 테스트용 "test"로 대체 동작 중(실제 데이터는 나오지만 사용량 제한 가능성) | 실 서비스 전환 전에 정식 OC 코드 발급 |
 | `NAVER_CLIENT_ID`/`NAVER_CLIENT_SECRET` | 미설정 — `naver_news.py` 전체가 매 실행 스킵됨(graceful degradation 정상 동작) | 발급 후 GitHub Secrets에 등록 |
-| `PROXY_BASE` | **GitHub Secrets에 등록됨(2026-09-01)** — Actions에서 실제 우회 동작은 아직 로그로 미확인 | 다음 Actions 실행 로그에서 law.go.kr 등 정상 수집되는지 확인 |
+| `PROXY_BASE` | 값 재등록(2026-09-08) — 프록시(`policy-proxy.epsillon.workers.dev`)는 직접 실측 확인(정상). moef/nts/fsc/korea.kr도 이번에 `get_govt()`로 전환해 5개 정부 사이트 전부 프록시 경유하도록 통일 | 다음 Actions 실행 로그에서 "PROXY_BASE 미설정" 경고가 안 뜨는지 + 5개 소스 전부 수집 성공하는지 확인 |
 | `data/schedules_manual.yml` | 비어있음(`[]`) — 사업연도 기준 근사 시행일은 `_FISCAL_YEAR_EFFECTIVE_DATES`(코드 내 수동 매핑)로 대신 처리해서 아직 이 파일을 쓸 일이 없었음 | `docs/EFFECTIVE_DATE_GAPS.md`(현재 2건) 검토해서 필요하면 수동 추가 |
 | `data/esg_roadmap.yml` | **신규** — KSSB/ESG 공시 로드맵(금융위 발표 기준, 1차 2028-01-01/FY2027) 수동 관리 중 | 금융위 로드맵이 실제로 바뀌면(확정 등) 수동 갱신 |
 | `data/summary_cache.json` | **43건 채워짐**(Claude Code가 원문 읽고 직접 작성 — API 키 불필요) | 새 후보 생길 때마다 사용자가 "요약해줘"로 배치 요청(주 1~2회 목표) |
