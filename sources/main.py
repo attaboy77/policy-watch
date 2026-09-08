@@ -9,6 +9,7 @@ site/data.json을 생성한다.
 """
 from __future__ import annotations
 
+import concurrent.futures
 import json
 import os
 import sys
@@ -33,6 +34,33 @@ from . import policy_briefing, law_api
 _KST = timezone(timedelta(hours=9))
 DATA_JSON_PATH = "site/data.json"
 SCHEMA_VERSION = "1.0"
+
+# 2026-09-08: GitHub Actions에서 kasb.or.kr(국내 전용 사이트로 추정)가 응답을
+# 안 줘서 크롤링 전체가 12분+ 멈춘 사고 발생 후 도입 — 소스 하나(fetch 함수
+# 전체)가 이 시간(초) 안에 안 끝나면 실패로 간주하고 전일 캐시로 넘어간다.
+# _http.py가 개별 HTTP 요청엔 이미 15초 타임아웃+재시도 3회를 걸어두지만
+# (요청 1건당 최대 ~46.5초), 소스 하나가 그런 요청을 여러 번 순차로 하면
+# (예: kasb.fetch()는 5개 하위 fetch를 차례로 호출) 합산 시간엔 상한이
+# 없었다 — 이 상수가 그 상한 역할을 한다.
+SOURCE_TIMEOUT_SECONDS = 60
+
+
+def _fetch_with_timeout(fetch_fn):
+    """`fetch_fn()`을 별도 스레드에서 실행하고 `SOURCE_TIMEOUT_SECONDS`초 안에
+    못 끝내면 `concurrent.futures.TimeoutError`를 올린다.
+
+    파이썬은 실행 중인 스레드를 강제 종료할 수 없다 — 시간을 초과한 스레드는
+    백그라운드에서 계속 돌다가 결국(각 HTTP 요청 자체의 타임아웃 덕에) 스스로
+    끝난다. 다만 호출부(collect_all)는 이 함수가 예외를 던지는 즉시 그 결과를
+    기다리지 않고 다음 소스로 넘어간다 — "소스 하나의 응답 지연이 전체
+    크롤링을 막지 않는다"가 목적이라 완전한 강제 종료까지는 필요 없다.
+    """
+    executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    future = executor.submit(fetch_fn)
+    try:
+        return future.result(timeout=SOURCE_TIMEOUT_SECONDS)
+    finally:
+        executor.shutdown(wait=False, cancel_futures=True)
 
 # (소스명, fetch 함수) — 이미 최종 스키마에 가까운 모양을 반환하는 어댑터들.
 OFFICIAL_SOURCES = [
@@ -83,6 +111,12 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
     2026-09-07: 소스가 실패하면 예전처럼 0건으로 두지 않고, 마지막으로 성공했을
     때 캐시해둔 결과(`data/source_cache.json`)를 그대로 쓴다 — id가 유지되므로
     다음 실행에서 그 소스가 다시 살아나도 notify_mail이 "신규"로 오판하지 않는다.
+
+    2026-09-08: 소스마다 시작 직전에 "수집 시도: {라벨}" 로그를 남기고,
+    `_fetch_with_timeout()`으로 감싸 `SOURCE_TIMEOUT_SECONDS`(60초) 안에
+    못 끝내면 실패로 간주해 전일 캐시로 넘어간다 — GitHub Actions에서 국내
+    전용 사이트(kasb.or.kr로 추정)가 응답을 안 줘서 크롤링 전체가 12분+
+    멈춘 사고 대응.
     """
     items: list[dict] = []
     sources_ok: list[str] = []
@@ -92,18 +126,25 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
     now_iso = _now_kst_iso()
 
     for name, fetch_fn in OFFICIAL_SOURCES:
+        label = SOURCE_LABELS.get(name, name)
+        print(f"[main] 수집 시도: {label}({name})")
         try:
-            got = fetch_fn()
+            got = _fetch_with_timeout(fetch_fn)
             items.extend(got)
             sources_ok.append(name)
             cache[name] = got
             _source_health.record_success(health, name, now_iso)
+        except concurrent.futures.TimeoutError:
+            _use_fallback(name, f"{SOURCE_TIMEOUT_SECONDS}초 초과(응답 없음)",
+                          cache, health, now_iso, items, sources_failed)
         except Exception as exc:  # noqa: BLE001 - 소스 단위 격리
             _use_fallback(name, str(exc), cache, health, now_iso, items, sources_failed)
 
     for name, fetch_all_fn, source_type in NEWS_SOURCES:
+        label = SOURCE_LABELS.get(name, name)
+        print(f"[main] 수집 시도: {label}({name})")
         try:
-            by_category = fetch_all_fn()
+            by_category = _fetch_with_timeout(fetch_all_fn)
             normalized = [
                 normalize_news_item(raw, source_type=source_type)
                 for raw_items in by_category.values()
@@ -118,6 +159,9 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
                 # 전부 빈 결과 — naver_news는 자격증명 없으면 조용히 빈 dict를 준다(graceful degradation).
                 _use_fallback(name, "결과 0건(자격증명 미설정 또는 응답 없음)",
                               cache, health, now_iso, items, sources_failed)
+        except concurrent.futures.TimeoutError:
+            _use_fallback(name, f"{SOURCE_TIMEOUT_SECONDS}초 초과(응답 없음)",
+                          cache, health, now_iso, items, sources_failed)
         except Exception as exc:  # noqa: BLE001
             _use_fallback(name, str(exc), cache, health, now_iso, items, sources_failed)
 

@@ -9,6 +9,8 @@
 실제 네트워크 호출은 절대 하지 않는다 — OFFICIAL_SOURCES/NEWS_SOURCES를
 가짜 fetch 함수로 통째로 교체하고, 캐시/헬스 파일 경로도 tmp_path로 돌린다.
 """
+import time
+
 from sources import main, _source_health as sh
 
 
@@ -90,6 +92,98 @@ class TestCollectAllOfficialFallback:
         assert failed == []
         assert sh.load_health()["nts"]["consecutive_failures"] == 0
         assert sh.load_cache()["nts"] == [{"id": "fresh"}]
+
+
+class TestCollectAllSourceTimeout:
+    """2026-09-08: GitHub Actions에서 kasb.or.kr이 응답을 안 줘서 크롤링 전체가
+    12분+ 멈춘 사고 대응 — 소스 하나가 SOURCE_TIMEOUT_SECONDS를 넘기면
+    실패로 간주하고 전일 캐시로 넘어가야 한다. 실제로 60초를 기다리지 않도록
+    매 테스트에서 SOURCE_TIMEOUT_SECONDS를 아주 짧게 monkeypatch한다."""
+
+    def test_official_source_exceeding_timeout_falls_back(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        sh.save_cache({"nts": [{"id": "old"}]})
+        monkeypatch.setattr(main, "SOURCE_TIMEOUT_SECONDS", 0.05)
+
+        def hangs():
+            time.sleep(1)
+            return [{"id": "too_late"}]
+
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("nts", hangs)])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+
+        items, ok, failed = main.collect_all()
+
+        assert items == [{"id": "old"}]  # 전일 캐시로 대체
+        assert ok == []
+        assert failed[0]["name"] == "nts"
+        assert failed[0]["reason"] == "0.05초 초과(응답 없음)"
+        assert failed[0]["used_fallback"] is True
+
+    def test_news_source_exceeding_timeout_falls_back(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        sh.save_cache({"google_news": [{"id": "g1", "category": "kifrs"}]})
+        monkeypatch.setattr(main, "SOURCE_TIMEOUT_SECONDS", 0.05)
+
+        def hangs():
+            time.sleep(1)
+            return {}
+
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [("google_news", hangs, "news")])
+
+        items, ok, failed = main.collect_all()
+
+        assert items == [{"id": "g1", "category": "kifrs"}]
+        assert failed[0]["reason"] == "0.05초 초과(응답 없음)"
+        assert failed[0]["used_fallback"] is True
+
+    def test_slow_source_does_not_block_later_sources(self, monkeypatch, tmp_path):
+        """느린 소스 하나 때문에 뒤 소스들이 전부 밀리지 않는지 확인 — 실행
+        시간 자체를 재서 '기다리지 않고 다음으로 넘어갔는지' 검증한다."""
+        _isolate_cache_health(monkeypatch, tmp_path)
+        monkeypatch.setattr(main, "SOURCE_TIMEOUT_SECONDS", 0.05)
+
+        def hangs():
+            time.sleep(1)
+            return [{"id": "slow"}]
+
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [
+            ("kasb", hangs),
+            ("fss", lambda: [{"id": "fast"}]),
+        ])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+
+        t0 = time.time()
+        items, ok, failed = main.collect_all()
+        elapsed = time.time() - t0
+
+        assert items == [{"id": "fast"}]
+        assert ok == ["fss"]
+        assert elapsed < 0.9  # hangs()의 1초 sleep을 기다리지 않고 넘어갔다
+
+    def test_success_within_timeout_unaffected(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        monkeypatch.setattr(main, "SOURCE_TIMEOUT_SECONDS", 5)
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("nts", lambda: [{"id": "n1"}])])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+
+        items, ok, failed = main.collect_all()
+
+        assert items == [{"id": "n1"}]
+        assert ok == ["nts"]
+        assert failed == []
+
+    def test_logs_which_source_is_being_attempted(self, monkeypatch, tmp_path, capsys):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("nts", lambda: [{"id": "n1"}])])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [("google_news", lambda: {}, "news")])
+
+        main.collect_all()
+
+        out = capsys.readouterr().out
+        assert "수집 시도: 국세청(nts)" in out
+        assert "수집 시도: 구글 뉴스(google_news)" in out
 
 
 class TestCollectAllNewsFallback:
