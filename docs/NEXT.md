@@ -1,7 +1,7 @@
 # 다음에 이어서 할 일 (NEXT)
 
-마지막 갱신: 2026-09-08, 구글 뉴스 URL 디코딩 세션 직후 기준. **Phase 6(GitHub Pages 자동 배포) 완료·운영 중.**
-현재 `site/data.json`: 137건(백필만 반영, 재크롤링 없음), 테스트 496개 통과.
+마지막 갱신: 2026-09-08, 구글 뉴스 URL 디코딩 세션 직후 기준(`c49cdcf`, origin/main의 09-07 자동 크롤링 커밋에 rebase 후 백필 재적용). **Phase 6(GitHub Pages 자동 배포) 완료·운영 중.**
+현재 `site/data.json`: 149건(K-IFRS 67 / 세법 31 / 내부회계 32 / ESG 19), 일정 72건. 테스트 496개 통과.
 
 ## 2026-09-08 세션 요약 — 구글 뉴스 RSS 링크 "We're sorry... automated queries" 차단 수정
 
