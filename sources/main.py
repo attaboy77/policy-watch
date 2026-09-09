@@ -130,6 +130,11 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
     못 끝내면 실패로 간주해 전일 캐시로 넘어간다 — GitHub Actions에서 국내
     전용 사이트(kasb.or.kr로 추정)가 응답을 안 줘서 크롤링 전체가 12분+
     멈춘 사고 대응.
+
+    2026-09-09: OFFICIAL_SOURCES도 NEWS_SOURCES처럼 "예외 없이 반환했지만
+    빈 리스트"도 실패로 본다(전에는 성공으로 처리돼 캐시가 빈 값으로
+    덮어써졌다 — 다음에 그 소스가 진짜 성공하면 과거분 전체가 "신규"로
+    오판되는 사고로 이어짐, nts 9/4·9/9 재발 실측으로 확인).
     """
     items: list[dict] = []
     sources_ok: list[str] = []
@@ -144,10 +149,19 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
         print(f"[main] 수집 시도: {label}({name})")
         try:
             got = _fetch_with_timeout(fetch_fn, timeout=timeout)
-            items.extend(got)
-            sources_ok.append(name)
-            cache[name] = got
-            _source_health.record_success(health, name, now_iso)
+            if got:
+                items.extend(got)
+                sources_ok.append(name)
+                cache[name] = got
+                _source_health.record_success(health, name, now_iso)
+            else:
+                # 2026-09-09: 예외 없이 빈 리스트가 와도 실패로 본다 — 그대로
+                # "성공"으로 두면 cache[name]이 빈 값으로 덮어써져서, 다음에
+                # 이 소스가 진짜로 성공할 때 과거분 전체가 "신규"로 오판된다
+                # (nts 9/4·9/9 재발 사고, docs/NEXT.md 참고). NEWS_SOURCES는
+                # 이미 이 가드가 있었는데 OFFICIAL_SOURCES엔 빠져 있었다.
+                _use_fallback(name, "결과 0건(응답 없음 또는 파싱 실패)",
+                              cache, health, now_iso, items, sources_failed)
         except concurrent.futures.TimeoutError:
             _use_fallback(name, f"{timeout}초 초과(응답 없음)",
                           cache, health, now_iso, items, sources_failed)

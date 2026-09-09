@@ -30,6 +30,36 @@ class TestCollectAllOfficialFallback:
         assert failed == []
         assert sh.load_cache() == {"nts": [{"id": "n1"}]}
 
+    def test_empty_result_treated_as_failure_and_falls_back(self, monkeypatch, tmp_path):
+        """2026-09-09: 예외 없이 빈 리스트를 반환해도 성공으로 보지 않는다 —
+        전엔 이 가드가 NEWS_SOURCES에만 있어서, 프록시 전환 직후 nts가 예외
+        없이 0건을 반환한 게 "성공"으로 기록돼 캐시가 빈 값으로 덮어써졌고,
+        다음에 nts가 진짜 성공하니 과거분 10건 전체가 "신규"로 오판된 사고가
+        실측으로 확인됐다(docs/NEXT.md 참고)."""
+        _isolate_cache_health(monkeypatch, tmp_path)
+        sh.save_cache({"nts": [{"id": "n1"}, {"id": "n2"}]})
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("nts", lambda: [])])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+        items, ok, failed = main.collect_all()
+        assert items == [{"id": "n1"}, {"id": "n2"}]  # 전일 캐시로 대체
+        assert ok == []
+        assert failed[0]["name"] == "nts"
+        assert failed[0]["reason"] == "결과 0건(응답 없음 또는 파싱 실패)"
+        assert failed[0]["used_fallback"] is True
+        assert failed[0]["fallback_count"] == 2
+        # 캐시가 빈 값으로 덮어써지지 않고 기존 2건이 그대로 남아있어야 한다.
+        assert sh.load_cache()["nts"] == [{"id": "n1"}, {"id": "n2"}]
+
+    def test_empty_result_with_no_prior_cache_yields_zero_items(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("nts", lambda: [])])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+        items, ok, failed = main.collect_all()
+        assert items == []
+        assert ok == []
+        assert failed[0]["name"] == "nts"
+        assert failed[0]["used_fallback"] is False
+
     def test_failure_with_no_prior_cache_yields_zero_items(self, monkeypatch, tmp_path):
         _isolate_cache_health(monkeypatch, tmp_path)
 
