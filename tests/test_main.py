@@ -298,3 +298,62 @@ class TestCollectAllNewsFallback:
         cached = sh.load_cache()["google_news"]
         assert cached[0]["id"] == "g1"
         assert cached[0]["urls"] == {"news": "https://x.example/1", "official": None}
+
+
+class TestCollectAllDisabledSources:
+    """2026-09-09: moef/fsc/policy_briefing이 프록시 경유 시 0건을 반환하는데
+    캐시도 없어 폴백할 데가 없어서, 매 실행 로그·메일에 실패 경고만 계속
+    쌓였다. `data/source_toggles.yml`(DISABLED_SOURCES)에 있는 소스는 시도
+    자체를 건너뛰어 sources_ok/sources_failed 어디에도 안 잡히는지, 나머지
+    소스는 평소대로 도는지 확인한다."""
+
+    def test_disabled_official_source_is_skipped_entirely(self, monkeypatch, tmp_path, capsys):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        monkeypatch.setattr(main, "DISABLED_SOURCES", {"moef": "테스트 사유"})
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("moef", lambda: [{"id": "m1"}])])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+
+        items, ok, failed = main.collect_all()
+
+        assert items == []
+        assert ok == []
+        assert failed == []
+        out = capsys.readouterr().out
+        assert "수집 시도" not in out  # 시도 자체를 안 함
+
+    def test_disabled_official_source_does_not_touch_health_or_cache(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        monkeypatch.setattr(main, "DISABLED_SOURCES", {"moef": ""})
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("moef", lambda: [{"id": "m1"}])])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+
+        main.collect_all()
+        main.collect_all()  # 두 번 돌려도 연속 실패 카운트가 안 생겨야 함
+
+        assert sh.load_health() == {}
+        assert sh.load_cache() == {}
+
+    def test_disabled_news_source_is_also_skipped(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        monkeypatch.setattr(main, "DISABLED_SOURCES", {"naver_news": ""})
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [("naver_news", lambda: {}, "news")])
+
+        items, ok, failed = main.collect_all()
+
+        assert items == [] and ok == [] and failed == []
+
+    def test_non_disabled_sources_still_run_normally(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        monkeypatch.setattr(main, "DISABLED_SOURCES", {"moef": ""})
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [
+            ("moef", lambda: [{"id": "m1"}]),
+            ("nts", lambda: [{"id": "n1"}]),
+        ])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+
+        items, ok, failed = main.collect_all()
+
+        assert items == [{"id": "n1"}]
+        assert ok == ["nts"]
+        assert failed == []

@@ -1,0 +1,31 @@
+# 소스 활성/비활성 설정
+#
+# enabled: false로 두면 그 소스는 다음 실행부터 아예 시도하지 않는다 —
+# "수집 시도" 로그도, 실패 카운트(연속 실패일수)도, 메일의 "전일 데이터
+# 사용" 경고도 전부 안 나온다(시도 자체를 안 하므로 실패로 잡히지 않는다).
+# 다시 켜려면 enabled를 true로 바꾸기만 하면 된다 — 코드 수정 불필요.
+#
+# 여기 없는 소스는 기본으로 활성 상태다. 이 파일이 없거나 파싱에 실패하면
+# _config.py가 "전부 활성화"로 동작한다(조용히 소스가 다 꺼지는 것보다 낫다
+# — data/tax_subjects.yml과 같은 원칙).
+
+sources:
+  - name: moef
+    enabled: false
+    reason: >
+      프록시 경유 시 0건 반환, 원인 미규명(2026-09-09). 로그/캐시 다
+      확인해도 응답 자체가 없는 건지 응답은 왔는데 파싱이 안 되는 건지
+      아직 구분 못 함 — 캐시도 없어서 폴백할 데도 없는 상태라 원인 조사
+      전까지 끔. docs/NEXT.md 참고.
+
+  - name: fsc
+    enabled: false
+    reason: >
+      프록시 경유 시 0건 반환, 원인 미규명(2026-09-09). moef/policy_briefing과
+      같은 증상 — docs/NEXT.md 참고.
+
+  - name: policy_briefing
+    enabled: false
+    reason: >
+      프록시 경유 시 0건 반환, 원인 미규명(2026-09-09). moef/fsc와 같은
+      증상 — docs/NEXT.md 참고.

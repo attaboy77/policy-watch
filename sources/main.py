@@ -16,7 +16,7 @@ import sys
 from datetime import datetime, timezone, timedelta
 
 from . import _excluded_log, _gap_log, _source_health
-from ._config import CATEGORIES, COLLECT_WINDOW_DAYS, SOURCE_LABELS
+from ._config import CATEGORIES, COLLECT_WINDOW_DAYS, DISABLED_SOURCES, SOURCE_LABELS
 from ._schema import validate as validate_schema
 from ._summarize import summarize
 from .current_standards import build_current_standards
@@ -135,6 +135,14 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
     빈 리스트"도 실패로 본다(전에는 성공으로 처리돼 캐시가 빈 값으로
     덮어써졌다 — 다음에 그 소스가 진짜 성공하면 과거분 전체가 "신규"로
     오판되는 사고로 이어짐, nts 9/4·9/9 재발 실측으로 확인).
+
+    2026-09-09: `DISABLED_SOURCES`(`data/source_toggles.yml`)에 있는 소스는
+    아예 시도하지 않고 건너뛴다 — moef/fsc/policy_briefing이 프록시 경유 시
+    0건을 반환하는데 캐시도 없어 폴백할 데가 없어서, 매 실행 로그와 메일에
+    실패 경고만 계속 쌓이는 걸 막기 위함(사용자 지시). 시도 자체를 안 하므로
+    `sources_ok`/`sources_failed` 어디에도 안 잡히고, `record_failure`도
+    호출되지 않아 연속 실패 카운트도 안 늘어난다 — 다시 켤 때 그 카운트가
+    남아있던 이전 값 그대로부터 이어지지 않고 조용히 사라져 있다는 뜻.
     """
     items: list[dict] = []
     sources_ok: list[str] = []
@@ -144,6 +152,8 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
     now_iso = _now_kst_iso()
 
     for name, fetch_fn in OFFICIAL_SOURCES:
+        if name in DISABLED_SOURCES:
+            continue
         label = SOURCE_LABELS.get(name, name)
         timeout = SOURCE_TIMEOUT_OVERRIDES.get(name, SOURCE_TIMEOUT_SECONDS)
         print(f"[main] 수집 시도: {label}({name})")
@@ -169,6 +179,8 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
             _use_fallback(name, str(exc), cache, health, now_iso, items, sources_failed)
 
     for name, fetch_all_fn, source_type in NEWS_SOURCES:
+        if name in DISABLED_SOURCES:
+            continue
         label = SOURCE_LABELS.get(name, name)
         timeout = SOURCE_TIMEOUT_OVERRIDES.get(name, SOURCE_TIMEOUT_SECONDS)
         print(f"[main] 수집 시도: {label}({name})")

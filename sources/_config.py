@@ -548,3 +548,40 @@ K-IFRS 적용 대상이며 금융업·공공기관·비영리법인이 아니다
 """
 
 TAX_SUBJECTS, TAX_FEATURES = _load_tax_subjects()
+
+# ── 소스 활성/비활성 설정 (2026-09-09 사용자 지시) ──────────────────────────
+# moef/fsc/policy_briefing 3개가 프록시 경유 시 0건 반환(캐시도 없어서 폴백할
+# 데도 없음, 원인 미규명 — docs/NEXT.md 참고)하며 로그/메일에 계속 실패
+# 경고를 냈다. 코드를 고치지 않고도 소스를 껐다 켰다 할 수 있도록
+# data/tax_subjects.yml과 같은 패턴(YAML + enabled 플래그)으로 뺐다.
+SOURCE_TOGGLES_YML_PATH = "data/source_toggles.yml"
+
+
+def _load_disabled_sources(path: str = SOURCE_TOGGLES_YML_PATH) -> dict[str, str]:
+    """data/source_toggles.yml을 읽어 {소스명: 비활성 사유} 딕셔너리를 반환한다.
+
+    `enabled: false`인 항목만 담는다 — 여기 없는 소스는 기본 활성이라 전체
+    소스를 다 나열할 필요가 없다. 파일이 없거나 파싱에 실패하면 **전부
+    활성화**로 동작한다(빈 딕셔너리 반환) — `_load_tax_subjects()`와 같은
+    원칙("조용히 소스가 다 꺼지는 것보다 낫다").
+    """
+    try:
+        import yaml
+        with open(path, encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+        disabled = {
+            s["name"]: (s.get("reason") or "").strip()
+            for s in data.get("sources", [])
+            if not s.get("enabled", True)
+        }
+        if disabled:
+            print(f"[main] 비활성화된 소스 {len(disabled)}개(설정 파일): {', '.join(disabled)}")
+        return disabled
+    except FileNotFoundError:
+        return {}
+    except Exception as exc:  # noqa: BLE001 - YAML 파싱 실패 등, 조용히 죽는 것보다 낫다
+        print(f"[main] {path} 파싱 실패({exc}) — 전부 활성화로 동작합니다.")
+        return {}
+
+
+DISABLED_SOURCES = _load_disabled_sources()
