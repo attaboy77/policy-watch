@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-09 16:09:51 +0900
+생성 시각: 2026-09-09 16:32:15 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -25,7 +25,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 |---|---|---|---|
 | kifrs | junggi.co.kr | "VC는 숫자 대신 사람을 본다"…벤처캐피탈의 진짜 심사기준 - 중기이코노미 | https://news.google.com/rss/articles/CBMiakFVX3lxTE5vbWVnMnhWdWE5MVctNEJEQVBobmwybXNhQlV0emtJODc1RWJvajlENWNwUW94UWRQSk1qdTExWGExeXBVc2wxVmxaSDdDVlNCM01UZjJ6X21qVW5aLXF2SlF6N0VSSzZzNlE?oc=5 |
 | kifrs | v.daum.net | 교보생명이 인수한 SBI저축은행, 회계 기준 바뀌자 순익 360억→19억 왜? - v.daum.net | https://news.google.com/rss/articles/CBMiT0FVX3lxTFBqOVBramVhY3JyaGdzUm1Hd3dHY0JrS0ptRnJuOUd5UkRxVTRUYXFsNUlSUVhrakhUOHcxTGF2cXdpNHRpdDM4ODA4bURTeUk?oc=5 |
-| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - sedaily.com | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
+| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
 | esg | segye.com | 증권사 지속가능경영…‘포괄적 ESG 활동’서 본업 연계 ‘지속가능금융... | https://www.segye.com/newsView/20260824517331?OutUrl=naver |
 
 ## excluded:foreign (1건)
