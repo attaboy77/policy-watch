@@ -59,6 +59,15 @@ _MINISTRY_NAME_FIX = {"재정경제부": "기획재정부"}  # 레거시 명칭 
 _KST = timezone(timedelta(hours=9))
 SLEEP_BETWEEN_REQUESTS = 1.0
 
+# 2026-09-09: 로컬 실측(13.5초, 요청 14회)과 실제 GitHub Actions("60초 초과",
+# 연속 3일째)의 격차가 너무 커서 원인 후보(프록시 왕복 지연 / law_api만 유독
+# 느림 / 재시도+백오프 중첩으로 실제 요청이 14회보다 많음)를 Actions 로그로
+# 가려야 한다는 사용자 요청 — 요청 번호·소요시간을 요청 단위로 남긴다.
+# 소요시간엔 `_http.get()`의 재시도(최대 3회, 0.5s/1s/2s 백오프)까지 전부
+# 포함된다 — 한 줄이 유난히 길면(예: 수 초 이상) 그 요청에서 재시도가
+# 걸렸다는 뜻으로 읽으면 된다.
+_request_count = 0
+
 
 def _oc() -> str:
     oc = os.environ.get("LAW_API_OC")
@@ -67,6 +76,24 @@ def _oc() -> str:
               "운영 배포 시 실제 OC 발급을 권장합니다.")
         return "test"
     return oc
+
+
+def _timed_get_govt(url: str, *, params: dict, label: str):
+    """`_http.get_govt()`를 요청 번호·소요시간 로그와 함께 호출한다(law_api 전용)."""
+    global _request_count
+    _request_count += 1
+    n = _request_count
+    t0 = time.monotonic()
+    try:
+        resp = _http.get_govt(url, params=params)
+    except Exception as exc:  # noqa: BLE001 - 로그만 남기고 그대로 올린다
+        elapsed = time.monotonic() - t0
+        print(f"[law_api] 요청 #{n} {label} - {elapsed:.2f}초 후 실패: {exc}")
+        raise
+    elapsed = time.monotonic() - t0
+    status = getattr(resp, "status_code", "?")  # 테스트용 fake response는 status_code가 없을 수 있음
+    print(f"[law_api] 요청 #{n} {label} - {elapsed:.2f}초 (HTTP {status})")
+    return resp
 
 
 def probe() -> dict:
@@ -127,9 +154,9 @@ def search_law(law_name: str, *, oc: str | None = None, wanted: set[str] | None 
     거의 다 써버리는 원인이었다. 여기서 바로 뽑아두면 `law_detail()` 호출
     자체가 필요 없어진다(그건 검색 응답에 없는 `제개정이유내용`용으로만 남음).
     """
-    resp = _http.get_govt(SEARCH_URL, params={
+    resp = _timed_get_govt(SEARCH_URL, params={
         "OC": oc or _oc(), "target": "law", "type": "XML", "query": law_name,
-    })
+    }, label=f"검색 '{law_name}'")
     root = ET.fromstring(resp.content)
     wanted = wanted or {law_name, f"{law_name} 시행령", f"{law_name} 시행규칙"}
     out = []
@@ -160,9 +187,9 @@ def law_detail(law_name: str, *, oc: str | None = None) -> dict | None:
     시행규칙/부가가치세법 4건 전부 정상 추출). `_tag_text()`가 첫 매치만
     반환하므로 이 필드는 항상 하나만 온다(실측상 여러 건인 사례 없음).
     """
-    resp = _http.get_govt(SERVICE_URL, params={
+    resp = _timed_get_govt(SERVICE_URL, params={
         "OC": oc or _oc(), "target": "law", "type": "XML", "LM": law_name,
-    })
+    }, label=f"상세조회 '{law_name}'")
     root = ET.fromstring(resp.content)
     result_code = _tag_text(root, "resultCode")
     if result_code is not None and result_code != "00":
@@ -190,6 +217,9 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
     개정이유에 함께 언급되는 경우가 많다는 게 사용자 판단) — 요청 25회→14회,
     강제 sleep 24초→13초로 줄어 소스 타임아웃(60초) 안에 여유 있게 끝난다.
     """
+    global _request_count
+    _request_count = 0  # 이번 fetch() 실행 동안의 요청 번호를 1부터 다시 매긴다
+    fetch_t0 = time.monotonic()
     oc = _oc()
     items: list[dict] = []
     wanted = set(law_names or _configured_law_names())
@@ -251,6 +281,8 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
                 "layer": "L1",
                 "is_noise": False,
             })
+    total_elapsed = time.monotonic() - fetch_t0
+    print(f"[law_api] fetch() 완료 - 요청 {_request_count}회, 총 {total_elapsed:.2f}초, {len(items)}건")
     return items
 
 

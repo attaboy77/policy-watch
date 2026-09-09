@@ -174,6 +174,45 @@ class TestCollectAllSourceTimeout:
         assert ok == ["nts"]
         assert failed == []
 
+    def test_per_source_timeout_override_applies(self, monkeypatch, tmp_path):
+        """2026-09-09: law_api만 이틀 연속 60초 초과로 실패해 임시로 120초로
+        올렸다 — SOURCE_TIMEOUT_OVERRIDES에 있는 소스는 SOURCE_TIMEOUT_SECONDS가
+        아니라 그 값을 쓰는지 확인한다."""
+        _isolate_cache_health(monkeypatch, tmp_path)
+        monkeypatch.setattr(main, "SOURCE_TIMEOUT_SECONDS", 0.05)
+        monkeypatch.setattr(main, "SOURCE_TIMEOUT_OVERRIDES", {"law_api": 1})
+
+        def slow_but_within_override():
+            time.sleep(0.2)  # 기본 상한(0.05초)은 넘지만 override(1초)는 안 넘음
+            return [{"id": "ok"}]
+
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("law_api", slow_but_within_override)])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+
+        items, ok, failed = main.collect_all()
+
+        assert items == [{"id": "ok"}]
+        assert ok == ["law_api"]
+        assert failed == []
+
+    def test_source_without_override_still_uses_default_timeout(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        monkeypatch.setattr(main, "SOURCE_TIMEOUT_SECONDS", 0.05)
+        monkeypatch.setattr(main, "SOURCE_TIMEOUT_OVERRIDES", {"law_api": 1})
+
+        def hangs():
+            time.sleep(0.2)
+            return [{"id": "too_late"}]
+
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("nts", hangs)])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+
+        items, ok, failed = main.collect_all()
+
+        assert ok == []
+        assert failed[0]["name"] == "nts"
+        assert failed[0]["reason"] == "0.05초 초과(응답 없음)"
+
     def test_logs_which_source_is_being_attempted(self, monkeypatch, tmp_path, capsys):
         _isolate_cache_health(monkeypatch, tmp_path)
         monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("nts", lambda: [{"id": "n1"}])])

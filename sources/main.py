@@ -44,21 +44,34 @@ SCHEMA_VERSION = "1.0"
 # 없었다 — 이 상수가 그 상한 역할을 한다.
 SOURCE_TIMEOUT_SECONDS = 60
 
+# 2026-09-09: law_api만 이틀 연속(현재 3일째) 60초를 넘겨 실패 — 로컬 실측은
+# 13.5초인데 Actions는 60초 초과라 격차 원인(프록시 왕복 지연/law_api만 유독
+# 느림/재시도+백오프 중첩)이 아직 안 밝혀졌다. 원인을 Actions 로그로 확인할
+# 때까지 임시로 law_api만 상한을 올려 데이터부터 살린다(사용자 지시 — "상한
+# 올리기보다 요청을 줄이는 쪽"이 원칙이었지만 이번엔 원인 파악 전 응급 조치).
+# 다른 소스는 기존 60초 그대로 — law_api.py의 요청당 로그(`_timed_get_govt`)로
+# 실측 데이터가 모이면 원인 확인 후 이 예외를 다시 없애거나 구조적으로 고칠 것.
+SOURCE_TIMEOUT_OVERRIDES = {"law_api": 120}
 
-def _fetch_with_timeout(fetch_fn):
-    """`fetch_fn()`을 별도 스레드에서 실행하고 `SOURCE_TIMEOUT_SECONDS`초 안에
-    못 끝내면 `concurrent.futures.TimeoutError`를 올린다.
+
+def _fetch_with_timeout(fetch_fn, *, timeout: float):
+    """`fetch_fn()`을 별도 스레드에서 실행하고 `timeout`초 안에 못 끝내면
+    `concurrent.futures.TimeoutError`를 올린다.
 
     파이썬은 실행 중인 스레드를 강제 종료할 수 없다 — 시간을 초과한 스레드는
     백그라운드에서 계속 돌다가 결국(각 HTTP 요청 자체의 타임아웃 덕에) 스스로
     끝난다. 다만 호출부(collect_all)는 이 함수가 예외를 던지는 즉시 그 결과를
     기다리지 않고 다음 소스로 넘어간다 — "소스 하나의 응답 지연이 전체
     크롤링을 막지 않는다"가 목적이라 완전한 강제 종료까지는 필요 없다.
+
+    2026-09-09: 소스마다 다른 상한을 줄 수 있도록 `timeout`을 호출부(collect_all)가
+    `SOURCE_TIMEOUT_OVERRIDES`를 참고해 명시적으로 넘기게 바꿨다(기본값 없음 —
+    호출부가 매번 어떤 상한을 쓰는지 스스로 결정하게 강제).
     """
     executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
     future = executor.submit(fetch_fn)
     try:
-        return future.result(timeout=SOURCE_TIMEOUT_SECONDS)
+        return future.result(timeout=timeout)
     finally:
         executor.shutdown(wait=False, cancel_futures=True)
 
@@ -127,24 +140,26 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
 
     for name, fetch_fn in OFFICIAL_SOURCES:
         label = SOURCE_LABELS.get(name, name)
+        timeout = SOURCE_TIMEOUT_OVERRIDES.get(name, SOURCE_TIMEOUT_SECONDS)
         print(f"[main] 수집 시도: {label}({name})")
         try:
-            got = _fetch_with_timeout(fetch_fn)
+            got = _fetch_with_timeout(fetch_fn, timeout=timeout)
             items.extend(got)
             sources_ok.append(name)
             cache[name] = got
             _source_health.record_success(health, name, now_iso)
         except concurrent.futures.TimeoutError:
-            _use_fallback(name, f"{SOURCE_TIMEOUT_SECONDS}초 초과(응답 없음)",
+            _use_fallback(name, f"{timeout}초 초과(응답 없음)",
                           cache, health, now_iso, items, sources_failed)
         except Exception as exc:  # noqa: BLE001 - 소스 단위 격리
             _use_fallback(name, str(exc), cache, health, now_iso, items, sources_failed)
 
     for name, fetch_all_fn, source_type in NEWS_SOURCES:
         label = SOURCE_LABELS.get(name, name)
+        timeout = SOURCE_TIMEOUT_OVERRIDES.get(name, SOURCE_TIMEOUT_SECONDS)
         print(f"[main] 수집 시도: {label}({name})")
         try:
-            by_category = _fetch_with_timeout(fetch_all_fn)
+            by_category = _fetch_with_timeout(fetch_all_fn, timeout=timeout)
             normalized = [
                 normalize_news_item(raw, source_type=source_type)
                 for raw_items in by_category.values()
@@ -160,7 +175,7 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
                 _use_fallback(name, "결과 0건(자격증명 미설정 또는 응답 없음)",
                               cache, health, now_iso, items, sources_failed)
         except concurrent.futures.TimeoutError:
-            _use_fallback(name, f"{SOURCE_TIMEOUT_SECONDS}초 초과(응답 없음)",
+            _use_fallback(name, f"{timeout}초 초과(응답 없음)",
                           cache, health, now_iso, items, sources_failed)
         except Exception as exc:  # noqa: BLE001
             _use_fallback(name, str(exc), cache, health, now_iso, items, sources_failed)

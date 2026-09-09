@@ -13,6 +13,14 @@ docs/SOURCE_PROBE.md §D2 "완전 검증" 기반.
   단위로 뽑을 수 없고(SOURCE_PROBE.md D2 참고), 애초에 시도하지 않는다.
 - 첨부 PDF 링크는 `javascript:htmlDocTransView(...)` 형태라 KASB와 마찬가지로
   평문 URL을 구성할 수 없다. attachments는 채우지 않는다(KASB와 동일 정책).
+- **연도 필터(2026-09-09)**: 이 게시판은 연 1회 자료집이지만 과거 발간분이
+  전부 목록에 남아있어(2017~2026년치, 10건) 매번 그대로 수집된다. 평소엔
+  전일 캐시와 id가 같아 "신규"로 안 잡히지만, 이 소스가 며칠 실패했다 복구될
+  때(캐시가 비었을 때) 10건 전부가 "신규 발표"로 오판돼 메일에 섞이는 사고가
+  2026-09-04·09-09 두 차례 재발(원인은 `sources/main.py`의 소스 실패 폴백
+  경로 문제 — `docs/NEXT.md` 참고, 이 필터는 그것과 별개로 애초에 오래된
+  연도까지 매번 수집 대상에 넣을 이유가 없다는 사용자 판단). 제목이
+  "YYYY년 ..."로 시작하는 항목은 최근 `_KEEP_YEARS`개 연도치만 남긴다.
 """
 from __future__ import annotations
 
@@ -32,6 +40,9 @@ BBS_ID = "1083"
 
 SOURCE_NAME = "국세청"
 _KST = timezone(timedelta(hours=9))
+
+_TITLE_YEAR_RE = re.compile(r"^(\d{4})년")  # "2026년 개정세법 해설" 형태만 매칭(연도 필터용)
+_KEEP_YEARS = 2  # 제목에 연도가 있는 연간 자료는 최근 몇 개 연도치만 남길지
 
 
 def probe() -> dict:
@@ -60,6 +71,32 @@ def _parse_dotted_date(s: str) -> str | None:
 
 def _parse_iso_date(s: str) -> date:
     return datetime.strptime(s, "%Y-%m-%d").date()
+
+
+def _filter_recent_years(items: list[dict], *, keep: int = _KEEP_YEARS) -> list[dict]:
+    """제목이 "YYYY년 ..."로 시작하는 연간 자료는 최근 `keep`개 연도치만 남긴다.
+
+    "최근"의 기준은 오늘 날짜가 아니라 **이 목록에 실제로 있는 연도 중 큰 값**
+    이다 — 예를 들어 올해치가 아직 안 올라온 시점(4월 이전)엔 작년이 최신이
+    되므로, 오늘 연도를 기준으로 자르면 그 사이엔 0건이 되는 문제를 피한다.
+    제목에 연도가 없는 항목(형식이 다른 공지 등)은 건드리지 않고 그대로 둔다.
+    """
+    years_present = sorted(
+        {int(m.group(1)) for it in items if (m := _TITLE_YEAR_RE.match(it["title"]))},
+        reverse=True,
+    )
+    keep_years = set(years_present[:keep])
+    kept, dropped = [], []
+    for it in items:
+        m = _TITLE_YEAR_RE.match(it["title"])
+        if m and int(m.group(1)) not in keep_years:
+            dropped.append(it)
+        else:
+            kept.append(it)
+    if dropped:
+        print(f"[nts] 연도 필터: {len(dropped)}건 제외(최근 {sorted(keep_years, reverse=True)}년치만 유지) - "
+              + ", ".join(it["title"][:20] for it in dropped))
+    return kept
 
 
 def fetch() -> list[dict]:
@@ -107,7 +144,7 @@ def fetch() -> list[dict]:
             "layer": "L1_comprehensive",  # ADDENDUM-3 §4 D2: 전 세목 포괄 연간 자료집, 세목 필터 면제
             "is_noise": False,
         })
-    return items
+    return _filter_recent_years(items)
 
 
 if __name__ == "__main__":
