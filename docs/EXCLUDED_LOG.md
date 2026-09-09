@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-09 08:49:45 +0900
+생성 시각: 2026-09-09 16:09:51 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -13,11 +13,11 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | kifrs | news.koreanbar.or.kr | [로펌소식] 지평, ‘AI회계감리대응센터’ 확대 개편… 회계 관련 규제 대응 강화 - 법조신문 | https://news.google.com/rss/articles/CBMib0FVX3lxTE12bVNaT28xenRLNXZMRTZFN2JWRTNDdjY5d3RmTG9iQlBsN3l6RWZxQUdnZzVjSmlBdzMyWXprTHJlOUNMT2tSeXZRLUwxSENTTXpEYUVUQW51bU8wemZTQ1FZTjVtNDRPbHdSNjhsaw?oc=5 |
-| esg | 한국경제 | 오스템임플란트, 지속가능경영보고서 발간…이중중대성 평가 도입 | https://www.hankyung.com/article/202608138384i |
 | esg | cenews.kr | 롯데건설, 글로벌 ESG 공시 기준 담은 지속가능경영보고서 발간 - 건설이코노미뉴스 | https://news.google.com/rss/articles/CBMiZkFVX3lxTFA2MHZhNXlOZncwT2hiUEYzeHUyeUhsci1lQTlLTmxHRzliR21Hc284ck8yaVgxSmJQT2ttRnZncGRJc3pOM0FwQWlpTUhGOXNXeU5OWVNQM2tFempCS25rQ1JINEhrZw?oc=5 |
-| esg | v.daum.net | 지오영, 창사 첫 지속가능경영보고서 발간...ESG 중장기 로드맵 제시 - v.daum.net | https://news.google.com/rss/articles/CBMiRkFVX3lxTE5WWmdYRDg2N0QyUzhUNGFfMjJMWWxTRDdFRTBsNHhPU1lMXzQ0UnQzMVBZWmdyTmRjMjY5b1ZtOGZXajZnNHc?oc=5 |
 | esg | cstimes.com | 오스템임플란트, ESG 공시 항목 70% 확대…지속가능경영보고서 발간 | https://www.cstimes.com/news/articleView.html?idxno=716698 |
+| esg | v.daum.net | 지오영, 창사 첫 지속가능경영보고서 발간...ESG 중장기 로드맵 제시 - v.daum.net | https://news.google.com/rss/articles/CBMiRkFVX3lxTE5WWmdYRDg2N0QyUzhUNGFfMjJMWWxTRDdFRTBsNHhPU1lMXzQ0UnQzMVBZWmdyTmRjMjY5b1ZtOGZXajZnNHc?oc=5 |
 | esg | youthdaily.co.kr | 지속가능경영 고도화·글로벌 경쟁력 강화…오스템임플란트, '글로벌 To... | https://www.youthdaily.co.kr/news/article.html?no=225235 |
+| esg | updownnews.co.kr | 오스템임플란트, 지속가능경영 보고서 발간...'이중중대성 평가' 정식 도... | http://www.updownnews.co.kr/news/articleView.html?idxno=318364 |
 
 ## excluded:financial (4건)
 
@@ -25,7 +25,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 |---|---|---|---|
 | kifrs | junggi.co.kr | "VC는 숫자 대신 사람을 본다"…벤처캐피탈의 진짜 심사기준 - 중기이코노미 | https://news.google.com/rss/articles/CBMiakFVX3lxTE5vbWVnMnhWdWE5MVctNEJEQVBobmwybXNhQlV0emtJODc1RWJvajlENWNwUW94UWRQSk1qdTExWGExeXBVc2wxVmxaSDdDVlNCM01UZjJ6X21qVW5aLXF2SlF6N0VSSzZzNlE?oc=5 |
 | kifrs | v.daum.net | 교보생명이 인수한 SBI저축은행, 회계 기준 바뀌자 순익 360억→19억 왜? - v.daum.net | https://news.google.com/rss/articles/CBMiT0FVX3lxTFBqOVBramVhY3JyaGdzUm1Hd3dHY0JrS0ptRnJuOUd5UkRxVTRUYXFsNUlSUVhrakhUOHcxTGF2cXdpNHRpdDM4ODA4bURTeUk?oc=5 |
-| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
+| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - sedaily.com | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
 | esg | segye.com | 증권사 지속가능경영…‘포괄적 ESG 활동’서 본업 연계 ‘지속가능금융... | https://www.segye.com/newsView/20260824517331?OutUrl=naver |
 
 ## excluded:foreign (1건)
