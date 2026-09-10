@@ -47,11 +47,13 @@ from sources._utils import (
     is_foreign_news_only,
     apply_foreign_news_filter,
     apply_corporate_pr_filter,
+    is_non_target_tax_subject,
+    apply_non_target_tax_subject_filter,
 )
 from sources._config import (CATEGORIES, NOISE_KEYWORDS, ADMIN_NOISE_KEYWORDS,
                              REGULATORY_SIGNALS, APPLICABILITY, COMPANY_EVENTS,
                              FOREIGN_STANDARD_BODIES, LOCAL_GOV_PETITION_KEYWORDS,
-                             FOREIGN_NEWS_SIGNALS)
+                             FOREIGN_NEWS_SIGNALS, NON_TARGET_TAX_SUBJECTS)
 
 
 # ── 쿼리 생성 ────────────────────────────────────────────────────────────
@@ -827,6 +829,14 @@ class TestIsApplicable:
         assert ok is False
         assert reason == "excluded:nonprofit"
 
+    # 2026-09-10 사용자 지시 — 종교단체 전용 제외.
+    def test_religious_entity_real_example_excluded(self):
+        ok, reason = is_applicable(
+            "한교총, 상증법 및 법인세법 시행령 재개정 및 법적용에 관한 공청회 개최"
+        )
+        assert ok is False
+        assert reason == "excluded:religious"
+
     def test_foreign_jurisdiction_excluded(self):
         ok, reason = is_applicable("EFRAG, 비EU 기업 대상 ESRS-40a 공개초안")
         assert ok is False
@@ -1271,6 +1281,56 @@ class TestApplyLocalGovPetitionFilter:
         items = [self._item("송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의",
                              layer="L1", tier=1)]
         kept, excluded = apply_local_gov_petition_filter(items)
+        assert len(kept) == 1
+        assert excluded == []
+
+
+# ── 비대상 세목 뉴스 제외 (2026-09-10 사용자 지시) ──────────────────────────
+class TestIsNonTargetTaxSubject:
+    def test_real_example_excluded_even_with_enabled_subject_keyword(self):
+        # "법인세법 시행령"(활성 세목 corp의 키워드)이 같이 있어도 제외돼야 한다.
+        assert is_non_target_tax_subject(
+            "tax", "한교총, 상증법 및 법인세법 시행령 재개정 및 법적용에 관한 공청회 개최"
+        ) is True
+
+    def test_all_keywords_individually_detected(self):
+        for kw in NON_TARGET_TAX_SUBJECTS:
+            assert is_non_target_tax_subject("tax", f"{kw} 개정 관련 공청회") is True, f"{kw}가 통과됨"
+
+    def test_non_tax_category_never_excluded(self):
+        # 카테고리 자체가 tax가 아니면(예: kifrs) 이 필터 대상이 아니다.
+        assert is_non_target_tax_subject("kifrs", "상속세 및 증여세법 개정") is False
+
+    def test_target_subject_only_passes(self):
+        assert is_non_target_tax_subject("tax", "법인세법 시행령 개정안 입법예고") is False
+
+
+class TestApplyNonTargetTaxSubjectFilter:
+    def _item(self, title, category="tax", layer="L3", tier=5):
+        return {"category": category, "title": title, "layer": layer,
+                "source": {"tier": tier}, "urls": {"news": "https://x", "official": None}}
+
+    def test_splits_kept_and_excluded(self):
+        items = [
+            self._item("한교총, 상증법 및 법인세법 시행령 재개정 및 법적용에 관한 공청회 개최"),
+            self._item("기획재정부, 법인세법 시행령 개정"),
+        ]
+        kept, excluded = apply_non_target_tax_subject_filter(items)
+        assert [it["title"] for it in kept] == ["기획재정부, 법인세법 시행령 개정"]
+        assert len(excluded) == 1
+        assert excluded[0]["excluded_reason"] == "excluded:non_target_tax_subject"
+
+    def test_applies_to_l1_too_unlike_local_gov_petition_filter(self):
+        # 이 필터는 §1(적용 대상 게이트)과 같은 자리에서 전 계층에 적용된다 —
+        # local_gov_petition_filter와 달리 L1도 면제하지 않는다.
+        items = [self._item("국세청, 상속세 및 증여세법 시행령 개정 고시", layer="L1", tier=1)]
+        kept, excluded = apply_non_target_tax_subject_filter(items)
+        assert kept == []
+        assert len(excluded) == 1
+
+    def test_other_category_unaffected(self):
+        items = [self._item("상속세 및 증여세법 관련 회계처리 안내", category="kifrs")]
+        kept, excluded = apply_non_target_tax_subject_filter(items)
         assert len(kept) == 1
         assert excluded == []
 

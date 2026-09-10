@@ -1,9 +1,84 @@
 # 다음에 이어서 할 일 (NEXT)
 
-마지막 갱신: 2026-09-09, nts 신규 오판 재발 진단·수정 세션 직후 기준. **Phase 6(GitHub Pages 자동 배포) 완료·운영 중.**
+마지막 갱신: 2026-09-10, 메일 발송 이력(구글 뉴스 재등장 중복 발송) + 뉴스 필터 2종 추가 세션 직후 기준. **Phase 6(GitHub Pages 자동 배포) 완료·운영 중.**
 **정부 보도자료 3소스(moef/fsc/policy_briefing) 비활성화 — 프록시 경유 시 0건 반환, 원인 미규명. 응답 없음인지 파싱 실패인지 확인 필요.**
 `data/source_toggles.yml`에서 `enabled: true`로 되돌리면 다시 켜진다(코드 수정 불필요) — 아래
-"2026-09-09 세션 요약" 참고. 테스트 534개 통과.
+"2026-09-09 세션 요약" 참고. 테스트 560개 통과. **미검증(다음 Actions 실행 필요)** —
+아래 "2026-09-10 세션 요약" 끝의 "미검증" 항목 참고.
+
+## 2026-09-10 세션 요약 — 메일 발송 이력(재등장 기사 중복 발송 방지) + 뉴스 필터 2종(종교단체·비대상 세목)
+
+사용자 보고 1: 9/10 메일에 9/9에도 나갔던 기사 2건("김현정 의원, 고의 분식
+회사관계자의 과징금 상향하는 외감법 개정안 발의", "국내 기업 83% 신외감법
+도입 효과…")이 또 발송됨. 원인은 구글 뉴스 RSS가 같은 검색어라도 매일
+결과 집합이 달라진다는 것 — `notify_mail.py`의 "신규" 판정이 PREV_DATA_JSON
+(수집 직전 백업한 site/data.json)에 없는 id만 봤는데, 응답에서 하루 빠졌다가
+그다음 날 다시 잡히면 PREV_DATA_JSON에도 없어서 "신규"로 재판정됐다.
+
+사용자 보고 2: "한교총, 상증법 및 법인세법 시행령 재개정 및 법적용에 관한
+공청회 개최"가 세법 카테고리를 통과. 한교총(한국교회총연합)은 종교단체라
+팜한농(상장 제조법인)과 무관하고, 상증법(상속세및증여세법)은
+`data/tax_subjects.yml`에 없는 세목인데 제목에 "법인세법 시행령"(활성 세목
+corp의 키워드)이 같이 언급돼 기존 세목 화이트리스트(`match_tax_subject`)를
+통과해버렸다.
+
+- **메일 발송 이력 신설(`sources/_sent_log.py`)** — `data/sent_log.json`에
+  `{id: "발송일(YYYY-MM-DD)"}`을 계속 누적한다. `data/source_cache.json`/
+  `data/source_health.json`과 같은 원칙(git 추적 대상, GitHub Actions 새 VM이
+  이전 실행 결과를 알 방법이 이 파일뿐)으로 설계했다.
+  - `notify_mail.find_new_items()`가 `sent_ids` 인자를 새로 받는다 —
+    PREV_DATA_JSON 비교를 대체하는 게 아니라 그 위에 얹는 추가 필터(기존
+    호출부는 인자를 안 줘도 그대로 동작).
+  - `_run()`: 실행마다 `_sent_log.prune()`(90일 지난 id 제거)한 결과를 먼저
+    저장해둔다 — 신규가 없어 메일을 안 보내는 날에도 정리는 계속 반영("이
+    파일은 매일 수집 결과와 무관하게 계속 쌓이게" 요구사항의 반대편인 "정리"
+    부분). 실제로 `send_via_gmail()`이 성공한 뒤에만 이번에 보낸 id를
+    `_sent_log.record()`로 추가 기록 — 발송 자체가 실패하면 기록되지 않는다
+    (다음 실행에서 다시 시도 가능).
+  - `SENT_LOG_PATH` 환경변수로 경로를 오버라이드할 수 있게 했다(테스트
+    격리용 — `CURRENT_DATA_JSON`/`PREV_DATA_JSON`과 같은 패턴).
+  - `crawl.yml`의 "변경사항 커밋" 단계 `git add` 목록에 `data/sent_log.json`
+    추가. 첫 실행에서 `git add`가 존재하지 않는 파일을 가리켜 실패하는 걸
+    막기 위해 빈 `{}`로 이 세션에서 미리 커밋해둔다.
+  - 테스트: `tests/test_sent_log.py` 신규 15개(load/save/record/prune,
+    90일 경계값 포함), `tests/test_notify_mail.py`에 `find_new_items`
+    sent_ids 케이스 3개 + `_run()` 종단 시나리오 3개(재등장 기사 재발송
+    안 됨, 발송 성공 시 id 기록됨, 미발송 시 기록 안 됨) 추가.
+- **뉴스 필터 2종 추가**(SPEC-ADDENDUM-6.md §1과 같은 자리 — 카테고리 분류
+  직후, 다른 필터 이전):
+  1. **종교단체 제외** — `_config.APPLICABILITY["excluded_entities"]`에
+     `religious` 스코프 신설(한교총/한국교회총연합/교회/사찰/성당/종단/교단/
+     종교인 과세/성직자/목회자). 기존 `is_applicable()`/
+     `apply_applicability_gate()`(전 계층 적용)에 자동으로 얹힌다 — 새 필터
+     함수를 따로 안 만들어도 됨. **순서 주의**: `industry_specific`의
+     "학교회계"가 "교회"를 부분문자열로 포함해서, `religious`를 그 앞에 두면
+     "학교회계" 기사가 엉뚱하게 종교단체로 오분류된다(pytest로 실측 발견) —
+     `industry_specific` 다음(딕셔너리 마지막)에 배치해 해결.
+  2. **비대상 세목 뉴스 제외** — `_config.NON_TARGET_TAX_SUBJECTS`(상증법/
+     상속세및증여세법/상속세/증여세 등) 신설 +
+     `_utils.is_non_target_tax_subject()`/`apply_non_target_tax_subject_filter()`
+     신규. `pass_tax_filter()`(활성 세목 키워드 화이트리스트)가 있는데도 새로
+     만든 이유: 활성 세목 키워드가 부수적으로 같이 언급되면 그대로
+     통과해버리는 허점이 실측으로 확인됐기 때문(위 한교총 사례). 비대상 세목
+     키워드가 하나라도 있으면 활성 세목 키워드가 같이 있어도 제외 —
+     사용자가 명시적으로 "우리 대상이 아니다"라고 지정한 세목이라 "애매하면
+     통과"(§9-2/§10) 원칙 대상이 아니라고 판단. `apply_applicability_gate()`
+     바로 다음(전 계층)에 배치, 지자체 건의 필터와 달리 L1도 면제 안 함.
+  - 두 필터 모두 기존 지자체 건의·해외 뉴스 필터와 같은 방식으로
+    `_record_excluded()` → `docs/EXCLUDED_LOG.md`에 남는다(과다 필터링 사후
+    검토용, §9-2 원칙 그대로).
+  - 테스트: `tests/test_utils.py`에 종교단체 실측 예시 1개(제너릭
+    `test_all_excluded_entity_keywords_individually_detected` 루프가 개별
+    키워드는 이미 자동 커버) + `TestIsNonTargetTaxSubject`/
+    `TestApplyNonTargetTaxSubjectFilter` 신규 7개.
+- 테스트 534→560개 통과.
+- **미검증**: 이번 세션은 전부 로컬 pytest로만 검증했다. 다음 GitHub Actions
+  실행(cron 또는 workflow_dispatch)에서 확인 필요 — (a) 실제 발송 후
+  `data/sent_log.json`이 커밋되는지, (b) 다음날 그 파일이 남아있어 재등장
+  기사가 실제로 중복 발송 안 되는지(최소 2일 연속 실행 관찰 필요), (c) 새
+  뉴스 필터 2종이 실제 수집에서 오탐(과다 필터링)을 만들지 않는지
+  `docs/EXCLUDED_LOG.md`의 "excluded:religious"/"excluded:non_target_tax_subject"
+  그룹을 다음에 사람이 훑어볼 것.
 
 ## 2026-09-09 세션 요약 — nts "신규 10건" 재발 진단 + law_api 상세 로깅 + 소스 비활성화 설정
 

@@ -37,6 +37,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
 
+from . import _sent_log
 from ._config import CATEGORIES, SOURCE_LABELS
 
 _KST = timezone(timedelta(hours=9))
@@ -45,6 +46,11 @@ DEFAULT_DASHBOARD_URL = "https://attaboy77.github.io/policy-watch/"
 
 def _now_kst_date_str() -> str:
     return datetime.now(_KST).strftime("%Y.%m.%d")
+
+
+def _now_kst_date_iso() -> str:
+    """`_sent_log`가 쓰는 "YYYY-MM-DD" 형식(`_sent_log.DATE_FMT`)."""
+    return datetime.now(_KST).strftime(_sent_log.DATE_FMT)
 
 
 def load_items(path: str | None) -> list[dict]:
@@ -111,10 +117,18 @@ def fallback_notice_lines(meta: dict) -> list[str]:
     return lines
 
 
-def find_new_items(prev_items: list[dict], current_items: list[dict]) -> list[dict]:
-    """id 기준 신규 항목만 추출."""
+def find_new_items(prev_items: list[dict], current_items: list[dict],
+                    sent_ids: set[str] | None = None) -> list[dict]:
+    """id 기준 신규 항목만 추출.
+
+    2026-09-10: `sent_ids`(과거에 실제로 메일 발송된 id, `_sent_log` 참고)가
+    주어지면 그것도 함께 제외한다 — 구글 뉴스 RSS 결과가 매일 달라져 어제
+    빠졌던 기사가 오늘 PREV_DATA_JSON 비교만으로는 "신규"로 재판정되는 걸
+    막기 위함(PREV_DATA_JSON 비교를 대체하는 게 아니라 그 위에 얹는 추가
+    필터 — 인자를 안 주면 기존 동작 그대로)."""
     prev_ids = {it.get("id") for it in prev_items}
-    return [it for it in current_items if it.get("id") not in prev_ids]
+    excluded_ids = prev_ids | (sent_ids or set())
+    return [it for it in current_items if it.get("id") not in excluded_ids]
 
 
 def is_official(item: dict) -> bool:
@@ -289,14 +303,22 @@ def _run() -> None:
     forced = os.environ.get("FORCE_MAIL", "").strip().lower() == "true"
     current_path = os.environ.get("CURRENT_DATA_JSON", "site/data.json")
     prev_path = os.environ.get("PREV_DATA_JSON")
+    sent_log_path = os.environ.get("SENT_LOG_PATH", _sent_log.PATH)
 
     current_items = load_items(current_path)
     if not current_items and not forced:
         print(f"[notify_mail] {current_path}를 읽을 수 없어 건너뜁니다.")
         return
 
+    # 2026-09-10: 90일 지난 항목을 정리한 상태를 먼저 저장해둔다 — 발송 여부와
+    # 무관하게(신규가 없어 메일을 안 보내는 날에도) 이 파일은 계속 정리·유지돼야
+    # 한다("매일 수집 결과와 무관하게 계속 쌓이게"라는 요구사항의 반대편:
+    # 안 쌓이는 부분인 90일 정리도 매일 반영).
+    sent_log = _sent_log.prune(_sent_log.load(sent_log_path))
+    _sent_log.save(sent_log, sent_log_path)
+
     if prev_path and os.path.exists(prev_path):
-        new_items = find_new_items(load_items(prev_path), current_items)
+        new_items = find_new_items(load_items(prev_path), current_items, sent_ids=set(sent_log))
     else:
         print("[notify_mail] 이전 data.json 백업이 없어 신규 판정을 못 합니다"
               + ("(강제 발송이라 신규 0건으로 진행)" if forced else " — 건너뜁니다."))
@@ -321,6 +343,15 @@ def _run() -> None:
 
     send_via_gmail(subject, text_body, html_body, recipients, gmail_user, gmail_password)
     print(f"[notify_mail] 메일 발송 완료: 공식 {len(new_official)}건, 언론 {len(new_news)}건 → {len(recipients)}명")
+
+    # 2026-09-10: 실제로 메일에 실린 id만 발송 이력에 남긴다(발송 자체가
+    # 실패하면 이 아래는 실행되지 않으므로 안 보낸 id가 "보냄"으로 잘못
+    # 기록될 일은 없다) — 다음 실행부터 find_new_items()가 이 id들을
+    # 다시 신규로 잡지 않는다.
+    sent_now = [it.get("id") for it in new_official + new_news if it.get("id")]
+    if sent_now:
+        _sent_log.record(sent_log, sent_now, _now_kst_date_iso())
+        _sent_log.save(sent_log, sent_log_path)
 
 
 def main() -> None:

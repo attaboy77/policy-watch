@@ -16,7 +16,8 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       APPLICABILITY, COMPANY_EVENTS, COMPANY_EVENT_STRONG_SIGNALS,
                       MANUFACTURING_ACCOUNTING_CONTEXT, EVENT_ANNOUNCEMENT_STRONG_SIGNALS,
                       FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS,
-                      LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS)
+                      LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS,
+                      NON_TARGET_TAX_SUBJECTS)
 from . import _esg_roadmap
 
 
@@ -213,6 +214,31 @@ def apply_applicability_gate(items: list[dict]) -> tuple[list[dict], list[dict]]
         else:
             it = dict(it, excluded_reason=reason)
             excluded.append(it)
+    return kept, excluded
+
+
+# ── 4-3) 비대상 세목 뉴스 제외 (2026-09-10 사용자 지시) ─────────────────────
+def is_non_target_tax_subject(category: str, title: str) -> bool:
+    """세법 카테고리 뉴스 중 주제가 `data/tax_subjects.yml`에 없는 세목(예:
+    상증법)인지 판정. `NON_TARGET_TAX_SUBJECTS` 참고. tax 카테고리가 아니면
+    항상 False(다른 카테고리는 이 필터 대상이 아님)."""
+    if category != "tax":
+        return False
+    t = _norm(title)
+    return any(_norm(k) in t for k in NON_TARGET_TAX_SUBJECTS)
+
+
+def apply_non_target_tax_subject_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """`is_applicable()`(적용 대상 게이트)과 같은 자리(카테고리 분류 직후, 다른
+    필터 이전)에서 전 계층에 적용한다 — 비대상 세목은 공식 자료가 냈어도
+    우리와 무관하다(법인세법 등 활성 세목 키워드가 부수적으로 같이 있어도
+    제외, `is_non_target_tax_subject()` 참고)."""
+    kept, excluded = [], []
+    for it in items:
+        if not is_non_target_tax_subject(it.get("category", ""), it.get("title", "")):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:non_target_tax_subject"))
     return kept, excluded
 
 

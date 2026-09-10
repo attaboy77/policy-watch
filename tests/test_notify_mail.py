@@ -6,6 +6,8 @@
 """
 import json
 
+import pytest
+
 from sources import notify_mail as nm
 
 
@@ -56,6 +58,23 @@ class TestFindNewItems:
         prev = [_item(id="a")]
         current = [_item(id="a")]
         assert nm.find_new_items(prev, current) == []
+
+    # 2026-09-10: 구글 뉴스 RSS 결과가 매일 달라져 prev에 없어도 이미 발송된
+    # id는 다시 신규로 잡으면 안 된다.
+    def test_excludes_ids_present_in_sent_ids(self):
+        current = [_item(id="a"), _item(id="b")]
+        out = nm.find_new_items([], current, sent_ids={"a"})
+        assert [it["id"] for it in out] == ["b"]
+
+    def test_sent_ids_none_behaves_like_before(self):
+        current = [_item(id="a")]
+        assert nm.find_new_items([], current, sent_ids=None) == current
+
+    def test_sent_ids_and_prev_ids_combine(self):
+        prev = [_item(id="a")]
+        current = [_item(id="a"), _item(id="b"), _item(id="c")]
+        out = nm.find_new_items(prev, current, sent_ids={"b"})
+        assert [it["id"] for it in out] == ["c"]
 
 
 class TestLoadMeta:
@@ -322,6 +341,12 @@ class TestRunGating:
     """_run()이 각 상황에서 send_via_gmail을 호출하는지/안 하는지만 검증
     (실제 SMTP는 monkeypatch로 막음)."""
 
+    @pytest.fixture(autouse=True)
+    def _isolate_sent_log(self, monkeypatch, tmp_path):
+        # 2026-09-10: _run()이 기본값(data/sent_log.json)을 쓰면 테스트가 실제
+        # 저장소 파일을 건드린다 — 모든 테스트를 tmp_path로 격리.
+        monkeypatch.setenv("SENT_LOG_PATH", str(tmp_path / "sent_log.json"))
+
     def _patch_send(self, monkeypatch):
         calls = []
         monkeypatch.setattr(nm, "send_via_gmail", lambda *a, **k: calls.append((a, k)))
@@ -454,6 +479,68 @@ class TestRunGating:
         (_subject, text_body, html_body, *_rest), _ = calls[0]
         assert "국세청 수집 실패로 전일 데이터 사용 (연속 2일째)" in text_body
         assert "국세청 수집 실패로 전일 데이터 사용 (연속 2일째)" in html_body
+
+    # ── 발송 이력(_sent_log) 연동 (2026-09-10) ───────────────────────────────
+    def test_reappeared_item_already_sent_is_not_resent(self, monkeypatch, tmp_path):
+        """구글 뉴스 RSS가 어제 빠졌다가 오늘 다시 돌려준 기사 재현: prev
+        백업에는 없지만(그래서 순수 id-diff로는 신규) 과거에 이미 발송 이력이
+        남아있으면 다시 보내지 않는다."""
+        calls = self._patch_send(monkeypatch)
+        monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
+        monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
+        monkeypatch.setenv("MAIL_TO", "a@x.com")
+        monkeypatch.delenv("FORCE_MAIL", raising=False)
+        current = tmp_path / "current.json"
+        prev = tmp_path / "prev.json"
+        self._write_data(current, [_item(id="a")])
+        self._write_data(prev, [])  # "a"가 어제 응답에서 빠짐
+        monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
+        monkeypatch.setenv("PREV_DATA_JSON", str(prev))
+        sent_log_path = tmp_path / "sent_log.json"
+        monkeypatch.setenv("SENT_LOG_PATH", str(sent_log_path))
+        sent_log_path.write_text(json.dumps({"a": "2026-09-09"}), encoding="utf-8")
+        nm._run()
+        assert calls == []
+
+    def test_sent_item_ids_recorded_after_successful_send(self, monkeypatch, tmp_path):
+        calls = self._patch_send(monkeypatch)
+        monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
+        monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
+        monkeypatch.setenv("MAIL_TO", "a@x.com")
+        monkeypatch.delenv("FORCE_MAIL", raising=False)
+        current = tmp_path / "current.json"
+        prev = tmp_path / "prev.json"
+        self._write_data(current, [_item(id="a"), _item(id="b")])
+        self._write_data(prev, [])
+        monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
+        monkeypatch.setenv("PREV_DATA_JSON", str(prev))
+        sent_log_path = tmp_path / "sent_log.json"
+        monkeypatch.setenv("SENT_LOG_PATH", str(sent_log_path))
+        nm._run()
+        assert len(calls) == 1
+        recorded = json.loads(sent_log_path.read_text(encoding="utf-8"))
+        assert set(recorded) == {"a", "b"}
+
+    def test_no_send_does_not_record_ids(self, monkeypatch, tmp_path):
+        """신규가 없어 메일을 안 보내는 날엔 발송 이력에 아무것도 추가되지
+        않는다(파일 자체는 정리 목적으로 계속 존재/갱신될 수 있음)."""
+        calls = self._patch_send(monkeypatch)
+        monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
+        monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
+        monkeypatch.setenv("MAIL_TO", "a@x.com")
+        monkeypatch.delenv("FORCE_MAIL", raising=False)
+        current = tmp_path / "current.json"
+        prev = tmp_path / "prev.json"
+        self._write_data(current, [_item(id="a")])
+        self._write_data(prev, [_item(id="a")])
+        monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
+        monkeypatch.setenv("PREV_DATA_JSON", str(prev))
+        sent_log_path = tmp_path / "sent_log.json"
+        monkeypatch.setenv("SENT_LOG_PATH", str(sent_log_path))
+        nm._run()
+        assert calls == []
+        recorded = json.loads(sent_log_path.read_text(encoding="utf-8"))
+        assert recorded == {}
 
     def test_send_failure_does_not_raise_via_main(self, monkeypatch, tmp_path):
         monkeypatch.setattr(nm, "send_via_gmail", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("smtp down")))
