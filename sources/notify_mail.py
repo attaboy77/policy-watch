@@ -25,6 +25,17 @@
 신규 언론(L3) 항목 중 하나라도 있으면 발송. 본문은 공식 기관 발표(제목+요약+
 링크) 섹션이 위, 언론 보도(제목+링크만) 섹션이 아래 — 한쪽이 0건이면 그
 섹션 자체를 뺀다. 제목의 "신규 N건"은 공식+언론 합계.
+
+2026-09-10 사용자 지시 — 언론(L3) 발행일 필터: 구글 뉴스가 오래된 기사를
+뒤늦게 결과에 포함시키는 경우가 있어(id가 처음 보이면 "신규"로 잡힘), 그게
+메일에 나가는 걸 원치 않는다. 발행일이 어제·오늘(KST)이 아닌 언론 기사는
+"신규"로 잡혀도 메일 본문에서 뺀다(`is_recent_enough_for_mail()` 참고) —
+사이트(site/data.json, 대시보드)에는 그대로 실린다, 메일만 뺀다. **공식
+(L1/L2) 항목은 면제** — 발표일이 지나도 챙겨야 하는 자료라 이 필터 대상이
+아니다. 발행일을 파싱 못 하는 항목(형식이 깨졌거나 결측)은 보수적으로
+포함시킨다 — `finalize_item()`이 이미 published_at 결측 시 collected_at
+(오늘 날짜)으로 채워두므로 실제로는 이 경우가 사실상 없다(정책적 선택이라기
+보다 안전장치).
 """
 from __future__ import annotations
 
@@ -129,6 +140,35 @@ def find_new_items(prev_items: list[dict], current_items: list[dict],
     prev_ids = {it.get("id") for it in prev_items}
     excluded_ids = prev_ids | (sent_ids or set())
     return [it for it in current_items if it.get("id") not in excluded_ids]
+
+
+# 2026-09-10: "어제·오늘"의 "어제"만큼 며칠 전까지 허용할지. 0=오늘만,
+# 1=어제·오늘(현재 사용자 요청 범위).
+MAIL_NEWS_RECENCY_DAYS = 1
+
+
+def _parse_date_str(s: str | None):
+    """"YYYY-MM-DD"(또는 그 앞부분이 그 형식인) 문자열을 date로. 실패하면 None."""
+    if not s:
+        return None
+    try:
+        return datetime.strptime(s[:10], "%Y-%m-%d").date()
+    except ValueError:
+        return None
+
+
+def is_recent_enough_for_mail(published_at: str | None, today: object | None = None) -> bool:
+    """L3(언론) 항목의 발행일이 메일에 실을 만큼 최근(어제·오늘, KST)인지.
+
+    날짜를 파싱 못 하면(결측/형식 오류) 보수적으로 True(포함) — 위 모듈
+    docstring 참고. `today`는 테스트에서 기준일을 고정하기 위한 것으로,
+    `datetime.date` 인스턴스를 받는다(생략하면 오늘 KST 날짜).
+    """
+    base = today or datetime.now(_KST).date()
+    d = _parse_date_str(published_at)
+    if d is None:
+        return True
+    return 0 <= (base - d).days <= MAIL_NEWS_RECENCY_DAYS
 
 
 def is_official(item: dict) -> bool:
@@ -328,6 +368,15 @@ def _run() -> None:
 
     new_official = [it for it in new_items if is_official(it)]
     new_news = [it for it in new_items if not is_official(it)]
+
+    # 2026-09-10: 언론(L3)만 발행일 어제·오늘 필터 — 공식(L1/L2)은 면제.
+    # site/data.json(대시보드)엔 이미 반영돼 있으므로 여기서 빼도 대시보드는
+    # 그대로다 — 메일 본문에서만 뺀다.
+    recent_news = [it for it in new_news if is_recent_enough_for_mail(it.get("published_at"))]
+    stale_count = len(new_news) - len(recent_news)
+    if stale_count:
+        print(f"[notify_mail] 발행일이 오래된 언론 기사 {stale_count}건 메일에서 제외")
+    new_news = recent_news
 
     if not new_official and not new_news and not forced:
         print("[notify_mail] 신규 항목이 없어 메일을 보내지 않습니다.")

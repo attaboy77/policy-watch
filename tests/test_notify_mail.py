@@ -5,6 +5,7 @@
 "호출됐는지/안 됐는지, 어떤 인자로 호출됐는지"만 검증한다.
 """
 import json
+from datetime import date, datetime
 
 import pytest
 
@@ -155,6 +156,39 @@ class TestDecodeNoticeLines:
     def test_exactly_at_threshold_returns_empty(self):
         meta = {"google_decode_stats": {"attempted": 10, "success": 7}}  # 정확히 30% 실패
         assert nm.decode_notice_lines(meta) == []
+
+
+class TestIsRecentEnoughForMail:
+    """2026-09-10 사용자 지시 — 언론(L3) 메일 발행일 필터(어제·오늘, KST)."""
+
+    def test_today_is_recent(self):
+        today = date(2026, 9, 11)
+        assert nm.is_recent_enough_for_mail("2026-09-11", today=today) is True
+
+    def test_yesterday_is_recent(self):
+        today = date(2026, 9, 11)
+        assert nm.is_recent_enough_for_mail("2026-09-10", today=today) is True
+
+    def test_two_days_ago_is_not_recent(self):
+        today = date(2026, 9, 11)
+        assert nm.is_recent_enough_for_mail("2026-09-09", today=today) is False
+
+    def test_far_past_is_not_recent(self):
+        today = date(2026, 9, 11)
+        assert nm.is_recent_enough_for_mail("2026-08-01", today=today) is False
+
+    def test_missing_date_is_conservatively_included(self):
+        today = date(2026, 9, 11)
+        assert nm.is_recent_enough_for_mail(None, today=today) is True
+
+    def test_malformed_date_is_conservatively_included(self):
+        today = date(2026, 9, 11)
+        assert nm.is_recent_enough_for_mail("not-a-date", today=today) is True
+
+    def test_default_today_uses_kst_now(self):
+        # today 인자를 안 주면 실제 오늘(KST) 기준 — 오늘 날짜 문자열은 항상 True.
+        today_str = datetime.now(nm._KST).strftime("%Y-%m-%d")
+        assert nm.is_recent_enough_for_mail(today_str) is True
 
 
 class TestIsOfficial:
@@ -404,13 +438,102 @@ class TestRunGating:
         monkeypatch.delenv("FORCE_MAIL", raising=False)
         current = tmp_path / "current.json"
         prev = tmp_path / "prev.json"
-        news_item = _item(id="b", source={"type": "news"})
+        # 2026-09-10: 언론 발행일 필터가 생겨서, 고정된 과거 날짜(_item()
+        # 기본값)로는 필터에 걸려 빠질 수 있다 — 이 테스트 목적(뉴스-only
+        # 신규가 발송되는지)과 무관하므로 오늘 날짜로 맞춘다.
+        news_item = _item(id="b", source={"type": "news"}, published_at=nm._now_kst_date_iso())
         self._write_data(current, [_item(id="a"), news_item])
         self._write_data(prev, [_item(id="a")])
         monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
         monkeypatch.setenv("PREV_DATA_JSON", str(prev))
         nm._run()
         assert len(calls) == 1
+
+    # ── 언론(L3) 발행일 필터 연동 (2026-09-10) ──────────────────────────────
+    def test_stale_news_excluded_but_official_not_affected(self, monkeypatch, tmp_path):
+        calls = self._patch_send(monkeypatch)
+        monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
+        monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
+        monkeypatch.setenv("MAIL_TO", "a@x.com")
+        monkeypatch.delenv("FORCE_MAIL", raising=False)
+        # is_recent_enough_for_mail을 "전부 오래됨"으로 고정 — 그런데도 공식
+        # 항목이 살아남으면 이 필터가 공식(L1/L2)엔 아예 적용 안 된다는 뜻
+        # (날짜 계산 자체는 TestIsRecentEnoughForMail이 이미 검증).
+        monkeypatch.setattr(nm, "is_recent_enough_for_mail", lambda *a, **k: False)
+        current = tmp_path / "current.json"
+        prev = tmp_path / "prev.json"
+        official_item = _item(id="o1", source={"type": "official"})
+        news_item = _item(id="n1", source={"type": "news"},
+                           urls={"official": None, "news": "https://news.example/n1"})
+        self._write_data(current, [official_item, news_item])
+        self._write_data(prev, [])
+        monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
+        monkeypatch.setenv("PREV_DATA_JSON", str(prev))
+        nm._run()
+        assert len(calls) == 1
+        (subject, text_body, *_rest), _ = calls[0]
+        assert "신규 1건" in subject
+        assert "공식 기관 발표" in text_body
+        assert "언론 보도" not in text_body
+
+    def test_only_stale_news_no_official_skips_send(self, monkeypatch, tmp_path):
+        calls = self._patch_send(monkeypatch)
+        monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
+        monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
+        monkeypatch.setenv("MAIL_TO", "a@x.com")
+        monkeypatch.delenv("FORCE_MAIL", raising=False)
+        monkeypatch.setattr(nm, "is_recent_enough_for_mail", lambda *a, **k: False)
+        current = tmp_path / "current.json"
+        prev = tmp_path / "prev.json"
+        news_item = _item(id="n1", source={"type": "news"},
+                           urls={"official": None, "news": "https://news.example/n1"})
+        self._write_data(current, [news_item])
+        self._write_data(prev, [])
+        monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
+        monkeypatch.setenv("PREV_DATA_JSON", str(prev))
+        nm._run()
+        assert calls == []
+
+    def test_recent_news_included_when_filter_passes(self, monkeypatch, tmp_path):
+        calls = self._patch_send(monkeypatch)
+        monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
+        monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
+        monkeypatch.setenv("MAIL_TO", "a@x.com")
+        monkeypatch.delenv("FORCE_MAIL", raising=False)
+        monkeypatch.setattr(nm, "is_recent_enough_for_mail", lambda *a, **k: True)
+        current = tmp_path / "current.json"
+        prev = tmp_path / "prev.json"
+        news_item = _item(id="n1", source={"type": "news"},
+                           urls={"official": None, "news": "https://news.example/n1"})
+        self._write_data(current, [news_item])
+        self._write_data(prev, [])
+        monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
+        monkeypatch.setenv("PREV_DATA_JSON", str(prev))
+        nm._run()
+        assert len(calls) == 1
+
+    def test_stale_news_id_not_recorded_in_sent_log(self, monkeypatch, tmp_path):
+        """메일에서 빠진 항목은 "발송"이 아니므로 발송 이력에도 안 남는다."""
+        self._patch_send(monkeypatch)
+        monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
+        monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
+        monkeypatch.setenv("MAIL_TO", "a@x.com")
+        monkeypatch.delenv("FORCE_MAIL", raising=False)
+        monkeypatch.setattr(nm, "is_recent_enough_for_mail", lambda *a, **k: False)
+        current = tmp_path / "current.json"
+        prev = tmp_path / "prev.json"
+        official_item = _item(id="o1", source={"type": "official"})
+        news_item = _item(id="n1", source={"type": "news"},
+                           urls={"official": None, "news": "https://news.example/n1"})
+        self._write_data(current, [official_item, news_item])
+        self._write_data(prev, [])
+        monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
+        monkeypatch.setenv("PREV_DATA_JSON", str(prev))
+        sent_log_path = tmp_path / "sent_log.json"
+        monkeypatch.setenv("SENT_LOG_PATH", str(sent_log_path))
+        nm._run()
+        recorded = json.loads(sent_log_path.read_text(encoding="utf-8"))
+        assert set(recorded) == {"o1"}
 
     def test_force_mail_sends_even_with_no_new_items(self, monkeypatch, tmp_path):
         calls = self._patch_send(monkeypatch)
