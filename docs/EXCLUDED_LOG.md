@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-10 08:44:50 +0900
+생성 시각: 2026-09-10 10:04:10 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -50,4 +50,17 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | tax | gukjenews.com | 송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의 - gukjenews.com | https://news.google.com/rss/articles/CBMibkFVX3lxTE4ybVZqakNwakU3WmxHRkxTdW02Q2Y3RnVmalItcFpLY19pQUw4bzBpU3FMVTRRSUtRNVdjTkxXMk1sSnN4VmhaRkNlQmhOeUxBc2JnSVNBeEdpci05TWZYbFhETUZoMWFjRkk0YWln?oc=5 |
+
+## excluded:non_target_tax_subject (1건)
+
+| 카테고리 | 출처 | 제목 | 링크 |
+|---|---|---|---|
+| tax | kmib.co.kr | 올해부터 해외선교비 면세 ‘사실상 박탈’에 증여세 폭탄 ‘비상’ - kmib.co.kr | https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5IQXkwc2ZwVlJlXzZ5bVlIUjFnY05JR2JlV0c1a0EweG9BRW1LY2otNUZpM2dRQ2ZrUnZJOWViakpOcHlIOWU4N3RMQzdHSTc1TlhkaEVmQXBOUE05ZVlMTWtpc2JLemfSAWxBVV95cUxOa0xHN1JwVEYxdXgyUGxwdnVCcURvX1FOR2FiMzJMMWxLTnpteVhVSjVXb3UwenNPaV8wd2E0T3FnaFI3TWFhWXJBTFM2N2E0bzY4TGJuSUlNQWVYVG5kbU5GY3B1eV9MYndnQ1I?oc=5 |
+
+## excluded:religious (2건)
+
+| 카테고리 | 출처 | 제목 | 링크 |
+|---|---|---|---|
+| tax | dangdangnews.com | 한교총, 상증법 및 법인세법 시행령 재개정 및 법적용에 관한 공청회 개최 - 당당뉴스 | https://news.google.com/rss/articles/CBMib0FVX3lxTE01SVQ4N2diMEdPb3g4TzZOTDZRZ1QyWnRzcXoxbWh1WXBjTDRRNy1BaGhVYmhLQkxhTlZOQU1UeWJBWTJ4b0h5elZLUm1nVlJubXI1bE03dHRhajI4N0JrY3NqU3RKQnBSaTVuQUMwZw?oc=5 |
+| tax | newsnnet.com | [이슈&해법] 해외 선교비 보내면 세금 폭탄?…교회가 반드시 알아야 할 ‘세법의 경계선’ - 뉴스앤넷 | https://news.google.com/rss/articles/CBMiakFVX3lxTE1JNlQzSV9CUmYtLXBRbkM0YlJPa0o4WEdyY3Z5dzFPbEFWOUJiOVY5dlpYQUtKZU12YjVBM21EbUI0cHZYYVNBa2tjLThsbWhCRmJYWUc0ay12Qjh3Q0J1Y1RVN0cwVG42X1E?oc=5 |
 
