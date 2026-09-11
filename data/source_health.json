@@ -1,13 +1,13 @@
 {
   "kasb": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-11T08:34:01+09:00",
+    "last_success_at": "2026-09-12T08:42:12+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
   "fss": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-11T08:34:01+09:00",
+    "last_success_at": "2026-09-12T08:42:12+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
@@ -19,7 +19,7 @@
   },
   "nts": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-11T08:34:01+09:00",
+    "last_success_at": "2026-09-12T08:42:12+09:00",
     "last_failure_at": "2026-09-08T16:29:16+09:00",
     "last_failure_reason": null
   },
@@ -37,19 +37,19 @@
   },
   "law_api": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-11T08:34:01+09:00",
+    "last_success_at": "2026-09-12T08:42:12+09:00",
     "last_failure_at": "2026-09-09T08:45:39+09:00",
     "last_failure_reason": null
   },
   "google_news": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-11T08:34:01+09:00",
+    "last_success_at": "2026-09-12T08:42:12+09:00",
     "last_failure_at": "2026-09-07T13:41:35+09:00",
     "last_failure_reason": null
   },
   "naver_news": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-11T08:34:01+09:00",
+    "last_success_at": "2026-09-12T08:42:12+09:00",
     "last_failure_at": "2026-09-07T13:44:17+09:00",
     "last_failure_reason": null
   }
