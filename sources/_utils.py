@@ -10,6 +10,7 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       TAX_SUBJECTS, MAX_NEWS_PER_CATEGORY, MAX_TIER4_PER_CATEGORY,
                       ADMIN_NOISE_KEYWORDS, SIMILARITY_THRESHOLD, SUBJECT_SIMILARITY_THRESHOLD,
                       SIMILARITY_DAY_WINDOW, LOCAL_GOV_SUBJECT_SIMILARITY_THRESHOLD,
+                      CORE_KEYWORD_MIN_OVERLAP, HEADLINE_STOPWORDS,
                       RELATED_NEWS_MAX, RELATED_NEWS_DAY_WINDOW, RELATED_NEWS_MIN_SIMILARITY,
                       DISCUSSION_MATERIAL_KEYWORDS, DISCUSSION_OVERRIDE_KEYWORDS,
                       REGULATORY_SIGNALS, CORPORATE_PR_KEYWORDS, CORPORATE_PR_STRONG_SIGNALS,
@@ -818,6 +819,15 @@ def title_similarity(a: str, b: str) -> float:
     return len(ta & tb) / len(ta | tb)
 
 
+def _core_keywords(title: str) -> set[str]:
+    """조건 (c) 전용(ADDENDUM-5 §5-3 확장, 2026-09-14 사용자 지시). 정제된
+    제목에서 HEADLINE_STOPWORDS를 뺀 2자 이상 어절만 남긴다 — extract_subject()가
+    못 잡는(콤마로 시작하는 주체가 없는) 전국 단위 사건, 예: 법원 판결을 매체별
+    리드 문장 차이와 무관하게 묶기 위한 핵심 키워드 집합이다."""
+    tokens = re.findall(r"[가-힣A-Za-z0-9]+", clean_title_for_compare(title))
+    return {t for t in tokens if len(t) >= 2 and t not in HEADLINE_STOPWORDS}
+
+
 def extract_subject(title: str) -> str | None:
     """제목 앞부분의 주체명 추출(ADDENDUM-5 §5-3). "남부발전, ..." → "남부발전"."""
     t = clean_title_for_compare(title)
@@ -852,6 +862,23 @@ def dedupe_similar_news(items: list[dict]) -> list[dict]:
           과세표준 상한 적용 건의"(전매신문)가 주체는 일치해도 어절 유사도
           0.25로 기존 임계값 0.35에 못 미쳐 병합 안 됐다 — 지자체 뉴스는
           매체마다 리드 문장이 크게 갈려도 같은 사안일 가능성이 높다).
+      (c) 두 제목 다 "주체, ..." 형태가 아니라 extract_subject()가 아예 못 잡을
+          때만(조건 b의 영역을 건드리지 않기 위해 — 기업 주체는 임계값을
+          일부러 엄격하게 유지하는 게 조건 b의 설계 의도다, 아래 실측 참고),
+          published_at이 SIMILARITY_DAY_WINDOW일 이내 + _core_keywords()
+          교집합이 CORE_KEYWORD_MIN_OVERLAP개 이상이면 병합한다(2026-09-14
+          사용자 지시 — 실측: "부가세법 개정 전 포인트
+          결제액 과세" 대법원 판결을 이데일리/한국경제/YTN이 각각 다른 리드로
+          보도해 제목이 "주체, ..." 형태로 시작하지 않으니(b) extract_subject()가
+          못 잡고, 전체 어절 유사도도 0.55에 못 미쳐(a) 3건이 안 묶였다. 전국
+          단위 사건은 지자체처럼 임계값만 낮추면 무관한 기사끼리도 쉽게
+          묶여서(예: "ESG 공시 로드맵" 관련 10여 개의 서로 다른 사안) 대신
+          핵심 키워드 교집합 개수로 판단한다. subject_i가 있으면(예: "남부발전,
+          ...") 조건 (c)를 건너뛴다 — 실측: "남부발전, 신축주택 재산세 급증
+          막는다…지방세법 시행령 개정 건의" vs "남부발전, 신축주택 과세표준
+          상한 적용 건의"는 핵심 키워드가 {남부발전,신축주택,건의}로 3개
+          겹쳐 조건 (c)를 그대로 적용하면 기업 주체에 일부러 걸어둔 조건 (b)의
+          엄격한 임계값(0.35)을 무력화한다).
 
     살아남는 대표 항목은 신뢰도(trust_score) 우선, 동률이면 final_score
     우선으로 고른다(2026-09-02 사용자 지시 — "신뢰도 높은 매체를 우선"; 기존엔
@@ -879,6 +906,7 @@ def dedupe_similar_news(items: list[dict]) -> list[dict]:
                 if subject_i and _LOCAL_GOV_SUBJECT_RE.match(subject_i)
                 else SUBJECT_SIMILARITY_THRESHOLD
             )
+            keywords_i = _core_keywords(it["title"])
             for j in range(i + 1, len(cat_items)):
                 if j in absorbed:
                     continue
@@ -889,6 +917,10 @@ def dedupe_similar_news(items: list[dict]) -> list[dict]:
                     if (sim >= subject_threshold
                             and _within_days(it.get("published_at"), other.get("published_at"), SIMILARITY_DAY_WINDOW)):
                         is_dup = True  # 조건 (b)
+                if (not is_dup and not subject_i
+                        and _within_days(it.get("published_at"), other.get("published_at"), SIMILARITY_DAY_WINDOW)
+                        and len(keywords_i & _core_keywords(other["title"])) >= CORE_KEYWORD_MIN_OVERLAP):
+                    is_dup = True  # 조건 (c)
                 if is_dup:
                     absorbed.add(j)
                     sources.append(other["source"]["name"])

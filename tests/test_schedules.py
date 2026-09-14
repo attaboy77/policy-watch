@@ -132,3 +132,22 @@ class TestBuildSchedules:
         items = [_item(id="dup"), _item(id="dup")]
         out = build_schedules(items, manual_path="__no_such_file__.yml")
         assert len(out) == 1
+
+    # ── 회의 예정 항목 제외 (2026-09-14 사용자 지시) ──────────────────────
+    # "제7회 지속가능성기준위원회" 같은 항목은 의결된 시행일이 아니라 위원회
+    # 회의 진행일자일 뿐이라 캘린더(schedules[])에서 아예 빠져야 한다.
+    def test_meeting_schedule_item_excluded_from_calendar(self):
+        items = [
+            _item(id="real", effective_date="2027-01-01"),
+            _item(id="meeting", effective_date="2026-10-01", is_meeting_schedule=True),
+        ]
+        out = build_schedules(items, manual_path="__no_such_file__.yml")
+        assert [s["id"] for s in out] == ["sch_real"]
+
+    def test_manual_entries_unaffected_by_meeting_exclusion(self):
+        # 수동 일정은 is_meeting_schedule 필드가 없는 item이 아니라 이미 완성된
+        # entry라 이 필터 대상이 아니다 — 회의 항목이 자동 수집분에서 전부
+        # 빠져도 수동 입력분은 그대로 살아야 한다.
+        items = [_item(id="meeting", effective_date="2026-10-01", is_meeting_schedule=True)]
+        out = build_schedules(items, manual_path="__no_such_file__.yml")
+        assert out == []

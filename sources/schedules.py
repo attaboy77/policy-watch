@@ -118,8 +118,23 @@ def _load_manual(path: str = MANUAL_PATH) -> list[dict]:
 def build_schedules(items: list[dict], *, manual_path: str = MANUAL_PATH) -> list[dict]:
     """`items`(최종 스키마) 중 effective_date가 있는 것 전부 + 수동 일정을 합쳐
     effective_date ASC로 정렬해 반환한다(SPEC §4). id가 겹치면 하나만 남긴다.
+
+    2026-09-14 사용자 지시: "회의 예정"(is_meeting_schedule=True — 위원회 회의
+    진행일자를 effective_date에 임시로 채운 항목, kasb.py fetch_schedule() 참고)
+    은 의결돼 시행일이 확정된 게 아니라 안건을 논의할 일정일 뿐이라 캘린더에서
+    아예 뺀다. 2026-08-31엔 is_meeting=true 뱃지/스타일로 구분만 해서 캘린더에
+    같이 보여줬지만, "제7회 지속가능성기준위원회" 같은 회의 일정이 실제 시행일과
+    섞여 헷갈린다는 지적으로 이번엔 제외로 바꿨다. 항목 자체(해당 회의 소식)는
+    최근 정책동향/전체 동향 피드에는 그대로 남는다 — 여기서 빠지는 건 캘린더
+    (schedules[])뿐이다. 수동 입력(data/schedules_manual.yml)은 전부 확정
+    시행일정이라 영향 없다. 헤더의 "오늘 챙길 것"(site/app.js
+    renderHeaderHighlight())도 이 schedules[]에서 가장 가까운 항목을 D-Day로
+    쓰므로, 회의를 빼면 자동으로 그다음 확정 시행일이 대신 뜬다.
     """
-    auto = [schedule_from_item(it) for it in items if it.get("effective_date")]
+    auto = [
+        schedule_from_item(it) for it in items
+        if it.get("effective_date") and not it.get("is_meeting_schedule")
+    ]
     manual = _load_manual(manual_path)
 
     seen: set[str] = set()

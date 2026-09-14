@@ -31,6 +31,7 @@ from sources._utils import (
     title_similarity,
     clean_title_for_compare,
     extract_subject,
+    _core_keywords,
     dedupe_similar_news,
     extract_core_phrase,
     attach_related_news,
@@ -53,7 +54,8 @@ from sources._utils import (
 from sources._config import (CATEGORIES, NOISE_KEYWORDS, ADMIN_NOISE_KEYWORDS,
                              REGULATORY_SIGNALS, APPLICABILITY, COMPANY_EVENTS,
                              FOREIGN_STANDARD_BODIES, LOCAL_GOV_PETITION_KEYWORDS,
-                             FOREIGN_NEWS_SIGNALS, NON_TARGET_TAX_SUBJECTS)
+                             FOREIGN_NEWS_SIGNALS, NON_TARGET_TAX_SUBJECTS,
+                             SIMILARITY_THRESHOLD)
 
 
 # ── 쿼리 생성 ────────────────────────────────────────────────────────────
@@ -657,6 +659,72 @@ class TestDedupeSimilarNews:
         out = dedupe_similar_news(items)
         assert len(out) == 1
         assert out[0]["id"] == "high_trust_low_score"
+
+    # ── 조건 (c): 핵심 키워드 교집합 (2026-09-14 사용자 지시) ────────────
+    # 실측 사례 재현 — "부가세법 개정 전 포인트 결제액 과세" 대법원 판결을
+    # 세 매체가 각각 다른 리드 문장으로 보도. "주체, ..." 형태가 아니라
+    # extract_subject()가 못 잡고(조건 b 불가), 리드 문장 차이가 커서 전체
+    # 어절 유사도도 0.55 미만(조건 a 불가) — 조건 (c)가 있어야만 묶인다.
+    def test_condition_c_merges_nationwide_ruling_across_differing_leads(self):
+        items = [
+            self._news("edaily", "포인트 결제도 부가가치세 과세 대상…대법원, 법 개정 전 건도 정당 판단",
+                       70.0, category="tax", published_at="2026-09-11", trust_score=50),
+            self._news("hankyung", "대법원 \"포인트 결제, 부가가치세 과세해야\"…세법 개정 전 거래도 해당",
+                       80.0, category="tax", published_at="2026-09-11", trust_score=60),
+            self._news("ytn", "부가가치세 논란 종지부…대법원 \"포인트 결제 과세 정당\", 개정 전 거래 첫 판단",
+                       60.0, category="tax", published_at="2026-09-12", trust_score=90),
+        ]
+        # 사전 확인: 조건 (a)/(b)는 이 조합에서 실제로 실패한다(조건 c 없이는 안 묶임).
+        assert title_similarity(items[0]["title"], items[1]["title"]) < SIMILARITY_THRESHOLD
+        assert extract_subject(items[0]["title"]) is None
+
+        out = dedupe_similar_news(items)
+        assert len(out) == 1
+        assert out[0]["id"] == "ytn"  # trust_score가 가장 높은 매체가 대표로 남는다
+        assert out[0]["duplicate_count"] == 2
+        assert set(out[0]["duplicate_sources"]) == {"edaily", "hankyung", "ytn"}
+
+    def test_condition_c_does_not_merge_across_day_window(self):
+        items = [
+            self._news("edaily", "포인트 결제도 부가가치세 과세 대상…대법원, 법 개정 전 건도 정당 판단",
+                       70.0, category="tax", published_at="2026-09-01"),
+            self._news("hankyung", "대법원 \"포인트 결제, 부가가치세 과세해야\"…세법 개정 전 거래도 해당",
+                       80.0, category="tax", published_at="2026-09-20"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 2
+
+    def test_condition_c_topic_word_overlap_alone_does_not_merge(self):
+        # HEADLINE_STOPWORDS가 "ESG"/"공시"/"로드맵"을 빼주지 않으면 카테고리
+        # 전체를 관통하는 토픽어만 겹쳐도 서로 다른 사안이 묶여버린다(실측:
+        # esg 카테고리 안에서 이런 헤드라인 10여 건이 전부 다른 사안).
+        items = [
+            self._news("a", "ESG 공시 로드맵 연기", 80.0, category="esg"),
+            self._news("b", "ESG 공시 의무화 로드맵 핵심쟁점 6가지", 60.0, category="esg"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 2
+
+    def test_condition_c_generic_regulatory_words_alone_do_not_merge(self):
+        # 시행령/개정안처럼 세법 뉴스 제목에 흔한 범용어만 겹치면 안 묶여야
+        # 한다(over_merge_guard 시나리오를 조건 c 관점에서도 그대로 지켜야 함).
+        items = [
+            self._news("a", "법인세법 시행령 개정안 — 접대비 한도", 80.0, category="tax"),
+            self._news("b", "법인세법 시행령 개정안 — 감가상각 특례", 60.0, category="tax"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 2
+
+
+class TestCoreKeywords:
+    def test_strips_stopwords_and_short_tokens(self):
+        kw = _core_keywords("ESG 공시 로드맵 연기")
+        assert kw == {"연기"}
+
+    def test_keeps_specific_legal_and_institution_terms(self):
+        kw = _core_keywords("대법원 \"포인트 결제, 부가가치세 과세해야\"…세법 개정 전 거래도 해당")
+        assert {"대법원", "포인트", "부가가치세", "과세해야"} <= kw
+        assert "개정" not in kw
 
 
 # ── 공식-뉴스 연결 (ADDENDUM-4 §4) ───────────────────────────────────────────

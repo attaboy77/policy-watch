@@ -1051,6 +1051,12 @@
       switchView(btn.getAttribute("data-view"));
     });
 
+    // 2026-09-14 사용자 지시: 좌측 상단 "Policy Watch" 로고를 누르면 "최근
+    // 정책동향" 탭으로 이동한다(다른 서비스의 관행과 동일한 "홈으로" 동작).
+    document.getElementById("navLogo").addEventListener("click", function () {
+      switchView("today");
+    });
+
     document.getElementById("calFullPrev").addEventListener("click", function () {
       calFullViewDate.setMonth(calFullViewDate.getMonth() - 1);
       renderCalendarFull();
