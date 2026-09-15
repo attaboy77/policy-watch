@@ -12,6 +12,14 @@ name: 정책 수집 및 배포
 # 추가하되, "수집은 다시 안 돌고 배포만" 되도록 crawl 잡을 push 이벤트에서는
 # 건너뛴다(crawl.if). build 잡을 새로 분리해 아티팩트 업로드를 전담시키고,
 # crawl이 스킵돼도(push 트리거) build/deploy는 정상 진행되게 needs 조건을 조정.
+#
+# 2026-09-15: 그런데 summary_cache.json만 바뀐 push는 "배포만"으로는 부족했다
+# — 요약을 site/data.json에 반영하는 건 `_summarize.summarize()`가 수집 실행
+# 중에 캐시를 읽어야 일어나는데(sources/_summary_cache.py 표준 사용 흐름 참고),
+# crawl을 건너뛰면 그 반영 자체가 안 일어나 매번 수동으로 `python -m sources.main`을
+# 따로 돌려야 했다(사용자 지시). `detect` 잡을 추가해 push된 커밋 범위에
+# data/summary_cache.json이 포함됐는지 확인하고, 포함됐으면 crawl도 돌게
+# 했다 — site/ 같은 화면 파일만 바뀐 push는 여전히 배포만 한다.
 
 on:
   schedule:
@@ -40,10 +48,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # schedule/workflow_dispatch에서만 돈다 — push 트리거는 이미 완성된
-  # site/data.json을 그대로 배포만 하면 되므로 재수집이 필요 없다.
+  # push 트리거일 때만 의미 있는 잡 — data/summary_cache.json이 이번에 push된
+  # 커밋 범위에 포함됐는지 확인한다(schedule/workflow_dispatch는 애초에 crawl.if가
+  # event_name만으로 통과하므로 이 잡의 결과를 보지 않는다). fetch-depth: 0으로
+  # 전체 히스토리를 받아 `git diff`가 push 범위(before..after) 전체를 볼 수
+  # 있게 한다 — push 하나에 커밋이 여러 개 섞여 있어도 놓치지 않기 위함.
+  # before가 전부 0인 SHA(브랜치 최초 push 등 드문 경우)는 diff 기준점이 없으므로
+  # 안전하게 "바뀐 것으로" 취급한다(크롤을 건너뛰어 반영을 놓치는 것보다 낫다).
+  detect:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      summary_cache_changed: ${{ steps.check.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: check
+        run: |
+          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.event.after }}" | grep -qx "data/summary_cache.json"; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # schedule/workflow_dispatch에서는 항상 돈다. push 트리거는 원래 "이미 완성된
+  # site/data.json을 그대로 배포만" 하면 됐지만, push된 커밋에 summary_cache.json이
+  # 포함돼 있으면(detect 잡 결과) 그 요약을 site/data.json에 반영하기 위해 crawl도
+  # 돈다 — site/ 같은 화면 파일만 바뀐 push는 여전히 배포만 한다.
   crawl:
-    if: github.event_name != 'push'
+    needs: detect
+    if: always() && (github.event_name != 'push' || needs.detect.outputs.summary_cache_changed == 'true')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
