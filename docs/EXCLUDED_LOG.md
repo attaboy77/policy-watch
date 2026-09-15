@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-14 08:50:45 +0900
+생성 시각: 2026-09-15 09:08:54 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -8,7 +8,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 있으면(오제외) 해당 키워드를 `sources/_config.py`의 `APPLICABILITY`에서
 빼거나 예외 조건을 추가할 것(§9-2).
 
-## excluded:corporate_pr (6건)
+## excluded:corporate_pr (5건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
@@ -17,16 +17,14 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | esg | v.daum.net | 지오영, 창사 첫 지속가능경영보고서 발간...ESG 중장기 로드맵 제시 - v.daum.net | https://news.google.com/rss/articles/CBMiRkFVX3lxTE5WWmdYRDg2N0QyUzhUNGFfMjJMWWxTRDdFRTBsNHhPU1lMXzQ0UnQzMVBZWmdyTmRjMjY5b1ZtOGZXajZnNHc?oc=5 |
 | esg | hellot.net | 해성디에스, 2050 넷제로 로드맵 담은 지속가능경영보고서 발간 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE9PdmJ5N3MyMF9jb1JURWEySTFUTGZ5TVQxS2IzY2ZMNGtndF8wTzVFNUxqWkg3V003YjB5Vm1CSVRJUXZKdmlxWUViZldYcVpWSDh4YWIxUUhrUF8zZGJ3?oc=5 |
 | esg | youthdaily.co.kr | 지속가능경영 고도화·글로벌 경쟁력 강화…오스템임플란트, '글로벌 To... | https://www.youthdaily.co.kr/news/article.html?no=225235 |
-| esg | updownnews.co.kr | 오스템임플란트, 지속가능경영 보고서 발간...'이중중대성 평가' 정식 도... | http://www.updownnews.co.kr/news/articleView.html?idxno=318364 |
 
-## excluded:financial (5건)
+## excluded:financial (4건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | kifrs | etnews.com | 수협, 91개 조합 회계기준 표준화…상호금융 위험관리 정교화 - 전자신문 | https://news.google.com/rss/articles/CBMiTkFVX3lxTFBWYllUdGlNdlNWZTR5NU9yMlVNY3ZMZndyYUNYUkhmRHVOcG9wUHRvOHp4NldiVTJWYWhpdWc0ekN0bVB4aUhLU0RlTzhxUQ?oc=5 |
 | icfr | news2day.co.kr | 한국캐피탈, 내부회계관리제도 고도화 나서…투명성·신뢰성 제고 - 뉴스투데이 | https://news.google.com/rss/articles/CBMiXkFVX3lxTE1fVjl2UnRnek5jelpoRk9reU55VW5IR2ZuSGpGbkVzNkVuYllnbExVWUZlMTU0N2JLalhEdmhwSmtPcDdYQ01ua3RJTkU0dFBxUVBQdEtmdHBaOWl5Z1E?oc=5 |
-| icfr | donga.com | 카드사 고위험업무 5년 초과 근무 못한다…여전업권 ‘내부통제 모범규준’ 시행 - 동아일보 | https://news.google.com/rss/articles/CBMidkFVX3lxTFB0NUVYMHh1RFBxTUpQTG9IbGVXRkRKRGQzcFdBanRCWUZsbkFlU0c2ZTVhYTdCWDZwRURKYkIyN1hIY1JtYjJyVnVBaW5VMWdteFNvZldWQkhlTHdrdVgyQlgzb1IzcW9uZlRtSGZXaXBkcnd4MFHSAWZBVV95cUxNMVltbFQybjRZSU5tN2w1X2ZOeWFnZ3gyVVFrTkJZTUNiU2NIZjQzc0JOYm40VlNibDVjYXZhTVNZRlgtMU1kWG05WUMzWVR2VXdoRk51QS1nc1JNR19MX3BEV0V5cGc?oc=5 |
-| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
+| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - sedaily.com | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
 | esg | segye.com | 증권사 지속가능경영…‘포괄적 ESG 활동’서 본업 연계 ‘지속가능금융... | https://www.segye.com/newsView/20260824517331?OutUrl=naver |
 
 ## excluded:foreign (1건)
@@ -35,7 +33,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 |---|---|---|---|
 | esg | 한국회계기준원 | ESRS-40a 공개초안에 대한 검토의견 조회 | https://www.kasb.or.kr/front/board/comm010View.do?seq=2182 |
 
-## excluded:industry_specific (8건)
+## excluded:industry_specific (21건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
@@ -45,8 +43,21 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | kifrs | 한국회계기준원 | 2018년 제1117호 보험계약 | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=231&searchfield=ALL&searchword=1117&s_date_start=2018-01-01&s_date_end= |
 | kifrs | 한국회계기준원 | 2017년 제1104호 ‘보험계약’과 제1109호 '금융상품'의 동시 적용 | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=220&searchfield=ALL&searchword=&s_date_start=2017-12-01&s_date_end=2017-12-31 |
 | kifrs | 한국회계기준원 | 2015년 건설계약 공시 (제1011호 건설계약, 제1037호 충당부채, 우발부채, 우발자산, 제1115호 고객과의 계약에서 생기는 수익, 제2115호 부동산건설약정) | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=166&searchfield=ALL&searchword=1115&s_date_start=2015-01-01&s_date_end= |
-| kifrs | mediwelfare.com | 요양병원협회, 29일 의료기관 회계기준 교육 - mediwelfare.com | https://news.google.com/rss/articles/CBMia0FVX3lxTE1pZmFjQjF4dmlPZHRrdjBWSTUzYmdMM2RZSGNvLUQzR1Z6SnQ1NkFEQnd1anVLN0VSb1QyOVg1bXllUDBGNERxUWozY0ZtdE0xNmVEa0VlanFkbENySTZCdm1CY2pnSEh3aE0w?oc=5 |
+| kifrs | mediwelfare.com | 요양병원협회, 29일 의료기관 회계기준 교육 - 의료&복지뉴스 | https://news.google.com/rss/articles/CBMia0FVX3lxTE1pZmFjQjF4dmlPZHRrdjBWSTUzYmdMM2RZSGNvLUQzR1Z6SnQ1NkFEQnd1anVLN0VSb1QyOVg1bXllUDBGNERxUWozY0ZtdE0xNmVEa0VlanFkbENySTZCdm1CY2pnSEh3aE0w?oc=5 |
 | icfr | fntimes.com | 금감원, 20일부터 농협금융 정기검사…내부통제·지배구조 취약점 진단 - 한국금융신문 | https://news.google.com/rss/articles/CBMifEFVX3lxTE9KWm44X0RyRWhXeFFsNU1CaVhtZVBxMm1sSGNXZEU4SmNWQWdBdEJLSlJBaXQtT1cyczZ5ZWFoRVpqUjZld0RqdG5HZTcyb3RMUHhzNVF5S19mVkxsOEdEcmJCQTNmb2xBdEszZjgzYXZpVk9wdnZXR1V1bmM?oc=5 |
+| icfr | ksmnews.co.kr | 농협 조합 회계감사·내부통제 대폭 강화…3000억 이상 매년 외부감사 | https://www.ksmnews.co.kr/news/view.php?idx=621932 |
+| icfr | asiatoday.co.kr | 자산 3000억 이상 매년 외부감사… 농협조합 '내부통제' 힘준다 | https://www.asiatoday.co.kr/kn/view.php?key=20260915010005344 |
+| icfr | m-economynews.com | 농협 내부통제 확 바뀐다...준법감시인 의무화·외부감사 주기 단축 | https://www.m-economynews.com/news/article.html?no=70723 |
+| icfr | financialpost.co.kr | 농협 조합 내부통제 강화...외부감사 주기 단축 | https://www.financialpost.co.kr/news/articleView.html?idxno=275510 |
+| icfr | jeonmin.co.kr | "농협 회계감사 매년 받는다"…투명성·내부통제 대폭 강화 | http://www.jeonmin.co.kr/news/articleView.html?idxno=446912 |
+| icfr | daejonilbo.com | 농협 조합 내부통제 고삐…외부 회계감사 주기 단축 | https://www.daejonilbo.com/news/articleView.html?idxno=2301103 |
+| icfr | newsfarm.co.kr | 농협 조합 내부통제 강화…대형 조합 매년 외부감사 | http://www.newsfarm.co.kr/news/articleView.html?idxno=102293 |
+| icfr | kdpress.co.kr | 농협 외부회계감사 주기 단축..준법감시인 제도 도입등 내부통제·경영... | https://www.kdpress.co.kr/news/articleView.html?idxno=208581 |
+| icfr | wowtv.co.kr | 대형 농협 조합 외부 회계감사 주기 단축…내부통제·경영 투명성 강화 | http://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202609140178&t=NN |
+| icfr | korea.kr | 농협 외부회계감사 주기 단축…내부통제·경영 투명성 강화 | https://www.korea.kr/news/policyNewsView.do?newsId=148971839&call_from=naver_news |
+| icfr | kado.net | [속보] 농협 조합 내부통제 강화…자산 3000억원 이상 매년 외부감사 | https://www.kado.net/news/articleView.html?idxno=2072412 |
+| icfr | mediapen.com | 농협조합 내부통제 강화…외부감사 주기 단축, 최대 매년 실시 | https://www.mediapen.com/news/view/1123263 |
+| icfr | yna.co.kr | 농협 조합 외부 회계감사 주기 단축…"내부통제·투명성 강화" | https://www.yna.co.kr/view/AKR20260914055200030?input=1195m |
 
 ## excluded:nonprofit (1건)
 
