@@ -23,7 +23,7 @@ from .current_standards import build_current_standards
 from ._utils import (apply_applicability_gate, apply_category_caps,
                      apply_company_event_filter, apply_corporate_pr_filter,
                      apply_foreign_news_filter, apply_local_gov_petition_filter,
-                     apply_non_target_tax_subject_filter,
+                     apply_non_target_tax_subject_filter, apply_opinion_piece_filter,
                      apply_regulatory_gate, attach_related_news, dedupe,
                      dedupe_similar_news, finalize_item, normalize_news_item)
 from .schedules import build_schedules
@@ -238,9 +238,9 @@ def build_data_json(items: list[dict]) -> dict:
 
     필터 순서: ADDENDUM-6 §1(적용 대상 게이트, 전 계층) → 2026-09-10 비대상
     세목 제외 → dedupe(정확일치) → ADDENDUM-5 §5(유사기사 병합) → §1(규제성
-    게이트) → ADDENDUM-7 §1(개별 기업 소식 제외) → 2026-09-02 지자체 건의·민원
-    제외 → 해외 전용 뉴스 제외 → ADDENDUM-5 §3(홍보성 제외, ESG 개별기업 홍보
-    문구 포함) → 상한 적용.
+    게이트) → ADDENDUM-7 §1(개별 기업 소식 제외) → 2026-09-15 논평성 기사
+    제외 → 2026-09-02 지자체 건의·민원 제외 → 해외 전용 뉴스 제외 → ADDENDUM-5
+    §3(홍보성 제외, ESG 개별기업 홍보 문구 포함) → 상한 적용.
     §1(적용 대상)을 맨 앞에 두는 건 §1-1 설계 그대로("카테고리 분류 직후,
     다른 모든 필터 이전")다. 2026-09-10 비대상 세목 제외도 같은 성격(카테고리
     분류 직후, 다른 필터 이전)이라 바로 다음 자리에 끼워 넣는다. ADDENDUM-5
@@ -248,9 +248,13 @@ def build_data_json(items: list[dict]) -> dict:
     원안은 §1→§3→...→§5 순서였음) — 그래야 §1/§3에 걸려 사라질 기사도 §5
     중복 병합의 후보에 먼저 포함된다. ADDENDUM-7 §1(개별 기업 소식)은 그 원안
     §5 처리순서(규제성 게이트 다음, 홍보성 제외 이전)대로 §1과 §3 사이에
-    끼워 넣는다. 2026-09-02 신규 필터 2종(지자체 건의·해외 뉴스)도 같은
-    자리(§1 이후, §3 이전)에 끼워 넣는다 — 개별 기업 소식 제외와 같은
-    성격("규제 자체가 아니라 프레이밍 문제")이라 같은 처리 단계가 맞다.
+    끼워 넣는다. 2026-09-02 신규 필터 2종(지자체 건의·해외 뉴스)과 2026-09-15
+    논평성 기사 제외도 같은 자리(§1 이후, §3 이전)에 끼워 넣는다 — 개별 기업
+    소식 제외와 같은 성격("규제 자체가 아니라 프레이밍 문제")이라 같은 처리
+    단계가 맞다. 논평성 기사 제외는 개별 기업 소식 제외 바로 다음에 둔다 —
+    이번에 놓친 사례("[시선] ... 빗썸, K-IFRS 전환·내부통제 정비")가 바로
+    개별 기업 필터를 통과한 건이라, 그 필터의 사각지대를 곧바로 메우는
+    안전망 자리가 맞다.
     """
     items, excluded = apply_applicability_gate(items)  # ADDENDUM-6 §1, 전 계층
     _record_excluded(excluded)
@@ -265,6 +269,9 @@ def build_data_json(items: list[dict]) -> dict:
     _log_stage("§1 규제성 게이트 후", deduped)
     deduped = apply_company_event_filter(deduped)  # ADDENDUM-7 §1
     _log_stage("ADDENDUM-7 §1(개별 기업 소식) 제외 후", deduped)
+    deduped, excluded = apply_opinion_piece_filter(deduped)  # 2026-09-15
+    _record_excluded(excluded)
+    _log_stage("논평성 기사([시선]/[칼럼]/[기고]/[사설]) 제외 후", deduped)
     deduped, excluded = apply_local_gov_petition_filter(deduped)  # 2026-09-02
     _record_excluded(excluded)
     _log_stage("지자체 건의·민원 제외 후", deduped)

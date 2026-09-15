@@ -1,12 +1,20 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-15 09:08:54 +0900
+생성 시각: 2026-09-15 09:08:54 +0900 (excluded:opinion_piece 구간은 이 실행 이후 수동 추가 — 아래 각주 참고)
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 **과다 필터링 점검용**: 아래 목록 중 실제로는 우리에게 적용되는 항목이
 있으면(오제외) 해당 키워드를 `sources/_config.py`의 `APPLICABILITY`에서
 빼거나 예외 조건을 추가할 것(§9-2).
+
+> **참고**: 이 파일은 원래 `python -m sources.main` 실행마다 `_excluded_log.flush()`가
+> 전체를 덮어쓴다(누적 아님). 위 생성 시각 기준 실행은 `apply_opinion_piece_filter`
+> 추가 이전 코드로 돈 것이라 그 구간이 없다. 아래 `excluded:opinion_piece` 1건은
+> 2026-09-15 사용자가 실제 화면에서 직접 발견해 보고한 사례라 수동으로 추가했다 —
+> 출처 매체명·링크는 보고 시점에 전달되지 않아 비워둔다. 다음 정기 수집(cron)부터는
+> 이 필터가 반영된 코드로 돌아 그 실행의 `excluded:opinion_piece` 구간이 이 항목을
+> 대체하며 자동 갱신된다.
 
 ## excluded:corporate_pr (5건)
 
@@ -64,6 +72,12 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | kifrs | CPA뉴스 | 한국공인회계사회, '2025년 학교법인 회계감사 감리 지적사례' 게시 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBxWHI0MWNTaThpUmtDaHFQOWUyQ1UwQXpab0lxaXF2blgtTmNuaVZNZVRNcHZuNEJwLUlrcHoyV0pnXzBFZzhoVGN0b0t6ZUZsWEc1ZjgtRzMwVThxYnJRZ0VHMTg0SWZR?oc=5 |
+
+## excluded:opinion_piece (1건)
+
+| 카테고리 | 출처 | 제목 | 링크 |
+|---|---|---|---|
+| kifrs | (미상 — 사용자 제보, 2026-09-15) | [시선] '세 번째 IPO 도전은 다르다'...빗썸, K-IFRS 전환·내부통제 정비 | |
 
 ## excluded:religious (2건)
 

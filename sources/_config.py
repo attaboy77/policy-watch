@@ -297,6 +297,17 @@ FOREIGN_NEWS_SIGNALS = ["美", "미국", "EU", "FASB", "SEC"]
 # 붙어도 걸리도록 서브도메인 포함 suffix 매칭).
 FOREIGN_NEWS_DOMAINS = ["tradingview.com"]
 
+# ── 논평성 기사(칼럼·사설류) 제외 (2026-09-15 사용자 지시) ──────────────────
+# 제목 말머리 대괄호("[시선]" 등)가 아래 목록 중 하나면 사실 전달이 아니라
+# 논평·의견 기사로 본다. 실측: "[시선] '세 번째 IPO 도전은 다르다'...빗썸,
+# K-IFRS 전환·내부통제 정비" — 특정 기업(빗썸)의 IPO 준비를 다룬 논평인데
+# "IPO"(COMPANY_EVENTS)와 "K-IFRS"(COMPANY_EVENT_STRONG_SIGNALS)가 한
+# 제목에 같이 있어 `is_company_event()`가 "정책 기사 오버라이드"로 오판해
+# 통과시켰다. 개별 기업 필터는 회사명 위치가 아니라 키워드 조합만 보므로
+# 이 유형(말머리 태그로만 드러나는 논평)은 애초에 잡을 수 없는 구조라
+# 별도 게이트(`_utils.is_opinion_piece()`)로 분리했다.
+OPINION_PREFIX_KEYWORDS = ["시선", "칼럼", "기고", "사설"]
+
 # ── 비대상 세목 뉴스 제외 (2026-09-10 사용자 지시) ──────────────────────────
 # `data/tax_subjects.yml`에 없는 세목이 주제인 세법 카테고리 뉴스는 제외한다.
 # `match_tax_subject()`/`pass_tax_filter()`가 이미 활성 세목 키워드 화이트리스트를

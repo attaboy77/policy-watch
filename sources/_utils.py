@@ -18,7 +18,7 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       MANUFACTURING_ACCOUNTING_CONTEXT, EVENT_ANNOUNCEMENT_STRONG_SIGNALS,
                       FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS,
                       LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS,
-                      NON_TARGET_TAX_SUBJECTS)
+                      NON_TARGET_TAX_SUBJECTS, OPINION_PREFIX_KEYWORDS)
 from . import _esg_roadmap
 
 
@@ -1039,6 +1039,41 @@ def apply_company_event_filter(items: list[dict]) -> list[dict]:
     호출한다(main.py). `_l3_gate_exempt()`로 L1/L2·tier==1 뉴스는 그대로 면제한다.
     """
     return [it for it in items if _l3_gate_exempt(it) or not is_company_event(it["title"])]
+
+
+# ── 논평성 기사(칼럼·사설류) 제외 (2026-09-15 사용자 지시) ──────────────────
+# 실측: "[시선] '세 번째 IPO 도전은 다르다'...빗썸, K-IFRS 전환·내부통제 정비".
+# 이 기사는 개별 기업(빗썸)의 IPO 준비 소식을 다룬 논평인데도 `is_company_event()`를
+# 통과했다 — "IPO"(COMPANY_EVENTS)가 있어 일단 개별 기업 이벤트로 걸렸지만,
+# 같은 제목에 "K-IFRS"(COMPANY_EVENT_STRONG_SIGNALS)가 있어 "회계기준 해설/적용
+# 기사"로 오인해 오버라이드가 발동, 결과적으로 통과했다(§1-2 제조업 예외와도
+# 무관 — MANUFACTURING_ACCOUNTING_CONTEXT 미매칭). 개별 기업 필터는 회사명이
+# 제목 어디에 있는지는 애초에 보지 않고 키워드 조합만 보는 구조라, "회사명이
+# 중간에 있어서" 못 잡은 게 아니라 "IPO/전환 같은 이벤트 키워드가 K-IFRS 같은
+# 정책 키워드와 함께 나오면" 못 잡는 구조적 사각지대다. 말머리 태그("[시선]" 등)로만
+# 드러나는 논평/의견 기사는 이런 키워드 조합과 무관하게 별도 게이트로 걸러야
+# 한다 — 그래서 회사명 위치나 키워드가 아니라 대괄호 말머리 자체를 본다.
+def is_opinion_piece(title: str) -> bool:
+    """제목 말머리 대괄호가 논평·의견 기사 표기(OPINION_PREFIX_KEYWORDS)인지 판정.
+    사실 전달 기사가 아니라 개인 의견이라 우리 용도(정책 변화 추적)에 안 맞는다.
+    """
+    m = _BRACKET_PREFIX_RE.match(title or "")
+    if not m:
+        return False
+    prefix = _norm(m.group(0))
+    return any(_norm(k) in prefix for k in OPINION_PREFIX_KEYWORDS)
+
+
+def apply_opinion_piece_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """L3 전용(공식 소스가 논평·칼럼을 낼 일은 없음) — `_l3_gate_exempt()`로
+    L1/L2·tier==1 뉴스는 면제."""
+    kept, excluded = [], []
+    for it in items:
+        if _l3_gate_exempt(it) or not is_opinion_piece(it.get("title", "")):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:opinion_piece"))
+    return kept, excluded
 
 
 # ── 14-2) 공식 항목에 관련 뉴스 연결 (SPEC-ADDENDUM-4.md §4) ────────────────

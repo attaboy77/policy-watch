@@ -50,11 +50,14 @@ from sources._utils import (
     apply_corporate_pr_filter,
     is_non_target_tax_subject,
     apply_non_target_tax_subject_filter,
+    is_opinion_piece,
+    apply_opinion_piece_filter,
 )
 from sources._config import (CATEGORIES, NOISE_KEYWORDS, ADMIN_NOISE_KEYWORDS,
                              REGULATORY_SIGNALS, APPLICABILITY, COMPANY_EVENTS,
                              FOREIGN_STANDARD_BODIES, LOCAL_GOV_PETITION_KEYWORDS,
                              FOREIGN_NEWS_SIGNALS, NON_TARGET_TAX_SUBJECTS,
+                             OPINION_PREFIX_KEYWORDS,
                              SIMILARITY_THRESHOLD)
 
 
@@ -1429,6 +1432,69 @@ class TestIsForeignNewsOnly:
     def test_korean_domain_not_excluded(self):
         assert is_foreign_news_only("서클 CEO 美 디지털자산 회계기준 개정", domain=None) is True
         assert is_foreign_news_only("K-IFRS 국내 소식", domain="hankyung.com") is False
+
+
+class TestIsOpinionPiece:
+    """2026-09-15 사용자 지시 — 실측: "[시선] '세 번째 IPO 도전은 다르다'...빗썸,
+    K-IFRS 전환·내부통제 정비". 이 기사는 `is_company_event()`를 통과했다 —
+    "IPO"(COMPANY_EVENTS)로 일단 걸렸지만 같은 제목의 "K-IFRS"
+    (COMPANY_EVENT_STRONG_SIGNALS)가 오버라이드를 발동시켰기 때문이다. 개별
+    기업 필터는 회사명 위치가 아니라 키워드 조합만 보므로 이 사각지대는
+    `is_company_event()` 쪽 개선이 아니라 말머리 태그를 보는 별도 게이트로
+    막는다."""
+
+    def test_real_example_still_passes_company_event_filter(self):
+        # 개별 기업 필터의 사각지대를 그대로 문서화 — 회사명(빗썸) 위치 문제가
+        # 아니라 "IPO"+"K-IFRS" 키워드 조합이 정책 기사 오버라이드를 발동시킨다.
+        title = "[시선] '세 번째 IPO 도전은 다르다'...빗썸, K-IFRS 전환·내부통제 정비"
+        assert is_company_event(title) is False
+
+    def test_real_example_excluded_as_opinion(self):
+        title = "[시선] '세 번째 IPO 도전은 다르다'...빗썸, K-IFRS 전환·내부통제 정비"
+        assert is_opinion_piece(title) is True
+
+    def test_all_prefixes_individually_detected(self):
+        for kw in OPINION_PREFIX_KEYWORDS:
+            assert is_opinion_piece(f"[{kw}] 금융위원회, 회계기준 개정 방향") is True, f"{kw}가 통과됨"
+
+    def test_non_opinion_bracket_prefix_passes(self):
+        assert is_opinion_piece("[단독] 금융위원회, 회계기준 개정 방향") is False
+
+    def test_no_bracket_prefix_passes(self):
+        assert is_opinion_piece("금융위원회, 회계기준 개정 방향") is False
+
+    def test_opinion_keyword_mid_title_without_bracket_prefix_passes(self):
+        # 말머리 대괄호가 아니면(예: 본문에 "사설" 언급) 대상이 아니다 — 표기
+        # 관용구만 본다.
+        assert is_opinion_piece("사설을 인용한 회계기준 개정 기사") is False
+
+    def test_other_bracket_content_not_matched_by_substring(self):
+        # "[시선집중]"처럼 논평 키워드를 포함하는 다른 코너명과 헷갈리지 않는지
+        # 확인(부분일치라 여전히 걸리는 게 의도된 동작 — 코너명 자체가 논평
+        # 성격이라 제외해도 무방하다는 걸 문서화).
+        assert is_opinion_piece("[시선집중] 회계기준 개정 방향") is True
+
+
+class TestApplyOpinionPieceFilter:
+    def _item(self, title, layer="L3", tier=5):
+        return {"category": "kifrs", "title": title, "layer": layer,
+                "source": {"tier": tier}, "urls": {"news": "https://x", "official": None}}
+
+    def test_splits_kept_and_excluded(self):
+        items = [
+            self._item("[시선] '세 번째 IPO 도전은 다르다'...빗썸, K-IFRS 전환·내부통제 정비"),
+            self._item("금융위원회, K-IFRS 제1118호 제정"),
+        ]
+        kept, excluded = apply_opinion_piece_filter(items)
+        assert [it["title"] for it in kept] == ["금융위원회, K-IFRS 제1118호 제정"]
+        assert len(excluded) == 1
+        assert excluded[0]["excluded_reason"] == "excluded:opinion_piece"
+
+    def test_l1_exempt(self):
+        items = [self._item("[사설] 회계기준 개정 방향", layer="L1", tier=1)]
+        kept, excluded = apply_opinion_piece_filter(items)
+        assert len(kept) == 1
+        assert excluded == []
 
 
 class TestApplyForeignNewsFilter:
