@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-18 08:52:04 +0900
+생성 시각: 2026-09-19 08:50:35 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -8,10 +8,11 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 있으면(오제외) 해당 키워드를 `sources/_config.py`의 `APPLICABILITY`에서
 빼거나 예외 조건을 추가할 것(§9-2).
 
-## excluded:corporate_pr (6건)
+## excluded:corporate_pr (7건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
+| esg | 임팩트온 | 【클릭ESG】“누가 읽기는 하나요”…지속가능경영보고서 발간 뒤의 씁쓸한 뒷맛 - impacton.net | https://news.google.com/rss/articles/CBMiaEFVX3lxTE00Y0xzY3VmTWd3c2pfSWJJcEpJbXZhTGpiSTBOV29ZWk9pdDRoTHAzNHpsUWFnV3hEdlQ3WVJOVTdmZ1l5V3J6ZFdKTFcwcF9CdXBQVE1FTVFQcEI5bFpQeGNNRndHdzYz0gFsQVVfeXFMTUI0Sm1uSk1GbXJWYVZ6U3MyaldBVUN2czEwMm9lT0VSTnVaT1BZQ1NLdm9hQ29VRWZqS2k3ZlRPUTR6UkE4WlFiMTk0WHVZOW9VQkRXSzZTcVNQSHdMV0t1VVVsTVV0SU9VMDNp?oc=5 |
 | esg | ttlnews.com | DL㈜, 2026 통합 지속가능경영보고서 발간…기후 리스크 대응·친환경 사... | http://www.ttlnews.com/news/articleView.html?idxno=3143574 |
 | esg | cenews.kr | 롯데건설, 글로벌 ESG 공시 기준 담은 지속가능경영보고서 발간 - 건설이코노미뉴스 | https://news.google.com/rss/articles/CBMiZkFVX3lxTFA2MHZhNXlOZncwT2hiUEYzeHUyeUhsci1lQTlLTmxHRzliR21Hc284ck8yaVgxSmJQT2ttRnZncGRJc3pOM0FwQWlpTUhGOXNXeU5OWVNQM2tFempCS25rQ1JINEhrZw?oc=5 |
 | esg | cstimes.com | 오스템임플란트, ESG 공시 항목 70% 확대…지속가능경영보고서 발간 | https://www.cstimes.com/news/articleView.html?idxno=716698 |
@@ -34,7 +35,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | esg | 한국회계기준원 | ESRS-40a 공개초안에 대한 검토의견 조회 | https://www.kasb.or.kr/front/board/comm010View.do?seq=2182 |
 | kifrs | 매일경제 | 트립닷컴 그룹, US GAAP·IFRS 회계기준 차이로 순이익 25억 위안 증가 - 매일경제 마켓 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE9lWktaN3g3SXlNOU9qcUlfVXRGUzNfRG14N0Z6R3JKR0xwMUJPN05VR1NQb3hqQ2VLZHNwSEN4UmVEMGs4MnB0SUcyeV9DQk1WS1E?oc=5 |
 
-## excluded:industry_specific (6건)
+## excluded:industry_specific (8건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
@@ -44,11 +45,14 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | kifrs | 한국회계기준원 | 2018년 제1117호 보험계약 | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=231&searchfield=ALL&searchword=1117&s_date_start=2018-01-01&s_date_end= |
 | kifrs | 한국회계기준원 | 2017년 제1104호 ‘보험계약’과 제1109호 '금융상품'의 동시 적용 | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=220&searchfield=ALL&searchword=&s_date_start=2017-12-01&s_date_end=2017-12-31 |
 | kifrs | 한국회계기준원 | 2015년 건설계약 공시 (제1011호 건설계약, 제1037호 충당부채, 우발부채, 우발자산, 제1115호 고객과의 계약에서 생기는 수익, 제2115호 부동산건설약정) | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=166&searchfield=ALL&searchword=1115&s_date_start=2015-01-01&s_date_end= |
+| kifrs | hapt.co.kr | ‘공동주택 회계 감리’ 법안에 “옥상옥(屋上屋) 규제” 지적 - 한국아파트신문 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE1zVlZtb2JHeEpyV204Q3FUVTRVU1JiRWswRmZuR3RDUEk0TFVhRlI3OVgzek00MlZwOGlQUmp4elFQRkFjMDh2YThBV05WZlhzeV9SZmhWMEl4WF9DcUZDc0ZwOWh3aEcy?oc=5 |
+| kifrs | hapt.co.kr | '공동주택 회계 감리' 법안에 "옥상옥(屋上屋) 규제" 지적 | https://www.hapt.co.kr/news/articleView.html?idxno=169530 |
 
-## excluded:opinion_piece (2건)
+## excluded:opinion_piece (3건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
+| kifrs | pointe.co.kr | [시선] "세 번째 IPO 도전은 다르다"...빗썸, K-IFRS 전환·내부통제 정비 - 포인트경제 | https://news.google.com/rss/articles/CBMiakFVX3lxTE5Za0ZLb1JYUy1qQWRHaC0wTWU3UlRPOGwtUk9nbTdDZDNqdVpZNXR1OFpiOXJvQ1N2RWVqcGJjRUtKdTE1NkpYYnhoa3hRVUlaeDhKenUzQUs0RkRfY04wd3pqWXFIOVhORXc?oc=5 |
 | esg | hellot.net | [ESG 칼럼] 미뤄졌던 ESG 공시 의무화, 2028년부터 단계적 시행 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE1BdXB6anZGSm9NNDRObEsyRjJJbGJlOUxnWk8yOFVUVXRsLTAxU0FMUDMwMXo1TXZzakNuanlEeHBaWnpFLXRWR3lXZ0ZJemhIcEo1MDVDX3JONFNvN20w?oc=5 |
 | esg | v.daum.net | [사설] ESG 공시 의무화…기업에 부담 떠안겨선 안 된다 - v.daum.net | https://news.google.com/rss/articles/CBMiT0FVX3lxTFA5cXhnUk5MY0NYeHZ6T21LdmN4alF2cmlBVUM4cXY5dDM1YkIyQVVTVjloRWJiN3NJdlhjMWRFVnVpQ29EUmtwUFBYNzJrTmc?oc=5 |
 
