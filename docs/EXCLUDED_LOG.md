@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-19 08:50:35 +0900
+생성 시각: 2026-09-20 08:51:00 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -12,9 +12,9 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| esg | 임팩트온 | 【클릭ESG】“누가 읽기는 하나요”…지속가능경영보고서 발간 뒤의 씁쓸한 뒷맛 - impacton.net | https://news.google.com/rss/articles/CBMiaEFVX3lxTE00Y0xzY3VmTWd3c2pfSWJJcEpJbXZhTGpiSTBOV29ZWk9pdDRoTHAzNHpsUWFnV3hEdlQ3WVJOVTdmZ1l5V3J6ZFdKTFcwcF9CdXBQVE1FTVFQcEI5bFpQeGNNRndHdzYz0gFsQVVfeXFMTUI0Sm1uSk1GbXJWYVZ6U3MyaldBVUN2czEwMm9lT0VSTnVaT1BZQ1NLdm9hQ29VRWZqS2k3ZlRPUTR6UkE4WlFiMTk0WHVZOW9VQkRXSzZTcVNQSHdMV0t1VVVsTVV0SU9VMDNp?oc=5 |
 | esg | ttlnews.com | DL㈜, 2026 통합 지속가능경영보고서 발간…기후 리스크 대응·친환경 사... | http://www.ttlnews.com/news/articleView.html?idxno=3143574 |
 | esg | cenews.kr | 롯데건설, 글로벌 ESG 공시 기준 담은 지속가능경영보고서 발간 - 건설이코노미뉴스 | https://news.google.com/rss/articles/CBMiZkFVX3lxTFA2MHZhNXlOZncwT2hiUEYzeHUyeUhsci1lQTlLTmxHRzliR21Hc284ck8yaVgxSmJQT2ttRnZncGRJc3pOM0FwQWlpTUhGOXNXeU5OWVNQM2tFempCS25rQ1JINEhrZw?oc=5 |
+| esg | metroseoul.co.kr | 현대건설, 글로벌 ESG 공시기준 반영한 지속가능경영보고서 발간 - 메트로신문 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE9hak9BSWRnYkt3YkUzT21ZSjdFMHQwR1M1ZnRlZy0ybkJ4LUJybGVGTVZXWFRIRWVZUVdwMlpnYVFEdlZpdW5RQTdNVG9JV0ZJcHgwS2pfN29wNzBjU3J0dQ?oc=5 |
 | esg | cstimes.com | 오스템임플란트, ESG 공시 항목 70% 확대…지속가능경영보고서 발간 | https://www.cstimes.com/news/articleView.html?idxno=716698 |
 | esg | v.daum.net | 지오영, 창사 첫 지속가능경영보고서 발간...ESG 중장기 로드맵 제시 - v.daum.net | https://news.google.com/rss/articles/CBMiRkFVX3lxTE5WWmdYRDg2N0QyUzhUNGFfMjJMWWxTRDdFRTBsNHhPU1lMXzQ0UnQzMVBZWmdyTmRjMjY5b1ZtOGZXajZnNHc?oc=5 |
 | esg | hellot.net | 해성디에스, 2050 넷제로 로드맵 담은 지속가능경영보고서 발간 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE9PdmJ5N3MyMF9jb1JURWEySTFUTGZ5TVQxS2IzY2ZMNGtndF8wTzVFNUxqWkg3V003YjB5Vm1CSVRJUXZKdmlxWUViZldYcVpWSDh4YWIxUUhrUF8zZGJ3?oc=5 |
@@ -48,18 +48,16 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | kifrs | hapt.co.kr | ‘공동주택 회계 감리’ 법안에 “옥상옥(屋上屋) 규제” 지적 - 한국아파트신문 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE1zVlZtb2JHeEpyV204Q3FUVTRVU1JiRWswRmZuR3RDUEk0TFVhRlI3OVgzek00MlZwOGlQUmp4elFQRkFjMDh2YThBV05WZlhzeV9SZmhWMEl4WF9DcUZDc0ZwOWh3aEcy?oc=5 |
 | kifrs | hapt.co.kr | '공동주택 회계 감리' 법안에 "옥상옥(屋上屋) 규제" 지적 | https://www.hapt.co.kr/news/articleView.html?idxno=169530 |
 
-## excluded:opinion_piece (3건)
+## excluded:opinion_piece (2건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| kifrs | pointe.co.kr | [시선] "세 번째 IPO 도전은 다르다"...빗썸, K-IFRS 전환·내부통제 정비 - 포인트경제 | https://news.google.com/rss/articles/CBMiakFVX3lxTE5Za0ZLb1JYUy1qQWRHaC0wTWU3UlRPOGwtUk9nbTdDZDNqdVpZNXR1OFpiOXJvQ1N2RWVqcGJjRUtKdTE1NkpYYnhoa3hRVUlaeDhKenUzQUs0RkRfY04wd3pqWXFIOVhORXc?oc=5 |
 | esg | hellot.net | [ESG 칼럼] 미뤄졌던 ESG 공시 의무화, 2028년부터 단계적 시행 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE1BdXB6anZGSm9NNDRObEsyRjJJbGJlOUxnWk8yOFVUVXRsLTAxU0FMUDMwMXo1TXZzakNuanlEeHBaWnpFLXRWR3lXZ0ZJemhIcEo1MDVDX3JONFNvN20w?oc=5 |
 | esg | v.daum.net | [사설] ESG 공시 의무화…기업에 부담 떠안겨선 안 된다 - v.daum.net | https://news.google.com/rss/articles/CBMiT0FVX3lxTFA5cXhnUk5MY0NYeHZ6T21LdmN4alF2cmlBVUM4cXY5dDM1YkIyQVVTVjloRWJiN3NJdlhjMWRFVnVpQ29EUmtwUFBYNzJrTmc?oc=5 |
 
-## excluded:religious (2건)
+## excluded:religious (1건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | tax | dangdangnews.com | 한교총, 상증법 및 법인세법 시행령 재개정 및 법적용에 관한 공청회 개최 - 당당뉴스 | https://news.google.com/rss/articles/CBMib0FVX3lxTE01SVQ4N2diMEdPb3g4TzZOTDZRZ1QyWnRzcXoxbWh1WXBjTDRRNy1BaGhVYmhLQkxhTlZOQU1UeWJBWTJ4b0h5elZLUm1nVlJubXI1bE03dHRhajI4N0JrY3NqU3RKQnBSaTVuQUMwZw?oc=5 |
-| tax | newsnnet.com | [이슈&해법] 해외 선교비 보내면 세금 폭탄?…교회가 반드시 알아야 할 ‘세법의 경계선’ - 뉴스앤넷 | https://news.google.com/rss/articles/CBMiakFVX3lxTE1JNlQzSV9CUmYtLXBRbkM0YlJPa0o4WEdyY3Z5dzFPbEFWOUJiOVY5dlpYQUtKZU12YjVBM21EbUI0cHZYYVNBa2tjLThsbWhCRmJYWUc0ay12Qjh3Q0J1Y1RVN0cwVG42X1E?oc=5 |
 
