@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-20 08:51:00 +0900
+생성 시각: 2026-09-21 08:46:22 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -8,17 +8,16 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 있으면(오제외) 해당 키워드를 `sources/_config.py`의 `APPLICABILITY`에서
 빼거나 예외 조건을 추가할 것(§9-2).
 
-## excluded:corporate_pr (7건)
+## excluded:corporate_pr (6건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | esg | ttlnews.com | DL㈜, 2026 통합 지속가능경영보고서 발간…기후 리스크 대응·친환경 사... | http://www.ttlnews.com/news/articleView.html?idxno=3143574 |
 | esg | cenews.kr | 롯데건설, 글로벌 ESG 공시 기준 담은 지속가능경영보고서 발간 - 건설이코노미뉴스 | https://news.google.com/rss/articles/CBMiZkFVX3lxTFA2MHZhNXlOZncwT2hiUEYzeHUyeUhsci1lQTlLTmxHRzliR21Hc284ck8yaVgxSmJQT2ttRnZncGRJc3pOM0FwQWlpTUhGOXNXeU5OWVNQM2tFempCS25rQ1JINEhrZw?oc=5 |
 | esg | metroseoul.co.kr | 현대건설, 글로벌 ESG 공시기준 반영한 지속가능경영보고서 발간 - 메트로신문 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE9hak9BSWRnYkt3YkUzT21ZSjdFMHQwR1M1ZnRlZy0ybkJ4LUJybGVGTVZXWFRIRWVZUVdwMlpnYVFEdlZpdW5RQTdNVG9JV0ZJcHgwS2pfN29wNzBjU3J0dQ?oc=5 |
-| esg | cstimes.com | 오스템임플란트, ESG 공시 항목 70% 확대…지속가능경영보고서 발간 | https://www.cstimes.com/news/articleView.html?idxno=716698 |
 | esg | v.daum.net | 지오영, 창사 첫 지속가능경영보고서 발간...ESG 중장기 로드맵 제시 - v.daum.net | https://news.google.com/rss/articles/CBMiRkFVX3lxTE5WWmdYRDg2N0QyUzhUNGFfMjJMWWxTRDdFRTBsNHhPU1lMXzQ0UnQzMVBZWmdyTmRjMjY5b1ZtOGZXajZnNHc?oc=5 |
-| esg | hellot.net | 해성디에스, 2050 넷제로 로드맵 담은 지속가능경영보고서 발간 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE9PdmJ5N3MyMF9jb1JURWEySTFUTGZ5TVQxS2IzY2ZMNGtndF8wTzVFNUxqWkg3V003YjB5Vm1CSVRJUXZKdmlxWUViZldYcVpWSDh4YWIxUUhrUF8zZGJ3?oc=5 |
 | esg | youthdaily.co.kr | 지속가능경영 고도화·글로벌 경쟁력 강화…오스템임플란트, '글로벌 To... | https://www.youthdaily.co.kr/news/article.html?no=225235 |
+| esg | lawissue.co.kr | 오스템임플란트, ESG 활동 담은 지속가능경영보고서 발간 | http://www.lawissue.co.kr/view.php?ud=202608132313598807f4ab64559d_12 |
 
 ## excluded:financial (3건)
 
@@ -28,11 +27,12 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
 | esg | segye.com | 증권사 지속가능경영…‘포괄적 ESG 활동’서 본업 연계 ‘지속가능금융... | https://www.segye.com/newsView/20260824517331?OutUrl=naver |
 
-## excluded:foreign (2건)
+## excluded:foreign (3건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | esg | 한국회계기준원 | ESRS-40a 공개초안에 대한 검토의견 조회 | https://www.kasb.or.kr/front/board/comm010View.do?seq=2182 |
+| kifrs | joseplus.com | 한국회계기준원, EFRAG과 ‘ESRS-40a 공개초안’ 실무 쟁점 논의 - 조세플러스 | https://news.google.com/rss/articles/CBMiWEFVX3lxTE1hOThTbnJjOFRsTFROUGdEWmh0TXZKWDN0RmU3enNON1FjRklFbzVGOHNiU1hjQ25hREItUUt6MVZiLUFYN2NVUWhWdUgxMUZGUlFubHlMMlI?oc=5 |
 | kifrs | 매일경제 | 트립닷컴 그룹, US GAAP·IFRS 회계기준 차이로 순이익 25억 위안 증가 - 매일경제 마켓 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE9lWktaN3g3SXlNOU9qcUlfVXRGUzNfRG14N0Z6R3JKR0xwMUJPN05VR1NQb3hqQ2VLZHNwSEN4UmVEMGs4MnB0SUcyeV9DQk1WS1E?oc=5 |
 
 ## excluded:industry_specific (8건)
