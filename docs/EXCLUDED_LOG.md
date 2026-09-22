@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-22 09:28:22 +0900
+생성 시각: 2026-09-23 08:58:56 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -48,22 +48,15 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | icfr | ajunews.com | 금감원 농협금융·은행 내부통제 취약···내달 정기감사 - 아주경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTE55ZFJtTGY0THV2eW84THBrdTE3TmVUeVV2ZXl1MHNKUmVvSkVBRWJsS1V6V2p6V2ZEMjE1NFdWbk5nZ0dyWF9relkwWUtlR21PYV9ITW5DWkN5Z9IBWEFVX3lxTE5OeFNrNFM5dnR6aU5iOTVaYTBQMFcwVlBiNW9TbG1BTXp5R21qWE1XYzJnaXgwOWV1UGc5NVhuclpLcWV2TFpGMEZMMlFxOWg0US1PeGRHU3k?oc=5 |
 | kifrs | hapt.co.kr | '공동주택 회계 감리' 법안에 "옥상옥(屋上屋) 규제" 지적 | https://www.hapt.co.kr/news/articleView.html?idxno=169530 |
 
-## excluded:opinion_piece (2건)
+## excluded:opinion_piece (1건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | esg | hellot.net | [ESG 칼럼] 미뤄졌던 ESG 공시 의무화, 2028년부터 단계적 시행 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE1BdXB6anZGSm9NNDRObEsyRjJJbGJlOUxnWk8yOFVUVXRsLTAxU0FMUDMwMXo1TXZzakNuanlEeHBaWnpFLXRWR3lXZ0ZJemhIcEo1MDVDX3JONFNvN20w?oc=5 |
-| esg | v.daum.net | [사설] ESG 공시 의무화…기업에 부담 떠안겨선 안 된다 - v.daum.net | https://news.google.com/rss/articles/CBMiT0FVX3lxTFA5cXhnUk5MY0NYeHZ6T21LdmN4alF2cmlBVUM4cXY5dDM1YkIyQVVTVjloRWJiN3NJdlhjMWRFVnVpQ29EUmtwUFBYNzJrTmc?oc=5 |
-
-## excluded:religious (1건)
-
-| 카테고리 | 출처 | 제목 | 링크 |
-|---|---|---|---|
-| tax | dangdangnews.com | 한교총, 상증법 및 법인세법 시행령 재개정 및 법적용에 관한 공청회 개최 - 당당뉴스 | https://news.google.com/rss/articles/CBMib0FVX3lxTE01SVQ4N2diMEdPb3g4TzZOTDZRZ1QyWnRzcXoxbWh1WXBjTDRRNy1BaGhVYmhLQkxhTlZOQU1UeWJBWTJ4b0h5elZLUm1nVlJubXI1bE03dHRhajI4N0JrY3NqU3RKQnBSaTVuQUMwZw?oc=5 |
 
 ## excluded:smb_only (1건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| kifrs | newsis.com | '소상공인 재무제표' 이번엔 실현?…"표본조사부터" - newsis.com | https://news.google.com/rss/articles/CBMiYEFVX3lxTE9Dck1TWDdLdHRFZEpSMGJuQkh6Y3V2dnhIRzI0UXZqbUdmNTQ3U1U4OXhPeUI2NlVKeGRGVi1Fc1VWVzlLalN6anVjNHRWTGp6UTI3NmkzVjZ5N1V6MW9ha9IBeEFVX3lxTE41Zi1DWXNFdzRPX2pKVVZaR2NYUjdHMmFoTTVmS2JCT3R2U2U1RTRVTTk3dl9EaE9PTTV5Zm9tNWJ0V3N2Ml8wYkZBVU5QcFNmeUxkX19UTTAtemhnUFdUUTBIRXM5QTV3R01VQ1VHMVJxV0dKcmxxcQ?oc=5 |
+| kifrs | newsis.com | '소상공인 재무제표' 이번엔 실현?…"표본조사부터" - 뉴시스 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE9Dck1TWDdLdHRFZEpSMGJuQkh6Y3V2dnhIRzI0UXZqbUdmNTQ3U1U4OXhPeUI2NlVKeGRGVi1Fc1VWVzlLalN6anVjNHRWTGp6UTI3NmkzVjZ5N1V6MW9ha9IBeEFVX3lxTE41Zi1DWXNFdzRPX2pKVVZaR2NYUjdHMmFoTTVmS2JCT3R2U2U1RTRVTTk3dl9EaE9PTTV5Zm9tNWJ0V3N2Ml8wYkZBVU5QcFNmeUxkX19UTTAtemhnUFdUUTBIRXM5QTV3R01VQ1VHMVJxV0dKcmxxcQ?oc=5 |
 
