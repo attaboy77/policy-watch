@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-24 09:10:30 +0900
+생성 시각: 2026-09-25 09:14:32 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -12,11 +12,11 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| esg | 임팩트온 | 【클릭ESG】“누가 읽기는 하나요”…지속가능경영보고서 발간 뒤의 씁쓸한 뒷맛 - 임팩트온 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE00Y0xzY3VmTWd3c2pfSWJJcEpJbXZhTGpiSTBOV29ZWk9pdDRoTHAzNHpsUWFnV3hEdlQ3WVJOVTdmZ1l5V3J6ZFdKTFcwcF9CdXBQVE1FTVFQcEI5bFpQeGNNRndHdzYz0gFsQVVfeXFMTUI0Sm1uSk1GbXJWYVZ6U3MyaldBVUN2czEwMm9lT0VSTnVaT1BZQ1NLdm9hQ29VRWZqS2k3ZlRPUTR6UkE4WlFiMTk0WHVZOW9VQkRXSzZTcVNQSHdMV0t1VVVsTVV0SU9VMDNp?oc=5 |
-| esg | cenews.kr | 롯데건설, 글로벌 ESG 공시 기준 담은 지속가능경영보고서 발간 - cenews.kr | https://news.google.com/rss/articles/CBMiZkFVX3lxTFA2MHZhNXlOZncwT2hiUEYzeHUyeUhsci1lQTlLTmxHRzliR21Hc284ck8yaVgxSmJQT2ttRnZncGRJc3pOM0FwQWlpTUhGOXNXeU5OWVNQM2tFempCS25rQ1JINEhrZw?oc=5 |
-| esg | metroseoul.co.kr | 현대건설, 글로벌 ESG 공시기준 반영한 지속가능경영보고서 발간 - metroseoul.co.kr | https://news.google.com/rss/articles/CBMiYEFVX3lxTE9hak9BSWRnYkt3YkUzT21ZSjdFMHQwR1M1ZnRlZy0ybkJ4LUJybGVGTVZXWFRIRWVZUVdwMlpnYVFEdlZpdW5RQTdNVG9JV0ZJcHgwS2pfN29wNzBjU3J0dQ?oc=5 |
+| kifrs | news.koreanbar.or.kr | [로펌소식] 지평, ‘AI회계감리대응센터’ 확대 개편… 회계 관련 규제 대응 강화 - news.koreanbar.or.kr | https://news.google.com/rss/articles/CBMib0FVX3lxTE12bVNaT28xenRLNXZMRTZFN2JWRTNDdjY5d3RmTG9iQlBsN3l6RWZxQUdnZzVjSmlBdzMyWXprTHJlOUNMT2tSeXZRLUwxSENTTXpEYUVUQW51bU8wemZTQ1FZTjVtNDRPbHdSNjhsaw?oc=5 |
+| esg | cenews.kr | 롯데건설, 글로벌 ESG 공시 기준 담은 지속가능경영보고서 발간 - 건설이코노미뉴스 | https://news.google.com/rss/articles/CBMiZkFVX3lxTFA2MHZhNXlOZncwT2hiUEYzeHUyeUhsci1lQTlLTmxHRzliR21Hc284ck8yaVgxSmJQT2ttRnZncGRJc3pOM0FwQWlpTUhGOXNXeU5OWVNQM2tFempCS25rQ1JINEhrZw?oc=5 |
+| esg | metroseoul.co.kr | 현대건설, 글로벌 ESG 공시기준 반영한 지속가능경영보고서 발간 - 메트로신문 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE9hak9BSWRnYkt3YkUzT21ZSjdFMHQwR1M1ZnRlZy0ybkJ4LUJybGVGTVZXWFRIRWVZUVdwMlpnYVFEdlZpdW5RQTdNVG9JV0ZJcHgwS2pfN29wNzBjU3J0dQ?oc=5 |
 | esg | ttlnews.com | DL㈜, 2026 통합 지속가능경영보고서 발간…기후 리스크 대응·친환경 사... | http://www.ttlnews.com/news/articleView.html?idxno=3143574 |
-| esg | v.daum.net | 지오영, 창사 첫 지속가능경영보고서 발간...ESG 중장기 로드맵 제시 - v.daum.net | https://news.google.com/rss/articles/CBMiS0FVX3lxTE53eWJWN0d6eGN0akl2MUIzUkxOLUhMYW5nRENyYWJab2JXVVZuRUJ2T2dCRTVqUWRMS0JKY3V4eDAxM1VzeWVoUTNDRQ?oc=5 |
+| esg | v.daum.net | 지오영, 창사 첫 지속가능경영보고서 발간...ESG 중장기 로드맵 제시 - v.daum.net | https://news.google.com/rss/articles/CBMiRkFVX3lxTE5WWmdYRDg2N0QyUzhUNGFfMjJMWWxTRDdFRTBsNHhPU1lMXzQ0UnQzMVBZWmdyTmRjMjY5b1ZtOGZXajZnNHc?oc=5 |
 | esg | youthdaily.co.kr | 지속가능경영 고도화·글로벌 경쟁력 강화…오스템임플란트, '글로벌 To... | https://www.youthdaily.co.kr/news/article.html?no=225235 |
 | esg | lawissue.co.kr | 오스템임플란트, ESG 활동 담은 지속가능경영보고서 발간 | http://www.lawissue.co.kr/view.php?ud=202608132313598807f4ab64559d_12 |
 
@@ -45,7 +45,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | kifrs | 한국회계기준원 | 2018년 제1117호 보험계약 | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=231&searchfield=ALL&searchword=1117&s_date_start=2018-01-01&s_date_end= |
 | kifrs | 한국회계기준원 | 2017년 제1104호 ‘보험계약’과 제1109호 '금융상품'의 동시 적용 | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=220&searchfield=ALL&searchword=&s_date_start=2017-12-01&s_date_end=2017-12-31 |
 | kifrs | 한국회계기준원 | 2015년 건설계약 공시 (제1011호 건설계약, 제1037호 충당부채, 우발부채, 우발자산, 제1115호 고객과의 계약에서 생기는 수익, 제2115호 부동산건설약정) | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=166&searchfield=ALL&searchword=1115&s_date_start=2015-01-01&s_date_end= |
-| kifrs | hapt.co.kr | ‘공동주택 회계 감리’ 법안에 “옥상옥(屋上屋) 규제” 지적 - 한국아파트신문 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE1zVlZtb2JHeEpyV204Q3FUVTRVU1JiRWswRmZuR3RDUEk0TFVhRlI3OVgzek00MlZwOGlQUmp4elFQRkFjMDh2YThBV05WZlhzeV9SZmhWMEl4WF9DcUZDc0ZwOWh3aEcy?oc=5 |
+| kifrs | hapt.co.kr | ‘공동주택 회계 감리’ 법안에 “옥상옥(屋上屋) 규제” 지적 - hapt.co.kr | https://news.google.com/rss/articles/CBMiaEFVX3lxTE1zVlZtb2JHeEpyV204Q3FUVTRVU1JiRWswRmZuR3RDUEk0TFVhRlI3OVgzek00MlZwOGlQUmp4elFQRkFjMDh2YThBV05WZlhzeV9SZmhWMEl4WF9DcUZDc0ZwOWh3aEcy?oc=5 |
 | icfr | ajunews.com | 금감원 농협금융·은행 내부통제 취약···내달 정기감사 - 아주경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTE55ZFJtTGY0THV2eW84THBrdTE3TmVUeVV2ZXl1MHNKUmVvSkVBRWJsS1V6V2p6V2ZEMjE1NFdWbk5nZ0dyWF9relkwWUtlR21PYV9ITW5DWkN5Z9IBWEFVX3lxTE5OeFNrNFM5dnR6aU5iOTVaYTBQMFcwVlBiNW9TbG1BTXp5R21qWE1XYzJnaXgwOWV1UGc5NVhuclpLcWV2TFpGMEZMMlFxOWg0US1PeGRHU3k?oc=5 |
 | kifrs | hapt.co.kr | '공동주택 회계 감리' 법안에 "옥상옥(屋上屋) 규제" 지적 | https://www.hapt.co.kr/news/articleView.html?idxno=169530 |
 

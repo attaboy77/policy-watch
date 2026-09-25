@@ -1,13 +1,13 @@
 {
   "kasb": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-24T09:07:11+09:00",
+    "last_success_at": "2026-09-25T09:10:08+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
   "fss": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-24T09:07:11+09:00",
+    "last_success_at": "2026-09-25T09:10:08+09:00",
     "last_failure_at": null,
     "last_failure_reason": null
   },
@@ -18,10 +18,10 @@
     "last_failure_reason": "결과 0건(응답 없음 또는 파싱 실패)"
   },
   "nts": {
-    "consecutive_failures": 0,
+    "consecutive_failures": 1,
     "last_success_at": "2026-09-24T09:07:11+09:00",
-    "last_failure_at": "2026-09-08T16:29:16+09:00",
-    "last_failure_reason": null
+    "last_failure_at": "2026-09-25T09:10:08+09:00",
+    "last_failure_reason": "HTTPSConnectionPool(host='policy-proxy.epsillon.workers.dev', port=443): Read timed out. (read timeout=15)"
   },
   "fsc": {
     "consecutive_failures": 1,
@@ -37,19 +37,19 @@
   },
   "law_api": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-24T09:07:11+09:00",
+    "last_success_at": "2026-09-25T09:10:08+09:00",
     "last_failure_at": "2026-09-09T08:45:39+09:00",
     "last_failure_reason": null
   },
   "google_news": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-24T09:07:11+09:00",
+    "last_success_at": "2026-09-25T09:10:08+09:00",
     "last_failure_at": "2026-09-07T13:41:35+09:00",
     "last_failure_reason": null
   },
   "naver_news": {
     "consecutive_failures": 0,
-    "last_success_at": "2026-09-24T09:07:11+09:00",
+    "last_success_at": "2026-09-25T09:10:08+09:00",
     "last_failure_at": "2026-09-07T13:44:17+09:00",
     "last_failure_reason": null
   }
