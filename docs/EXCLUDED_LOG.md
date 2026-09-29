@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-09-28 09:12:11 +0900
+생성 시각: 2026-09-29 10:25:15 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -8,7 +8,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 있으면(오제외) 해당 키워드를 `sources/_config.py`의 `APPLICABILITY`에서
 빼거나 예외 조건을 추가할 것(§9-2).
 
-## excluded:corporate_pr (5건)
+## excluded:corporate_pr (4건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
@@ -16,7 +16,6 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | esg | cenews.kr | 롯데건설, 글로벌 ESG 공시 기준 담은 지속가능경영보고서 발간 - 건설이코노미뉴스 | https://news.google.com/rss/articles/CBMiZkFVX3lxTFA2MHZhNXlOZncwT2hiUEYzeHUyeUhsci1lQTlLTmxHRzliR21Hc284ck8yaVgxSmJQT2ttRnZncGRJc3pOM0FwQWlpTUhGOXNXeU5OWVNQM2tFempCS25rQ1JINEhrZw?oc=5 |
 | esg | ttlnews.com | DL㈜, 2026 통합 지속가능경영보고서 발간…기후 리스크 대응·친환경 사... | http://www.ttlnews.com/news/articleView.html?idxno=3143574 |
 | esg | youthdaily.co.kr | 지속가능경영 고도화·글로벌 경쟁력 강화…오스템임플란트, '글로벌 To... | https://www.youthdaily.co.kr/news/article.html?no=225235 |
-| esg | lawissue.co.kr | 오스템임플란트, ESG 활동 담은 지속가능경영보고서 발간 | http://www.lawissue.co.kr/view.php?ud=202608132313598807f4ab64559d_12 |
 
 ## excluded:financial (3건)
 
@@ -57,10 +56,4 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | esg | hellot.net | [ESG 칼럼] 미뤄졌던 ESG 공시 의무화, 2028년부터 단계적 시행 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE1BdXB6anZGSm9NNDRObEsyRjJJbGJlOUxnWk8yOFVUVXRsLTAxU0FMUDMwMXo1TXZzakNuanlEeHBaWnpFLXRWR3lXZ0ZJemhIcEo1MDVDX3JONFNvN20w?oc=5 |
-
-## excluded:smb_only (1건)
-
-| 카테고리 | 출처 | 제목 | 링크 |
-|---|---|---|---|
-| kifrs | newsis.com | '소상공인 재무제표' 이번엔 실현?…"표본조사부터" - 뉴시스 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE9Dck1TWDdLdHRFZEpSMGJuQkh6Y3V2dnhIRzI0UXZqbUdmNTQ3U1U4OXhPeUI2NlVKeGRGVi1Fc1VWVzlLalN6anVjNHRWTGp6UTI3NmkzVjZ5N1V6MW9ha9IBeEFVX3lxTE41Zi1DWXNFdzRPX2pKVVZaR2NYUjdHMmFoTTVmS2JCT3R2U2U1RTRVTTk3dl9EaE9PTTV5Zm9tNWJ0V3N2Ml8wYkZBVU5QcFNmeUxkX19UTTAtemhnUFdUUTBIRXM5QTV3R01VQ1VHMVJxV0dKcmxxcQ?oc=5 |
 
