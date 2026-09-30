@@ -145,17 +145,6 @@ def _build_summary(item: dict) -> list[str]:
     return lines[:MAX_SUMMARY_LINES]
 
 
-# ADDENDUM-2 §2-1이 "예규·유권해석"을 "질의회신"으로 통합했다 — SPEC.md §6 원문
-# 규칙("기존 세무처리 관행 재확인 필요")은 세법 전용 문구라 다른 카테고리 질의회신에
-# 그대로 쓰면 카테고리와 안 맞는다(2026-08-28 사용자 피드백) — 카테고리별로 나눈다.
-_QNA_IMPACT_BY_CATEGORY = {
-    "tax": "기존 세무처리 관행 재확인 필요.",
-    "kifrs": "기존 회계처리 관행 재확인 필요.",
-    "icfr": "기존 내부통제 운영 방식 재확인 필요.",
-    "esg": "기존 공시 실무 재확인 필요.",
-}
-
-
 def _build_impact(item: dict) -> str | None:
     """SPEC §6 규칙. 해당 없으면 억지로 만들지 않고 None."""
     effective_date = item.get("effective_date")
@@ -179,9 +168,11 @@ def _build_impact(item: dict) -> str | None:
             return f"{formatted} 위원회 회의 예정 · 안건 의결 시 시행일 별도 확인"
         team = CATEGORIES.get(category, {}).get("team", "담당팀")
         return f"{formatted}부터 적용. {team} 사전 검토 필요."
-    if item.get("doc_type") == "질의회신":
-        # 매핑에 없는(알 수 없는) 카테고리면 억지로 만들지 않고 None.
-        return _QNA_IMPACT_BY_CATEGORY.get(category)
+    # 2026-10-01 사용자 지시: 질의회신의 카테고리별 고정 문구("기존 회계처리 관행
+    # 재확인 필요." 등, SPEC.md §6 "예규·유권해석" 규칙에서 유래)는 폐지 — 9/29 메일에서
+    # 질의회신 6건이 전부 같은 문장이라 읽을 게 없이 박스만 차지했다. 이제 None으로
+    # 두어 카드·메일에서 실무영향 칸 자체가 빠지고, 요약 캐시(AI 요약)의 impact가
+    # 있으면 summarize()가 그걸 그대로 쓴다.
     return None
 
 

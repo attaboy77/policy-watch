@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """sources/_summarize.py 단위 테스트 (SPEC.md §6 + SPEC-ADDENDUM-8.md §4)."""
+import pytest
+
 from sources._summarize import summarize
 
 
@@ -60,16 +62,19 @@ class TestBuildImpact:
         result = summarize(_item(effective_date="2026-01-01", category="tax"))
         assert result["impact"] == "2026.01.01부터 적용. 세무팀 사전 검토 필요."
 
-    def test_doc_type_qna_generates_review_message(self):
-        result = summarize(_item(doc_type="질의회신", effective_date=None))
-        assert result["impact"] == "기존 세무처리 관행 재확인 필요."
+    # 2026-10-01 사용자 지시: 질의회신 고정 문구 폐지 — 모든 카테고리에서 None.
+    @pytest.mark.parametrize("category", ["tax", "kifrs", "icfr", "esg"])
+    def test_doc_type_qna_without_cache_has_no_impact(self, category):
+        result = summarize(_item(category=category, doc_type="질의회신", effective_date=None),
+                           cache={})
+        assert result["impact"] is None
 
-    def test_doc_type_qna_message_matches_category_not_always_tax(self):
-        # 카테고리가 tax가 아닌데 세무 문구가 나오면 안 된다(2026-08-28 사용자 피드백:
-        # K-IFRS 질의회신에 "기존 세무처리 관행 재확인 필요"가 나온 버그).
-        result = summarize(_item(category="kifrs", doc_type="질의회신", effective_date=None))
-        assert result["impact"] == "기존 회계처리 관행 재확인 필요."
-        assert "세무" not in result["impact"]
+    def test_doc_type_qna_uses_cached_ai_impact(self):
+        cache = {"x": {"summary": ["요약"], "impact": "IFRS18 도입 시 표시범주 재검토 필요"}}
+        result = summarize(_item(id="x", category="kifrs", doc_type="질의회신",
+                                 effective_date=None), cache=cache)
+        assert result["impact"] == "IFRS18 도입 시 표시범주 재검토 필요"
+        assert result["ai_generated"] is True
 
     def test_no_rule_matches_returns_none(self):
         result = summarize(_item(doc_type="기사", effective_date=None))
