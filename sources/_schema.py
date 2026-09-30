@@ -126,6 +126,11 @@ _ITEM_SCHEMA = {
         # 시행일이 아니라 회계연도 기준 근사치라는 걸 캘린더 카드에서 알 수
         # 있게(schedules.py의 _description_of()가 description에 병기한다).
         "effective_date_note": {"type": ["string", "null"]},
+        # 2026-10-01: KASB 질의회신 전용 원래 날짜(그 외 소스는 null). published_at은
+        # 공개일(수집일보다 미래면 수집일)이고, 회신일·공개일 원값은 여기 남긴다
+        # (kasb._qna_published_at() 참고).
+        "replied_at": {"type": ["string", "null"]},
+        "disclosed_at": {"type": ["string", "null"]},
     },
 }
 

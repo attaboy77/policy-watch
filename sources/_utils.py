@@ -1146,7 +1146,7 @@ ITEM_FIELDS = [
     "urls", "law_meta", "attachments",
     "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
     "is_meeting_schedule", "ai_generated", "revision_reason", "is_roadmap_estimate",
-    "effective_date_note",
+    "effective_date_note", "replied_at", "disclosed_at",
 ]
 
 # 2026-09-02 사용자 지시: KSSB 자발적용 기준서(doc_type="자발적용")는 자체

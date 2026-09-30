@@ -539,9 +539,11 @@ def fetch_qna() -> list[dict]:
     """
     resp = _http.get(QNA_LIST_URL)
     soup = BeautifulSoup(resp.text, "html.parser")
+    today = _now_kst_iso()[:10]
+    disclosed_idx = _qna_disclosed_column_index(soup)
     items: list[dict] = []
     for row in soup.select("table tbody tr"):
-        cells = row.find_all("td")
+        cells = row.find_all("td", recursive=False)
         if len(cells) < 3:
             continue
         link = row.find("a")
@@ -555,17 +557,52 @@ def fetch_qna() -> list[dict]:
             continue
         seq = m.group(1)
         date_p = row.select_one(".board_date")
-        published_at = date_p.get_text(strip=True) if date_p else None
-        if not published_at:
+        replied_at = date_p.get_text(strip=True) if date_p else None
+        if not replied_at:
             continue  # 날짜 없는 상단 고정 항목 = 일반기업회계기준 계열, 제외
+        disclosed_at = None
+        if disclosed_idx is not None and disclosed_idx < len(cells):
+            disclosed_at = cells[disclosed_idx].get_text(strip=True) or None
+            if disclosed_at and not _ISO_DATE_RE.match(disclosed_at):
+                disclosed_at = None
         url = f"{QNA_LIST_URL}#{seq}"  # A3도 상세 URL 패턴 미확정 — 동일하게 앵커로 대체
         tier, trust_score, source_name = trust_of(url)
-        items.append(_build_item(
-            category="kifrs", title=title, url=url, published_at=published_at,
+        item = _build_item(
+            category="kifrs", title=title, url=url,
+            published_at=_qna_published_at(replied_at, disclosed_at, today),
             doc_type="질의회신", effective_date=None,
             tier=tier, trust_score=trust_score, source_name=source_name,
-        ))
+        )
+        item["replied_at"] = replied_at
+        item["disclosed_at"] = disclosed_at
+        items.append(item)
     return items
+
+
+_ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def _qna_disclosed_column_index(soup: BeautifulSoup) -> int | None:
+    """질의회신 목록 표 머리글에서 "공개일" 칸의 위치를 찾는다. 못 찾으면 None."""
+    for i, th in enumerate(soup.select("table thead th")):
+        if th.get_text(strip=True) == "공개일":
+            return i
+    return None
+
+
+def _qna_published_at(replied_at: str, disclosed_at: str | None, today: str) -> str:
+    """질의회신의 published_at = 공개일(2026-10-01 사용자 지시).
+
+    목록의 `.board_date`는 "회신일"이라, IFRS 해석위원회 논의 결과처럼 4/30에
+    회신된 게 9월 말에 공개되면 5개월 전 날짜로 찍혀 화면 날짜 범위(최근 30일)
+    밖으로 밀려났다(9/29 메일 6건 실측). 공개일이 수집일보다 미래면 수집일로
+    맞춘다 — 실측으로 9/29 아침 수집분이 페이지엔 공개일 9/30으로 나와, 그대로
+    쓰면 화면이 미래 날짜를 걸러 공개일까지 또 안 보인다. 공개일 칸이 없거나
+    비어 있으면 기존대로 회신일. id는 목록 URL+seq 기반이라 날짜와 무관하다.
+    """
+    if not disclosed_at:
+        return replied_at
+    return min(disclosed_at, today)
 
 
 def fetch(*, fetch_detail: bool = True) -> list[dict]:
