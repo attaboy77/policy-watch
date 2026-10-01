@@ -58,9 +58,9 @@ sources:
         path.write_text("sources: [this is not: valid: yaml:", encoding="utf-8")
         assert _config._load_disabled_sources(str(path)) == {}
 
-    def test_real_config_file_disables_the_three_reported_sources(self):
-        """실제 data/source_toggles.yml — 2026-09-09 사용자 지시로 moef/fsc/
-        policy_briefing 3개를 껐다. 파일이 실수로 지워지거나 형식이 깨지면
-        이 테스트가 바로 잡아낸다."""
+    def test_real_config_file_currently_disables_nothing(self):
+        """실제 data/source_toggles.yml — 2026-09-09에 moef/fsc/policy_briefing 3개를
+        껐다가 2026-10-01에 다시 켰다(0건은 정상 결과였음 — main.ALLOW_EMPTY_SOURCES).
+        파일 형식이 깨지거나 누가 다시 끄면 이 테스트가 바로 잡아낸다."""
         out = _config._load_disabled_sources()
-        assert set(out) == {"moef", "fsc", "policy_briefing"}
+        assert set(out) == set()

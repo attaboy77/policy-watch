@@ -76,8 +76,22 @@ def _extract_attachments(li) -> list[dict] | None:
     return out or None
 
 
+# 2026-10-01: fetch()가 "목록 행을 하나라도 읽었는지"를 알기 위한 카운터 — 관련 항목이
+# 없어서 0건인 것(정상, main.ALLOW_EMPTY_SOURCES)과 구조 변경·차단으로 행 자체를
+# 못 읽은 것(실패)을 구분한다.
+_rows_seen = 0
+
+# 2026-10-01 실측: 목록 페이지(no010101)는 한 페이지에 24~26초가 걸린다(메인 페이지는
+# 1초 — 서버 쪽 목록 조회가 느림). 기본 timeout 15초·재시도 3회로는 매번 read timeout,
+# 5페이지면 소스 상한 60초를 크게 넘는다(로컬 218초). 1페이지(10건, 2~3일치)만
+# 넉넉한 timeout으로 한 번만(재시도 없이 — _http.get의 retries는 총 시도 횟수) 받는다.
+PAGE_TIMEOUT = 40
+PAGE_RETRIES = 1
+
+
 def fetch_page(page: int = 1) -> list[dict]:
-    resp = _http.get_govt(LIST_URL, params={"curPage": page})
+    global _rows_seen
+    resp = _http.get_govt(LIST_URL, params={"curPage": page}, timeout=PAGE_TIMEOUT, retries=PAGE_RETRIES)
     soup = BeautifulSoup(resp.text, "html.parser")
     items: list[dict] = []
 
@@ -86,6 +100,7 @@ def fetch_page(page: int = 1) -> list[dict]:
         day_div = li.select_one(".day")
         if subject_a is None or day_div is None:
             continue
+        _rows_seen += 1
         title = subject_a.get_text(strip=True)
         href = subject_a.get("href", "")
         if not title or not href:
@@ -128,8 +143,14 @@ def fetch_page(page: int = 1) -> list[dict]:
     return items
 
 
-def fetch(*, max_pages: int = 5) -> list[dict]:
-    """A4/C2: 금융위원회 보도자료. 페이지 하나가 실패해도 계속 진행."""
+def fetch(*, max_pages: int = 1) -> list[dict]:
+    """A4/C2: 금융위원회 보도자료. 페이지 하나가 실패해도 계속 진행.
+
+    2026-10-01: 관련 항목이 없어 0건인 건 정상(main.ALLOW_EMPTY_SOURCES). 대신
+    모든 페이지가 실패했거나 목록 행을 하나도 못 읽었으면 예외로 올려 실패 처리한다.
+    """
+    global _rows_seen
+    _rows_seen = 0
     items: list[dict] = []
     for page in range(1, max_pages + 1):
         if page > 1:
@@ -139,6 +160,8 @@ def fetch(*, max_pages: int = 5) -> list[dict]:
             items.extend(fetch_page(page))
         except Exception as exc:  # noqa: BLE001
             print(f"[fsc] page={page} 수집 실패: {exc}")
+    if _rows_seen == 0:
+        raise RuntimeError("보도자료 목록 행 0개 — 전 페이지 실패 또는 페이지 구조 변경·차단 의심")
     return items
 
 
@@ -147,7 +170,7 @@ if __name__ == "__main__":
     print(probe())
 
     print("\n=== A4/C2: 금융위원회 보도자료(카테고리 매칭분만, 5페이지) ===")
-    items = fetch(max_pages=5)
+    items = fetch()
     for it in items[:15]:
         att = f" | 첨부 {len(it['attachments'])}개" if it["attachments"] else ""
         print(f"  [{it['category']:5s}] [{it['doc_type']:6s}] {it['published_at']} | {it['title'][:45]}{att}")

@@ -10,8 +10,10 @@ tax 카테고리 전체의 사실상 유일한 신뢰 가능 시행일 정보다
   (본법/시행령/시행규칙) 채택한다.
 - `lawService.do`(본문 상세): `<시행일자>`/`<공포일자>` 필드가 구조화돼 그대로
   나온다 — 정규식 파싱 불필요. 이 소스만 유일하게 이렇다.
-- **명칭 함정**: API 응답의 `소관부처명`도 "재정경제부"(구 명칭)로 나올 수 있다
-  (실측: 법인세법 사례). `_MINISTRY_NAME_FIX`로 정규화한다.
+- **명칭**: 2026.1.2 정부조직 개편으로 세제 소관 부처가 "재정경제부"가 됐다(기획재정부에서
+  재정경제부·기획예산처 분리). API 응답의 `소관부처명`도 "재정경제부"로 온다. 예전엔 이걸
+  2008년 이전 구 명칭으로 오인해 "기획재정부"로 바꿔 표시했다(2026-10-01 정정) — 지금은
+  반대로 혹시 남아 있는 "기획재정부"를 현행 명칭으로 맞춘다.
 - 프록시: `PROXY_BASE`가 있으면 `_http.get_govt()`가 알아서 경유한다(SPEC §9-3).
 - `LAW_API_OC` 환경변수가 없으면 법제처가 공개 제공하는 테스트용 OC "test"로
   대체한다(실측 확인 — 실제 데이터가 온다). 다만 사용량 제한이 있을 수 있어
@@ -57,7 +59,7 @@ def _configured_law_names() -> list[str]:
             seen.setdefault(law_name, None)
     return list(seen) or _FALLBACK_LAW_NAMES
 
-_MINISTRY_NAME_FIX = {"재정경제부": "기획재정부"}  # 레거시 명칭 정규화(SOURCE_PROBE.md D1/D4 참고)
+_MINISTRY_NAME_FIX = {"기획재정부": "재정경제부"}  # 2026.1.2 개편 전 명칭 → 현행 명칭
 _KST = timezone(timedelta(hours=9))
 # 2026-10-01: 1.0→0.3. Actions 실측 63.71초(요청 14회) 중 14초가 이 대기였다.
 # 로컬에서 0.3초 간격 14회(검색 7 + 개정이유 페이지 7) 테스트 — 전부 HTTP 200,
@@ -72,7 +74,7 @@ SLEEP_BETWEEN_REQUESTS = 0.3
 # 응답이 2.6KB로 줄지만 제개정이유가 빠져서 못 쓴다.
 REVISION_REASON_URL = "https://www.law.go.kr/LSW/lsRvsDocInfoR.do"
 REVISION_REASON_TIMEOUT = 10
-REVISION_REASON_RETRIES = 1
+REVISION_REASON_RETRIES = 1  # _http.get의 retries는 총 시도 횟수 — 재시도 없이 1회
 # 시행령/시행규칙 개정이유는 공포일이 최근 N일 이내인 것만 받는다(사용자 지시 —
 # 요청 수가 크게 늘지 않게). 본법은 기존대로 항상 받는다.
 RECENT_REVISION_DAYS = 30

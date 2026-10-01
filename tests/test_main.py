@@ -60,6 +60,39 @@ class TestCollectAllOfficialFallback:
         assert failed[0]["name"] == "nts"
         assert failed[0]["used_fallback"] is False
 
+    def test_allow_empty_source_zero_items_is_success(self, monkeypatch, tmp_path):
+        """2026-10-01: moef/fsc/policy_briefing/lawmaking은 관련 항목이 없는 날 0건이
+        정상이다 — 실패로 기록하거나 전일 캐시로 채우지 않는다."""
+        _isolate_cache_health(monkeypatch, tmp_path)
+        sh.save_cache({"moef": [{"id": "m1"}]})
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("moef", lambda: [])])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+        items, ok, failed = main.collect_all()
+        assert items == []
+        assert ok == ["moef"]
+        assert failed == []
+        assert sh.load_cache()["moef"] == []
+        assert sh.load_health()["moef"]["consecutive_failures"] == 0
+
+    def test_allow_empty_source_exception_still_falls_back(self, monkeypatch, tmp_path):
+        """목록 행을 하나도 못 읽으면 어댑터가 예외를 올린다 — 그건 여전히 실패."""
+        _isolate_cache_health(monkeypatch, tmp_path)
+        sh.save_cache({"lawmaking": [{"id": "l1"}]})
+
+        def boom():
+            raise RuntimeError("입법예고 검색 전부 실패")
+
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("lawmaking", boom)])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+        items, ok, failed = main.collect_all()
+        assert items == [{"id": "l1"}]
+        assert failed[0]["name"] == "lawmaking" and failed[0]["used_fallback"] is True
+
+    def test_allow_empty_sources_are_registered(self):
+        names = {name for name, _ in main.OFFICIAL_SOURCES}
+        assert main.ALLOW_EMPTY_SOURCES <= names
+        assert "lawmaking" in names
+
     def test_failure_with_no_prior_cache_yields_zero_items(self, monkeypatch, tmp_path):
         _isolate_cache_health(monkeypatch, tmp_path)
 

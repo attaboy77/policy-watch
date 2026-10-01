@@ -638,6 +638,34 @@ def match_tax_subject(text: str) -> list[str]:
     return [s["key"] for s in TAX_SUBJECTS if any(_norm(k) in t for k in s["keywords"])]
 
 
+def configured_tax_laws() -> list[str]:
+    """활성 세목의 `laws:`(data/tax_subjects.yml)를 합친 법령명 목록(중복 제거, 순서 유지).
+
+    law_api.py가 수집 대상으로 쓰는 것과 같은 목록이다. TAX_SUBJECTS가 비어 있으면
+    빈 리스트 — 호출부가 "전체 통과"로 처리한다(`match_tax_law()` 참고).
+    """
+    seen: dict[str, None] = {}
+    for subject in TAX_SUBJECTS:
+        for law_name in subject.get("laws", []):
+            seen.setdefault(law_name, None)
+    return list(seen)
+
+
+def match_tax_law(law_names) -> list[str]:
+    """`law_names` 중 활성 세목 법령명과 **정확히** 일치하는 것만 반환한다.
+
+    2026-10-01: 재정경제부 "「소득세법 시행령」 등 4개 시행령 국무회의 의결"처럼 법령
+    여러 개를 묶은 보도자료는 제목 키워드만으론 세목 필터(`match_tax_subject`)를 못
+    통과한다 — 묶음에 실제로 든 법령명(첨부 본문의 「…」)을 이 함수로 대조한다.
+    TAX_SUBJECTS가 비어 있으면 `match_tax_subject()`와 같은 원칙으로 전부 통과.
+    """
+    names = [n.strip() for n in law_names if n and n.strip()]
+    if not TAX_SUBJECTS:
+        return names
+    allowed = set(configured_tax_laws())
+    return [n for n in names if n in allowed]
+
+
 def pass_tax_filter(*, category: str, layer: str, text: str) -> bool:
     """계층에 따라 세목 필터 적용 여부를 결정한다(ADDENDUM-3 §3 표).
 
@@ -1078,7 +1106,7 @@ def apply_opinion_piece_filter(items: list[dict]) -> tuple[list[dict], list[dict
 
 # ── 14-2) 공식 항목에 관련 뉴스 연결 (SPEC-ADDENDUM-4.md §4) ────────────────
 _ORG_NAME_STOPWORDS = {
-    "금융위원회", "국세청", "기획재정부", "한국회계기준원", "금융감독원",
+    "금융위원회", "국세청", "재정경제부", "기획재정부", "한국회계기준원", "금융감독원",
     "국가법령정보센터", "한국공인회계사회", "내부회계관리제도운영위원회",
 }
 

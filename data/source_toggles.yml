@@ -10,22 +10,17 @@
 # — data/tax_subjects.yml과 같은 원칙).
 
 sources:
+  # 2026-10-01: 세 소스 다시 켬. 9/9에 "프록시 경유 시 0건"으로 꺼뒀던 건 오진이었을 가능성이 높다 —
+  # 로컬 직접 접속에서도 목록은 정상으로 읽히고(moef 10행, 정책브리핑 20행), 그날
+  # 우리 카테고리·세목에 걸리는 보도자료가 없어서 0건이었을 뿐이다. 9/9에 들어간
+  # "빈 결과 = 실패" 가드가 그 정상 0건을 실패로 기록했다. 이제 main.ALLOW_EMPTY_SOURCES로
+  # 0건을 정상 처리하고, 목록 행을 하나도 못 읽으면 어댑터가 예외로 올린다(프록시
+  # 경유 시 진짜로 막힌 거라면 이제 "목록 행 0개" 실패로 로그에 구분돼 나온다).
   - name: moef
-    enabled: false
-    reason: >
-      프록시 경유 시 0건 반환, 원인 미규명(2026-09-09). 로그/캐시 다
-      확인해도 응답 자체가 없는 건지 응답은 왔는데 파싱이 안 되는 건지
-      아직 구분 못 함 — 캐시도 없어서 폴백할 데도 없는 상태라 원인 조사
-      전까지 끔. docs/NEXT.md 참고.
+    enabled: true
 
   - name: fsc
-    enabled: false
-    reason: >
-      프록시 경유 시 0건 반환, 원인 미규명(2026-09-09). moef/policy_briefing과
-      같은 증상 — docs/NEXT.md 참고.
+    enabled: true
 
   - name: policy_briefing
-    enabled: false
-    reason: >
-      프록시 경유 시 0건 반환, 원인 미규명(2026-09-09). moef/fsc와 같은
-      증상 — docs/NEXT.md 참고.
+    enabled: true

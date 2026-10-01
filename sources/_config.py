@@ -404,9 +404,11 @@ TRUST_TIERS = [
     (1, 100, {
         "kasb.or.kr": "한국회계기준원", "fsc.go.kr": "금융위원회",
         "law.go.kr": "국가법령정보센터", "nts.go.kr": "국세청",
-        "moef.go.kr": "기획재정부", "mofe.go.kr": "기획재정부",  # moef.go.kr이 301로 리다이렉트되는 실제 도메인(SOURCE_PROBE.md D1)
+        # 2026-10-01: 2026.1.2 정부조직 개편으로 기획재정부 → 재정경제부(세제 소관)·기획예산처 분리.
+        "moef.go.kr": "재정경제부", "mofe.go.kr": "재정경제부",  # moef.go.kr이 301로 리다이렉트되는 실제 도메인(SOURCE_PROBE.md D1)
         "fss.or.kr": "금융감독원", "kicpa.or.kr": "한국공인회계사회",
         "k-icfr.org": "내부회계관리제도운영위원회",
+        "lawmaking.go.kr": "국민참여입법센터",  # 2026-10-01: 입법예고(sources/official/lawmaking.py)
     }),
     (2, 80, {
         "intn.co.kr": "일간NTN", "taxtimes.co.kr": "한국세정신문",
@@ -443,11 +445,12 @@ COLLECT_WINDOW_DAYS = 90     # 수집 기간
 SOURCE_LABELS = {
     "kasb": "회계기준원(KASB)",
     "fss": "k-icfr.org(내부회계 모범규준)",
-    "moef": "기획재정부",
+    "moef": "재정경제부",
     "nts": "국세청",
     "fsc": "금융위원회",
     "policy_briefing": "정책브리핑",
     "law_api": "법제처",
+    "lawmaking": "국민참여입법센터(입법예고)",
     "google_news": "구글 뉴스",
     "naver_news": "네이버 뉴스",
 }

@@ -101,7 +101,14 @@ def _build_item(*, category: str, dept: str, title: str, lead: str, url: str,
     }
 
 
+# 2026-10-01: fetch()가 "목록 행을 하나라도 읽었는지"를 알기 위한 카운터 — 대상 부처
+# (국세청·금융위) 보도자료가 없어서 0건인 것(정상, main.ALLOW_EMPTY_SOURCES)과
+# 구조 변경·차단으로 행 자체를 못 읽은 것(실패)을 구분한다.
+_rows_seen = 0
+
+
 def fetch_page(page_index: int) -> list[dict]:
+    global _rows_seen
     resp = _http.get_govt(LIST_URL, params={"pageIndex": page_index})
     soup = BeautifulSoup(resp.text, "html.parser")
     items: list[dict] = []
@@ -115,6 +122,7 @@ def fetch_page(page_index: int) -> list[dict]:
         spans = source_span.find_all("span")
         if len(spans) < 2:
             continue
+        _rows_seen += 1
         published_raw, dept = spans[0].get_text(strip=True), spans[1].get_text(strip=True)
         if dept not in TARGET_DEPTS:
             continue
@@ -148,12 +156,18 @@ def fetch(*, max_pages: int = 10) -> list[dict]:
     비중이 작아(300건 중 2건, 아래 __main__ 실행 결과 참고) 하루치를 안정적으로
     잡으려면 1~2페이지로는 부족했다. 값은 운영하면서 조정할 것.
     """
+    global _rows_seen
+    _rows_seen = 0
     items: list[dict] = []
     for page in range(1, max_pages + 1):
         try:
             items.extend(fetch_page(page))
         except Exception as exc:  # noqa: BLE001
             print(f"[policy_briefing] page={page} 수집 실패: {exc}")
+    # 2026-10-01: 대상 부처 보도자료가 없어 0건인 건 정상(main.ALLOW_EMPTY_SOURCES).
+    # 행을 하나도 못 읽었으면(전 페이지 실패·구조 변경·차단) 실패로 올린다.
+    if _rows_seen == 0:
+        raise RuntimeError("보도자료 목록 행 0개 — 전 페이지 실패 또는 페이지 구조 변경·차단 의심")
     return items
 
 

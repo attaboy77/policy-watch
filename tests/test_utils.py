@@ -207,7 +207,7 @@ class TestTrustOf:
     def test_scheme_less_bare_domain_is_parsed(self):
         # 구글 뉴스 RSS의 <source url="..."> 힌트가 스킴 없이 올 수 있음
         tier, score, name = trust_of("moef.go.kr")
-        assert (tier, score, name) == (1, 100, "기획재정부")
+        assert (tier, score, name) == (1, 100, "재정경제부")
 
     def test_exact_subdomain_override_beats_parent_suffix(self):
         # 2026-09-01 실측 버그: "news.kicpa.or.kr"(CPA뉴스 칼럼이 실리는 포털)이

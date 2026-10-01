@@ -29,7 +29,7 @@ from ._utils import (apply_applicability_gate, apply_category_caps,
 from .schedules import build_schedules
 
 from . import google_news, naver_news
-from .official import kasb, fss, moef, nts, fsc
+from .official import kasb, fss, moef, nts, fsc, lawmaking
 from . import policy_briefing, law_api
 
 _KST = timezone(timedelta(hours=9))
@@ -53,6 +53,13 @@ SOURCE_TIMEOUT_SECONDS = 60
 # 다른 소스는 기존 60초 그대로 — law_api.py의 요청당 로그(`_timed_get_govt`)로
 # 실측 데이터가 모이면 원인 확인 후 이 예외를 다시 없애거나 구조적으로 고칠 것.
 SOURCE_TIMEOUT_OVERRIDES = {"law_api": 120}
+
+# 2026-10-01: 관련 항목이 없는 날 0건이 정상인 소스. 이 소스들은 목록 전체를 받아
+# 우리 카테고리·세목에 걸리는 것만 남기므로(moef/fsc/policy_briefing) 또는 검색 결과가
+# 원래 드물어서(lawmaking) 0건이 흔하다 — 9/9엔 이 0건을 "프록시 경유 시 0건"으로
+# 오진해 moef/fsc/policy_briefing을 꺼뒀었다. 대신 각 어댑터가 "목록 행을 하나도 못
+# 읽음/전 페이지 실패"를 스스로 예외로 올려 진짜 실패와 구분한다.
+ALLOW_EMPTY_SOURCES = {"moef", "fsc", "policy_briefing", "lawmaking"}
 
 
 def _fetch_with_timeout(fetch_fn, *, timeout: float):
@@ -85,6 +92,7 @@ OFFICIAL_SOURCES = [
     ("fsc", fsc.fetch),
     ("policy_briefing", policy_briefing.fetch),
     ("law_api", law_api.fetch),
+    ("lawmaking", lawmaking.fetch),
 ]
 # (소스명, fetch_all 함수) — 카테고리별 raw item을 돌려주는 뉴스 어댑터. normalize 필요.
 NEWS_SOURCES = [
@@ -160,7 +168,7 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
         print(f"[main] 수집 시도: {label}({name})")
         try:
             got = _fetch_with_timeout(fetch_fn, timeout=timeout)
-            if got:
+            if got or name in ALLOW_EMPTY_SOURCES:
                 items.extend(got)
                 sources_ok.append(name)
                 cache[name] = got
