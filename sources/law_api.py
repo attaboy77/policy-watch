@@ -24,6 +24,8 @@ import time
 import xml.etree.ElementTree as ET
 from datetime import date, datetime, timezone, timedelta
 
+from bs4 import BeautifulSoup
+
 from . import _http
 from ._config import TAX_SUBJECTS
 from ._utils import keyword_score, matched_keywords, make_id_exact, final_score, recency_score
@@ -57,7 +59,27 @@ def _configured_law_names() -> list[str]:
 
 _MINISTRY_NAME_FIX = {"재정경제부": "기획재정부"}  # 레거시 명칭 정규화(SOURCE_PROBE.md D1/D4 참고)
 _KST = timezone(timedelta(hours=9))
-SLEEP_BETWEEN_REQUESTS = 1.0
+# 2026-10-01: 1.0→0.3. Actions 실측 63.71초(요청 14회) 중 14초가 이 대기였다.
+# 로컬에서 0.3초 간격 14회(검색 7 + 개정이유 페이지 7) 테스트 — 전부 HTTP 200,
+# 지연·차단 징후 없음(총 9.07초).
+SLEEP_BETWEEN_REQUESTS = 0.3
+
+# 2026-10-01: 개정이유는 lawService.do(법령 전문 — 법인세법 기준 조문·부칙 포함
+# 약 0.8MB, Actions에서 건당 평균 6초) 대신 이 제정·개정이유 단독 페이지에서
+# 받는다(5~27KB, 서버 렌더링 HTML). lsiSeq는 검색 응답의 법령일련번호 그대로 —
+# 추가 요청 없이 바로 부를 수 있다. 실측: 법인세법 본법의 API 제개정이유내용
+# 전문이 이 페이지 텍스트에 그대로 포함됨. lawService.do의 JO= 파라미터는
+# 응답이 2.6KB로 줄지만 제개정이유가 빠져서 못 쓴다.
+REVISION_REASON_URL = "https://www.law.go.kr/LSW/lsRvsDocInfoR.do"
+REVISION_REASON_TIMEOUT = 10
+REVISION_REASON_RETRIES = 1
+# 시행령/시행규칙 개정이유는 공포일이 최근 N일 이내인 것만 받는다(사용자 지시 —
+# 요청 수가 크게 늘지 않게). 본법은 기존대로 항상 받는다.
+RECENT_REVISION_DAYS = 30
+# law_api 소스 전체가 60초를 넘기면 안 된다(9/7~9/9 사흘 연속 타임아웃 사고).
+# fetch() 시작 후 이 시간이 지나면 시행령/시행규칙 추가 조회는 건너뛴다 —
+# 개정이유 페이지 요청 1건의 최악(타임아웃 10초 + 대기)을 더해도 60초 안.
+EXTRA_REASON_BUDGET_SECONDS = 45
 
 # 2026-09-09: 로컬 실측(13.5초, 요청 14회)과 실제 GitHub Actions("60초 초과",
 # 연속 3일째)의 격차가 너무 커서 원인 후보(프록시 왕복 지연 / law_api만 유독
@@ -78,14 +100,15 @@ def _oc() -> str:
     return oc
 
 
-def _timed_get_govt(url: str, *, params: dict, label: str):
-    """`_http.get_govt()`를 요청 번호·소요시간 로그와 함께 호출한다(law_api 전용)."""
+def _timed_get_govt(url: str, *, params: dict, label: str, **kw):
+    """`_http.get_govt()`를 요청 번호·소요시간 로그와 함께 호출한다(law_api 전용).
+    `kw`(timeout/retries)는 그대로 넘긴다."""
     global _request_count
     _request_count += 1
     n = _request_count
     t0 = time.monotonic()
     try:
-        resp = _http.get_govt(url, params=params)
+        resp = _http.get_govt(url, params=params, **kw)
     except Exception as exc:  # noqa: BLE001 - 로그만 남기고 그대로 올린다
         elapsed = time.monotonic() - t0
         print(f"[law_api] 요청 #{n} {label} - {elapsed:.2f}초 후 실패: {exc}")
@@ -203,6 +226,38 @@ def law_detail(law_name: str, *, oc: str | None = None) -> dict | None:
     }
 
 
+def revision_reason(lsi_seq: str, *, label: str = "") -> str | None:
+    """lsRvsDocInfoR.do(제정·개정이유 단독 페이지)에서 개정이유 전문을 뽑는다.
+
+    페이지 구조: `<p class="sbj02">【제정·개정이유】</p>` 바로 다음 `div.pgroup`이
+    본문이다(그 뒤의 【제정·개정문】 블록은 쓰지 않는다). `<br>`을 줄바꿈으로
+    바꿔 lawService.do의 제개정이유내용과 같은 모양("[일부개정]\\n◇ 개정이유...")으로
+    맞춘다. 못 찾으면 None.
+    """
+    resp = _timed_get_govt(REVISION_REASON_URL, params={"lsiSeq": lsi_seq},
+                           label=f"개정이유 '{label or lsi_seq}'",
+                           timeout=REVISION_REASON_TIMEOUT, retries=REVISION_REASON_RETRIES)
+    soup = BeautifulSoup(resp.content, "html.parser")
+    for p in soup.select("p.sbj02"):
+        if "제정·개정이유" not in p.get_text():
+            continue
+        body = p.find_next_sibling("div", class_="pgroup")
+        if body is None:
+            return None
+        for br in body.find_all("br"):
+            br.replace_with("\n")
+        lines = [ln.strip() for ln in body.get_text().splitlines()]
+        text = "\n".join(ln for ln in lines if ln)
+        return text or None
+    return None
+
+
+def _is_recent(promulgation_iso: str | None, today: date) -> bool:
+    if not promulgation_iso:
+        return False
+    return (today - _parse_iso_date(promulgation_iso)).days <= RECENT_REVISION_DAYS
+
+
 def fetch(law_names: list[str] | None = None) -> list[dict]:
     """D4: `law_names`(기본값: TAX_SUBJECTS의 laws: 전체, data/tax_subjects.yml)를
     수집한다. 검색은 법령 루트(본법) 단위로 한 번씩만 호출하고(같은 API 호출로
@@ -216,14 +271,23 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
     뿐이다. 사용자 지시로 시행령/시행규칙의 개정이유는 포기(대체로 본법
     개정이유에 함께 언급되는 경우가 많다는 게 사용자 판단) — 요청 25회→14회,
     강제 sleep 24초→13초로 줄어 소스 타임아웃(60초) 안에 여유 있게 끝난다.
+
+    2026-10-01: 그래도 Actions 실측 63.71초(상세조회 건당 평균 6초 — 법령 전문
+    약 0.8MB를 받기 때문). 개정이유를 `revision_reason()`(lsRvsDocInfoR.do,
+    5~27KB)으로 받도록 바꾸고 대기를 0.3초로 줄였다. 시간 여유가 생긴 만큼
+    공포일이 최근 `RECENT_REVISION_DAYS`일 이내인 시행령/시행규칙도 개정이유를
+    받는다 — 단, `EXTRA_REASON_BUDGET_SECONDS`가 지나면 건너뛴다. 본법은 기존대로
+    항상 받는다. `law_detail()`은 수동 확인용으로만 남는다.
     """
     global _request_count
     _request_count = 0  # 이번 fetch() 실행 동안의 요청 번호를 1부터 다시 매긴다
     fetch_t0 = time.monotonic()
+    today = datetime.now(_KST).date()
     oc = _oc()
     items: list[dict] = []
     wanted = set(law_names or _configured_law_names())
     roots = sorted({_search_root(name) for name in wanted})
+    skipped_for_budget: list[str] = []
 
     for i, root_name in enumerate(roots):
         if i > 0:
@@ -234,18 +298,21 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
             print(f"[law_api] '{root_name}' 검색 실패: {exc}")
             continue
         for m in matches:
-            detail = {}
-            if m["법령명한글"] == root_name:  # 본법만 상세 조회(개정이유 목적)
+            title = m["법령명한글"]
+            promulgation = _yyyymmdd_to_iso(m.get("공포일자"))
+            effective = _yyyymmdd_to_iso(m.get("시행일자"))
+            reason = None
+            is_root = title == root_name
+            want_reason = is_root or _is_recent(promulgation, today)
+            if want_reason and not is_root and time.monotonic() - fetch_t0 > EXTRA_REASON_BUDGET_SECONDS:
+                skipped_for_budget.append(title)
+                want_reason = False
+            if want_reason and m.get("법령일련번호"):
                 time.sleep(SLEEP_BETWEEN_REQUESTS)
                 try:
-                    detail = law_detail(m["법령명한글"], oc=oc) or {}
+                    reason = revision_reason(m["법령일련번호"], label=title)
                 except Exception as exc:  # noqa: BLE001
-                    print(f"[law_api] '{m['법령명한글']}' 상세 조회 실패: {exc}")
-                    detail = {}
-
-            promulgation = _yyyymmdd_to_iso(m.get("공포일자") or detail.get("공포일자"))
-            effective = _yyyymmdd_to_iso(m.get("시행일자") or detail.get("시행일자"))
-            title = m["법령명한글"]
+                    print(f"[law_api] '{title}' 개정이유 조회 실패: {exc}")
             raw_ministry = m.get("소관부처명") or "국가법령정보센터"
             # 공동소관 법령은 "재정경제부,행정안전부"처럼 콤마로 여러 부처가 온다 — 토큰별로 정규화.
             ministry = ",".join(_MINISTRY_NAME_FIX.get(p, p) for p in raw_ministry.split(","))
@@ -269,7 +336,7 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
                 "final_score": final_score(100, kw, rec),
                 "matched_keywords": matched_keywords(title, "tax"),
                 "urls": {"news": None, "official": url},
-                "revision_reason": detail.get("제개정이유"),
+                "revision_reason": reason,
                 "law_meta": {
                     "law_name": title,
                     "law_id": m.get("법령ID"),
@@ -282,7 +349,11 @@ def fetch(law_names: list[str] | None = None) -> list[dict]:
                 "is_noise": False,
             })
     total_elapsed = time.monotonic() - fetch_t0
-    print(f"[law_api] fetch() 완료 - 요청 {_request_count}회, 총 {total_elapsed:.2f}초, {len(items)}건")
+    if skipped_for_budget:
+        print(f"[law_api] {EXTRA_REASON_BUDGET_SECONDS}초 경과로 개정이유 조회 건너뜀: {', '.join(skipped_for_budget)}")
+    with_reason = sum(1 for it in items if it["revision_reason"])
+    print(f"[law_api] fetch() 완료 - 요청 {_request_count}회, 총 {total_elapsed:.2f}초, {len(items)}건"
+          f" (개정이유 {with_reason}건)")
     return items
 
 
