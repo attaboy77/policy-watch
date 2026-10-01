@@ -3,8 +3,21 @@
 마지막 갱신: 2026-10-01, 입법예고 소스 신설 + moef/fsc/policy_briefing 재활성화 + 재정경제부 명칭 정정 직후 기준. **Phase 6(GitHub Pages 자동 배포) 완료·운영 중.**
 **정부 보도자료 3소스(moef/fsc/policy_briefing) 2026-10-01 재활성화 — 9/9 비활성화 사유("0건")는 정상 0건이었을 가능성이 높음. 아래 "2026-10-01 세션 (3)" 참고.**
 `data/source_toggles.yml`에서 `enabled: false`로 소스를 끌 수 있다(코드 수정 불필요) — 아래
-"2026-09-09 세션 요약" 참고. 테스트 623개 통과. **미검증(다음 Actions 실행 필요)** —
+"2026-09-09 세션 요약" 참고. 테스트 636개 통과. **미검증(다음 Actions 실행 필요)** —
 아래 "2026-09-14~09-30 요약"의 "미검증" 항목과 "2026-09-10 세션 요약"의 "미검증" 항목 참고.
+
+## 2026-10-01 세션 (4) — 기준 제정 절차·조직 자료 제외
+
+사용자 지시: "IFRS 재단 '정관 개정 공개초안' 검토의견 조회"(회계기준원)는 재단 지배구조 규약에 대한 기관 업무라
+기업 회계팀 대상이 아니다. 이 유형을 통째로 제외한다. IASB 실제 기준서 공개초안은 지금처럼 "해외기준"으로 유지한다.
+- `_config.STANDARD_SETTER_GOVERNANCE` + `_utils.is_standard_setter_governance()`/`apply_standard_setter_governance_filter()`.
+  대상은 IFRS 재단 정관(Constitution), Due Process Handbook, Trustees 구성·감독 체계, Agenda Consultation(의제 협의)이다.
+  "정관"·"트러스티"·"의제 협의" 등은 일반 단어와 겹칠 수 있다(실측: "신외감법 아버지·정관계 인맥" 뉴스). 그래서
+  IFRS 재단/IFRS Foundation/IASB/ISSB 맥락이 함께 있을 때만 인정한다. "Due Process Handbook"·"Agenda Consultation"은 단독으로 인정한다.
+- 공식 L1 포함 전 계층 대상이다. `build_data_json()`에서 비대상 세목 제외 바로 다음 자리에 넣었고, 사유는
+  `excluded:standard_setter_governance`로 EXCLUDED_LOG에 기록된다. 이번 1건은 수동 기록했고 다음 수집부터 자동이다.
+- 현재 데이터 기준으로 걸리는 건 이 1건뿐이다. IASB/ISSB 관련 기존 항목(ISSB 자연공시 초안 등)은 그대로 남는다. 테스트 623→636개.
+- `site/data.json`에서는 다음 수집 때 빠진다. 요약 캐시의 해당 id(526be350716ed967)는 남아 있지만 쓰이지 않는다.
 
 ## 2026-10-01 세션 (3) — 입법예고 소스 신설 + moef/fsc/policy_briefing 재활성화 + 재정경제부 명칭
 

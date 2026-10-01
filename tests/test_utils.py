@@ -1528,3 +1528,42 @@ class TestApplyForeignNewsFilter:
 
 if __name__ == "__main__":
     raise SystemExit(pytest.main([__file__, "-v"]))
+
+
+# ── 2026-10-01: 기준 제정 절차·조직 자료 제외(전 계층) ───────────────────────
+class TestStandardSetterGovernanceFilter:
+    from sources._utils import (apply_standard_setter_governance_filter as _apply,
+                                is_standard_setter_governance as _is)
+
+    @pytest.mark.parametrize("title", [
+        "IFRS 재단 '정관 개정 공개초안' 검토의견 조회",          # 실측 사례(회계기준원)
+        "IFRS Foundation Constitution 개정안 의견 요청",
+        "IASB Due Process Handbook 개정 공개초안",
+        "IFRS 재단 트러스티 구성 및 감독 체계 개편",
+        "IFRS Foundation Trustees, 신규 트러스티 선임",
+        "IASB 제3차 의제 협의(Agenda Consultation) 결과 발표",
+        "ISSB 의제협의 피드백 요약",
+    ])
+    def test_governance_titles_excluded(self, title):
+        assert type(self)._is(title) is True
+
+    @pytest.mark.parametrize("title", [
+        "IASB 공개초안 '재무제표 표시와 공시 개선' 의견조회",      # 실제 기준서 공개초안 → 유지
+        "ISSB, 자연공시 의무화 대신 '권고' 택했다...10월 초안 공개",
+        "최운열 한공회 회장은...신외감법 아버지·정관계 인맥도 '주목'",  # 맥락 없는 "정관"
+        "[KAI 세미나] 최중경 IFRS재단 이사 \"재무와 연계성 확보된 KSSB, 기업엔...\"",
+        "주주총회 정관 변경 안건 공시 강화",
+    ])
+    def test_standard_content_and_unrelated_kept(self, title):
+        assert type(self)._is(title) is False
+
+    def test_applies_to_official_l1_and_marks_reason(self):
+        items = [
+            {"title": "IFRS 재단 '정관 개정 공개초안' 검토의견 조회", "layer": "L1",
+             "source": {"tier": 1, "type": "official"}},
+            {"title": "IASB 공개초안 '리스' 의견조회", "layer": "L1",
+             "source": {"tier": 1, "type": "official"}},
+        ]
+        kept, excluded = type(self)._apply(items)
+        assert [it["title"] for it in kept] == ["IASB 공개초안 '리스' 의견조회"]
+        assert excluded[0]["excluded_reason"] == "excluded:standard_setter_governance"

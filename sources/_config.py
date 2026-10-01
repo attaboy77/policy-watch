@@ -400,6 +400,21 @@ EVENT_ANNOUNCEMENT_STRONG_SIGNALS = ["개정", "제정", "공표", "의결", "�
 # "IASB"/"ISSB"를 추가하면 된다(§3-3).
 FOREIGN_STANDARD_BODIES = ["IASB", "ISSB"]
 
+# 2026-10-01 사용자 지시: 기준 "내용"이 아니라 기준을 만드는 "절차·조직"에 관한 자료는
+# 전 계층에서 제외한다 — IFRS 재단 정관(Constitution), Due Process Handbook, Trustees
+# 구성·감독 체계, Agenda Consultation(의제 협의). 회계기준원이 국내 의견을 모아 재단에
+# 제출하는 기관 업무라 기업 회계팀이 볼 내용이 아니다(실측: "IFRS 재단 '정관 개정
+# 공개초안' 검토의견 조회"). IASB/ISSB 실제 기준서 공개초안은 그대로 "해외기준"으로 남는다.
+# - standalone: 그 자체로 이 유형이 확실한 표현.
+# - terms: 일반 단어와 겹칠 수 있어(예: "정관계 인맥" 뉴스) context가 함께 있을 때만 인정.
+STANDARD_SETTER_GOVERNANCE = {
+    "standalone": ["Due Process Handbook", "Agenda Consultation", "IFRS 재단 정관", "IFRS Foundation Constitution"],
+    "context": ["IFRS 재단", "IFRS Foundation", "IASB", "ISSB"],
+    "terms": ["정관", "Constitution", "Due Process", "실사절차", "정규절차",
+              "트러스티", "Trustee", "수탁자", "감독기구", "Monitoring Board",
+              "의제 협의", "의제협의"],
+}
+
 TRUST_TIERS = [
     (1, 100, {
         "kasb.or.kr": "한국회계기준원", "fsc.go.kr": "금융위원회",

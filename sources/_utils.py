@@ -18,7 +18,8 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       MANUFACTURING_ACCOUNTING_CONTEXT, EVENT_ANNOUNCEMENT_STRONG_SIGNALS,
                       FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS,
                       LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS,
-                      NON_TARGET_TAX_SUBJECTS, OPINION_PREFIX_KEYWORDS)
+                      NON_TARGET_TAX_SUBJECTS, OPINION_PREFIX_KEYWORDS,
+                      STANDARD_SETTER_GOVERNANCE)
 from . import _esg_roadmap
 
 
@@ -414,6 +415,32 @@ def is_foreign_standard(title: str) -> bool:
     if any(_norm(k) in t for k in APPLICABILITY["foreign_exception_context"]):
         return False
     return True
+
+
+def is_standard_setter_governance(title: str) -> bool:
+    """기준 제정 기구의 절차·조직(IFRS 재단 정관, Due Process Handbook, Trustees,
+    Agenda Consultation)에 관한 자료인지 — 2026-10-01 사용자 지시, 전 계층 제외.
+    `STANDARD_SETTER_GOVERNANCE` 참고. IASB 기준서 공개초안("IASB 공개초안 '…'")은
+    terms에 안 걸려 False다."""
+    t = _norm(title)
+    g = STANDARD_SETTER_GOVERNANCE
+    if any(_norm(k) in t for k in g["standalone"]):
+        return True
+    return (any(_norm(k) in t for k in g["context"])
+            and any(_norm(k) in t for k in g["terms"]))
+
+
+def apply_standard_setter_governance_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """`is_standard_setter_governance()` 항목을 계층 무관하게 제외한다(공식 L1 포함 —
+    회계기준원이 게시한 검토의견 조회도 대상). (통과분, 제외분) 튜플, 제외분은
+    EXCLUDED_LOG.md 기록용 `excluded_reason`을 단다."""
+    kept, excluded = [], []
+    for it in items:
+        if is_standard_setter_governance(it.get("title", "")):
+            excluded.append(dict(it, excluded_reason="excluded:standard_setter_governance"))
+        else:
+            kept.append(it)
+    return kept, excluded
 
 
 # ── 8) 시행일 추출 (SPEC-ADDENDUM.md §4-4) ──────────────────────────────────

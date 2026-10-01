@@ -24,7 +24,8 @@ from ._utils import (apply_applicability_gate, apply_category_caps,
                      apply_company_event_filter, apply_corporate_pr_filter,
                      apply_foreign_news_filter, apply_local_gov_petition_filter,
                      apply_non_target_tax_subject_filter, apply_opinion_piece_filter,
-                     apply_regulatory_gate, attach_related_news, dedupe,
+                     apply_regulatory_gate, apply_standard_setter_governance_filter,
+                     attach_related_news, dedupe,
                      dedupe_similar_news, finalize_item, normalize_news_item)
 from .schedules import build_schedules
 
@@ -245,7 +246,7 @@ def build_data_json(items: list[dict]) -> dict:
     """수집된 raw item 리스트 → site/data.json 전체 구조(메타 제외 조립은 main()에서).
 
     필터 순서: ADDENDUM-6 §1(적용 대상 게이트, 전 계층) → 2026-09-10 비대상
-    세목 제외 → dedupe(정확일치) → ADDENDUM-5 §5(유사기사 병합) → §1(규제성
+    세목 제외 → 2026-10-01 기준 제정 절차·조직 자료 제외(전 계층) → dedupe(정확일치) → ADDENDUM-5 §5(유사기사 병합) → §1(규제성
     게이트) → ADDENDUM-7 §1(개별 기업 소식 제외) → 2026-09-15 논평성 기사
     제외 → 2026-09-02 지자체 건의·민원 제외 → 해외 전용 뉴스 제외 → ADDENDUM-5
     §3(홍보성 제외, ESG 개별기업 홍보 문구 포함) → 상한 적용.
@@ -270,6 +271,11 @@ def build_data_json(items: list[dict]) -> dict:
     items, excluded = apply_non_target_tax_subject_filter(items)  # 2026-09-10
     _record_excluded(excluded)
     _log_stage("비대상 세목 제외 후", items)
+    # 2026-10-01: 기준 제정 절차·조직(IFRS 재단 정관·Due Process·Trustees·의제 협의)은
+    # 공식 L1 포함 전 계층에서 제외 — 적용 대상 게이트와 같은 성격이라 바로 다음 자리.
+    items, excluded = apply_standard_setter_governance_filter(items)
+    _record_excluded(excluded)
+    _log_stage("기준 제정 절차·조직 자료 제외 후", items)
     deduped = dedupe(items)
     deduped = dedupe_similar_news(deduped)  # ADDENDUM-5 §5: L3 유사 기사 병합
     _log_stage("§5 중복 제거 후", deduped)

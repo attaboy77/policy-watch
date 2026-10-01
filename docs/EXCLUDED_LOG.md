@@ -60,3 +60,10 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | esg | hellot.net | [ESG 칼럼] 미뤄졌던 ESG 공시 의무화, 2028년부터 단계적 시행 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE1BdXB6anZGSm9NNDRObEsyRjJJbGJlOUxnWk8yOFVUVXRsLTAxU0FMUDMwMXo1TXZzakNuanlEeHBaWnpFLXRWR3lXZ0ZJemhIcEo1MDVDX3JONFNvN20w?oc=5 |
 | esg | asiatime.co.kr | [윤영민 칼럼] ESG 공시 의무화, ‘지속가능성·기업 현실’ 균형 절실 - 아시아타임즈 | https://news.google.com/rss/articles/CBMiXkFVX3lxTFBBaFRTRG1qT2tKNnAybU10OGZZVWN3TW03MTNnREZBUWNCUkhjUFktZGRTMlp3eFEwR3VBcUdRb1ZGUmM4UkxlSi1YNlYtcXZkM0N2cnR3WGY1NGptQmc?oc=5 |
 
+## excluded:standard_setter_governance (1건)
+
+| 카테고리 | 출처 | 제목 | 링크 |
+|---|---|---|---|
+| kifrs | 한국회계기준원 | IFRS 재단 '정관 개정 공개초안' 검토의견 조회 | https://www.kasb.or.kr/front/board/comm010View.do?seq=2193 |
+
+(2026-10-01 수동 기록 — 사용자 제보 건. 다음 정기 수집부터는 필터가 자동 기록한다.)
