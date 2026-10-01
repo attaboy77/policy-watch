@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-10-01 08:40:23 +0900
+생성 시각: 2026-10-01 09:08:08 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -21,7 +21,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| icfr | news2day.co.kr | 한국캐피탈, 내부회계관리제도 고도화 나서…투명성·신뢰성 제고 - news2day.co.kr | https://news.google.com/rss/articles/CBMiXkFVX3lxTE1fVjl2UnRnek5jelpoRk9reU55VW5IR2ZuSGpGbkVzNkVuYllnbExVWUZlMTU0N2JLalhEdmhwSmtPcDdYQ01ua3RJTkU0dFBxUVBQdEtmdHBaOWl5Z1E?oc=5 |
+| icfr | news2day.co.kr | 한국캐피탈, 내부회계관리제도 고도화 나서…투명성·신뢰성 제고 - 뉴스투데이 | https://news.google.com/rss/articles/CBMiXkFVX3lxTE1fVjl2UnRnek5jelpoRk9reU55VW5IR2ZuSGpGbkVzNkVuYllnbExVWUZlMTU0N2JLalhEdmhwSmtPcDdYQ01ua3RJTkU0dFBxUVBQdEtmdHBaOWl5Z1E?oc=5 |
 | icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
 | esg | segye.com | 증권사 지속가능경영…‘포괄적 ESG 활동’서 본업 연계 ‘지속가능금융... | https://www.segye.com/newsView/20260824517331?OutUrl=naver |
 
@@ -30,7 +30,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | esg | 한국회계기준원 | ESRS-40a 공개초안에 대한 검토의견 조회 | https://www.kasb.or.kr/front/board/comm010View.do?seq=2182 |
-| kifrs | joseplus.com | 한국회계기준원, EFRAG과 ‘ESRS-40a 공개초안’ 실무 쟁점 논의 - 조세플러스 | https://news.google.com/rss/articles/CBMiWEFVX3lxTE1hOThTbnJjOFRsTFROUGdEWmh0TXZKWDN0RmU3enNON1FjRklFbzVGOHNiU1hjQ25hREItUUt6MVZiLUFYN2NVUWhWdUgxMUZGUlFubHlMMlI?oc=5 |
+| kifrs | joseplus.com | 한국회계기준원, EFRAG과 ‘ESRS-40a 공개초안’ 실무 쟁점 논의 - joseplus.com | https://news.google.com/rss/articles/CBMiWEFVX3lxTE1hOThTbnJjOFRsTFROUGdEWmh0TXZKWDN0RmU3enNON1FjRklFbzVGOHNiU1hjQ25hREItUUt6MVZiLUFYN2NVUWhWdUgxMUZGUlFubHlMMlI?oc=5 |
 
 ## excluded:industry_specific (8건)
 
@@ -42,7 +42,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | kifrs | 한국회계기준원 | 2018년 제1117호 보험계약 | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=231&searchfield=ALL&searchword=1117&s_date_start=2018-01-01&s_date_end= |
 | kifrs | 한국회계기준원 | 2017년 제1104호 ‘보험계약’과 제1109호 '금융상품'의 동시 적용 | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=220&searchfield=ALL&searchword=&s_date_start=2017-12-01&s_date_end=2017-12-31 |
 | kifrs | 한국회계기준원 | 2015년 건설계약 공시 (제1011호 건설계약, 제1037호 충당부채, 우발부채, 우발자산, 제1115호 고객과의 계약에서 생기는 수익, 제2115호 부동산건설약정) | https://www.kasb.or.kr/front/board/comm020View.do?siteCd=002000000000000&seq=166&searchfield=ALL&searchword=1115&s_date_start=2015-01-01&s_date_end= |
-| kifrs | hapt.co.kr | ‘공동주택 회계 감리’ 법안에 “옥상옥(屋上屋) 규제” 지적 - hapt.co.kr | https://news.google.com/rss/articles/CBMiaEFVX3lxTE1zVlZtb2JHeEpyV204Q3FUVTRVU1JiRWswRmZuR3RDUEk0TFVhRlI3OVgzek00MlZwOGlQUmp4elFQRkFjMDh2YThBV05WZlhzeV9SZmhWMEl4WF9DcUZDc0ZwOWh3aEcy?oc=5 |
+| kifrs | hapt.co.kr | ‘공동주택 회계 감리’ 법안에 “옥상옥(屋上屋) 규제” 지적 - 한국아파트신문 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE1zVlZtb2JHeEpyV204Q3FUVTRVU1JiRWswRmZuR3RDUEk0TFVhRlI3OVgzek00MlZwOGlQUmp4elFQRkFjMDh2YThBV05WZlhzeV9SZmhWMEl4WF9DcUZDc0ZwOWh3aEcy?oc=5 |
 | kifrs | hapt.co.kr | '공동주택 회계 감리' 법안에 "옥상옥(屋上屋) 규제" 지적 | https://www.hapt.co.kr/news/articleView.html?idxno=169530 |
 
 ## excluded:nonprofit (1건)
