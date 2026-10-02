@@ -122,12 +122,12 @@
   }
 
   // ── 상태 ─────────────────────────────────────────────────────────────
+  var DEFAULT_RANGE_DAYS = 30;  // 첫 화면/"초기화" 시 조회 기간
   var state = {
     view: "today",  // ADDENDUM-4 §5-1: today | all | calendar — 기본 진입 화면은 오늘의 정책동향
     cats: [],       // 빈 배열 = 전체
     doctypes: [],   // 빈 배열 = 전체
-    staticOnly: false,  // ADDENDUM-4 §2-4: "상설자료만" 빠른 버튼
-    from: addDaysISO(todayISO(), -30),
+    from: addDaysISO(todayISO(), -DEFAULT_RANGE_DAYS),
     to: todayISO(),
     sort: "importance",
     q: "",  // ADDENDUM-8 §1: 검색어. 오늘의 정책동향/전체 동향 둘 다에 적용(§1-1).
@@ -147,7 +147,6 @@
     if (p.get("from")) state.from = p.get("from");
     if (p.get("to")) state.to = p.get("to");
     if (p.get("sort") === "latest" || p.get("sort") === "importance") state.sort = p.get("sort");
-    if (p.get("static") === "1") state.staticOnly = true;
     if (p.get("q")) state.q = p.get("q");
   }
 
@@ -156,7 +155,6 @@
     if (state.view !== "today") p.set("view", state.view);
     if (state.cats.length) p.set("cat", state.cats.join(","));
     if (state.doctypes.length) p.set("doctype", state.doctypes.join(","));
-    if (state.staticOnly) p.set("static", "1");
     p.set("from", state.from);
     p.set("to", state.to);
     if (state.sort !== "importance") p.set("sort", state.sort);
@@ -168,8 +166,8 @@
   // ── 필터/정렬 ────────────────────────────────────────────────────────
   // ADDENDUM-4 §2-4 + 2026-08-28 피드백: 상설자료는 "기본 조회"(빠른 선택 범위인
   // 최근 90일 이내)에서는 아예 제외한다. 90일보다 넓게(직접 시작일을 더 과거로)
-  // 잡으면 실제 published_at으로 정상 필터링해 노출한다 — "상설자료만" 버튼은
-  // 그와 별개로 항상(날짜 무관) 상설자료만 보여준다.
+  // 잡으면 실제 published_at으로 정상 필터링해 노출한다.
+  // (2026-10-02: "상설자료만" 빠른 버튼은 다른 문서종류 바로가기와 함께 삭제했다.)
   var STATIC_DEFAULT_WINDOW_DAYS = 90;
 
   function isWideDateRange() {
@@ -201,11 +199,6 @@
       if (it.doc_type === "논의자료" && !showDiscussion) return false;
       if (it.doc_type === "해외기준" && !showForeign) return false;
       if (!matchesQuery(it, state.q)) return false;
-      if (state.staticOnly) {
-        // "상설자료만": 상설자료가 아니면 제외. 상설자료는 개정일이 오래돼 보통
-        // 조회 기간 밖에 있는 게 정상이므로 이 모드에서는 날짜 필터를 건너뛴다.
-        return !!it.is_static;
-      }
       if (it.is_static && !wideRange) return false;
       if (it.published_at < state.from || it.published_at > state.to) return false;
       return true;
@@ -885,12 +878,21 @@
     DATA.items.forEach(function (it) { present[it.doc_type] = true; });
     var ordered = DOC_TYPE_ORDER.filter(function (t) { return present[t]; });
     var menu = document.getElementById("doctypeMenu");
-    menu.innerHTML = ordered.map(function (t) {
-      return '<label><input type="checkbox" value="' + esc(t) + '"> ' + esc(t) + "</label>";
-    }).join("");
-    Array.prototype.forEach.call(menu.querySelectorAll('input[type="checkbox"]'), function (cb) {
+    // 2026-10-02: 맨 위 "전체 선택" — 모든 종류를 명시적으로 체크/해제한다.
+    // 해제하면 아무것도 선택 안 한 상태(= 기본 "전체")로 돌아간다.
+    menu.innerHTML =
+      '<label class="doctype-all"><input type="checkbox" id="doctypeAll"> 전체 선택</label>' +
+      ordered.map(function (t) {
+        return '<label><input type="checkbox" class="doctype-cb" value="' + esc(t) + '"> ' + esc(t) + "</label>";
+      }).join("");
+    document.getElementById("doctypeAll").addEventListener("change", function () {
+      state.doctypes = this.checked ? ordered.slice() : [];
+      updateDoctypeSummary();
+      applyAndRender();
+    });
+    Array.prototype.forEach.call(menu.querySelectorAll(".doctype-cb"), function (cb) {
       cb.addEventListener("change", function () {
-        var checked = Array.prototype.map.call(menu.querySelectorAll('input:checked'), function (c) { return c.value; });
+        var checked = Array.prototype.map.call(menu.querySelectorAll(".doctype-cb:checked"), function (c) { return c.value; });
         state.doctypes = checked;
         updateDoctypeSummary();
         applyAndRender();
@@ -899,12 +901,20 @@
   }
 
   function updateDoctypeSummary() {
-    var summary = document.getElementById("doctypeSummary");
-    summary.textContent = state.doctypes.length ? "문서 종류: " + state.doctypes.length + "개 선택" : "문서 종류: 전체";
     var menu = document.getElementById("doctypeMenu");
-    Array.prototype.forEach.call(menu.querySelectorAll('input[type="checkbox"]'), function (cb) {
+    var boxes = menu.querySelectorAll(".doctype-cb");
+    Array.prototype.forEach.call(boxes, function (cb) {
       cb.checked = state.doctypes.indexOf(cb.value) !== -1;
     });
+    var n = menu.querySelectorAll(".doctype-cb:checked").length;
+    var allCb = document.getElementById("doctypeAll");
+    if (allCb) {
+      allCb.checked = boxes.length > 0 && n === boxes.length;
+      allCb.indeterminate = n > 0 && n < boxes.length;
+    }
+    var summary = document.getElementById("doctypeSummary");
+    summary.textContent = !state.doctypes.length ? "문서 종류: 전체"
+      : (n === boxes.length ? "문서 종류: 모두 선택" : "문서 종류: " + state.doctypes.length + "개 선택");
   }
 
   // ── 필터 바 이벤트 ───────────────────────────────────────────────────
@@ -914,7 +924,6 @@
       var active = cat === "all" ? state.cats.length === 0 : state.cats.indexOf(cat) !== -1;
       chip.classList.toggle("is-active", active);
     });
-    document.getElementById("staticOnlyBtn").classList.toggle("is-active", state.staticOnly);
   }
 
   function refreshDateInputs() {
@@ -922,11 +931,36 @@
     document.getElementById("dateTo").value = state.to;
   }
 
+  // 2026-10-02: 빠른 선택 버튼 표시를 클릭 여부가 아니라 실제 날짜 범위로 정한다 —
+  // "최근 90일로 보기" 등 다른 경로로 날짜가 바뀌어도 화면에서 바로 보이도록.
+  function updateQuickRangeUI() {
+    var today = todayISO();
+    Array.prototype.forEach.call(document.querySelectorAll(".quick-range"), function (b) {
+      var days = parseInt(b.getAttribute("data-days"), 10);
+      b.classList.toggle("is-active", state.to === today && state.from === addDaysISO(today, -days));
+    });
+  }
+
+  // 2026-10-02: 필터를 첫 화면 상태로 되돌린다(현재 탭은 유지).
+  function resetFilters() {
+    state.cats = [];
+    state.doctypes = [];
+    state.to = todayISO();
+    state.from = addDaysISO(state.to, -DEFAULT_RANGE_DAYS);
+    state.sort = "importance";
+    setQuery("");
+    refreshDateInputs();
+    updateDoctypeSummary();
+    document.getElementById("sortSelect").value = state.sort;
+    applyAndRender();
+  }
+
   function applyAndRender() {
     syncURL();
     renderFeed();
     renderScheduleList();
     updateCatChipsUI();
+    updateQuickRangeUI();
     // ADDENDUM-8 §1-1: 검색은 오늘의 정책동향에도 적용된다 — 그 탭이 보이는
     // 중이면 같이 다시 그린다(다른 필터는 today 탭에 영향 없음, 검색만 예외).
     if (state.view === "today") renderTodayView();
@@ -986,7 +1020,6 @@
       var to = document.getElementById("dateTo").value;
       if (from) state.from = from;
       if (to) state.to = to;
-      Array.prototype.forEach.call(document.querySelectorAll(".quick-range"), function (b) { b.classList.remove("is-active"); });
       applyAndRender();
     });
 
@@ -996,27 +1029,11 @@
         state.to = todayISO();
         state.from = addDaysISO(state.to, -days);
         refreshDateInputs();
-        Array.prototype.forEach.call(document.querySelectorAll(".quick-range"), function (b) { b.classList.remove("is-active"); });
-        btn.classList.add("is-active");
         applyAndRender();
       });
     });
 
-    // [data-doctype]로 한정: "상설자료만"(#staticOnlyBtn)도 .quick-doctype 클래스를
-    // 공유하지만 doc_type 필터가 아니라 별도 토글이라 여기서 걸러야 한다(아래 참고).
-    Array.prototype.forEach.call(document.querySelectorAll(".quick-doctype[data-doctype]"), function (btn) {
-      btn.addEventListener("click", function () {
-        state.doctypes = [btn.getAttribute("data-doctype")];
-        updateDoctypeSummary();
-        applyAndRender();
-      });
-    });
-
-    document.getElementById("staticOnlyBtn").addEventListener("click", function () {
-      state.staticOnly = !state.staticOnly;
-      this.classList.toggle("is-active", state.staticOnly);
-      applyAndRender();
-    });
+    document.getElementById("resetFiltersBtn").addEventListener("click", resetFilters);
 
     document.getElementById("sortSelect").addEventListener("change", function (e) {
       state.sort = e.target.value;
