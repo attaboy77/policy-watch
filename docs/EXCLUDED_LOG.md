@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-10-02 10:16:16 +0900
+생성 시각: 2026-10-03 09:53:51 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -12,18 +12,16 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| kifrs | csnnews.co.kr | 대전도시공사, 전 직원 회계·세무 역량 강화 나서 - 충청시사신문 | https://news.google.com/rss/articles/CBMia0FVX3lxTFBoV01tZDNrWVJTLUlFYUpfRi1SWTlkakE2U2FNZWpQWHpiSlptX3hteXU1VFpWd05HN2NRbUlTekxTaVFHU0hLNUVycTRkbEVQVVhHWkVpQVc2R1U5QnZiSC1xdHl1RFprMTF3?oc=5 |
 | esg | 임팩트온 | 【클릭ESG】“누가 읽기는 하나요”…지속가능경영보고서 발간 뒤의 씁쓸한 뒷맛 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTFBjbUtYWW5zWVg4RTh3RmN4bWhZWmpzZWl2cVljeFJXYTlpSjZJRW1oLUljUE1WS0UzU0NNU19CSG90UFJJS2lVc1FIT04zYkw5MUthQlBrV0wtMjNTSERDZFVtMVNQZ1g3c1E?oc=5 |
 | esg | cenews.kr | 롯데건설, 글로벌 ESG 공시 기준 담은 지속가능경영보고서 발간 - 건설이코노미뉴스 | https://news.google.com/rss/articles/CBMiZkFVX3lxTFA2MHZhNXlOZncwT2hiUEYzeHUyeUhsci1lQTlLTmxHRzliR21Hc284ck8yaVgxSmJQT2ttRnZncGRJc3pOM0FwQWlpTUhGOXNXeU5OWVNQM2tFempCS25rQ1JINEhrZw?oc=5 |
+| esg | insnews.co.kr | 우리금융, ‘2025 지속가능경영보고서’ 발간… ESG 경영성과·전략 공개 - 한국보험신문 | https://news.google.com/rss/articles/CBMia0FVX3lxTFA0Zzltbl9HY1N3SFRqRVV2cXNNQ1ZBMG1NdTVLZW50Z3dsclFrZUg5RDlKY2F2TzVZbm1QZXhHbm9hbkRDcENoaFgxU0ZZUGxNTC1Ud0lyUUthX2RsVzJ3aWszZnE3bEU2MHhN0gFvQVVfeXFMUE9CT0JJWE9RVWR5ZkdOSlphSEdvQWQ3dVlhOWd3M05uTkQ3cjFpM3BRcmJtNDRwNFl4NWlqNXhZd2dnQ3ltZ1FzS284Tl9KS0NsSjZfWUVvSW9BdGNLdFgyVWpqTFZMTkdMTWhkODhr?oc=5 |
 | esg | ttlnews.com | DL㈜, 2026 통합 지속가능경영보고서 발간…기후 리스크 대응·친환경 사... | http://www.ttlnews.com/news/articleView.html?idxno=3143574 |
 
-## excluded:financial (4건)
+## excluded:financial (2건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| icfr | news2day.co.kr | 한국캐피탈, 내부회계관리제도 고도화 나서…투명성·신뢰성 제고 - 뉴스투데이 | https://news.google.com/rss/articles/CBMiXkFVX3lxTE1fVjl2UnRnek5jelpoRk9reU55VW5IR2ZuSGpGbkVzNkVuYllnbExVWUZlMTU0N2JLalhEdmhwSmtPcDdYQ01ua3RJTkU0dFBxUVBQdEtmdHBaOWl5Z1E?oc=5 |
 | icfr | donga.com | 카드사 고위험업무 5년 초과 근무 못한다…여전업권 ‘내부통제 모범규준’ 시행 - 동아일보 | https://news.google.com/rss/articles/CBMidkFVX3lxTFB0NUVYMHh1RFBxTUpQTG9IbGVXRkRKRGQzcFdBanRCWUZsbkFlU0c2ZTVhYTdCWDZwRURKYkIyN1hIY1JtYjJyVnVBaW5VMWdteFNvZldWQkhlTHdrdVgyQlgzb1IzcW9uZlRtSGZXaXBkcnd4MFHSAWZBVV95cUxNMVltbFQybjRZSU5tN2w1X2ZOeWFnZ3gyVVFrTkJZTUNiU2NIZjQzc0JOYm40VlNibDVjYXZhTVNZRlgtMU1kWG05WUMzWVR2VXdoRk51QS1nc1JNR19MX3BEV0V5cGc?oc=5 |
-| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
 | esg | segye.com | 증권사 지속가능경영…‘포괄적 ESG 활동’서 본업 연계 ‘지속가능금융... | https://www.segye.com/newsView/20260824517331?OutUrl=naver |
 
 ## excluded:foreign (2건)
@@ -50,14 +48,7 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| kifrs | CPA뉴스 | 한국공인회계사회, '2025년 학교법인 회계감사 감리 지적사례' 게시 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBxWHI0MWNTaThpUmtDaHFQOWUyQ1UwQXpab0lxaXF2blgtTmNuaVZNZVRNcHZuNEJwLUlrcHoyV0pnXzBFZzhoVGN0b0t6ZUZsWEc1ZjgtRzMwVThxYnJRZ0VHMTg0SWZR?oc=5 |
-
-## excluded:opinion_piece (2건)
-
-| 카테고리 | 출처 | 제목 | 링크 |
-|---|---|---|---|
-| esg | hellot.net | [ESG 칼럼] 미뤄졌던 ESG 공시 의무화, 2028년부터 단계적 시행 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE1BdXB6anZGSm9NNDRObEsyRjJJbGJlOUxnWk8yOFVUVXRsLTAxU0FMUDMwMXo1TXZzakNuanlEeHBaWnpFLXRWR3lXZ0ZJemhIcEo1MDVDX3JONFNvN20w?oc=5 |
-| esg | asiatime.co.kr | [윤영민 칼럼] ESG 공시 의무화, ‘지속가능성·기업 현실’ 균형 절실 - 아시아타임즈 | https://news.google.com/rss/articles/CBMiXkFVX3lxTFBBaFRTRG1qT2tKNnAybU10OGZZVWN3TW03MTNnREZBUWNCUkhjUFktZGRTMlp3eFEwR3VBcUdRb1ZGUmM4UkxlSi1YNlYtcXZkM0N2cnR3WGY1NGptQmc?oc=5 |
+| kifrs | CPA뉴스 | 한국공인회계사회, '2025년 학교법인 회계감사 감리 지적사례' 게시 - news.kicpa.or.kr | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBxWHI0MWNTaThpUmtDaHFQOWUyQ1UwQXpab0lxaXF2blgtTmNuaVZNZVRNcHZuNEJwLUlrcHoyV0pnXzBFZzhoVGN0b0t6ZUZsWEc1ZjgtRzMwVThxYnJRZ0VHMTg0SWZR?oc=5 |
 
 ## excluded:standard_setter_governance (1건)
 
