@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-10-05 09:24:24 +0900
+생성 시각: 2026-10-06 11:02:48 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -20,15 +20,14 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
 | icfr | news2day.co.kr | 한국캐피탈, 내부회계관리제도 고도화 나서…투명성·신뢰성 제고 - 뉴스투데이 | https://news.google.com/rss/articles/CBMiXkFVX3lxTE1fVjl2UnRnek5jelpoRk9reU55VW5IR2ZuSGpGbkVzNkVuYllnbExVWUZlMTU0N2JLalhEdmhwSmtPcDdYQ01ua3RJTkU0dFBxUVBQdEtmdHBaOWl5Z1E?oc=5 |
-| icfr | donga.com | 카드사 고위험업무 5년 초과 근무 못한다…여전업권 ‘내부통제 모범규준’ 시행 - 동아일보 | https://news.google.com/rss/articles/CBMidkFVX3lxTFB0NUVYMHh1RFBxTUpQTG9IbGVXRkRKRGQzcFdBanRCWUZsbkFlU0c2ZTVhYTdCWDZwRURKYkIyN1hIY1JtYjJyVnVBaW5VMWdteFNvZldWQkhlTHdrdVgyQlgzb1IzcW9uZlRtSGZXaXBkcnd4MFHSAWZBVV95cUxNMVltbFQybjRZSU5tN2w1X2ZOeWFnZ3gyVVFrTkJZTUNiU2NIZjQzc0JOYm40VlNibDVjYXZhTVNZRlgtMU1kWG05WUMzWVR2VXdoRk51QS1nc1JNR19MX3BEV0V5cGc?oc=5 |
+| icfr | 서울경제 | 카드·캐피탈사 순환근무 강화…금감원 내부통제 모범규준 정비 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5yMmlfZHJmeGF0N3BFaW0tS1NmZUZXM2dEQXBCUmM5NHV5aEJwcXNCN0Z4bG5ZWlhsaGpuU3FGUDgwQlZ3NTRWM3R4QVRVUUcyVHfSAVNBVV95cUxPZ2JSaTVKelZ2S2NNQTQtNzRyaHQzODQ2THVqOWFOVHhVaEltN3NpdmRfR3VIaG9WZzRXanRaOWdndkJHYUFMWDRXUWh4NS1HWVFoTQ?oc=5 |
 | esg | segye.com | 증권사 지속가능경영…‘포괄적 ESG 활동’서 본업 연계 ‘지속가능금융... | https://www.segye.com/newsView/20260824517331?OutUrl=naver |
 
-## excluded:foreign (2건)
+## excluded:foreign (1건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| esg | 한국회계기준원 | ESRS-40a 공개초안에 대한 검토의견 조회 | https://www.kasb.or.kr/front/board/comm010View.do?seq=2182 |
-| kifrs | joseplus.com | 한국회계기준원, EFRAG과 ‘ESRS-40a 공개초안’ 실무 쟁점 논의 - joseplus.com | https://news.google.com/rss/articles/CBMiWEFVX3lxTE1hOThTbnJjOFRsTFROUGdEWmh0TXZKWDN0RmU3enNON1FjRklFbzVGOHNiU1hjQ25hREItUUt6MVZiLUFYN2NVUWhWdUgxMUZGUlFubHlMMlI?oc=5 |
+| kifrs | joseplus.com | 한국회계기준원, EFRAG과 ‘ESRS-40a 공개초안’ 실무 쟁점 논의 - 조세플러스 | https://news.google.com/rss/articles/CBMiWEFVX3lxTE1hOThTbnJjOFRsTFROUGdEWmh0TXZKWDN0RmU3enNON1FjRklFbzVGOHNiU1hjQ25hREItUUt6MVZiLUFYN2NVUWhWdUgxMUZGUlFubHlMMlI?oc=5 |
 
 ## excluded:industry_specific (8건)
 
@@ -55,11 +54,10 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 |---|---|---|---|
 | kifrs | CPA뉴스 | 한국공인회계사회, '2025년 학교법인 회계감사 감리 지적사례' 게시 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBxWHI0MWNTaThpUmtDaHFQOWUyQ1UwQXpab0lxaXF2blgtTmNuaVZNZVRNcHZuNEJwLUlrcHoyV0pnXzBFZzhoVGN0b0t6ZUZsWEc1ZjgtRzMwVThxYnJRZ0VHMTg0SWZR?oc=5 |
 
-## excluded:opinion_piece (2건)
+## excluded:opinion_piece (1건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
-| esg | hellot.net | [ESG 칼럼] 미뤄졌던 ESG 공시 의무화, 2028년부터 단계적 시행 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE1BdXB6anZGSm9NNDRObEsyRjJJbGJlOUxnWk8yOFVUVXRsLTAxU0FMUDMwMXo1TXZzakNuanlEeHBaWnpFLXRWR3lXZ0ZJemhIcEo1MDVDX3JONFNvN20w?oc=5 |
 | esg | asiatime.co.kr | [윤영민 칼럼] ESG 공시 의무화, ‘지속가능성·기업 현실’ 균형 절실 - 아시아타임즈 | https://news.google.com/rss/articles/CBMiXkFVX3lxTFBBaFRTRG1qT2tKNnAybU10OGZZVWN3TW03MTNnREZBUWNCUkhjUFktZGRTMlp3eFEwR3VBcUdRb1ZGUmM4UkxlSi1YNlYtcXZkM0N2cnR3WGY1NGptQmc?oc=5 |
 
 ## excluded:standard_setter_governance (1건)
