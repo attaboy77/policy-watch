@@ -1,6 +1,6 @@
 # 적용 대상 판정 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-10-06 11:02:48 +0900
+생성 시각: 2026-10-07 10:13:15 +0900
 
 SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.
 L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
@@ -54,10 +54,11 @@ L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).
 |---|---|---|---|
 | kifrs | CPA뉴스 | 한국공인회계사회, '2025년 학교법인 회계감사 감리 지적사례' 게시 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBxWHI0MWNTaThpUmtDaHFQOWUyQ1UwQXpab0lxaXF2blgtTmNuaVZNZVRNcHZuNEJwLUlrcHoyV0pnXzBFZzhoVGN0b0t6ZUZsWEc1ZjgtRzMwVThxYnJRZ0VHMTg0SWZR?oc=5 |
 
-## excluded:opinion_piece (1건)
+## excluded:opinion_piece (2건)
 
 | 카테고리 | 출처 | 제목 | 링크 |
 |---|---|---|---|
+| esg | 임팩트온 | 【칼럼】기후 공시 의무화, 그 다음은? TISFD로 보는 사회 공시의 미래 - 임팩트온 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE5ncEtVNnd0cWdNNEIwZHJpRkdGUG95eHFoejdlbm1pd2tqY0R0dWRCQkRNS2wxYkZmZDNRRXg4aTlKR2lBOV9MMkYxSkZxSmZGSWUyTzVIQno3UVZxaUV1d1VUaGRJeUx20gFsQVVfeXFMT25zc2J0Q2tZaW5oSFdqam43LVdJMC1JaVlvVDRVM0VaWlZFbzVYU2lwN0pPZzZPNkFRc0JLQndieE1ZZnhqSkFMZ2dES2l1ZkVtdVlWSzJJSUNpWVFSeUtxZ2RXY2x0LTZENEVm?oc=5 |
 | esg | asiatime.co.kr | [윤영민 칼럼] ESG 공시 의무화, ‘지속가능성·기업 현실’ 균형 절실 - 아시아타임즈 | https://news.google.com/rss/articles/CBMiXkFVX3lxTFBBaFRTRG1qT2tKNnAybU10OGZZVWN3TW03MTNnREZBUWNCUkhjUFktZGRTMlp3eFEwR3VBcUdRb1ZGUmM4UkxlSi1YNlYtcXZkM0N2cnR3WGY1NGptQmc?oc=5 |
 
 ## excluded:standard_setter_governance (1건)
