@@ -19,14 +19,16 @@ _excluded: list[dict] = []
 
 
 def record(*, category: str, title: str, url: str | None, source: str | None,
-           reason: str) -> None:
-    """제외 항목 하나를 메모리 목록에 추가한다. flush()를 호출해야 파일에 쓰인다."""
+           reason: str, note: str | None = None) -> None:
+    """제외 항목 하나를 메모리 목록에 추가한다. flush()를 호출해야 파일에 쓰인다.
+    `note`는 비고 칸(2026-10-08 — §5 병합이면 살아남은 대표 제목)."""
     _excluded.append({
         "category": category,
         "title": title,
         "url": url,
         "source": source,
         "reason": reason,
+        "note": note,
     })
 
 
@@ -55,6 +57,8 @@ def flush(path: str = "docs/EXCLUDED_LOG.md") -> None:
         "",
         "SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.",
         "L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).",
+        "2026-10-08부터 §5 중복 제거(`duplicate_exact`/`similar_news_merged`)와",
+        "§1 규제성 게이트(`no_regulatory_signal`)에서 빠진 뉴스도 함께 기록한다.",
         "**과다 필터링 점검용**: 아래 목록 중 실제로는 우리에게 적용되는 항목이",
         "있으면(오제외) 해당 키워드를 `sources/_config.py`의 `APPLICABILITY`에서",
         "빼거나 예외 조건을 추가할 것(§9-2).",
@@ -66,15 +70,21 @@ def flush(path: str = "docs/EXCLUDED_LOG.md") -> None:
         by_reason: dict[str, list[dict]] = {}
         for e in _excluded:
             by_reason.setdefault(e["reason"], []).append(e)
+        lines.append("| 사유 | 건수 |")
+        lines.append("|---|---|")
+        for reason in sorted(by_reason):
+            lines.append(f"| {reason} | {len(by_reason[reason])} |")
+        lines.append("")
         for reason in sorted(by_reason):
             group = by_reason[reason]
             lines.append(f"## {reason} ({len(group)}건)")
             lines.append("")
-            lines.append("| 카테고리 | 출처 | 제목 | 링크 |")
-            lines.append("|---|---|---|---|")
+            lines.append("| 카테고리 | 출처 | 제목 | 링크 | 비고 |")
+            lines.append("|---|---|---|---|---|")
             for e in group:
                 title = (e["title"] or "").replace("|", "\\|")
-                lines.append(f"| {e['category']} | {e['source'] or ''} | {title} | {e['url'] or ''} |")
+                note = (e.get("note") or "").replace("|", "\\|")
+                lines.append(f"| {e['category']} | {e['source'] or ''} | {title} | {e['url'] or ''} | {note} |")
             lines.append("")
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")

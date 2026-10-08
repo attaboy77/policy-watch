@@ -939,7 +939,33 @@ def dedupe_similar_news(items: list[dict]) -> list[dict]:
     우선으로 고른다(2026-09-02 사용자 지시 — "신뢰도 높은 매체를 우선"; 기존엔
     final_score만 봐서 키워드 점수가 신뢰도보다 앞설 수 있었다). 남은 항목에
     `duplicate_count`/`duplicate_sources`를 기록한다("외 N건 보도" 표시용).
+
+    2026-10-08: 묶음 안에 §1(규제성 게이트)을 통과하는 기사가 있으면 신뢰도·점수보다
+    그쪽을 대표로 우선한다(`_pick_representative()`). 묶음 구성(누가 누구와 묶이는지)은
+    그대로 두고 대표만 바꾼다. 실측: 대표가 신호 단어 없는 기사로 뽑혀 바로 다음 §1에서
+    탈락하면서, 신호 단어가 있던 "…과징금 의결"(연합뉴스)·"…6개 개정안 순차 발의"까지
+    묶음째 사라졌다(10/1~10/8 뉴스 54건 전멸).
     """
+    return dedupe_similar_news_with_excluded(items)[0]
+
+
+def _passes_regulatory_gate(item: dict) -> bool:
+    """§1(규제성 게이트)을 통과하는지 — `apply_regulatory_gate()`와 같은 판정."""
+    return _l3_gate_exempt(item) or has_regulatory_signal(item["title"])
+
+
+def _pick_representative(group: list[dict]) -> dict:
+    """묶음(앵커가 맨 앞, 신뢰도·점수 내림차순 정렬 상태)에서 대표를 고른다.
+    앵커가 §1을 통과하면 앵커 그대로, 아니면 §1을 통과하는 첫 기사(= 그중 신뢰도·점수
+    최고), 아무도 통과 못 하면 앵커."""
+    if _passes_regulatory_gate(group[0]):
+        return group[0]
+    return next((it for it in group[1:] if _passes_regulatory_gate(it)), group[0])
+
+
+def dedupe_similar_news_with_excluded(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """`dedupe_similar_news()`와 같지만 병합돼 빠진 항목도 함께 돌려준다(EXCLUDED_LOG 기록용).
+    빠진 항목에는 `excluded_reason`과 `merged_into`(살아남은 대표 제목)를 채운다."""
     news = [it for it in items if layer_of(it) == "L3"]
     others = [it for it in items if layer_of(it) != "L3"]
 
@@ -948,13 +974,14 @@ def dedupe_similar_news(items: list[dict]) -> list[dict]:
         by_cat.setdefault(it["category"], []).append(it)
 
     kept: list[dict] = []
+    merged: list[dict] = []
     for cat_items in by_cat.values():
         cat_items = sorted(cat_items, key=lambda x: (-x.get("trust_score", 0), -x.get("final_score", 0)))
         absorbed: set[int] = set()
         for i, it in enumerate(cat_items):
             if i in absorbed:
                 continue
-            sources = [it["source"]["name"]]
+            group = [it]
             subject_i = extract_subject(it["title"])
             subject_threshold = (
                 LOCAL_GOV_SUBJECT_SIMILARITY_THRESHOLD
@@ -978,12 +1005,16 @@ def dedupe_similar_news(items: list[dict]) -> list[dict]:
                     is_dup = True  # 조건 (c)
                 if is_dup:
                     absorbed.add(j)
-                    sources.append(other["source"]["name"])
-            if len(sources) > 1:
-                it["duplicate_count"] = len(sources) - 1
-                it["duplicate_sources"] = sources
-            kept.append(it)
-    return others + kept
+                    group.append(other)
+            rep = _pick_representative(group)
+            if len(group) > 1:
+                rest = [g for g in group if g is not rep]
+                rep["duplicate_count"] = len(rest)
+                rep["duplicate_sources"] = [rep["source"]["name"]] + [g["source"]["name"] for g in rest]
+                merged.extend(dict(g, excluded_reason="excluded:similar_news_merged", merged_into=rep["title"])
+                              for g in rest)
+            kept.append(rep)
+    return others + kept, merged
 
 
 # ── 14-1b) §5 이후 순서로 옮긴 §1/§3 게이트 (2026-08-31 사용자 지시) ─────────
@@ -995,9 +1026,16 @@ def _l3_gate_exempt(item: dict) -> bool:
     return layer_of(item) != "L3" or item.get("source", {}).get("tier") == 1
 
 
-def apply_regulatory_gate(items: list[dict]) -> list[dict]:
-    """ADDENDUM-5 §1. "제도가 바뀌었다"는 신호 없는 L3 뉴스를 제외한다."""
-    return [it for it in items if _l3_gate_exempt(it) or has_regulatory_signal(it["title"])]
+def apply_regulatory_gate(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """ADDENDUM-5 §1. "제도가 바뀌었다"는 신호 없는 L3 뉴스를 제외한다.
+    2026-10-08: 다른 필터처럼 (통과, 제외)를 돌려준다 — 제외분을 EXCLUDED_LOG에 남기기 위함."""
+    kept, excluded = [], []
+    for it in items:
+        if _passes_regulatory_gate(it):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:no_regulatory_signal"))
+    return kept, excluded
 
 
 def apply_corporate_pr_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:

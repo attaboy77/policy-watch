@@ -26,7 +26,7 @@ from ._utils import (apply_applicability_gate, apply_category_caps,
                      apply_non_target_tax_subject_filter, apply_opinion_piece_filter,
                      apply_regulatory_gate, apply_standard_setter_governance_filter,
                      attach_related_news, dedupe,
-                     dedupe_similar_news, finalize_item, normalize_news_item)
+                     dedupe_similar_news_with_excluded, finalize_item, normalize_news_item)
 from .schedules import build_schedules
 
 from . import google_news, naver_news
@@ -221,13 +221,15 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
     return items, sources_ok, sources_failed
 
 
-def _log_stage(stage: str, items: list[dict]) -> None:
-    """ADDENDUM-5 §7: 단계별 카테고리별 건수 로그(과다 필터링 확인용)."""
+def _log_stage(stage: str, items: list[dict], before: int | None = None) -> None:
+    """ADDENDUM-5 §7: 단계별 카테고리별 건수 로그(과다 필터링 확인용).
+    2026-10-08: `before`(직전 단계 건수)를 주면 이 단계에서 빠진 건수도 찍는다."""
     counts: dict[str, int] = {}
     for it in items:
         counts[it["category"]] = counts.get(it["category"], 0) + 1
     parts = ", ".join(f"{k} {v}" for k, v in counts.items())
-    print(f"  [필터] {stage}: 합계 {len(items)}건 ({parts})")
+    dropped = f", -{before - len(items)}건" if before is not None else ""
+    print(f"  [필터] {stage}: 합계 {len(items)}건 ({parts}{dropped})")
 
 
 def _record_excluded(excluded: list[dict]) -> None:
@@ -239,6 +241,7 @@ def _record_excluded(excluded: list[dict]) -> None:
             url=(it.get("urls") or {}).get("official") or (it.get("urls") or {}).get("news"),
             source=(it.get("source") or {}).get("name"),
             reason=it["excluded_reason"],
+            note=(f"→ 대표: {it['merged_into']}" if it.get("merged_into") else None),
         )
 
 
@@ -265,37 +268,58 @@ def build_data_json(items: list[dict]) -> dict:
     개별 기업 필터를 통과한 건이라, 그 필터의 사각지대를 곧바로 메우는
     안전망 자리가 맞다.
     """
+    n = len(items)
     items, excluded = apply_applicability_gate(items)  # ADDENDUM-6 §1, 전 계층
     _record_excluded(excluded)
-    _log_stage("ADDENDUM-6 §1(적용 대상) 게이트 후", items)
+    _log_stage("ADDENDUM-6 §1(적용 대상) 게이트 후", items, n)
+    n = len(items)
     items, excluded = apply_non_target_tax_subject_filter(items)  # 2026-09-10
     _record_excluded(excluded)
-    _log_stage("비대상 세목 제외 후", items)
+    _log_stage("비대상 세목 제외 후", items, n)
     # 2026-10-01: 기준 제정 절차·조직(IFRS 재단 정관·Due Process·Trustees·의제 협의)은
     # 공식 L1 포함 전 계층에서 제외 — 적용 대상 게이트와 같은 성격이라 바로 다음 자리.
+    n = len(items)
     items, excluded = apply_standard_setter_governance_filter(items)
     _record_excluded(excluded)
-    _log_stage("기준 제정 절차·조직 자료 제외 후", items)
+    _log_stage("기준 제정 절차·조직 자료 제외 후", items, n)
+    # 2026-10-08: §5·§1에서 빠진 항목도 EXCLUDED_LOG에 남긴다 — 로그가 없어서 10/1~10/8
+    # 뉴스 54건이 §5→§1 사이에서 전부 빠지는 동안 8일간 몰랐다.
+    n = len(items)
     deduped = dedupe(items)
-    deduped = dedupe_similar_news(deduped)  # ADDENDUM-5 §5: L3 유사 기사 병합
-    _log_stage("§5 중복 제거 후", deduped)
-    deduped = apply_regulatory_gate(deduped)  # ADDENDUM-5 §1
-    _log_stage("§1 규제성 게이트 후", deduped)
+    kept_ids = {id(it) for it in deduped}
+    _record_excluded([dict(it, excluded_reason="excluded:duplicate_exact")
+                      for it in items if id(it) not in kept_ids])
+    _log_stage("§5 정확 일치 중복 제거 후", deduped, n)
+    n = len(deduped)
+    deduped, excluded = dedupe_similar_news_with_excluded(deduped)  # ADDENDUM-5 §5: L3 유사 기사 병합
+    _record_excluded(excluded)
+    _log_stage("§5 유사 기사 병합 후", deduped, n)
+    n = len(deduped)
+    deduped, excluded = apply_regulatory_gate(deduped)  # ADDENDUM-5 §1
+    _record_excluded(excluded)
+    _log_stage("§1 규제성 게이트 후", deduped, n)
+    n = len(deduped)
     deduped = apply_company_event_filter(deduped)  # ADDENDUM-7 §1
-    _log_stage("ADDENDUM-7 §1(개별 기업 소식) 제외 후", deduped)
+    _log_stage("ADDENDUM-7 §1(개별 기업 소식) 제외 후", deduped, n)
+    n = len(deduped)
     deduped, excluded = apply_opinion_piece_filter(deduped)  # 2026-09-15
     _record_excluded(excluded)
-    _log_stage("논평성 기사([시선]/[칼럼]/[기고]/[사설]) 제외 후", deduped)
+    _log_stage("논평성 기사([시선]/[칼럼]/[기고]/[사설]) 제외 후", deduped, n)
+    n = len(deduped)
     deduped, excluded = apply_local_gov_petition_filter(deduped)  # 2026-09-02
     _record_excluded(excluded)
-    _log_stage("지자체 건의·민원 제외 후", deduped)
+    _log_stage("지자체 건의·민원 제외 후", deduped, n)
+    n = len(deduped)
     deduped, excluded = apply_foreign_news_filter(deduped)  # 2026-09-02
     _record_excluded(excluded)
-    _log_stage("해외 전용 뉴스 제외 후", deduped)
+    _log_stage("해외 전용 뉴스 제외 후", deduped, n)
+    n = len(deduped)
     deduped, excluded = apply_corporate_pr_filter(deduped)  # ADDENDUM-5 §3
     _record_excluded(excluded)
-    _log_stage("§3 홍보성 제외 후", deduped)
+    _log_stage("§3 홍보성 제외 후", deduped, n)
+    n = len(deduped)
     capped = apply_category_caps(deduped)
+    _log_stage("카테고리 상한 적용 후", capped, n)
     # ADDENDUM-4 §4: 공식(L1/L2) 항목에 관련 L3 기사를 연결하고, 그렇게 붙은 L3는
     # 피드 중복 노출을 막기 위해 여기서 제외한다(layer 필드가 남아있는 동안 처리 —
     # finalize_item()이 layer를 지우므로 그 전에 해야 함).
@@ -397,7 +421,7 @@ def main() -> None:
     _excluded_log.flush()
     excluded_count = len(_excluded_log.excluded())
     if excluded_count:
-        print(f"  ⚠ 적용 대상 게이트 제외: {excluded_count}건 → docs/EXCLUDED_LOG.md (과다 필터링 여부 검토 필요)")
+        print(f"  ⚠ 필터 제외: {excluded_count}건 → docs/EXCLUDED_LOG.md (과다 필터링 여부 검토 필요)")
 
     if errors:
         raise SystemExit(1)

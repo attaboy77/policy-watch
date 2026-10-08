@@ -33,6 +33,8 @@ from sources._utils import (
     extract_subject,
     _core_keywords,
     dedupe_similar_news,
+    dedupe_similar_news_with_excluded,
+    apply_regulatory_gate,
     extract_core_phrase,
     attach_related_news,
     has_regulatory_signal,
@@ -717,6 +719,69 @@ class TestDedupeSimilarNews:
         ]
         out = dedupe_similar_news(items)
         assert len(out) == 2
+
+    # 2026-10-08: 묶음 안에 §1 통과 기사가 있으면 신뢰도·점수보다 그쪽을 대표로.
+    def test_representative_prefers_regulatory_signal_over_trust(self):
+        # 실측(10/7): 신뢰도 높은 중앙신문(신호 없음)이 대표가 돼 §1에서 탈락하면서
+        # 신호 단어("의결")가 있는 연합뉴스까지 묶음째 사라졌다.
+        items = [
+            self._news("joongang", "금융위, 회계처리 기준 위반 금양에 76억3300만원 과징금", 90.0,
+                       category="kifrs", trust_score=50, published_at="2026-10-07"),
+            self._news("yonhap", "금융위, '회계기준 위반' 금양에 76억3천만원 과징금 의결", 60.0,
+                       category="kifrs", trust_score=40, published_at="2026-10-07"),
+        ]
+        out = dedupe_similar_news(items)
+        assert len(out) == 1
+        assert out[0]["id"] == "yonhap"
+        assert out[0]["duplicate_count"] == 1
+        assert out[0]["duplicate_sources"] == ["yonhap", "joongang"]
+
+    def test_representative_unchanged_when_anchor_passes_gate(self):
+        items = [
+            self._news("a", "법인세법 시행령 개정안 입법예고 — 접대비 한도", 80.0, category="tax", trust_score=50),
+            self._news("b", "법인세법 시행령 개정안 입법예고 — 접대비 한도 상향", 60.0, category="tax", trust_score=40),
+        ]
+        out = dedupe_similar_news(items)
+        assert [it["id"] for it in out] == ["a"]
+
+    def test_representative_unchanged_when_nobody_passes_gate(self):
+        items = [
+            self._news("a", "남부발전, 내부통제 고도화 '앞장'…6대 중점관리 분야 분과위 가동", 80.0, trust_score=50),
+            self._news("b", "남부발전, 내부통제 고도화 위한 '6대 중점관리 분야' 분과위 가동", 90.0, trust_score=40),
+        ]
+        out = dedupe_similar_news(items)
+        assert [it["id"] for it in out] == ["a"]
+
+    def test_with_excluded_returns_merged_items_with_representative(self):
+        items = [
+            self._news("joongang", "금융위, 회계처리 기준 위반 금양에 76억3300만원 과징금", 90.0,
+                       category="kifrs", trust_score=50, published_at="2026-10-07"),
+            self._news("yonhap", "금융위, '회계기준 위반' 금양에 76억3천만원 과징금 의결", 60.0,
+                       category="kifrs", trust_score=40, published_at="2026-10-07"),
+        ]
+        kept, merged = dedupe_similar_news_with_excluded(items)
+        assert [it["id"] for it in kept] == ["yonhap"]
+        assert [it["id"] for it in merged] == ["joongang"]
+        assert merged[0]["excluded_reason"] == "excluded:similar_news_merged"
+        assert merged[0]["merged_into"] == items[1]["title"]
+        assert "excluded_reason" not in items[0]  # 원본은 건드리지 않는다
+
+
+class TestApplyRegulatoryGate:
+    def _news(self, id_, title, tier=5):
+        return {"id": id_, "category": "tax", "title": title, "layer": "L3",
+                "source": {"name": id_, "tier": tier}}
+
+    def test_returns_kept_and_excluded_with_reason(self):
+        items = [
+            self._news("a", "추미애 지사 제안 지방세제 개편, 6개 개정안 순차 발의"),
+            self._news("b", "상장사 재무제표 비적정 53곳…전년比 소폭 감소"),
+            self._news("c", "상장사 재무제표 비적정 53곳", tier=1),  # tier1 면제
+        ]
+        kept, excluded = apply_regulatory_gate(items)
+        assert [it["id"] for it in kept] == ["a", "c"]
+        assert [it["id"] for it in excluded] == ["b"]
+        assert excluded[0]["excluded_reason"] == "excluded:no_regulatory_signal"
 
 
 class TestCoreKeywords:
