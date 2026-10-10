@@ -78,7 +78,7 @@ class TestBuildEsgStandards:
         assert cs.build_esg_standards(items)["recent"][0]["is_roadmap_estimate"] is True
 
     def test_scope_note_attached_when_roadmap_estimate(self, monkeypatch):
-        # 2026-09-02 사용자 지시: 시행 예정일만 보면 팜한농 자체 적용일로
+        # 2026-09-02 사용자 지시: 시행 예정일만 보면 당사 자체 적용일로
         # 오독할 수 있어 대상 범위(data/esg_roadmap.yml의 scope_note)를
         # 병기한다 — 실제 yml 파일 문구에 테스트가 흔들리지 않도록 monkeypatch.
         monkeypatch.setattr(cs._esg_roadmap, "load", lambda: {"milestones": [{"scope_note": "테스트 대상 범위"}]})
@@ -212,7 +212,7 @@ class TestBuildIcfrDocuments:
         assert len(buckets["적용지침"]) == 2
 
     def test_excludes_sme_titled_documents(self):
-        # 2026-09-02 사용자 지시: 팜한농은 중소기업이 아니므로 "중소기업"
+        # 2026-09-02 사용자 지시: 당사는 중소기업이 아니므로 "중소기업"
         # 문서는 다른 조건과 무관하게 제외한다.
         items = [
             self._icfr_item("중소기업 내부회계관리제도 설계 및 운영 적용기법 전문(2021.5.11. 제정)", doc_type="적용지침"),

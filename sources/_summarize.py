@@ -150,7 +150,7 @@ def _build_impact(item: dict) -> str | None:
     effective_date = item.get("effective_date")
     category = item.get("category")
     # 2026-09-02 사용자 지시: KSSB 자발적용 항목은 자체 시행일이 없어 이 함수가
-    # 늘 None을 냈다 — data/esg_roadmap.yml의 company_note(팜한농 관점 문구)를
+    # 늘 None을 냈다 — data/esg_roadmap.yml의 company_note(당사 관점 문구)를
     # 그대로 쓴다. 로드맵 status가 "예정"이면 그 사실을 괄호로 명시(§6 "확정
     # 여부를 분명히 한다" 원칙과 동일).
     if item.get("doc_type") == "자발적용":

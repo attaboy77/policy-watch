@@ -358,7 +358,7 @@
     // 비어있으면(=AI가 검토했지만 회사와 무관하다고 판단한 경우) 카드가 텅 빈
     // 것처럼 보여 헷갈린다 — 짧은 안내 문구로 "검토는 했다"는 걸 알려준다.
     var aiEmptyHtml = (it.ai_generated && !summaryHtml && !impactHtml)
-      ? '<div class="card-ai-empty">AI 검토 결과 팜한농 해당사항 없음</div>'
+      ? '<div class="card-ai-empty">AI 검토 결과 당사 해당사항 없음</div>'
       : "";
     var relatedHtml = renderRelatedNews(it.related_news);
     var revisionReasonHtml = renderRevisionReason(it);
@@ -674,8 +674,8 @@
     var s = section || { catalog_url: "", recent: [] };
     var rows = s.recent.length
       ? s.recent.map(function (r) {
-          // 2026-09-02 사용자 지시: 시행 예정일만 보이면 팜한농 자체 적용일로
-          // 오독할 수 있어(팜한농은 1차 대상이 아니라 후속 단계) 대상 범위를
+          // 2026-09-02 사용자 지시: 시행 예정일만 보이면 당사 자체 적용일로
+          // 오독할 수 있어(당사는 1차 대상이 아니라 후속 단계) 대상 범위를
           // 괄호로 병기한다 — "(로드맵 예정)" 같은 모호한 표현보다 구체적.
           var eff = esc(fmtDot(r.effective_date)) + (r.effective_date_scope_note ? " (" + esc(r.effective_date_scope_note) + ")" : "");
           return "<tr><td>" + esc(r.title) + "</td>" +
@@ -850,7 +850,7 @@
     // 2026-09-02 사용자 피드백: renderCard()와 동일 — AI 검토는 했는데 둘 다
     // 비어있으면 빈 카드처럼 보이니 짧은 안내 문구를 넣는다.
     var aiEmptyHtml = (it.ai_generated && !summaryHtml && !impactHtml)
-      ? '<div class="card-ai-empty">AI 검토 결과 팜한농 해당사항 없음</div>'
+      ? '<div class="card-ai-empty">AI 검토 결과 당사 해당사항 없음</div>'
       : "";
     var relatedHtml = isOfficial ? renderRelatedNews(it.related_news) : "";
     var revisionReasonHtml = renderRevisionReason(it);

@@ -44,7 +44,7 @@ class TestScheduleFromItem:
     # ai_generated=True면 title 대신 전체 동향 탭과 같은 문구를 쓴다.
     def test_ai_generated_empty_falls_back_to_notice_not_title(self):
         sch = schedule_from_item(_item(impact=None, summary=[], ai_generated=True))
-        assert sch["description"] == "AI 검토 결과 팜한농 해당사항 없음"
+        assert sch["description"] == "AI 검토 결과 당사 해당사항 없음"
         assert sch["description"] != "연결 내부회계관리제도 감사 의무 적용"
 
     def test_non_ai_generated_empty_still_falls_back_to_title(self):

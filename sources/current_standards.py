@@ -69,7 +69,7 @@ def build_kifrs_standards(items: list[dict]) -> dict:
 
 def _esg_roadmap_scope_note() -> str | None:
     """data/esg_roadmap.yml 1차 마일스톤의 대상 범위 문구. 2026-09-02 사용자
-    지시 — 시행 예정일만 보이면 팜한농 자체 적용일로 오독할 수 있어(팜한농은
+    지시 — 시행 예정일만 보이면 당사 자체 적용일로 오독할 수 있어(당사는
     1차 대상이 아니라 후속 단계) 표에 "2028.01.01 (연결자산 10조원 이상
     코스피부터)"처럼 대상 범위를 병기한다."""
     milestones = (_esg_roadmap.load().get("milestones") or [])
@@ -176,7 +176,7 @@ def build_icfr_documents(items: list[dict]) -> dict:
     하나만 남긴다.
 
     2026-09-02 사용자 지시: 제목에 "중소기업"이 들어간 문서(중소기업 전용
-    적용기법 등)는 제외한다 — 팜한농은 중소기업이 아니라 해당 없음."""
+    적용기법 등)는 제외한다 — 당사는 중소기업이 아니라 해당 없음."""
     latest_by_base: dict[str, dict] = {}
     bucket_of_base: dict[str, str] = {}
     for it in items:
