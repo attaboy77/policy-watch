@@ -460,6 +460,9 @@ COLLECT_WINDOW_DAYS = 90     # 수집 기간
 SOURCE_LABELS = {
     "kasb": "회계기준원(KASB)",
     "fss": "k-icfr.org(내부회계 모범규준)",
+    # 2026-10-14: fss 하위 수집 부분 실패 표시용(main.SUB_SOURCES)
+    "fss_b2": "금융감독원(내부회계 자료 게시판)",
+    "fss_b3": "k-icfr.org(내부회계 모범규준)",
     "moef": "재정경제부",
     "nts": "국세청",
     "fsc": "금융위원회",
@@ -690,3 +693,23 @@ def _load_disabled_sources(path: str = SOURCE_TOGGLES_YML_PATH) -> dict[str, str
 
 
 DISABLED_SOURCES = _load_disabled_sources()
+
+# ── 2026-10-14: 상설 기준 문서 / 같은 문서의 변형 ────────────────────────────
+# 내부회계 공식 자료 중 상시 유효한 기준 문서(모범규준·평가·보고 기준·적용지침·FAQ·가이드라인).
+# 게시일이 `STANDING_DOC_FRESH_DAYS`보다 오래됐으면(또는 날짜 추정이면) is_static=True —
+# 메일 신규·"최근 정책동향"에서 빠지고 "현행 기준"·"전체 동향"(기간 확대 시)에는 남는다.
+# 새 개정이 게시되면 그 기간 동안은 is_static=False라 신규로 잡힌다(10/11 옛 문서 6건 재발송 대응).
+STANDING_DOC = {
+    "categories": {"icfr"},
+    "doc_types": {"모범규준", "적용지침", "FAQ"},
+    "title_keywords": ["가이드라인"],
+}
+STANDING_DOC_FRESH_DAYS = 30
+
+# 같은 문서의 변형본(Clean 버전·전문·요약본)을 판정할 때 제목에서 떼는 수식어.
+# 수식어와 날짜 괄호를 뗀 문서명 + 개정일(제목 날짜, 없으면 게시일)이 같으면 하나만 남긴다.
+DOC_VARIANT_MODIFIERS = [
+    r"Clean\s*ver(?:sion)?\.?",
+    r"전문(?=\s*(?:[(\[]|$))",
+    r"요약본",
+]

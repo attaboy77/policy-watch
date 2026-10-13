@@ -1632,3 +1632,101 @@ class TestStandardSetterGovernanceFilter:
         kept, excluded = type(self)._apply(items)
         assert [it["title"] for it in kept] == ["IASB 공개초안 '리스' 의견조회"]
         assert excluded[0]["excluded_reason"] == "excluded:standard_setter_governance"
+
+
+# ── 2026-10-14: 같은 문서 변형본 병합 / 상설 기준 문서 ─────────────────────
+from sources._utils import (dedupe_doc_variants, doc_variant_key, is_standing_document,
+                            mark_standing_documents)
+
+
+def _off(title, published_at="2025-01-02", doc_type="적용지침", category="icfr", **kw):
+    return {"title": title, "published_at": published_at, "doc_type": doc_type,
+            "category": category, "source": {"type": "official"}, **kw}
+
+
+class TestDocVariants:
+    def test_clean_ver_merged_into_plain(self):
+        clean = _off("내부회계관리제도 평가·보고 지침 Clean ver. ('24.12.23 개정)", "2025-01-08")
+        plain = _off("내부회계관리제도 평가·보고 지침 ('24.12.23 개정)", "2025-01-02")
+        kept, excluded = dedupe_doc_variants([clean, plain])
+        assert kept == [plain]
+        assert excluded[0]["excluded_reason"] == "excluded:doc_variant_merged"
+        assert excluded[0]["merged_into"] == plain["title"]
+
+    def test_different_revision_kept(self):
+        a = _off("내부회계관리제도 평가·보고 지침 ('24.12.23 개정)")
+        b = _off("내부회계관리제도 평가·보고 지침 ('23.12.29 배포)")
+        kept, excluded = dedupe_doc_variants([a, b])
+        assert kept == [a, b] and excluded == []
+
+    @pytest.mark.parametrize("variant", [
+        "내부회계관리제도 평가 및 보고 모범규준 전문(2021.10.1. 개정)",
+        "내부회계관리제도 평가 및 보고 모범규준 요약본(2021.10.1. 개정)",
+        "내부회계관리제도 평가 및 보고 모범규준 (요약본) (2021.10.1. 개정)",
+    ])
+    def test_modifiers_stripped(self, variant):
+        base = "내부회계관리제도 평가 및 보고 모범규준(2021.10.1. 개정)"
+        assert doc_variant_key(_off(variant)) == doc_variant_key(_off(base))
+
+    def test_word_containing_jeonmun_not_stripped(self):
+        assert doc_variant_key(_off("전문가 의견 지침")) != doc_variant_key(_off("가 의견 지침"))
+
+    def test_undated_paren_kept_in_key(self):
+        a = _off("공시 서식 예시 개정본 및 참고자료 (작성 사례, FAQ)")
+        b = _off("공시 서식 예시 개정본 및 참고자료 (작성 사례)")
+        assert doc_variant_key(a) != doc_variant_key(b)
+
+    def test_news_untouched(self):
+        a = dict(_off("평가·보고 지침 Clean ver. ('24.12.23 개정)"), source={"type": "news"})
+        b = dict(_off("평가·보고 지침 ('24.12.23 개정)"), source={"type": "news"})
+        kept, _ = dedupe_doc_variants([a, b])
+        assert len(kept) == 2
+
+    def test_both_with_modifier_keeps_latest(self):
+        a = _off("X 지침 전문('24.12.23 개정)", "2025-01-01")
+        b = _off("X 지침 Clean ver.('24.12.23 개정)", "2025-01-05")
+        kept, _ = dedupe_doc_variants([a, b])
+        assert kept == [b]
+
+
+class TestStandingDocuments:
+    TODAY = date(2026, 10, 14)
+
+    @pytest.mark.parametrize("item", [
+        _off("내부회계관리제도 관련 FAQ('25.12)", "2025-12-23", doc_type="FAQ"),
+        _off("내부회계관리제도 평가·보고 지침 ('24.12.23 개정)", "2025-01-02"),
+        _off("설계 및 운영 개념체계 전문(2021.10.1. 개정)", "2021-10-01", doc_type="모범규준"),
+        _off("연결 대상범위 선정 가이드라인", "2024-06-05", doc_type="해설·교육자료"),
+    ])
+    def test_old_standing_doc_is_static(self, item):
+        mark_standing_documents([item], today=self.TODAY)
+        assert item["is_static"] is True
+
+    def test_new_revision_not_static(self):
+        """새 개정이 게시되면 신규로 잡혀야 한다(사용자 요구)."""
+        item = _off("내부회계관리제도 평가·보고 지침 ('26.10.10 개정)", "2026-10-13", is_static=True)
+        mark_standing_documents([item], today=self.TODAY)
+        assert item["is_static"] is False
+
+    def test_date_estimated_is_static(self):
+        item = _off("모범규준", "2026-10-13", doc_type="모범규준", date_estimated=True)
+        mark_standing_documents([item], today=self.TODAY)
+        assert item["is_static"] is True
+
+    @pytest.mark.parametrize("item", [
+        _off("감리 결과 보도자료", doc_type="보도자료"),
+        _off("K-IFRS 적용지침", category="kifrs"),
+        dict(_off("내부회계 FAQ", doc_type="FAQ"), source={"type": "news"}),
+    ])
+    def test_not_standing(self, item):
+        assert not is_standing_document(item)
+        mark_standing_documents([item], today=self.TODAY)
+        assert "is_static" not in item
+
+
+def test_doc_variant_paren_without_date_kept():
+    """실측 오탐: 같은 날 게시된 서로 다른 제1012호 개정이 병합되면 안 된다."""
+    a = _off("2023년 국제조세개혁 - 필라2 모범규칙 (제1012호 문단 4A, 88A)", "2023-09-15", category="kifrs")
+    b = _off("2023년 국제조세개혁 - 필라2 모범규칙 (제1012호 문단 88B~88D)", "2023-09-15", category="kifrs")
+    kept, excluded = dedupe_doc_variants([a, b])
+    assert len(kept) == 2 and excluded == []

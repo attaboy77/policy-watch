@@ -142,6 +142,13 @@ def find_new_items(prev_items: list[dict], current_items: list[dict],
     return [it for it in current_items if it.get("id") not in excluded_ids]
 
 
+def exclude_static_items(items: list[dict]) -> list[dict]:
+    """2026-10-14: 상설 자료(is_static)를 뺀다 — 옛 기준 문서가 수집 누락 후 복귀하며
+    "신규"로 재발송되는 걸 막는다(새 개정은 `_utils.mark_standing_documents`가 일정
+    기간 is_static=False로 둬서 그대로 통과)."""
+    return [it for it in items if not it.get("is_static")]
+
+
 # 2026-09-10: "어제·오늘"의 "어제"만큼 며칠 전까지 허용할지. 0=오늘만,
 # 1=어제·오늘(현재 사용자 요청 범위).
 MAIL_NEWS_RECENCY_DAYS = 1
@@ -365,6 +372,15 @@ def _run() -> None:
         if not forced:
             return
         new_items = []
+
+    # 2026-10-14: 상설 기준 문서(is_static)는 메일 신규에서 뺀다 — 수집이 하루 빠졌다
+    # 돌아오는 등으로 id가 "직전 data.json에 없음"이 돼도 옛 기준 문서가 재발송되지 않게.
+    # 새 개정은 게시 후 일정 기간 is_static=False라 그대로 신규로 잡힌다
+    # (`_utils.mark_standing_documents`).
+    non_static = exclude_static_items(new_items)
+    if len(non_static) < len(new_items):
+        print(f"[notify_mail] 상설 자료 {len(new_items) - len(non_static)}건 메일에서 제외")
+    new_items = non_static
 
     new_official = [it for it in new_items if is_official(it)]
     new_news = [it for it in new_items if not is_official(it)]

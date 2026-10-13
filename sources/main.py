@@ -26,7 +26,8 @@ from ._utils import (apply_applicability_gate, apply_category_caps,
                      apply_non_target_tax_subject_filter, apply_opinion_piece_filter,
                      apply_regulatory_gate, apply_standard_setter_governance_filter,
                      attach_related_news, dedupe,
-                     dedupe_similar_news_with_excluded, finalize_item, normalize_news_item)
+                     dedupe_doc_variants, dedupe_similar_news_with_excluded, finalize_item,
+                     mark_standing_documents, normalize_news_item)
 from .schedules import build_schedules
 
 from . import google_news, naver_news
@@ -61,6 +62,11 @@ SOURCE_TIMEOUT_OVERRIDES = {"law_api": 120}
 # 오진해 moef/fsc/policy_briefing을 꺼뒀었다. 대신 각 어댑터가 "목록 행을 하나도 못
 # 읽음/전 페이지 실패"를 스스로 예외로 올려 진짜 실패와 구분한다.
 ALLOW_EMPTY_SOURCES = {"moef", "fsc", "policy_briefing", "lawmaking"}
+
+# 2026-10-14: 하위 수집을 여러 개 가진 소스의 부분 키. 어댑터가 `PartialFetch`로
+# 일부 실패를 알리면 실패한 부분만 전일 캐시로 채우고, 연속 실패 횟수는
+# "{소스}_{부분}" 키로 따로 센다(라벨은 `SOURCE_LABELS`).
+SUB_SOURCES = {"fss": ("b2", "b3")}
 
 
 def _fetch_with_timeout(fetch_fn, *, timeout: float):
@@ -107,13 +113,16 @@ def _now_kst_iso() -> str:
 
 
 def _use_fallback(name: str, reason: str, cache: dict, health: dict, now_iso: str,
-                   items: list[dict], sources_failed: list[dict]) -> None:
+                   items: list[dict], sources_failed: list[dict],
+                   fallback_items: list[dict] | None = None) -> None:
     """소스 실패 공통 처리(2026-09-07): 연속 실패 횟수 갱신 + 캐시에 어제 성공분이
     있으면 그대로 이번 실행 items에 합쳐 "그 소스만 0건"이 되는 걸 막는다.
-    캐시가 없으면(이 소스가 아직 한 번도 성공한 적 없음) 어쩔 수 없이 0건 그대로."""
+    캐시가 없으면(이 소스가 아직 한 번도 성공한 적 없음) 어쩔 수 없이 0건 그대로.
+    2026-10-14: 하위 수집 부분 실패는 `fallback_items`로 그 부분의 캐시만 넘긴다."""
     consecutive = _source_health.record_failure(health, name, reason, now_iso)
     label = SOURCE_LABELS.get(name, name)
-    fallback_items = cache.get(name) or []
+    if fallback_items is None:
+        fallback_items = cache.get(name) or []
     entry = {"name": name, "reason": reason, "consecutive_failures": consecutive}
     if fallback_items:
         items.extend(fallback_items)
@@ -174,6 +183,8 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
                 sources_ok.append(name)
                 cache[name] = got
                 _source_health.record_success(health, name, now_iso)
+                for part in SUB_SOURCES.get(name, ()):
+                    _source_health.record_success(health, f"{name}_{part}", now_iso)
             else:
                 # 2026-09-09: 예외 없이 빈 리스트가 와도 실패로 본다 — 그대로
                 # "성공"으로 두면 cache[name]이 빈 값으로 덮어써져서, 다음에
@@ -182,6 +193,23 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
                 # 이미 이 가드가 있었는데 OFFICIAL_SOURCES엔 빠져 있었다.
                 _use_fallback(name, "결과 0건(응답 없음 또는 파싱 실패)",
                               cache, health, now_iso, items, sources_failed)
+        except _source_health.PartialFetch as pf:
+            # 2026-10-14: 성공한 부분은 그대로, 실패한 부분만 전일 캐시에서 골라 채운다.
+            # 소스 자체는 성공으로 보고, 캐시는 "이번 성공분 + 채운 전일분"으로 갱신해
+            # 실패가 며칠 이어져도 그 부분 항목이 캐시에서 사라지지 않게 한다.
+            prior = cache.get(name) or []
+            merged = list(pf.items)
+            for part, reason in pf.failed.items():
+                part_cached = [it for it in prior if pf.part_of(it) == part]
+                _use_fallback(f"{name}_{part}", reason, cache, health, now_iso,
+                              merged, sources_failed, fallback_items=part_cached)
+            for part in SUB_SOURCES.get(name, ()):
+                if part not in pf.failed:
+                    _source_health.record_success(health, f"{name}_{part}", now_iso)
+            items.extend(merged)
+            sources_ok.append(name)
+            cache[name] = merged
+            _source_health.record_success(health, name, now_iso)
         except concurrent.futures.TimeoutError:
             _use_fallback(name, f"{timeout}초 초과(응답 없음)",
                           cache, health, now_iso, items, sources_failed)
@@ -290,6 +318,11 @@ def build_data_json(items: list[dict]) -> dict:
     _record_excluded([dict(it, excluded_reason="excluded:duplicate_exact")
                       for it in items if id(it) not in kept_ids])
     _log_stage("§5 정확 일치 중복 제거 후", deduped, n)
+    # 2026-10-14: 공식 문서의 변형본(Clean 버전·전문·요약본)은 같은 문서명+같은 개정일이면 하나만.
+    n = len(deduped)
+    deduped, excluded = dedupe_doc_variants(deduped)
+    _record_excluded(excluded)
+    _log_stage("같은 문서 변형본(Clean·전문·요약본) 병합 후", deduped, n)
     n = len(deduped)
     deduped, excluded = dedupe_similar_news_with_excluded(deduped)  # ADDENDUM-5 §5: L3 유사 기사 병합
     _record_excluded(excluded)
@@ -324,6 +357,9 @@ def build_data_json(items: list[dict]) -> dict:
     # 피드 중복 노출을 막기 위해 여기서 제외한다(layer 필드가 남아있는 동안 처리 —
     # finalize_item()이 layer를 지우므로 그 전에 해야 함).
     capped = attach_related_news(capped)
+    # 2026-10-14: 상설 기준 문서(오래된 모범규준·적용지침·FAQ·가이드라인)는 is_static —
+    # 메일 신규·"최근 정책동향"에서 빠진다. 새로 게시된 개정은 일정 기간 신규로 둔다.
+    mark_standing_documents(capped)
 
     finalized = []
     for it in capped:

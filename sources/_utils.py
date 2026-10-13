@@ -19,7 +19,8 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS,
                       LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS,
                       NON_TARGET_TAX_SUBJECTS, OPINION_PREFIX_KEYWORDS,
-                      STANDARD_SETTER_GOVERNANCE)
+                      STANDARD_SETTER_GOVERNANCE, STANDING_DOC, STANDING_DOC_FRESH_DAYS,
+                      DOC_VARIANT_MODIFIERS)
 from . import _esg_roadmap
 
 
@@ -441,6 +442,82 @@ def apply_standard_setter_governance_filter(items: list[dict]) -> tuple[list[dic
         else:
             kept.append(it)
     return kept, excluded
+
+
+# 2026-10-14: 같은 문서의 변형본(Clean 버전·전문·요약본) 병합 — 공식 항목만.
+_DOC_VARIANT_MODIFIER_RE = re.compile("|".join(DOC_VARIANT_MODIFIERS), re.IGNORECASE)
+_PAREN_RE = re.compile(r"[(\[][^)\]]*[)\]]")
+_EMPTY_BRACKET_RE = re.compile(r"[(\[]\s*[)\]]")
+
+
+def has_doc_variant_modifier(title: str) -> bool:
+    return bool(_DOC_VARIANT_MODIFIER_RE.search(title or ""))
+
+
+def doc_variant_key(item: dict) -> tuple[str, str, str]:
+    """(카테고리, 수식어·날짜 괄호를 뗀 문서명, 개정일). 개정일은 제목 날짜, 없으면 게시일.
+    예: "…평가·보고 지침 Clean ver. ('24.12.23 개정)"와 "…평가·보고 지침 ('24.12.23 개정)"
+    → 둘 다 ("icfr", "내부회계관리제도평가·보고지침", "2024-12-23")."""
+    title = item.get("title", "")
+    base = _DOC_VARIANT_MODIFIER_RE.sub("", title)
+    # 날짜가 든 괄호만 뗀다 — "(제1012호 문단 4A, 88A)"처럼 숫자만 있는 괄호는 문서를 가른다.
+    base = _PAREN_RE.sub(lambda m: "" if extract_title_revision_date(m.group(0)) else m.group(0), base)
+    base = _EMPTY_BRACKET_RE.sub("", base)
+    rev = extract_title_revision_date(title) or (item.get("published_at") or "")
+    return (item.get("category", ""), _norm(base), rev)
+
+
+def dedupe_doc_variants(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """공식 항목 중 `doc_variant_key()`가 같은 것은 하나만 남긴다. 수식어 없는 원본을
+    우선하고, 그다음 게시일이 늦은 쪽. 개정일이 다르면(다른 개정) 남긴다.
+    (통과분, 제외분) 튜플 — 제외분은 `excluded_reason`·`merged_into`(남긴 제목)를 단다."""
+    groups: dict[tuple, list[int]] = {}
+    for i, it in enumerate(items):
+        if (it.get("source") or {}).get("type") != "official":
+            continue
+        groups.setdefault(doc_variant_key(it), []).append(i)
+    drop: dict[int, str] = {}
+    for idxs in groups.values():
+        if len(idxs) < 2:
+            continue
+        by_date = sorted(idxs, key=lambda i: items[i].get("published_at") or "", reverse=True)
+        keep = min(by_date, key=lambda i: has_doc_variant_modifier(items[i].get("title", "")))
+        for i in idxs:
+            if i != keep:
+                drop[i] = items[keep].get("title", "")
+    kept = [it for i, it in enumerate(items) if i not in drop]
+    excluded = [dict(items[i], excluded_reason="excluded:doc_variant_merged", merged_into=t)
+                for i, t in drop.items()]
+    return kept, excluded
+
+
+# 2026-10-14: 상설 기준 문서 표시(is_static) — 메일 신규·"최근 정책동향" 제외용.
+def is_standing_document(item: dict) -> bool:
+    if (item.get("source") or {}).get("type") != "official":
+        return False
+    if item.get("category") not in STANDING_DOC["categories"]:
+        return False
+    title = item.get("title", "")
+    return (item.get("doc_type") in STANDING_DOC["doc_types"]
+            or any(k in title for k in STANDING_DOC["title_keywords"]))
+
+
+def mark_standing_documents(items: list[dict], today: date | None = None) -> list[dict]:
+    """상설 기준 문서는 게시일이 `STANDING_DOC_FRESH_DAYS`일 이내가 아니면(날짜 추정 포함)
+    is_static=True, 이내면 새 개정으로 보고 is_static=False로 둔다. 제자리 수정 후 반환."""
+    base = today or datetime.now(timezone(timedelta(hours=9))).date()
+    for it in items:
+        if not is_standing_document(it):
+            continue
+        fresh = False
+        if not it.get("date_estimated"):
+            try:
+                d = datetime.strptime((it.get("published_at") or "")[:10], "%Y-%m-%d").date()
+                fresh = 0 <= (base - d).days <= STANDING_DOC_FRESH_DAYS
+            except ValueError:
+                fresh = False
+        it["is_static"] = not fresh
+    return items
 
 
 # ── 8) 시행일 추출 (SPEC-ADDENDUM.md §4-4) ──────────────────────────────────

@@ -676,3 +676,18 @@ class TestRunGating:
         monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
         monkeypatch.setenv("PREV_DATA_JSON", str(tmp_path / "nope.json"))
         nm.main()  # 예외가 안 올라오면 통과
+
+
+class TestExcludeStaticItems:
+    """2026-10-14: 10/11 옛 내부회계 기준 문서 6건 재발송 대응."""
+
+    def test_static_items_dropped(self):
+        items = [_item(id="a", is_static=True), _item(id="b", is_static=False), _item(id="c")]
+        assert [it["id"] for it in nm.exclude_static_items(items)] == ["b", "c"]
+
+
+class TestPartialFallbackNotice:
+    def test_fss_b2_fallback_line(self):
+        meta = {"sources_failed": [{"name": "fss_b2", "used_fallback": True, "consecutive_failures": 2}]}
+        assert nm.fallback_notice_lines(meta) == [
+            "금융감독원(내부회계 자료 게시판) 수집 실패로 전일 데이터 사용 (연속 2일째)"]

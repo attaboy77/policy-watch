@@ -390,3 +390,57 @@ class TestCollectAllDisabledSources:
         assert items == [{"id": "n1"}]
         assert ok == ["nts"]
         assert failed == []
+
+
+class TestCollectAllPartialFallback:
+    """2026-10-14: fss B2만 실패하면 B2 부분만 전일 캐시로 채운다(10/9~10/10 사고)."""
+
+    @staticmethod
+    def _part_of(it):
+        return "b3" if it["id"].startswith("k") else "b2"
+
+    def _partial(self, items, failed):
+        def fetch():
+            raise sh.PartialFetch(items, failed, self._part_of)
+        return fetch
+
+    def test_failed_part_filled_from_cache(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        sh.save_cache({"fss": [{"id": "f1"}, {"id": "f2"}, {"id": "k_old"}]})
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES",
+                            [("fss", self._partial([{"id": "k_new"}], {"b2": "타임아웃"}))])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+        items, ok, failed = main.collect_all()
+        assert items == [{"id": "k_new"}, {"id": "f1"}, {"id": "f2"}]  # B3 전일분(k_old)은 안 씀
+        assert ok == ["fss"]
+        assert failed == [{"name": "fss_b2", "reason": "타임아웃", "consecutive_failures": 1,
+                           "used_fallback": True, "fallback_count": 2}]
+        assert sh.load_cache()["fss"] == items  # 다음 날도 B2 전일분이 남아 있게
+        health = sh.load_health()
+        assert health["fss"]["consecutive_failures"] == 0
+        assert health["fss_b2"]["consecutive_failures"] == 1
+        assert health["fss_b3"]["consecutive_failures"] == 0
+
+    def test_consecutive_part_failures_keep_cached_part(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        sh.save_cache({"fss": [{"id": "f1"}, {"id": "k1"}]})
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES",
+                            [("fss", self._partial([{"id": "k1"}], {"b2": "0건"}))])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+        main.collect_all()
+        items, _, failed = main.collect_all()
+        assert {"id": "f1"} in items
+        assert failed[0]["consecutive_failures"] == 2
+
+    def test_full_success_resets_part_health(self, monkeypatch, tmp_path):
+        _isolate_cache_health(monkeypatch, tmp_path)
+        sh.save_health({"fss_b2": {"consecutive_failures": 3, "last_success_at": None}})
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES", [("fss", lambda: [{"id": "f1"}])])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+        main.collect_all()
+        assert sh.load_health()["fss_b2"]["consecutive_failures"] == 0
+
+    def test_part_labels_registered(self):
+        for name, parts in main.SUB_SOURCES.items():
+            for part in parts:
+                assert f"{name}_{part}" in main.SOURCE_LABELS

@@ -24,6 +24,7 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from .. import _http, _gap_log
+from .._source_health import PartialFetch
 from .._utils import (doc_type_of, extract_title_revision_date, is_event_announcement,
                       keyword_score, matched_keywords, make_id_exact, final_score, recency_score,
                       has_fiscal_year_override)
@@ -207,18 +208,46 @@ def fetch_kicfr_guidelines() -> list[dict]:
     return items
 
 
+def part_of(item: dict) -> str:
+    """캐시 항목이 어느 하위 수집(B2/B3)에서 왔는지 — 부분 폴백용(main.SUB_SOURCES)."""
+    url = (item.get("urls") or {}).get("official") or ""
+    return "b3" if "k-icfr.org" in url else "b2"
+
+
 def fetch() -> list[dict]:
-    """B2+B3 전체(B1은 참고 자료라 제외). 소스 한 종류가 실패해도 나머지는 계속 진행."""
+    """B2+B3 전체(B1은 참고 자료라 제외). 소스 한 종류가 실패해도 나머지는 계속 진행.
+
+    2026-10-14: 하위 수집이 예외를 내거나 0건이면 실패로 본다. 일부만 실패하면
+    `PartialFetch`로 올려 main이 그 부분만 전일 캐시로 채우게 하고, 둘 다 실패하면
+    일반 예외로 올려 소스 단위 폴백을 탄다. 전에는 실패를 print만 하고 삼켜서
+    10/9~10/10 B2 6건이 조용히 빠졌다가 10/11 신규 메일로 다시 나갔다."""
     out: list[dict] = []
+    failed: dict[str, str] = {}
     try:
-        out.extend(fetch_data_board())
+        got = fetch_data_board()
+        if got:
+            out.extend(got)
+        else:
+            failed["b2"] = "결과 0건(목록 행 없음 또는 파싱 실패)"
     except Exception as exc:  # noqa: BLE001
-        print(f"[fss] B2 수집 실패: {exc}")
+        failed["b2"] = str(exc)
+    if "b2" in failed:
+        print(f"[fss] B2 수집 실패: {failed['b2']}")
     time.sleep(SLEEP_BETWEEN_REQUESTS)
     try:
-        out.extend(fetch_kicfr_guidelines())
+        got = fetch_kicfr_guidelines()
+        if got:
+            out.extend(got)
+        else:
+            failed["b3"] = "결과 0건(목록 행 없음 또는 파싱 실패)"
     except Exception as exc:  # noqa: BLE001
-        print(f"[fss] B3(k-icfr.org) 수집 실패: {exc}")
+        failed["b3"] = str(exc)
+    if "b3" in failed:
+        print(f"[fss] B3(k-icfr.org) 수집 실패: {failed['b3']}")
+    if len(failed) == 2:
+        raise RuntimeError(f"B2·B3 모두 실패 — B2: {failed['b2']} / B3: {failed['b3']}")
+    if failed:
+        raise PartialFetch(out, failed, part_of)
     return out
 
 
