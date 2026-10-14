@@ -22,7 +22,8 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       STANDARD_SETTER_GOVERNANCE, STANDING_DOC, STANDING_DOC_FRESH_DAYS,
                       DOC_VARIANT_MODIFIERS, SELF_ACTIVITY_PUBLIC_SUFFIXES,
                       SELF_ACTIVITY_PUBLIC_ABBREV_RE, SELF_ACTIVITY_STAKEHOLDERS,
-                      SELF_ACTIVITY_NON_ENTITY_RE, NEWS_MAX_AGE_DAYS)
+                      SELF_ACTIVITY_NON_ENTITY_RE, NEWS_MAX_AGE_DAYS,
+                      SELF_ACTIVITY_PARTY_PREFIXES, SELF_ACTIVITY_COLLECTIVE_SUFFIXES)
 from . import _esg_roadmap
 
 
@@ -1249,9 +1250,12 @@ def extract_actor_subject(title: str) -> str | None:
 
 
 def is_public_or_non_entity_subject(subject: str) -> bool:
-    """공적 주체(기관·직함·지자체·위원회 약칭), 기관투자자·거버넌스 단체, 또는 법령·기준명이면 True."""
+    """공적 주체(기관·직함·지자체·위원회 약칭·정당), 업계 전체, 기관투자자·거버넌스 단체,
+    또는 법령·기준명이면 True."""
     s = subject.replace(" ", "")
     return (s in SELF_ACTIVITY_STAKEHOLDERS
+            or s.startswith(tuple(SELF_ACTIVITY_PARTY_PREFIXES))
+            or s.endswith(tuple(SELF_ACTIVITY_COLLECTIVE_SUFFIXES))
             or s.endswith(tuple(SELF_ACTIVITY_PUBLIC_SUFFIXES))
             or bool(_PUBLIC_ABBREV_RE.match(s))
             or bool(_LOCAL_GOV_SUBJECT_RE.match(s))
@@ -1262,9 +1266,8 @@ def is_company_self_activity(title: str) -> bool:
     subject = extract_actor_subject(title)
     if not subject or is_public_or_non_entity_subject(subject):
         return False
+    # 강한 제도 신호 오버라이드는 두지 않는다(`_config.SELF_ACTIVITY_*` 주석 참고).
     t = _norm(title)
-    if any(_norm(k) in t for k in COMPANY_EVENT_STRONG_SIGNALS):
-        return False
     return not any(_norm(k) in t for k in MANUFACTURING_ACCOUNTING_CONTEXT)  # §1-2 예외와 동일
 
 
