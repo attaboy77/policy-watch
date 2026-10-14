@@ -20,7 +20,9 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS,
                       NON_TARGET_TAX_SUBJECTS, OPINION_PREFIX_KEYWORDS,
                       STANDARD_SETTER_GOVERNANCE, STANDING_DOC, STANDING_DOC_FRESH_DAYS,
-                      DOC_VARIANT_MODIFIERS)
+                      DOC_VARIANT_MODIFIERS, SELF_ACTIVITY_PUBLIC_SUFFIXES,
+                      SELF_ACTIVITY_PUBLIC_ABBREV_RE, SELF_ACTIVITY_STAKEHOLDERS,
+                      SELF_ACTIVITY_NON_ENTITY_RE, NEWS_MAX_AGE_DAYS)
 from . import _esg_roadmap
 
 
@@ -1209,6 +1211,72 @@ def apply_company_event_filter(items: list[dict]) -> list[dict]:
     호출한다(main.py). `_l3_gate_exempt()`로 L1/L2·tier==1 뉴스는 그대로 면제한다.
     """
     return [it for it in items if _l3_gate_exempt(it) or not is_company_event(it["title"])]
+
+
+# ── 언론 발행일 상한 (2026-10-14 사용자 지시, `_config.NEWS_MAX_AGE_DAYS`) ─────
+def apply_news_age_limit(items: list[dict], today: date | None = None) -> tuple[list[dict], list[dict]]:
+    """L3 중 발행일이 `NEWS_MAX_AGE_DAYS`일보다 오래된 기사를 뺀다. 공식(L1/L2)은 대상 아님."""
+    base = today or datetime.now(timezone(timedelta(hours=9))).date()
+    kept, excluded = [], []
+    for it in items:
+        old = False
+        if layer_of(it) == "L3":
+            try:
+                d = date.fromisoformat((it.get("published_at") or "")[:10])
+                old = (base - d).days > NEWS_MAX_AGE_DAYS
+            except ValueError:
+                pass
+        if old:
+            excluded.append(dict(it, excluded_reason="excluded:news_too_old"))
+        else:
+            kept.append(it)
+    return kept, excluded
+
+
+# ── 기업이 주체인 자사 활동 소식 제외 (2026-10-14 사용자 지시) ─────────────
+# `_config.SELF_ACTIVITY_*` 주석 참고. 주체 추출은 §5의 `extract_subject()`와 따로 둔다 —
+# 두 어절("에머슨 일렉트릭")·한자("지역난방公")까지 잡고 구분자는 쉼표만 쓴다("·"는 "대출
+# 인지세·전산용역…"처럼 나열에 쓰여 오탐). §5 중복 제거 동작은 바꾸지 않는다.
+_ACTOR_SUBJECT_RE = re.compile(r"^([가-힣A-Za-z0-9一-龥&]{1,15}(?:\s[가-힣A-Za-z0-9一-龥&]{1,15})?)\s*,")
+_PUBLIC_ABBREV_RE = re.compile(SELF_ACTIVITY_PUBLIC_ABBREV_RE)
+_NON_ENTITY_RE = re.compile(SELF_ACTIVITY_NON_ENTITY_RE, re.IGNORECASE)
+
+
+def extract_actor_subject(title: str) -> str | None:
+    """"주체, …" 형태 제목의 주체. 없으면 None."""
+    m = _ACTOR_SUBJECT_RE.match(clean_title_for_compare(title))
+    return m.group(1) if m else None
+
+
+def is_public_or_non_entity_subject(subject: str) -> bool:
+    """공적 주체(기관·직함·지자체·위원회 약칭), 기관투자자·거버넌스 단체, 또는 법령·기준명이면 True."""
+    s = subject.replace(" ", "")
+    return (s in SELF_ACTIVITY_STAKEHOLDERS
+            or s.endswith(tuple(SELF_ACTIVITY_PUBLIC_SUFFIXES))
+            or bool(_PUBLIC_ABBREV_RE.match(s))
+            or bool(_LOCAL_GOV_SUBJECT_RE.match(s))
+            or bool(_NON_ENTITY_RE.search(s)))
+
+
+def is_company_self_activity(title: str) -> bool:
+    subject = extract_actor_subject(title)
+    if not subject or is_public_or_non_entity_subject(subject):
+        return False
+    t = _norm(title)
+    if any(_norm(k) in t for k in COMPANY_EVENT_STRONG_SIGNALS):
+        return False
+    return not any(_norm(k) in t for k in MANUFACTURING_ACCOUNTING_CONTEXT)  # §1-2 예외와 동일
+
+
+def apply_company_self_activity_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """L3 전용 — `_l3_gate_exempt()`로 L1/L2·tier==1 뉴스는 면제."""
+    kept, excluded = [], []
+    for it in items:
+        if _l3_gate_exempt(it) or not is_company_self_activity(it.get("title", "")):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:company_self_activity"))
+    return kept, excluded
 
 
 # ── 논평성 기사(칼럼·사설류) 제외 (2026-09-15 사용자 지시) ──────────────────

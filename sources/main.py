@@ -21,8 +21,9 @@ from ._schema import validate as validate_schema
 from ._summarize import summarize
 from .current_standards import build_current_standards
 from ._utils import (apply_applicability_gate, apply_category_caps,
-                     apply_company_event_filter, apply_corporate_pr_filter,
-                     apply_foreign_news_filter, apply_local_gov_petition_filter,
+                     apply_company_event_filter, apply_company_self_activity_filter,
+                     apply_corporate_pr_filter,
+                     apply_foreign_news_filter, apply_local_gov_petition_filter, apply_news_age_limit,
                      apply_non_target_tax_subject_filter, apply_opinion_piece_filter,
                      apply_regulatory_gate, apply_standard_setter_governance_filter,
                      attach_related_news, dedupe,
@@ -310,6 +311,11 @@ def build_data_json(items: list[dict]) -> dict:
     items, excluded = apply_standard_setter_governance_filter(items)
     _record_excluded(excluded)
     _log_stage("기준 제정 절차·조직 자료 제외 후", items, n)
+    # 2026-10-14: 언론(L3) 발행일 1년 상한 — §5 병합 전에 빼서 옛 기사가 대표로 뽑히지도 않게.
+    n = len(items)
+    items, excluded = apply_news_age_limit(items)
+    _record_excluded(excluded)
+    _log_stage("언론 발행일 1년 상한 후", items, n)
     # 2026-10-08: §5·§1에서 빠진 항목도 EXCLUDED_LOG에 남긴다 — 로그가 없어서 10/1~10/8
     # 뉴스 54건이 §5→§1 사이에서 전부 빠지는 동안 8일간 몰랐다.
     n = len(items)
@@ -334,6 +340,11 @@ def build_data_json(items: list[dict]) -> dict:
     n = len(deduped)
     deduped = apply_company_event_filter(deduped)  # ADDENDUM-7 §1
     _log_stage("ADDENDUM-7 §1(개별 기업 소식) 제외 후", deduped, n)
+    # 2026-10-14: 기업이 주체인 자사 활동 소식("한난, 경영진 내부회계 교육 시행" 등).
+    n = len(deduped)
+    deduped, excluded = apply_company_self_activity_filter(deduped)
+    _record_excluded(excluded)
+    _log_stage("기업 주체 자사 활동 소식 제외 후", deduped, n)
     n = len(deduped)
     deduped, excluded = apply_opinion_piece_filter(deduped)  # 2026-09-15
     _record_excluded(excluded)

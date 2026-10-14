@@ -1730,3 +1730,77 @@ def test_doc_variant_paren_without_date_kept():
     b = _off("2023년 국제조세개혁 - 필라2 모범규칙 (제1012호 문단 88B~88D)", "2023-09-15", category="kifrs")
     kept, excluded = dedupe_doc_variants([a, b])
     assert len(kept) == 2 and excluded == []
+
+
+# ── 2026-10-14: 기업이 주체인 자사 활동 소식 ────────────────────────────────
+from sources._utils import (apply_company_self_activity_filter, extract_actor_subject,
+                            is_company_self_activity)
+
+
+class TestCompanySelfActivity:
+    @pytest.mark.parametrize("title", [
+        "한난, '경영진 대상 내부회계 관리교육'…“예방 중심 내부통제 강화”",
+        "한국지역난방공사, '경영진 대상 내부회계 관리 교육' 시행",
+        "지역난방公, 경영진 대상 내부회계 관리 강화",
+        "에머슨 일렉트릭, 퇴직연금 회계처리 방식 변경…시가평가법 도입 - 데이터투자",
+        "하나금융, 공시 넘어 기후금융 관리 강화…KSSB·전환금융 동시 대응 - ESG경제",
+        "해태제과, 증선위 회계위반 제재에 “내부통제·윤리교육 강화” - 에너지경제신문",
+        "수출입은행, 회계처리 위반 기업에 여신 54조…“심사·관리 강화해야” - 한겨레",
+    ])
+    def test_excluded(self, title):
+        assert is_company_self_activity(title)
+
+    @pytest.mark.parametrize("title", [
+        "금융위, 지속가능성 공시 로드맵 이달 발표 목표 - ESG경제",           # ~위 약칭
+        "금감원, PB업무 내부통제 모범규준 시행 - 아시아경제",
+        "한국공인회계사회, 3분기 재무제표 회계투명성·감사품질 강화 유의사항 안내",
+        "이억원 금융위원장, \"ESG공시 일본보다 적극적인 안으로 확정\"",
+        "【단독】청와대, 국민연금 CIO 긴급면담…ESG 공시로드맵 전면 수정하나",
+        "국민연금, 금융위에 ESG 공시 로드맵 '전면 수정' 의견",               # 기관투자자
+        "ICGN, 한국 ESG공시 로드맵 환영…“다른 시장에 모범사례로 소개”",      # 거버넌스 단체
+        "IGCN, \"ESG 공시 로드맵 최종안, 한국 자본시장의 국제적 위상 강화\"",
+        "新외감법, 내부회계관리제도 시스템 도입 필요성 커져",                 # 법령명
+        "ISSA 5000, “인증기준 중 업무 지침 가장 구체적”",                    # 기준명
+        "서울 송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의",
+        "은행권, 내부통제 모범규준 마련...고위험 비예금상품 판매시 손실위험 정확히 설명해야",  # 강한 신호
+        "A전자, 재고자산 평가 방식 변경…저가법 적용 확대",                      # §1-2 제조업 회계
+        "내년 K-IFRS 제1118호 의무 적용…금감원 \"기업들, 도입 준비 철저히 해야\"",  # 주체 없음
+    ])
+    def test_kept(self, title):
+        assert not is_company_self_activity(title)
+
+    def test_middle_dot_is_not_subject_separator(self):
+        """오탐 수정: "·"는 나열에 쓰여 주체 구분자로 쓰지 않는다."""
+        assert extract_actor_subject("대출 인지세·전산용역 부가세 면제 종료…농가 실익 축소 우려") is None
+
+    def test_official_and_tier1_exempt(self):
+        title = "한난, 경영진 대상 내부회계관리 교육 실시…위험관리 강화"
+        official = {"title": title, "layer": "L1", "source": {"type": "official", "tier": 1}}
+        news = {"title": title, "layer": "L3", "source": {"type": "news", "tier": 3}}
+        kept, excluded = apply_company_self_activity_filter([official, news])
+        assert kept == [official]
+        assert excluded[0]["excluded_reason"] == "excluded:company_self_activity"
+
+
+# ── 2026-10-14: 언론 발행일 상한 ──────────────────────────────────────────
+from sources._utils import apply_news_age_limit
+
+
+class TestNewsAgeLimit:
+    TODAY = date(2026, 10, 14)
+
+    def test_old_news_dropped_official_kept(self):
+        old_news = {"layer": "L3", "published_at": "2011-04-11", "title": "a"}
+        edge_news = {"layer": "L3", "published_at": "2025-10-14", "title": "b"}   # 정확히 365일 — 남김
+        new_news = {"layer": "L3", "published_at": "2026-10-13", "title": "c"}
+        old_official = {"layer": "L1", "published_at": "2012-12-01", "title": "d"}
+        kept, excluded = apply_news_age_limit([old_news, edge_news, new_news, old_official], today=self.TODAY)
+        assert kept == [edge_news, new_news, old_official]
+        assert [e["title"] for e in excluded] == ["a"]
+        assert excluded[0]["excluded_reason"] == "excluded:news_too_old"
+
+    @pytest.mark.parametrize("published_at", [None, "", "날짜없음"])
+    def test_missing_or_bad_date_kept(self, published_at):
+        item = {"layer": "L3", "published_at": published_at, "title": "x"}
+        kept, _ = apply_news_age_limit([item], today=self.TODAY)
+        assert kept == [item]
