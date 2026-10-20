@@ -182,6 +182,13 @@
     return state.doctypes.indexOf("논의자료") !== -1;
   }
 
+  // 2026-10-20 사용자 지시: 요약(ai_generated)이 붙은 논의자료는 기본 조회와 최근
+  // 정책동향에도 보인다 — 메일은 원래 논의자료를 빼지 않아 메일에만 오던 걸 화면이
+  // 따라가게 한 것. 요약 없는 논의자료(제목만)는 여전히 노이즈로 보고 뺀다.
+  function isHiddenDiscussion(it) {
+    return it.doc_type === "논의자료" && !it.ai_generated;
+  }
+
   // ADDENDUM-7 §3 안 A: "해외기준"(IASB/ISSB)도 논의자료와 같은 방식 —
   // 완전 제외가 아니라 기본 조회/오늘의 정책동향에서만 빼고, 문서종류 필터에서
   // 직접 선택했을 때만 보여준다.
@@ -196,7 +203,7 @@
     return items.filter(function (it) {
       if (state.cats.length && state.cats.indexOf(it.category) === -1) return false;
       if (state.doctypes.length && state.doctypes.indexOf(it.doc_type) === -1) return false;
-      if (it.doc_type === "논의자료" && !showDiscussion) return false;
+      if (isHiddenDiscussion(it) && !showDiscussion) return false;
       if (it.doc_type === "해외기준" && !showForeign) return false;
       if (!matchesQuery(it, state.q)) return false;
       if (it.is_static && !wideRange) return false;
@@ -764,11 +771,12 @@
   // 헤더의 기간 안내도 "확대됐을 때만" 뜨던 걸 넓힌 기간을 항상 명시하도록 바꿨다.
   var TODAY_VIEW_WINDOWS = [1, 3, 7, 14, 30];
   var TODAY_VIEW_MIN_ITEMS = 5;
+  var TODAY_VIEW_MIN_OFFICIAL = 1;
 
   function renderTodayView() {
     var day = (DATA.meta && DATA.meta.generated_at) ? DATA.meta.generated_at.slice(0, 10) : todayISO();
     var pool = DATA.items.filter(function (it) {
-      return !it.is_static && it.doc_type !== "논의자료" && it.doc_type !== "해외기준";
+      return !it.is_static && !isHiddenDiscussion(it) && it.doc_type !== "해외기준";
     });
 
     var windowDays = TODAY_VIEW_WINDOWS[0];
@@ -778,7 +786,10 @@
       windowDays = TODAY_VIEW_WINDOWS[i];
       from = addDaysISO(day, -(windowDays - 1));
       todays = pool.filter(function (it) { return it.published_at >= from && it.published_at <= day; });
-      if (todays.length >= TODAY_VIEW_MIN_ITEMS) break;
+      // 2026-10-20: 보도만으로 5건이 차면 공식을 놓쳐서(10/20 "공식 0건 · 보도 5건",
+      // 30일 안 공식 9건) 공식이 1건 이상일 때만 멈춘다. 30일에서는 무조건 멈춘다.
+      var officialCount = todays.filter(function (it) { return it.source && it.source.type === "official"; }).length;
+      if (officialCount >= TODAY_VIEW_MIN_OFFICIAL && todays.length >= TODAY_VIEW_MIN_ITEMS) break;
     }
     var expanded = windowDays > 1;
 
