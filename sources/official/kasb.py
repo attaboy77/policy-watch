@@ -550,12 +550,12 @@ def fetch_qna() -> list[dict]:
         if link is None:
             continue
         title = link.get_text(strip=True)
-        m = re.search(r"fn_Detail\('(\d+)'", link.get("onclick", ""))
+        m = _QNA_DETAIL_RE.search(link.get("onclick", ""))
         if not title or not m:
             continue
         if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
             continue
-        seq = m.group(1)
+        seq, ctg_cd = m.group(1), m.group(2)
         date_p = row.select_one(".board_date")
         replied_at = date_p.get_text(strip=True) if date_p else None
         if not replied_at:
@@ -565,13 +565,15 @@ def fetch_qna() -> list[dict]:
             disclosed_at = cells[disclosed_idx].get_text(strip=True) or None
             if disclosed_at and not _ISO_DATE_RE.match(disclosed_at):
                 disclosed_at = None
-        url = f"{QNA_LIST_URL}#{seq}"  # A3도 상세 URL 패턴 미확정 — 동일하게 앵커로 대체
+        url = _qna_detail_url(seq, ctg_cd)
         tier, trust_score, source_name = trust_of(url)
         item = _build_item(
             category="kifrs", title=title, url=url,
             published_at=_qna_published_at(replied_at, disclosed_at, today),
             doc_type="질의회신", effective_date=None,
             tier=tier, trust_score=trust_score, source_name=source_name,
+            # id는 예전 링크(목록+#seq) 그대로 — 요약 캐시·sent_log가 id로 연결돼 있다.
+            id_source=f"{QNA_LIST_URL}#{seq}",
         )
         item["replied_at"] = replied_at
         item["disclosed_at"] = disclosed_at
@@ -580,6 +582,15 @@ def fetch_qna() -> list[dict]:
 
 
 _ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+_QNA_DETAIL_RE = re.compile(r"fn_Detail\('(\d+)'\s*,\s*'(\d+)'")
+
+
+def _qna_detail_url(seq: str, ctg_cd: str) -> str:
+    """질의회신 상세 페이지 URL(2026-10-20). 목록의 fn_Detail(seq, ctgCd)이
+    GET 폼을 `/front/board/View{ctgCd}.do`로 보내는 걸 그대로 조립한다 — 분류마다
+    경로가 다르다(016002 IFRS 해석위원회, 016008 정착지원TF, 016009 등 실측)."""
+    return (f"{BASE}/front/board/View{ctg_cd}.do"
+            f"?siteCd=002000000000000&seq={seq}&ctgCd={ctg_cd}&replySummary=Y")
 
 
 def _qna_disclosed_column_index(soup: BeautifulSoup) -> int | None:

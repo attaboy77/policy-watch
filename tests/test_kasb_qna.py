@@ -60,3 +60,22 @@ def test_id_does_not_depend_on_dates(monkeypatch):
     a = _fetch(monkeypatch, _HEAD + _row("40687", "t", "2026-04-30", "2026-09-29") + "</tbody></table>")[0]
     b = _fetch(monkeypatch, _HEAD + _row("40687", "t", "2026-04-30", "") + "</tbody></table>")[0]
     assert a["id"] == b["id"] == make_id_exact(f"{kasb.QNA_LIST_URL}#40687") == "0d5770fb95813c22"
+
+
+def test_link_is_detail_page_but_id_stays_list_anchor(monkeypatch):
+    # 2026-10-20: 링크는 상세 페이지로, id는 예전 목록+#seq 그대로(요약 캐시·sent_log 연결 유지).
+    html = _HEAD + _row("40687", "t", "2026-04-30", "2026-09-29") + "</tbody></table>"
+    [it] = _fetch(monkeypatch, html)
+    assert it["urls"]["official"] == (
+        "https://www.kasb.or.kr/front/board/View016002.do"
+        "?siteCd=002000000000000&seq=40687&ctgCd=016002&replySummary=Y")
+    assert it["id"] == "0d5770fb95813c22"
+
+
+def test_detail_url_follows_category_code(monkeypatch):
+    html = (_HEAD + _row("40689", "제1118호 정착지원 TF 논의 내용(5차)", "2026-10-16", "")
+            .replace("'016002'", "'016008'") + "</tbody></table>")
+    [it] = _fetch(monkeypatch, html)
+    assert "/View016008.do?" in it["urls"]["official"]
+    assert "seq=40689&ctgCd=016008" in it["urls"]["official"]
+    assert it["id"] == make_id_exact(f"{kasb.QNA_LIST_URL}#40689")
