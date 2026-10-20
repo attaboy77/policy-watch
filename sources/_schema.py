@@ -131,6 +131,9 @@ _ITEM_SCHEMA = {
         # (kasb._qna_published_at() 참고).
         "replied_at": {"type": ["string", "null"]},
         "disclosed_at": {"type": ["string", "null"]},
+        # 2026-10-20: KASB 질의회신 첨부 hwpx의 요약 입력용 발췌(그 외는 null,
+        # kasb._qna_excerpt() 참고). 화면에는 쓰지 않는다.
+        "attachment_text": {"type": ["string", "null"]},
     },
 }
 

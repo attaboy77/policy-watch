@@ -27,8 +27,11 @@ docs/SOURCE_PROBE.md §A 조사 결과에 기반한다.
 """
 from __future__ import annotations
 
+import io
 import re
 import time
+import xml.etree.ElementTree as ET
+import zipfile
 from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
@@ -52,6 +55,10 @@ BASE = "https://www.kasb.or.kr"
 NOTICE_LIST_URL = f"{BASE}/front/board/comm010List.do"
 NOTICE_VIEW_URL = f"{BASE}/front/board/comm010View.do"
 QNA_LIST_URL = f"{BASE}/front/board/allReplySummaryList.do"
+# fileDownload(fileNo, fileSeq) JS는 POST로 보내지만 같은 값을 GET 쿼리로 줘도 같은 파일이 온다(2026-10-20 실측).
+FILE_DOWNLOAD_URL = f"{BASE}/commonFile/fileDownload.do"
+# 질의회신 첨부 hwpx 발췌 상한(글자 수). 5차 TF 자료 전문이 4.8만 자라 요약 입력용으로 앞부분만 남긴다.
+QNA_ATTACHMENT_TEXT_LIMIT = 6000
 STANDARD_LIST_URLS = [f"{BASE}/front/board/List300{n}.do" for n in range(3, 9)]  # List3003~List3008
 # calListA.do(=bu=A, "회계기준" 메뉴 하위)를 쓴다(2026-08-31 사용자 지시).
 # 실측 확인: calList.do(접미사 없음)·calListB.do와 행 데이터가 완전히 동일한
@@ -528,7 +535,7 @@ def fetch_standards() -> list[dict]:
     return items
 
 
-def fetch_qna() -> list[dict]:
+def fetch_qna(*, fetch_attachments: bool = True) -> list[dict]:
     """A3: 질의회신요약. doc_type을 게시판 단위로 '질의회신' 고정한다.
 
     상단에 날짜 없이 고정된 항목들은 실측 결과 "일반기업회계기준 질의회신 비교표"
@@ -536,6 +543,11 @@ def fetch_qna() -> list[dict]:
     날짜 있는 항목은 실제로 K-IFRS 관련("K-IFRS 제1118호 정착지원 TF" 등, 1000번대
     확인됨)이라 그대로 둔다. 날짜 유무가 곧 "일반기업회계기준 고정자료 여부"와 일치해
     별도 제목 키워드 필터 없이 published_at 유무만으로 걸러도 된다(사용자 지시 2026-08-26).
+
+    2026-10-20: 행에 hwpx 첨부가 있으면 받아서 발췌를 `attachment_text`에 넣는다
+    (정착지원 TF 회의자료는 상세 페이지 본문이 없고 내용이 첨부에만 있다). 첨부 번호는
+    목록 행에 있어 상세 페이지는 열지 않는다. 구형 hwp·PDF는 새 의존성이 필요해 건너뛴다.
+    받기·읽기에 실패하면 그 항목만 None으로 두고 계속한다.
     """
     resp = _http.get(QNA_LIST_URL)
     soup = BeautifulSoup(resp.text, "html.parser")
@@ -577,12 +589,91 @@ def fetch_qna() -> list[dict]:
         )
         item["replied_at"] = replied_at
         item["disclosed_at"] = disclosed_at
+        item["attachment_text"] = _qna_attachment_text(row, seq) if fetch_attachments else None
         items.append(item)
     return items
 
 
 _ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _QNA_DETAIL_RE = re.compile(r"fn_Detail\('(\d+)'\s*,\s*'(\d+)'")
+
+
+_HWPX_FILE_RE = re.compile(r"fileDownload\('(-?\d+)'\s*,\s*'(\d+)'\)")
+_HWPX_SECTION_RE = re.compile(r"Contents/section\d+\.xml$")
+_QNA_AGENDA_RE = re.compile(r"^안건\s*\.?\s*\d+$")
+_QNA_HEADING_RE = re.compile(r"^\d+\.\s")
+
+
+def _qna_attachment_text(row, seq: str) -> str | None:
+    """목록 행의 첫 hwpx 첨부를 받아 발췌를 돌려준다. 없거나 실패하면 None."""
+    for a in row.select("a[onclick*=fileDownload]"):
+        name = a.get_text(strip=True)
+        if not name.lower().endswith(".hwpx"):
+            continue
+        m = _HWPX_FILE_RE.search(a.get("onclick", ""))
+        if not m:
+            continue
+        try:
+            resp = _http.get(FILE_DOWNLOAD_URL, params={"fileNo": m.group(1), "fileSeq": m.group(2)},
+                             timeout=20, retries=1)
+            text = _qna_excerpt(_hwpx_paragraphs(resp.content))
+        except Exception as exc:  # noqa: BLE001 - 첨부 하나 실패해도 수집은 계속
+            print(f"[kasb] qna seq={seq} 첨부 hwpx 읽기 실패: {exc}")
+            return None
+        return text or None
+    return None
+
+
+def _hwpx_paragraphs(content: bytes) -> list[str]:
+    """hwpx(zip) 본문 문단 텍스트. 표 안 문단이 바깥 문단에 중복으로 잡히지 않게
+    가장 안쪽 문단(<hp:p>)만 쓴다."""
+    out: list[str] = []
+    with zipfile.ZipFile(io.BytesIO(content)) as z:
+        for name in sorted(n for n in z.namelist() if _HWPX_SECTION_RE.search(n)):
+            root = ET.fromstring(z.read(name))
+            for p in root.iter():
+                if not p.tag.endswith("}p"):
+                    continue
+                if any(q is not p and q.tag.endswith("}p") for q in p.iter()):
+                    continue
+                s = "".join(t.text or "" for t in p.iter() if t.tag.endswith("}t")).strip()
+                if s:
+                    out.append(s)
+    return out
+
+
+def _qna_excerpt(paras: list[str], limit: int = QNA_ATTACHMENT_TEXT_LIMIT) -> str:
+    """요약 입력용 발췌: 첫 안건 앞(표지·순서) + 안건마다 제목과 "논의" 절.
+
+    정착지원 TF 자료는 안건마다 "1. 현황 / 2. 쟁점사항 / 3. 주요 논의내용 / 1. 관련
+    기준서 등" 구조라(4·5차 실측), 번호 제목에 "논의"가 든 절만 결론으로 본다.
+    상한은 안건 수로 나눠 안건마다 앞부분을 남긴다 — 통째로 자르면 뒤 안건 결론이
+    빠진다(5차 발췌 8.3천 자, 4차 2.1만 자). "안건.N" 구조가 없으면 앞에서부터 자른다.
+    """
+    paras = [s for s in paras if re.search(r"\w", s)]  # 표지의 "/" 같은 장식 줄
+    agenda_idx = [i for i, s in enumerate(paras) if _QNA_AGENDA_RE.match(s)]
+    if not agenda_idx:
+        return _cut("\n".join(paras), limit)
+    head = "\n".join(paras[:agenda_idx[0]])
+    bounds = agenda_idx + [len(paras)]
+    budget = max((limit - len(head)) // len(agenda_idx), 200)
+    parts = [head]
+    for start, end in zip(bounds, bounds[1:]):
+        block = paras[start:end]
+        picked = [" ".join(block[:2])]  # "안건.1" + 안건 제목
+        in_discussion = False
+        for s in block[2:]:
+            if _QNA_HEADING_RE.match(s):
+                in_discussion = "논의" in s
+            # 5차 안건 5처럼 "논의" 제목 없이 쟁점 뒤에 바로 위원 의견이 오는 경우도 있다.
+            if in_discussion or (s[:1] in "□ㅇ" and "위원" in s):
+                picked.append(s)
+        parts.append(_cut("\n".join(picked), budget))
+    return _cut("\n".join(parts), limit)
+
+
+def _cut(text: str, limit: int) -> str:
+    return text if len(text) <= limit else text[:limit - 1].rstrip() + "…"
 
 
 def _qna_detail_url(seq: str, ctg_cd: str) -> str:

@@ -65,3 +65,5 @@ if __name__ == "__main__":
         url = (it.get("urls") or {}).get("official") or (it.get("urls") or {}).get("news")
         print(f"  [{it['category']:5s}][{it['doc_type']:8s}] id={it['id']} | {it['title']}")
         print(f"      원문: {url}")
+        if it.get("attachment_text"):  # 2026-10-20: 본문 없이 첨부에만 내용이 있는 질의회신
+            print(f"      첨부 발췌: {len(it['attachment_text'])}자 (data.json attachment_text)")
