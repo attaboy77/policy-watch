@@ -134,6 +134,8 @@ _ITEM_SCHEMA = {
         # 2026-10-20: KASB 질의회신 첨부 hwpx의 요약 입력용 발췌(그 외는 null,
         # kasb._qna_excerpt() 참고). 화면에는 쓰지 않는다.
         "attachment_text": {"type": ["string", "null"]},
+        # 2026-10-20: 메일 신규·화면 기본 조회 공통 제외 사유(_utils.feed_hidden_reason()).
+        "hidden_reason": {"enum": ["static", "foreign", "meeting", None]},
     },
 }
 

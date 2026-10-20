@@ -1387,7 +1387,7 @@ ITEM_FIELDS = [
     "urls", "law_meta", "attachments",
     "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
     "is_meeting_schedule", "ai_generated", "revision_reason", "is_roadmap_estimate",
-    "effective_date_note", "replied_at", "disclosed_at", "attachment_text",
+    "effective_date_note", "replied_at", "disclosed_at", "attachment_text", "hidden_reason",
 ]
 
 # 2026-09-02 사용자 지시: KSSB 자발적용 기준서(doc_type="자발적용")는 자체
@@ -1423,6 +1423,24 @@ def has_fiscal_year_override(item_id: str) -> bool:
     return item_id in _FISCAL_YEAR_EFFECTIVE_DATES
 
 
+# 2026-10-20: 기본 노출 제외 사유 — 메일 신규(notify_mail)와 화면 기본 조회(app.js)가
+# 같은 판정을 쓰도록 한 곳에서 정한다(전엔 메일·화면 규칙이 따로 놀아 "메일엔 왔는데 화면엔
+# 없음"이 반복됐다). 메일은 사유가 있으면 항상 빼고, 화면은 사유별로 다시 보는 방법이 있다
+# (static: 기간을 90일 넘게 넓히면, foreign: 문서종류 직접 선택 시, meeting: 화면은 그대로 노출).
+# 논의자료는 사유가 아니다 — 메일·화면 모두 보낸다/보인다(사용자 결정: 요약은 나중에 수동).
+HIDDEN_REASONS = ("static", "foreign", "meeting")
+
+
+def feed_hidden_reason(item: dict) -> str | None:
+    if item.get("is_static"):
+        return "static"
+    if item.get("doc_type") == "해외기준":
+        return "foreign"
+    if item.get("is_meeting_schedule"):  # 위원회 회의 예정 공지 — 의결 자료가 나오면 그게 소식
+        return "meeting"
+    return None
+
+
 def finalize_item(item: dict) -> dict:
     """stage를 계산해 채우고, published_at 결측 시 collected_at 날짜로 대체하고
     (SPEC §4 필드 규칙), 신규 필드(is_static/date_estimated/duplicate_*/related_news)에
@@ -1452,6 +1470,7 @@ def finalize_item(item: dict) -> dict:
     out["duplicate_count"] = int(item.get("duplicate_count") or 0)
     out["duplicate_sources"] = item.get("duplicate_sources") or []
     out["related_news"] = item.get("related_news") or []
+    out["hidden_reason"] = feed_hidden_reason(out)
     # KSSB 자발적용 기준서에 로드맵 1차 마일스톤 날짜를 채운다. 이미 실제
     # effective_date가 있으면(향후 다른 소스가 채울 수도 있으니) 덮어쓰지
     # 않는다 — is_roadmap_estimate는 "이 effective_date가 확정이 아니라

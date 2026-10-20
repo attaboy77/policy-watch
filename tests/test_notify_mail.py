@@ -683,7 +683,17 @@ class TestExcludeStaticItems:
 
     def test_static_items_dropped(self):
         items = [_item(id="a", is_static=True), _item(id="b", is_static=False), _item(id="c")]
-        assert [it["id"] for it in nm.exclude_static_items(items)] == ["b", "c"]
+        kept, dropped = nm.exclude_hidden_items(items)
+        assert [it["id"] for it in kept] == ["b", "c"]
+        assert dropped == {"static": 1}
+
+    def test_foreign_and_meeting_dropped_but_discussion_kept(self):
+        # 2026-10-20: 화면 기본 조회와 같은 판정. 논의자료는 메일로 보낸다(요약은 나중에 수동).
+        items = [_item(id="f", doc_type="해외기준"), _item(id="m", is_meeting_schedule=True),
+                 _item(id="d", doc_type="논의자료"), _item(id="q", doc_type="질의회신")]
+        kept, dropped = nm.exclude_hidden_items(items)
+        assert [it["id"] for it in kept] == ["d", "q"]
+        assert dropped == {"foreign": 1, "meeting": 1}
 
 
 class TestPartialFallbackNotice:

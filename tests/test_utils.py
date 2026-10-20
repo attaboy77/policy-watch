@@ -417,6 +417,14 @@ class TestFinalizeItem:
         out = finalize_item(self._item(doc_type="공개초안"))
         assert out["stage"] == "의견수렴"
 
+    def test_hidden_reason(self):
+        # 2026-10-20: 메일 신규·화면 기본 조회 공통 제외 사유. 논의자료는 사유가 아니다.
+        assert finalize_item(self._item())["hidden_reason"] is None
+        assert finalize_item(self._item(is_static=True))["hidden_reason"] == "static"
+        assert finalize_item(self._item(title="IASB 공개초안 발표"))["hidden_reason"] == "foreign"
+        assert finalize_item(self._item(is_meeting_schedule=True))["hidden_reason"] == "meeting"
+        assert finalize_item(self._item(title="제1118호 정착지원 TF 논의 내용(6차)"))["hidden_reason"] is None
+
     def test_published_at_falls_back_to_collected_at_date(self):
         out = finalize_item(self._item(published_at=None))
         assert out["published_at"] == "2026-08-26"

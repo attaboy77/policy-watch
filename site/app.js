@@ -174,39 +174,31 @@
     return (new Date(state.to) - new Date(state.from)) / 864e5 > STATIC_DEFAULT_WINDOW_DAYS;
   }
 
-  // 2026-08-28 피드백: "논의자료"(TF·실무그룹 중간 산출물)는 기본 조회/오늘의
-  // 정책동향에서 제외하고, 문서종류 필터에서 "논의자료"를 직접 선택했을 때만
-  // 보여준다. 상설자료와 달리 발행일이 최근일 수 있어 날짜 범위로는 못 거르므로
-  // (상설자료의 "기간을 넓히면 보임" 방식이 아니라) 문서종류 선택 여부로만 게이팅한다.
-  function showsDiscussionMaterial() {
-    return state.doctypes.indexOf("논의자료") !== -1;
+  // 2026-10-20: 기본 노출 제외 사유는 수집 단계(_utils.feed_hidden_reason)가 정해
+  // data.json의 hidden_reason에 담고, 메일과 화면이 같은 값을 쓴다. 화면은 사유별로
+  // 다시 보는 방법만 다르다 — static: 기간을 90일 넘게 넓히면, foreign: 문서종류에서
+  // "해외기준"을 직접 고르면 보인다. meeting(위원회 회의 예정)은 메일에서만 빼고 화면엔
+  // 그대로 둔다(사용자 결정). 논의자료는 사유가 아니라 메일·화면 모두 보인다
+  // (2026-08-28 "직접 선택 시에만" → 10/20 "요약 있으면" → 10/20 메일과 같게 전부).
+  function hiddenReason(it) {
+    if (it.hidden_reason !== undefined) return it.hidden_reason;
+    return it.is_static ? "static" : it.doc_type === "해외기준" ? "foreign" : null;  // 필드 도입 전 데이터
   }
 
-  // 2026-10-20 사용자 지시: 요약(ai_generated)이 붙은 논의자료는 기본 조회와 최근
-  // 정책동향에도 보인다 — 메일은 원래 논의자료를 빼지 않아 메일에만 오던 걸 화면이
-  // 따라가게 한 것. 요약 없는 논의자료(제목만)는 여전히 노이즈로 보고 뺀다.
-  function isHiddenDiscussion(it) {
-    return it.doc_type === "논의자료" && !it.ai_generated;
-  }
-
-  // ADDENDUM-7 §3 안 A: "해외기준"(IASB/ISSB)도 논의자료와 같은 방식 —
-  // 완전 제외가 아니라 기본 조회/오늘의 정책동향에서만 빼고, 문서종류 필터에서
-  // 직접 선택했을 때만 보여준다.
   function showsForeignStandard() {
     return state.doctypes.indexOf("해외기준") !== -1;
   }
 
   function filterItems(items) {
     var wideRange = isWideDateRange();
-    var showDiscussion = showsDiscussionMaterial();
     var showForeign = showsForeignStandard();
     return items.filter(function (it) {
       if (state.cats.length && state.cats.indexOf(it.category) === -1) return false;
       if (state.doctypes.length && state.doctypes.indexOf(it.doc_type) === -1) return false;
-      if (isHiddenDiscussion(it) && !showDiscussion) return false;
-      if (it.doc_type === "해외기준" && !showForeign) return false;
+      var reason = hiddenReason(it);
+      if (reason === "foreign" && !showForeign) return false;
       if (!matchesQuery(it, state.q)) return false;
-      if (it.is_static && !wideRange) return false;
+      if (reason === "static" && !wideRange) return false;
       if (it.published_at < state.from || it.published_at > state.to) return false;
       return true;
     });
@@ -776,7 +768,8 @@
   function renderTodayView() {
     var day = (DATA.meta && DATA.meta.generated_at) ? DATA.meta.generated_at.slice(0, 10) : todayISO();
     var pool = DATA.items.filter(function (it) {
-      return !it.is_static && !isHiddenDiscussion(it) && it.doc_type !== "해외기준";
+      var reason = hiddenReason(it);
+      return reason !== "static" && reason !== "foreign";
     });
 
     var windowDays = TODAY_VIEW_WINDOWS[0];

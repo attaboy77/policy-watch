@@ -50,6 +50,7 @@ from email.utils import formataddr
 
 from . import _sent_log
 from ._config import CATEGORIES, SOURCE_LABELS
+from ._utils import feed_hidden_reason
 
 _KST = timezone(timedelta(hours=9))
 DEFAULT_DASHBOARD_URL = "https://attaboy77.github.io/policy-watch/"
@@ -142,11 +143,23 @@ def find_new_items(prev_items: list[dict], current_items: list[dict],
     return [it for it in current_items if it.get("id") not in excluded_ids]
 
 
-def exclude_static_items(items: list[dict]) -> list[dict]:
-    """2026-10-14: 상설 자료(is_static)를 뺀다 — 옛 기준 문서가 수집 누락 후 복귀하며
-    "신규"로 재발송되는 걸 막는다(새 개정은 `_utils.mark_standing_documents`가 일정
-    기간 is_static=False로 둬서 그대로 통과)."""
-    return [it for it in items if not it.get("is_static")]
+_HIDDEN_REASON_LABELS = {"static": "상설 자료", "foreign": "해외기준", "meeting": "위원회 회의 예정"}
+
+
+def exclude_hidden_items(items: list[dict]) -> tuple[list[dict], dict[str, int]]:
+    """화면 기본 조회와 같은 제외 사유(`_utils.feed_hidden_reason`)가 있는 항목을 뺀다.
+
+    2026-10-14 상설 자료(옛 기준 문서가 수집 누락 후 복귀하며 재발송되던 것)에서 시작해,
+    2026-10-20 해외기준·위원회 회의 예정까지 화면과 같은 판정으로 맞췄다.
+    (남은 항목, 사유별 제외 건수)를 돌려준다."""
+    kept, dropped = [], {}
+    for it in items:
+        reason = feed_hidden_reason(it)
+        if reason:
+            dropped[reason] = dropped.get(reason, 0) + 1
+        else:
+            kept.append(it)
+    return kept, dropped
 
 
 # 2026-09-10: "어제·오늘"의 "어제"만큼 며칠 전까지 허용할지. 0=오늘만,
@@ -373,14 +386,11 @@ def _run() -> None:
             return
         new_items = []
 
-    # 2026-10-14: 상설 기준 문서(is_static)는 메일 신규에서 뺀다 — 수집이 하루 빠졌다
-    # 돌아오는 등으로 id가 "직전 data.json에 없음"이 돼도 옛 기준 문서가 재발송되지 않게.
-    # 새 개정은 게시 후 일정 기간 is_static=False라 그대로 신규로 잡힌다
-    # (`_utils.mark_standing_documents`).
-    non_static = exclude_static_items(new_items)
-    if len(non_static) < len(new_items):
-        print(f"[notify_mail] 상설 자료 {len(new_items) - len(non_static)}건 메일에서 제외")
-    new_items = non_static
+    # 2026-10-14 상설 기준 문서, 2026-10-20 해외기준·회의 예정 — 화면 기본 조회와 같은
+    # 판정(`_utils.feed_hidden_reason`)으로 메일 신규에서 뺀다.
+    new_items, dropped = exclude_hidden_items(new_items)
+    for reason, n in dropped.items():
+        print(f"[notify_mail] {_HIDDEN_REASON_LABELS.get(reason, reason)} {n}건 메일에서 제외")
 
     new_official = [it for it in new_items if is_official(it)]
     new_news = [it for it in new_items if not is_official(it)]
