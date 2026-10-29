@@ -24,7 +24,6 @@
 - 키워드 필터마다 **예외(오버라이드) 단어**가 있다 — 표의 "예외" 칸을 본다.
 - 소스 수집이 실패하면 **전일 캐시**(`data/source_cache.json`)가 그대로 들어간다(`main._use_fallback`). 오늘 없어진 글이 하루 더 보일 수 있다.
 - 논의자료(`doc_type="논의자료"`)는 숨김 사유가 **아니다** — 메일·화면 모두 나온다(§3).
-- 위원회 회의 예정(`meeting`)은 메일에서만 빠지고 화면엔 나온다(§3).
 
 ---
 
@@ -95,7 +94,7 @@ data.json에는 남는다. 메일·화면이 이 값을 보고 따로 거른다(
 |---|---|---|---|---|
 | `is_static` → `hidden_reason="static"` | (가) FSS B3 수집분은 항상. (나) 공식 + icfr + doc_type이 모범규준·적용지침·FAQ이거나 제목에 "가이드라인": 게시일이 30일 이내가 아니면(날짜 추정 포함) static, 이내면 static 해제 (`mark_standing_documents`) | 제외 | 최근 정책동향 제외. 전체 동향은 기간을 90일 넘게 잡을 때만 나오고 맨 아래 정렬 | ADDENDUM-4 §2(8/31) · 10/14: 옛 기준 문서 6건이 수집 복귀하며 재발송 |
 | `doc_type="해외기준"` → `hidden_reason="foreign"` | 제목에 IASB/ISSB가 있고 국내 도입 맥락(회계기준위원회·지속가능성기준위원회·KSSB·국내 도입 …)이 없음 | 제외 | 최근 정책동향 제외. 전체 동향은 문서 종류에서 "해외기준"을 직접 고를 때만 | ADDENDUM-7 §3 안 A(8/31) · K-IFRS 원천이라 수집은 유지 · 메일 제외 10/20 |
-| `is_meeting_schedule` → `hidden_reason="meeting"` | KASB 주요일정(C)에서 온 위원회 회의 항목 | 제외 | **그대로 나옴**(캘린더에서만 빠짐, §5) | 10/20 · 의결 자료가 나오면 그게 소식 |
+| `is_meeting_schedule` → `hidden_reason="meeting"` | KASB 주요일정(C)에서 온 위원회 회의 항목 | 제외 | 제외(최근 정책동향·전체 동향·캘린더 모두, 다시 보는 방법 없음) | 메일 10/20 · 화면 10/29 · 의결 자료가 나오면 그게 소식 |
 | `doc_type="논의자료"` | 제목에 TF·태스크포스·논의 내용·회의 결과·진행 경과·워킹그룹 등이 있고 의결·공표·제정·개정·확정이 없음 | **나옴** | **나옴** | 8/28 분류 도입 · 10/20 숨김 해제("메일·화면 둘 다 보인다") |
 
 우선순위는 static → foreign → meeting(`_utils.feed_hidden_reason`). 메일과 화면이 같은 함수 결과(`hidden_reason`)를 쓴다(10/20 통일).
@@ -120,11 +119,11 @@ data.json에는 남는다. 메일·화면이 이 값을 보고 따로 거른다(
 
 | 화면 | 거르는 것 | 도입 · 이유 |
 |---|---|---|
-| 최근 정책동향 (`renderTodayView`) | `hidden_reason`이 static·foreign. 기간은 1→3→7→14→30일로 늘리며 **5건 이상 + 공식 1건 이상**이 되면 멈춤(30일에서 무조건 멈춤). 검색어는 기간을 정한 뒤 그 안에서만 적용 | 9/1 이름·점진 확대 · 10/20 공식 1건 조건(보도만 5건으로 공식을 놓침) |
-| 전체 동향 (`filterItems`) | 카테고리·문서 종류·기간(기본 최근 30일)·검색어. foreign은 "해외기준"을 직접 골라야, static은 기간 90일 초과일 때만. static은 정렬에서 항상 아래 | ADDENDUM-4 §2-4 · 8/28 · 10/20 hidden_reason 통일 |
+| 최근 정책동향 (`renderTodayView`) | `hidden_reason`이 있는 항목 전부(static·foreign·meeting). 기간은 1→3→7→14→30일로 늘리며 **5건 이상 + 공식 1건 이상**이 되면 멈춤(30일에서 무조건 멈춤). 검색어는 기간을 정한 뒤 그 안에서만 적용 | 9/1 이름·점진 확대 · 10/20 공식 1건 조건(보도만 5건으로 공식을 놓침) |
+| 전체 동향 (`filterItems`) | 카테고리·문서 종류·기간(기본 최근 30일)·검색어. meeting은 항상 제외, foreign은 "해외기준"을 직접 골라야, static은 기간 90일 초과일 때만. static은 정렬에서 항상 아래 | ADDENDUM-4 §2-4 · 8/28 · 10/20 hidden_reason 통일 · 10/29 meeting 제외 |
 | 캘린더 (`schedules.build_schedules`) | `effective_date` 있는 항목 + `data/schedules_manual.yml`. **위원회 회의 예정(`is_meeting_schedule`)은 제외** | 9/14 · 회의 일정이 실제 시행일과 섞임 |
 
-`hidden_reason` 필드가 없는 옛 data.json이면 화면은 `is_static`·`doc_type="해외기준"`으로 대신 판정한다(meeting은 판정 안 함).
+`hidden_reason` 필드가 없는 옛 data.json이면 화면은 `is_static`·`doc_type="해외기준"`·`is_meeting_schedule`로 대신 판정한다.
 
 ---
 

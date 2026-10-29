@@ -1426,7 +1426,7 @@ def has_fiscal_year_override(item_id: str) -> bool:
 # 2026-10-20: 기본 노출 제외 사유 — 메일 신규(notify_mail)와 화면 기본 조회(app.js)가
 # 같은 판정을 쓰도록 한 곳에서 정한다(전엔 메일·화면 규칙이 따로 놀아 "메일엔 왔는데 화면엔
 # 없음"이 반복됐다). 메일은 사유가 있으면 항상 빼고, 화면은 사유별로 다시 보는 방법이 있다
-# (static: 기간을 90일 넘게 넓히면, foreign: 문서종류 직접 선택 시, meeting: 화면은 그대로 노출).
+# (static: 기간을 90일 넘게 넓히면, foreign: 문서종류 직접 선택 시, meeting: 화면도 항상 제외 — 10/29).
 # 논의자료는 사유가 아니다 — 메일·화면 모두 보낸다/보인다(사용자 결정: 요약은 나중에 수동).
 HIDDEN_REASONS = ("static", "foreign", "meeting")
 

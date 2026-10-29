@@ -177,12 +177,13 @@
   // 2026-10-20: 기본 노출 제외 사유는 수집 단계(_utils.feed_hidden_reason)가 정해
   // data.json의 hidden_reason에 담고, 메일과 화면이 같은 값을 쓴다. 화면은 사유별로
   // 다시 보는 방법만 다르다 — static: 기간을 90일 넘게 넓히면, foreign: 문서종류에서
-  // "해외기준"을 직접 고르면 보인다. meeting(위원회 회의 예정)은 메일에서만 빼고 화면엔
-  // 그대로 둔다(사용자 결정). 논의자료는 사유가 아니라 메일·화면 모두 보인다
-  // (2026-08-28 "직접 선택 시에만" → 10/20 "요약 있으면" → 10/20 메일과 같게 전부).
+  // "해외기준"을 직접 고르면 보인다. meeting(위원회 회의 예정)은 화면에서도 다시 보는
+  // 방법 없이 뺀다(10/20 메일만 → 10/29 화면도, 사용자 결정). 논의자료는 사유가 아니라
+  // 메일·화면 모두 보인다(2026-08-28 "직접 선택 시에만" → 10/20 "요약 있으면" → 10/20 전부).
   function hiddenReason(it) {
     if (it.hidden_reason !== undefined) return it.hidden_reason;
-    return it.is_static ? "static" : it.doc_type === "해외기준" ? "foreign" : null;  // 필드 도입 전 데이터
+    // 필드 도입 전 데이터
+    return it.is_static ? "static" : it.doc_type === "해외기준" ? "foreign" : it.is_meeting_schedule ? "meeting" : null;
   }
 
   function showsForeignStandard() {
@@ -196,6 +197,7 @@
       if (state.cats.length && state.cats.indexOf(it.category) === -1) return false;
       if (state.doctypes.length && state.doctypes.indexOf(it.doc_type) === -1) return false;
       var reason = hiddenReason(it);
+      if (reason === "meeting") return false;
       if (reason === "foreign" && !showForeign) return false;
       if (!matchesQuery(it, state.q)) return false;
       if (reason === "static" && !wideRange) return false;
@@ -767,10 +769,7 @@
 
   function renderTodayView() {
     var day = (DATA.meta && DATA.meta.generated_at) ? DATA.meta.generated_at.slice(0, 10) : todayISO();
-    var pool = DATA.items.filter(function (it) {
-      var reason = hiddenReason(it);
-      return reason !== "static" && reason !== "foreign";
-    });
+    var pool = DATA.items.filter(function (it) { return !hiddenReason(it); });
 
     var windowDays = TODAY_VIEW_WINDOWS[0];
     var from = day;
