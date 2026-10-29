@@ -40,6 +40,20 @@ def skip(*, source: str, reason: str, title: str, url: str | None = None,
     record(category=category, title=title, url=url, source=source, reason=reason)
 
 
+# 2026-10-29: 제목 없이 건수만 남기는 제외(라벨 → 건수). 걸러진 게 아니라 애초에 우리 주제가 아닌
+# 대량 유입(네이버 검색 결과 중 카테고리 미분류, 하루 1,700건 안팎)이라 목록이 로그를 덮었다.
+_tallies: dict[str, int] = {}
+
+
+def tally(label: str) -> None:
+    """`label`(예: "네이버 검색 결과 중 카테고리 미분류") 건수만 1 늘린다."""
+    _tallies[label] = _tallies.get(label, 0) + 1
+
+
+def tallies() -> dict[str, int]:
+    return dict(_tallies)
+
+
 def excluded() -> list[dict]:
     """지금까지 record()된 항목 전체(읽기 전용 스냅샷)."""
     return list(_excluded)
@@ -48,6 +62,7 @@ def excluded() -> list[dict]:
 def clear() -> None:
     """다음 수집 실행을 위해 메모리 목록을 비운다."""
     _excluded.clear()
+    _tallies.clear()
 
 
 def flush(path: str = "docs/EXCLUDED_LOG.md") -> None:
@@ -71,8 +86,12 @@ def flush(path: str = "docs/EXCLUDED_LOG.md") -> None:
         "`sources/_config.py`의 해당 키워드를 빼거나 예외 조건을 추가할 것.",
         "",
     ]
+    for label, n in sorted(_tallies.items()):
+        lines.append(f"- {label}: {n}건 (제목은 남기지 않음)")
+    if _tallies:
+        lines.append("")
     if not _excluded:
-        lines.append("_현재 수집 결과에는 제외된 항목이 없다._")
+        lines.append("_현재 수집 결과에는 (위 건수 요약 외에) 제외된 항목이 없다._")
     else:
         by_reason: dict[str, list[dict]] = {}
         for e in _excluded:

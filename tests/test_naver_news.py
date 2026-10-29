@@ -124,3 +124,21 @@ def test_fetch_all_gracefully_skips_when_credentials_missing(monkeypatch):
 
     results = nn.fetch_all()
     assert all(results[cat] == [] for cat in results)
+
+
+def test_fetch_category_logs_off_topic_as_count_only(monkeypatch):
+    # 2026-10-29: 카테고리 미분류는 EXCLUDED_LOG에 제목 없이 건수만, 나머지 수집 단계 제외는 제목까지.
+    from sources import _excluded_log
+    today = date.today()
+    payload = {"items": [
+        {"title": "오늘의 날씨는 맑음입니다", "originallink": "https://a.example.com/1", "pubDate": _pubdate(today)},
+        {"title": "국세청 세법 개정안 오래된 기사", "originallink": "https://a.example.com/2",
+         "pubDate": _pubdate(today - timedelta(days=200))},
+    ]}
+    monkeypatch.setattr(nn, "_http", SimpleNamespace(get=lambda url, **kw: _FakeResp(payload)))
+    monkeypatch.setattr(time, "sleep", lambda s: None)
+    _excluded_log.clear()
+    nn.fetch_category("tax")
+    assert _excluded_log.tallies() == {nn.NAVER_NO_CATEGORY_LABEL: 1}  # 같은 링크는 질의가 여러 번이어도 1건
+    assert [e["reason"] for e in _excluded_log.excluded()] == ["collect:out_of_window"]
+    _excluded_log.clear()

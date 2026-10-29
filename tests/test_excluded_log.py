@@ -28,3 +28,16 @@ def test_skip_records_collect_reason_listed_after_pipeline_reasons(tmp_path):
     text = path.read_text(encoding="utf-8")
     assert "|  | 재정경제부 | 국고채 발행 계획 | https://m |  |" in text
     assert text.index("## excluded:opinion_piece") < text.index("## collect:no_category")
+
+
+def test_tally_writes_count_line_without_titles(tmp_path):
+    _excluded_log.clear()
+    for _ in range(3):
+        _excluded_log.tally("네이버 검색 결과 중 카테고리 미분류")
+    path = tmp_path / "EXCLUDED_LOG.md"
+    _excluded_log.flush(str(path))
+    text = path.read_text(encoding="utf-8")
+    assert "- 네이버 검색 결과 중 카테고리 미분류: 3건 (제목은 남기지 않음)" in text
+    assert "collect:no_category" not in text
+    _excluded_log.clear()
+    assert _excluded_log.tallies() == {}

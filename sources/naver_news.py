@@ -29,6 +29,7 @@ from ._utils import (
 )
 
 SLEEP_BETWEEN_REQUESTS = 0.5
+NAVER_NO_CATEGORY_LABEL = "네이버 검색 결과 중 카테고리 미분류"  # EXCLUDED_LOG 건수 요약 줄
 _TAG_RE = re.compile(r"<[^>]+>")
 _ENTITY_MAP = {"&quot;": '"', "&amp;": "&", "&lt;": "<", "&gt;": ">", "&#39;": "'"}
 
@@ -89,10 +90,10 @@ def fetch_category(cat_key: str, days: int = COLLECT_WINDOW_DAYS, *,
             if not title:
                 continue
             # 2026-10-29: 아래 수집 단계 제외도 EXCLUDED_LOG에 남긴다(같은 링크는 한 번만).
+            # 카테고리 미분류는 걸러진 게 아니라 애초에 우리 주제가 아닌 검색 결과라 건수만(하루 1,700건 안팎).
             if not match_loose(title, cat_key):
                 seen_urls.add(link)
-                _excluded_log.skip(source=trust_of(link)[2], reason="collect:no_category",
-                                   title=title, url=link, category=cat_key)
+                _excluded_log.tally(NAVER_NO_CATEGORY_LABEL)
                 continue
             published = _parse_pubdate(raw.get("pubDate", ""))
             if published and published < cutoff:
