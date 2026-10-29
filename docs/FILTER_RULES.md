@@ -126,9 +126,13 @@ EXCLUDED_LOG가 아니라 Actions 출력에만 남는다(`[notify_mail] … N건
 
 | 화면 | 거르는 것 | 도입 · 이유 |
 |---|---|---|
-| 최근 정책동향 (`renderTodayView`) | `hidden_reason`이 있는 항목 전부(static·foreign·meeting). 기간은 1→3→7→14→30일로 늘리며 **5건 이상 + 공식 1건 이상**이 되면 멈춤(30일에서 무조건 멈춤). 검색어는 기간을 정한 뒤 그 안에서만 적용 | 9/1 이름·점진 확대 · 10/20 공식 1건 조건(보도만 5건으로 공식을 놓침) · 10/29 meeting 제외 |
+| 최근 정책동향 (`renderTodayView`) | `hidden_reason`이 있는 항목 전부(static·foreign·meeting). 날짜는 **공식은 max(발행일, 처음 수집일)**, 언론은 발행일(`recentDateOf`). 기간은 1→3→7→14→30일로 늘리며 **5건 이상 + 공식 1건 이상**이 되면 멈춤(30일에서 무조건 멈춤). 공식·보도 각 12건까지 보이고 나머지는 "전체 동향에서 더 보기". 공식은 그 날짜 내림차순 → tier → 점수 순. 검색어는 기간을 정한 뒤 그 안에서만 적용 | 9/1 이름·점진 확대 · 10/20 공식 1건 조건(보도만 5건으로 공식을 놓침) · 10/29 meeting 제외 · 10/29 처음 수집일: 메일로 간 공식 36건 중 28건이 그날 화면에 없었음 |
 | 전체 동향 (`filterItems`) | 카테고리·문서 종류·기간(기본 최근 30일)·검색어. meeting은 항상 제외, foreign은 "해외기준"을 직접 골라야, static은 기간 90일 초과일 때만. static은 정렬에서 항상 아래 | ADDENDUM-4 §2-4 · 8/28 · 10/20 hidden_reason 통일 · 10/29 meeting 제외 |
 | 캘린더 (`schedules.build_schedules`) | `effective_date` 있는 항목 + `data/schedules_manual.yml`. **위원회 회의 예정(`is_meeting_schedule`)은 제외** | 9/14 · 회의 일정이 실제 시행일과 섞임 |
+
+**처음 수집일**(`first_seen_at`, `data/first_seen.json`, `sources/_first_seen.py`): 최종 data.json에 처음 들어간 날. 공식 카드는 발행일보다 늦게 처음 수집됐으면 날짜 옆에 "· 수집 M/D"를 붙인다(최근 정책동향·전체 동향 둘 다). 전체 동향의 기간 필터는 발행일 그대로다. 메일 신규 판정은 이 값을 쓰지 않는다(직전 data.json + `sent_log`).
+
+**메일과 일부러 다르게 둔 것**(10/29 검토): 언론은 메일이 어제·오늘 발행분만 보내고 화면은 기간 안 발행분을 보여준다(화면에만 있는 방향뿐, 7주간 44건). 화면의 12건 상한은 숨김이 아니라 "더 보기"로 넘긴다.
 
 `hidden_reason` 필드가 없는 옛 data.json이면 화면은 `is_static`·`doc_type="해외기준"`·`is_meeting_schedule`로 대신 판정한다.
 

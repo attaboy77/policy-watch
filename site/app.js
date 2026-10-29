@@ -186,6 +186,25 @@
     return it.is_static ? "static" : it.doc_type === "해외기준" ? "foreign" : it.is_meeting_schedule ? "meeting" : null;
   }
 
+  // 2026-10-29: 공식 자료는 발행일이 수집일보다 한참 앞서는 경우가 많다(입법예고 첫 수집분·법령·
+  // 질의회신) — 메일은 "새로 잡힌 id"라 그날 보내는데 최근 정책동향은 발행일로 골라 못 보여줬다.
+  // 최근 정책동향만 공식 자료를 max(발행일, 처음 수집일)로 고른다. 언론은 발행일 그대로(구글이
+  // 뒤늦게 준 옛 기사가 "최근"으로 올라오지 않게), 전체 동향은 날짜로 찾는 화면이라 발행일 그대로.
+  function isOfficialItem(it) { return !!(it.source && it.source.type === "official"); }
+
+  function recentDateOf(it) {
+    var seen = it.first_seen_at || "";
+    return isOfficialItem(it) && seen > it.published_at ? seen : it.published_at;
+  }
+
+  // 발행일보다 늦게 처음 수집된 공식 자료에 " · 수집 M/D" — 8월 입법예고가 10월 최근 정책동향에
+  // 뜰 때 "왜 두 달 전 게 최근이지?"를 표시 하나로 푼다.
+  function collectedLabel(it) {
+    if (!isOfficialItem(it) || !it.first_seen_at || it.first_seen_at <= it.published_at) return "";
+    var p = it.first_seen_at.split("-");
+    return " · 수집 " + parseInt(p[1], 10) + "/" + parseInt(p[2], 10);
+  }
+
   function showsForeignStandard() {
     return state.doctypes.indexOf("해외기준") !== -1;
   }
@@ -371,7 +390,7 @@
       '<span class="badge badge-doctype">' + esc(it.doc_type) + "</span>" + stageBadge + staticBadge + foreignBadge + aiBadge + "</div>" +
       // '중요도순'에서는 날짜 그룹 헤더가 없으므로(renderFeed 참고) 카드 안에
       // 날짜를 직접 표기한다 — '최신순'에서도 항상 보여 일관성 유지.
-      '<div class="card-source">' + esc(fmtDot(it.published_at)) + ' · 출처: ' + esc(it.source ? it.source.name : "-") + officialTag + dupTag + "</div>" +
+      '<div class="card-source">' + esc(fmtDot(it.published_at) + collectedLabel(it)) + ' · 출처: ' + esc(it.source ? it.source.name : "-") + officialTag + dupTag + "</div>" +
       "</div>" +
       '<h3 class="card-title">' + esc(it.title) + "</h3>" +
       summaryHtml +
@@ -777,7 +796,7 @@
     for (var i = 0; i < TODAY_VIEW_WINDOWS.length; i++) {
       windowDays = TODAY_VIEW_WINDOWS[i];
       from = addDaysISO(day, -(windowDays - 1));
-      todays = pool.filter(function (it) { return it.published_at >= from && it.published_at <= day; });
+      todays = pool.filter(function (it) { var d = recentDateOf(it); return d >= from && d <= day; });
       // 2026-10-20: 보도만으로 5건이 차면 공식을 놓쳐서(10/20 "공식 0건 · 보도 5건",
       // 30일 안 공식 9건) 공식이 1건 이상일 때만 멈춘다. 30일에서는 무조건 멈춘다.
       var officialCount = todays.filter(function (it) { return it.source && it.source.type === "official"; }).length;
@@ -792,7 +811,12 @@
     var official = todays.filter(function (it) { return it.source && it.source.type === "official"; });
     var news = todays.filter(function (it) { return !(it.source && it.source.type === "official"); });
     // §5-5 정렬: 공식 그룹은 tier 오름차순 → final_score 내림차순, 보도 그룹은 final_score 내림차순.
-    official.sort(function (a, b) { return (a.source.tier - b.source.tier) || (b.final_score - a.final_score); });
+    // 2026-10-29: 공식 그룹은 recentDateOf() 내림차순을 맨 앞에 둔다 — 새 소스 첫 수집분(10/1 입법예고
+    // 12건)이 점수로 위를 채워 TF 5차(10/16)가 "더 보기" 뒤로 밀렸다(사용자 결정).
+    official.sort(function (a, b) {
+      var da = recentDateOf(a), db = recentDateOf(b);
+      return (da < db ? 1 : da > db ? -1 : 0) || (a.source.tier - b.source.tier) || (b.final_score - a.final_score);
+    });
     news.sort(function (a, b) { return b.final_score - a.final_score; });
 
     document.getElementById("todayTitle").textContent = windowDays === 1
@@ -869,7 +893,7 @@
       '<h3 class="today-card-title">' + esc(it.title) + "</h3>" +
       summaryHtml + impactHtml + aiEmptyHtml + revisionReasonHtml + relatedHtml +
       '<div class="today-card-bottom">' +
-      "<span>" + esc(it.source ? it.source.name : "-") + " · " + esc(fmtDot(it.published_at)) + "</span>" +
+      "<span>" + esc(it.source ? it.source.name : "-") + " · " + esc(fmtDot(it.published_at) + collectedLabel(it)) + "</span>" +
       actionHtml +
       "</div></article>"
     );

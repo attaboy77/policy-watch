@@ -103,7 +103,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "meeting"
+      "hidden_reason": "meeting",
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "59df521c3adc5420",
@@ -158,7 +159,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "8d42db70eba720fe",
@@ -208,7 +210,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2024-06-05"
     },
     {
       "id": "986586070e6d7393",
@@ -252,7 +255,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "foreign"
+      "hidden_reason": "foreign",
+      "first_seen_at": "2026-10-27"
     },
     {
       "id": "e8e790cc216b2661",
@@ -306,7 +310,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "dc121ecf1d8f8072",
@@ -355,7 +360,8 @@
       "replied_at": "2026-04-30",
       "disclosed_at": "2026-09-30",
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-29"
     },
     {
       "id": "c7d0428613141653",
@@ -409,7 +415,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "b6ad3d736ef50754",
@@ -455,7 +462,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2021-10-01"
     },
     {
       "id": "384acd931476aa45",
@@ -502,7 +510,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "meeting"
+      "hidden_reason": "meeting",
+      "first_seen_at": "2026-10-16"
     },
     {
       "id": "c68ecb80a8b050c5",
@@ -555,7 +564,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "fe08c2b40b993b2f",
@@ -608,7 +618,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "b893f5e5440901f6",
@@ -660,7 +671,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "e3420be7b1fd7b67",
@@ -712,7 +724,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "6b80af08a309b400",
@@ -760,7 +773,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2025-12-23"
     },
     {
       "id": "9204a2cb8d4f8a52",
@@ -808,7 +822,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2025-01-02"
     },
     {
       "id": "69c2d4668fe23175",
@@ -856,7 +871,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2024-06-05"
     },
     {
       "id": "1a711fdd0c342028",
@@ -901,7 +917,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2021-10-01"
     },
     {
       "id": "74795672b06f9c97",
@@ -946,7 +963,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2021-05-11"
     },
     {
       "id": "00ea305aac4e5a33",
@@ -991,7 +1009,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2021-05-11"
     },
     {
       "id": "75b6483b2158c1d5",
@@ -1036,7 +1055,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2022-02-07"
     },
     {
       "id": "691464f48c67f01c",
@@ -1081,7 +1101,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2022-02-07"
     },
     {
       "id": "1444709b36f4d789",
@@ -1126,7 +1147,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2021-10-01"
     },
     {
       "id": "14af2bd99efff38c",
@@ -1171,7 +1193,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2021-10-01"
     },
     {
       "id": "91cefa63682603d8",
@@ -1225,7 +1248,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-23"
     },
     {
       "id": "fd7843c6663f6df9",
@@ -1279,7 +1303,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "458aff841078bcde",
@@ -1333,7 +1358,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-07-01"
     },
     {
       "id": "3139eed9c4c3b608",
@@ -1384,7 +1410,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2025-10-01"
     },
     {
       "id": "04ccf64eccbb94ec",
@@ -1437,7 +1464,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-02-27"
     },
     {
       "id": "1e9591c70e26dcb9",
@@ -1490,7 +1518,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-03-20"
     },
     {
       "id": "5dbab462d8b34b1f",
@@ -1538,7 +1567,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "de8101b3d2622614",
@@ -1586,7 +1616,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "c582caac32b3ee46",
@@ -1634,7 +1665,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "1c7a9ed3065ba502",
@@ -1691,7 +1723,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-01"
     },
     {
       "id": "0a2b98588db481a3",
@@ -1748,7 +1781,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-01"
     },
     {
       "id": "26c0f263c5728f4c",
@@ -1795,7 +1829,8 @@
       "replied_at": "2026-04-30",
       "disclosed_at": "2026-09-30",
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-29"
     },
     {
       "id": "423c7279a872de5c",
@@ -1842,7 +1877,8 @@
       "replied_at": "2026-04-30",
       "disclosed_at": "2026-09-30",
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-29"
     },
     {
       "id": "5880ed0833ebf82b",
@@ -1889,7 +1925,8 @@
       "replied_at": "2026-04-30",
       "disclosed_at": "2026-09-30",
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-29"
     },
     {
       "id": "68087adfaa1eaee6",
@@ -1945,7 +1982,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "583038805d16c3d1",
@@ -1997,7 +2035,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "63f16f6e10a6e23b",
@@ -2049,7 +2088,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "9ead55f57dc69745",
@@ -2101,7 +2141,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "7b2bd2616e6b597a",
@@ -2153,7 +2194,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "872e59c4f99af5f2",
@@ -2205,7 +2247,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "2002dbf94fdd1896",
@@ -2257,7 +2300,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "4871e57f29a4fcbf",
@@ -2308,7 +2352,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "eca008a239c10381",
@@ -2364,7 +2409,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "b0cf26e1698be745",
@@ -2436,7 +2482,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "59699d7f3a686df7",
@@ -2488,7 +2535,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "cd682e391cdcb6b2",
@@ -2535,7 +2583,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-04-15"
     },
     {
       "id": "129870ed37a8ae9a",
@@ -2582,7 +2631,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2025-04-14"
     },
     {
       "id": "61d39ad3a5e78fde",
@@ -2635,7 +2685,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-23"
     },
     {
       "id": "157c0421b7c7c269",
@@ -2688,7 +2739,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "a508a599d9274dde",
@@ -2740,7 +2792,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-05-22"
     },
     {
       "id": "38a29e3a5e491dd0",
@@ -2793,7 +2846,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-31"
     },
     {
       "id": "116ebe45dbf81182",
@@ -2846,7 +2900,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "95fa63587a531267",
@@ -2893,7 +2948,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "32142c0968b76bbb",
@@ -2940,7 +2996,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "099cb78714660947",
@@ -2987,7 +3044,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "8e60a6640cfe55f0",
@@ -3034,7 +3092,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "0e7336cefc13cc5d",
@@ -3081,7 +3140,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "82cebea8a504ced0",
@@ -3128,7 +3188,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "meeting"
+      "hidden_reason": "meeting",
+      "first_seen_at": "2026-09-11"
     },
     {
       "id": "c42832b38333a0de",
@@ -3174,7 +3235,8 @@
       "replied_at": "2026-10-16",
       "disclosed_at": null,
       "attachment_text": "K-IFRS 제1118호 정착지원 TF\n5차 회의\n2026. 9. 10.\n한국회계기준원\n순    서\n1. 교환사채 내재파생상품 공정가치 변동의 손익 범주 분류\n2. 별도의 파생상품이 자금조달거래에만 관련된 거래에 관련되어 있는지의 판단\n3. 관계기업에 대한 금융상품 관련 손익의 범주 분류 23\n4. 전대리스시 상위리스에서 발생하는 변동리스료 손익의 범주 분류 35\n5. 유형자산으로 분류된 부동산 임대수익의 범주 분류\n6. 기타부채의 외화환산손익(1차 안건 재논의)\n안건.1 교환사채 내재파생상품 공정가치 변동의 손익 범주 분류\n3. 주요 논의내용\n➊ 지배기업의 별도재무제표에서 내재파생상품으로 분리한 교환권이 문단 B73⑴의 ‘자금조달에만 관련된 거래에 관련된 경우’에 해당하는지?\n□ 대부분의 위원이 파생상품이 문단 B73⑴의 ‘자금조달에만 관련된 거래에 관련된 경우’에 해당하는지 여부는 파생상품이 발생한 기초거래가 문단 B50에서 제시하는 자금조달에만 관련된 거래에 해당하는지 여부로 판단하여야 함에 동의함\nㅇ 문단 BC232에서 자금조달에만 관련된 거래에 관련된 파생상품의 예시로 전환옵션과 같이 현금 또는 자기지분상품을 교환하는 파생상품만이 언급되나, 문단 B73⑴이 적용될 수 있는 파생상품의 범위를 이러한 예시에 한정하기 위한 것으로 해석하는 것은 적절하지 않음을 언급함\n- 또한, 기초상품인 사채의 발행이 자금조달을 목적으로 이루어진 거래로서 관련 손익이 재무 범주로 분류되는 반면, 그와 관련된 교환권 등 내재파생상품의 손익을 영업 범주에 포함하는 것은 정보이용자 관점에서 유용한 정보가 아니라는 의견이 제시됨\n□ 따라서 대부분의 위원은 기초거래인 사채의 발행이 자금조달에만 관련된 거래에 해당하므로, 교환권에서 발생하는 손익 또한 재무 범주로 분류하는 것이 적절하다는 견해인 을설을 지지함\nㅇ 반면 일부 위원은 교환사채의 발행이 종속기업의 주식 처분을 원활하게 하기 위한 거래로 해석된다면, 기초거래가 자금조달에만 관련된 거래에 해당하지 않으므로 교환권에서 발생하는 손익을 영업 범주로 분류하는 것이 타당하다는 의견을 제시함\n□한편, 일부 위원은 자기지분상품이 아닌 종속기업의 지분과 교환할 수 있는 권리를 부여한 목적*을 고려하여 그 목적이 자금조달에만 관련된 거래에 해당하지 않는 경우 영업 범주로 분류할 수 있다는 의견을 제시하였음\n* 자기지분상품으로 교환 시 발생할 수 있는 희석화 방지, 종속기업투자주식의 원활한 처분 등\nㅇ 이에 대하여 일부…\n안건.2 별도의 파생상품이 자금조달거래에만 관련된 거래에 관련되어 있는지의 판단\n3. 주요 논의내용\n➊ 지배기업 P의 연결재무제표에 인식된 Drag-Along 약정은 자금조달에만 관련된 거래에 관련된 파생상품인지?\n□모든 위원은 자금조달에만 관련된 거래에 관련된 파생상품으로 보아 관련 손익을 재무 범주로 분류하는 갑설을 지지하였으며,\nㅇ 파생상품이 문단 B73⑴의 ‘자금조달에만 관련된 거래에 관련된 경우’에 해당하는지 여부는 파생상품이 발생한 기초거래가 문단 B50에서 제시하는 자금조달에만 관련된 거래에 해당하는지 여부로 판단하는 것으로 보았음\n➋ 질의 ➊에서 을설을 지지하는 경우, 지배기업 P의 연결재무제표에 인식된 제3자 지정가능 콜옵션은 자금조달에만 관련된 거래에 관련된 파생상품인지?\n□대부분의 위원은 제3자 지정가능 콜옵션에도 질의 ➊의 갑설과 같이 특정 파생상품의 문단 B73⑴의 ‘자금조달에만 관련된 거래에 관련된 경우’에 해당하는지는 파생상품이 발생한 기초거래를 기준으로 판단하는 것을 지지하였음\nㅇ 반면 일부 위원은 질의 ➊의 Drag-Along 약정과 달리 제3자 지정가능 콜옵션은 내재파생상품이 아닌 별도의 금융상품에 해당하는 점을 고려하여 종속기업이 발행한 RCPS와 별개로 판단하는 것이 적절할 수 있다는 의견을 제시함\n※참고\n안건.3 관계기업에 대한 금융상품 관련 손익의 범주 분류\n3. 주요 논의내용\n➊ 피투자기업에 대한 대여금은 K-IFRS 제1118호 문단 53(3)에 명시된 자산에 해당하는가?\n□ 대부분의 위원은 피투자기업에 대한 대여금이 문단 53⑶에 명시된 자산에 해당한다는 을설을 지지하였으며, 다음과 같은 의견을 제시함\nㅇ 대여금이나 RCPS와 같은 금융상품은 피투자기업의 실적과 관계없이 독립된 현금흐름을 창출하고 있으므로 문단 53⑶의 자산에 해당함\n- 또한, 과거 TF 논의와 같이 대여금에 대해 사업모형과의 관련성을 범주 분류의 판단 근거로 가져올 경우, 판단의 영역이 넓어져 자의적인 범주 분류가 이루어질 수 있음\n- 아울러 관계기업에 대한 금융상품이 K-IFRS 제1028호 ‘관계기업과 공동기업에 대한 투자’에 따른 순투자의 일부를 구성하는 장기투자지분에 해당하더라도, 기본적으로 K-IFRS 제1109호 ‘금융상품’을 적용하는 하나의 금융상품 투자이므로 문단 53⑶의 자산에 해당한다고 볼 수 있음\nㅇ 다만, 한 위원은 안건의 지주회사처럼 타 기업에 대한 투자를 주된 사업활동으로 하는 사업모형을 고려할 경우, 대여금 및 관련 금융상품은 문단 53⑶의 자산에 해당하지 않는다는 의견을 제시함\n- 회사의 주된 사업활동은 피투자기업의 영업성과와 관련되고, 이러한 상황에서 대여 및 투자 의사결정은 피투자기업의 영업성과에 영향을 끼치므로 관련 자산은 독립적으로 수익을 창출하지 않는다고 볼 수 있음\n➋ 관계기업에 대한 RCPS, 전환사채 등에서 발생하는 손익은 별도 재무제표에서 어떤 범주로 분류하여야 하는가?\n□ 대부분의 위원은 잠재적 의결권을 가진 금융상품에서 발생하는 손익도 투자 범주로 분류하는 을설을 지지하였으며, 다음과 같은 의견을 제시함\nㅇ 관련 금융상품이 문단 B43에 해당하지 않는다면, 문단 53⑴의 자산에 해당하지 않으므로 문단 53⑶의 자산에 해당하는지 검토하여야 하고, 본 쟁점의 금…\n안건.4 전대리스시 상위리스에서 발생하는 변동리스료 손익의 범주 분류\nㅇ 변동리스료가 투자부동산의 측정치에 포함되지 않으나, 이는 K-IFRS 제1116호 결론도출근거 BC169의 일부 위원의 견해와 같이 원가-효익의 이유일 뿐, 리스이용자의 부채의 정의를 충족하는 현금흐름으로 볼 수 있음\n3. 주요 논의내용\n□ 다수의 위원이 상위리스의 변동리스료를 영업 범주로 분류하는 갑설을 지지하였음\nㅇ 안건의 변동리스료는 기초자산의 사용대가일 뿐, 투자 범주로 분류하도록 문단 54에서 명시한 자산의 최초 및 후속 측정에서 발생한 손익이나 취득과 직접 관련된 증분원가에 해당하지 않음\nㅇ 한 위원은 기준서를 적용할 때, 본 안건처럼 다소 명확한 사안에 대해서도 지나치게 경제적 실질을 고려할 경우 회계처리에 어려움이 발생할 수 있다고 언급함\n□ 소수의 위원은 기존 영업손익과의 일관성, 범주 분류를 위해 손익을 구분할 실익이 없다는 점 등을 근거로 투자 범주로 분류하는 것이 적절하다는 의견을 제시함\n※참고\n안건.5 유형자산으로 분류된 부동산 임대수익의 범주 분류\n□ 다수의 위원들이 부동산 전체를 하나의 유형자산으로 회계처리한 경우 전체 자산을 기준으로 문단 53⑶을 적용하여야 한다는 갑설을 지지하였으며, 그 이유는 다음과 같이 제시됨\n□ 일부의 위원들이 임대 부분을 별도의 판단 대상으로 할 수 있다는 을설을 지지하였으며, 그 이유는 다음과 같이 제시됨\nㅇ 일부 위원들은 해당 임대 부분이 다른 자원과 결합하여 사용된다면 해당 임대 부분이 기업의 주된 사업활동의 수익을 창출하는 데 사용되어 비용 등으로 나타나야 하나, 사례의 임대 매장은 주된 사업활동에서 어떻게 소비되는지 확인되지 않아 문단 53⑶의 요건을 충족한다고 판단함\nㅇ 반면, 일부 위원들은 골프장 그늘집은 이용객과 수익이 골프장 운영에 영향을 미치는 등 다른 자원과 상호의존적으로 사용될 수 있으므로, 임대 부분을 별도로 판단하더라도 문단 53⑶의 요건을 충족하지 않을 수 있다는 의견을 제시함\nㅇ 한편, 한 위원은 ‘다른 자원과 결합하여 사용’의 의미를 시너지나 사업활동 지원 목적까지 확대하면 영업 범주의 범위가 지나치게 넓어질 수 있다는 우려를 제기하며, 실무에서 적용할 수 있는 명확한 판단기준이 필요하다는 의견을 제시함\n안건.6 기타부채의 외화환산손익(1차 안건 재논의)\n3. 공개된 논의내용(‘26.5월)\n□ 다양한 의견이 제시되었으며, 외화미지급금(부채)에서 발생한 외환차이를 투자 범주로 분류할 수 있는지에 대해 견해가 나뉘었음. 범주 분류에 대한 의견은 다음과 같이 제시됨\n□ 갑설(대안 1)을 지지한 측의 견해는 다음과 같음\nㅇ 문단 B67에 따르면, 하나의 거래가 둘 이상의 성격을 포함하는 경우 해당 거래에서 발생하는 수익·비용은 각각의 성격에 따라 구분되며, 외환차이 또한 관련되는 구성요소의 성격에 따라 해당 범주로 분류해야 함\n- 외화 미지급금의 환산손익은 투자부동산 취득이라는 원천 거래에서 발생하며, 해당 거래에서 인식되는 대표적 비용(감가상각비)이 투자 범주에 속하므로, 외환차이는 이를 발생시킨 항목에서 인식되는 다른 수익·비용의 범주와 동일하게 분류해야 한다는 기준서 취지에 따라 투자 범주로 분류하는 것이 적절함\n- 한편, 해당 외화미지급금에는 이자요소가 존재하지 않아 자금조달 활동과 직접적인 관련성을 갖는다고 보기 어려우므로, 재무 범주로 분류하는 것은 적절하지 않음\nㅇ 기존에는 외화 미지급금과 외화 미수금의 환율 효과가 동일 범주 내에서 상쇄되는 경향이 있었으나, 외환차이가 재무 범주와 영업(또는 기타)범주로 각각 분리되어 인식되면 정보이용자에게 실적 변동이 과도하게 왜곡되어 보일 수 있음\n□ 을설(대안 1)을 지지한 측의 견해는 다음과 같음\nㅇ 미지급금은 독립적인 투자자산으로 보기 어려우며, 투자부동산 취득 관련 외화미지급금의 환산손익을 투자 범주로 분류할 경우, 기준서에서 자산에만 제한적으로 열거한 투자 범주 수익·비용을 부채에서 발생한 손익까지 확장 해석하는 부담이 있음\n- 따라서, 투자부동산 취득 관련 외화미지급금은 자금조달에만 관련되지는 않은 거래에서 발생하는 부채이므로 관련 외환차이는 영업 또는 재무 범주로 분류할 필요가 있으며, 해당 안건의 미지급금은 이자 요소가 없…",
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-17"
     },
     {
       "id": "6b21dc9517e82d99",
@@ -3226,7 +3288,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "ab6aeea5bd158a7d",
@@ -3278,7 +3341,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "2969aff07892421c",
@@ -3330,7 +3394,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "d96964bb13f723e8",
@@ -3382,7 +3447,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "99beac7c56ada9ab",
@@ -3435,7 +3501,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-18"
     },
     {
       "id": "2be5a505120c0b87",
@@ -3488,7 +3555,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-18"
     },
     {
       "id": "6485e0899dfb3f53",
@@ -3541,7 +3609,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-18"
     },
     {
       "id": "7adef588070c69d3",
@@ -3588,7 +3657,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "59cb28288ff7145e",
@@ -3632,7 +3702,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2026-10-29"
     },
     {
       "id": "9132e55304c0d64f",
@@ -3676,7 +3747,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2018-06-01"
     },
     {
       "id": "1ca6d21bb824a6bc",
@@ -3720,7 +3792,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2012-12-01"
     },
     {
       "id": "e6a278803535318e",
@@ -3766,7 +3839,8 @@
       "replied_at": "2026-08-18",
       "disclosed_at": null,
       "attachment_text": "K-IFRS 제1118호 정착지원 TF\n4차 회의\n2026. 7. 24.\n한국회계기준원\n순    서\n1. 주된 사업활동 판단 - 개별 자산 또는 자산 집단\n2. 정비사업조합 대여금의 손익 범주 분류\n3. 민간투자사업에 건설출자자로 참여시 관련 투자자산의 손익 범주 분류 24\n4. 식별된 위험을 관리하기 위해 사용되는 파생상품의 판단\n5. 파생상품 손익의 범주별 분류\n6. 매출채권 팩토링 거래 관련 손익 범주 분류\n안건.1 주된 사업활동 판단 – 개별 자산 또는 자산 집단\n3. 주요 논의내용\n□ 모든 위원들은 공유되는 특성을 가진다면 하나의 자산 집단이 될 수 있으나, 공유되는 특성이 있는지에 대한 판단이 요구된다는 을설을 지지하였으며, 다음과 같은 의견을 제시\nㅇ 연결재무제표상 주된 사업활동은 연결실체 기준에서 판단하여야 하며, 연결실체내 공유되는 특성을 가진 자산은 집단으로 평가할 수 있음\n- 킥오프 미팅(’26.2월) 안건 “지배기업의 연결재무제표에서 수익과 비용의 범주 분류”에서 연결실체를 구성하는 다수 기업들이 보유한 동일한 금융자산을 하나의 범주로 일괄적으로 판단하는 것이 아니라, 각 금융자산의 취득 목적, 속성 등의 공유되는 특성을 고려해서 집단으로 평가할지 판단하도록 했으며,\n- 당시, 각 종속기업이 서로 다른 범주로 분류한 개별 자산들이 연결 실체 관점에서 하나의 범주로 일괄적으로 판단하는 것이 아니라는 논의가 하나의 자산 집단이 될 수 없다는 결론을 내린 것은 아니었음\nㅇ 문단 B40에서 ‘공유되는 특성’에 대해 명시적으로 규정하지 않으므로, 이를 판단하기 위해서는 자산의 통합과 세분화 원칙을 함께 고려하여 재무제표 이용자에게 구조화된 요약 정보를 제공하는지 판단할 필요가 있음\n- 공유되는 특성의 판단 시에는 측정기준 뿐만 아니라 투자 목적, 보유 및 처분 방식, 기업의 사업활동 내에서의 기능(역할), 관리 방식 등 다양한 요소를 종합적으로 고려하여야 하며, 단지 측정 기준(예: FVPL 금융자산)이 동일하다고해서 자산을 동일한 집단으로 묶는 것은 적절하지 아니함\n- 특히, 금융상품의 경우에는 문단 B40에서 언급하는 바와 같이, 일반적으로 IFRS 9에 따른 측정 기준보다 세분화하여 사용되는 IFRS 7에 따른 종류별 공시 수준 등도 함께 고려하도록 한 점도 참고할 수 있음\n- 다만, 공유되는 특성에 대해 상당한 판단이 요구되고, 유사한 사실관계에 대해 기업 별로 판단이 달라질 경…\n안건.2 정비사업조합 대여금의 손익 범주 분류\n3. 주요 논의내용\n□ 해당 대여금이 문단 53⑶에 해당하므로 관련 손익을 투자 범주로 분류해야 한다는 갑설과 사업 수행과 밀접하게 연계되어 있으므로 관련 손익은 영업 범주로 분류됨이 타당하다는 을설로 나뉘었음\n□ 갑설을 지지한 위원들은 다음과 같은 의견을 제시함\nㅇ 대여금은 금융자산으로서 문단 B48의 ‘재화나 용역을 생산하거나 공급하기 위해 결합하여 사용하는 자산’에 해당한다고 보기 어려우므로 투자 범주로 분류하는 것이 타당함\nㅇ 또한, 사업 활동과의 연계성이나 필수성을 근거로 영업 범주의 적용을 확대할 경우, 대부분의 대여금 관련 손익이 영업 범주로 분류될 수 있음\nㅇ 동일한 성격의 대여금이 기업별 판단에 따라 다른 범주로 분류될 경우 실무상 혼란이 발생할 수 있어, 별도의 금융자산이라는 대여금의성격을 고려하여 관련 손익을 투자 범주로 분류하는 것이 기준서의 일관된 적용 측면에서 타당함\n□ 을설을 지지한 위원들은 다음과 같은 의견을 제시함\nㅇ 본 안건은 시공계약에 따른 자금 지원이 사업 수행과정에 내재 되어 있으며, 시공사의 자금 지원 없이는 사업 진행이 어려운 구조라는 점에서 개별 사실관계를 고려하여 판단할 필요가 있음\nㅇ 또한, 해당 자산이 회사의 주된 사업활동에 영향을 미치거나, 회사의 주된 사업활동이 해당 자산에 영향을 미치는 경우 주된 사업활동과 밀접하게 연계된 것으로 보아 관련 손익의 영업 범주 분류가 적정함\nㅇ 대여금의 제공과 회수는 공사 진행과 상호 영향을 미치며 정비사업의 원활한 수행을 위해 필수적으로 요구되는 등 건설용역 제공과 밀접하게 연계되어 있으므로 다른 자원과 결합하여 사용되는 자산으로 보는 것이 타당함\n□ 문단 53⑶의 의미가 기준서에서 명확하게 제시되지 않아 다양한 해석이 가능한 만큼, 향후 IASB 및 IFRS 해석위원회의 관련 논의 동향을 참고하여 판단기준을 보완할 필요가 있다는 의견이 제시됨\n※참고\n안건.3 민간투자사업에 건설출자자로 참여시 관련 투자자산의 손익 범주 분류\n3. 주요 논의내용\n□ 해당 자산이 문단 53⑶에 해당하므로 관련 손익을 투자 범주로 분류해야 한다는 갑설과 사업 수행과 밀접하게 연계되어 있으므로 관련 손익을 영업범주로 분류해야 한다는 을설로 나뉘었음\n□ 갑설을 지지한 위원들은 다음과 같은 의견을 제시함\nㅇ SOC 출자금 및 대여금은 준공 이후 민간투자사업의 운영 성과와 정부 정책·제도적 요인 등에 따라 회수가 이루어진다는 점에서 금융투자와 유사한 성격을 지님\nㅇ 또한 출자금이나 대여금은 문단 B48의 ‘재화나 용역을 생산하거나 공급하기 위해 결합하여 사용하는 자산’에 해당한다고 보기 어려우므로 투자범주로 분류하는 것이 타당함\n□ 을설을 지지한 위원들은 다음과 같은 의견을 제시함\nㅇ 건설출자자의 지위를 취득하기 위해 출자 및 자금지원이 필수적으로 요구되며, 이는 건설용역 제공과 하나의 사업참여 구조를 구성하는 요소이므로 다른 자원과 결합하여 사용되는 자산에 해당하는 것으로 판단할 수 있음\nㅇ 또한, 사업 참여를 위한 출자 및 자금 관련 손익은 사업수행과 밀접하게 관련되므로 영업범주로 분류하는 것이 타당함\n- 다만, 대여금과 출자금을 동일하게 재화나 용역 제공에 결합하여 사용하는 자산으로 보아 관련 손익을 영업 범주로 분류할 수 있는지에 대해 의문임\n□ 문단 53⑶의 의미가 기준서에서 명확하게 제시되지 않아 다양한 해석이 가능한 만큼, 향후 IASB 및 IFRS 해석위원회의 관련 논의 동향을 참고하여 판단기준을 보완할 필요가 있다는 의견이 제시됨\n※참고\n안건.4 식별된 위험을 관리하기 위해 사용되는 파생상품의 판단\n3. 주요 논의내용\n➊ 예상거래에서 발생하는 위험도 K-IFRS 제1118호 문단 B72에 따른 ‘식별된 위험’에 해당하는지\n□ 모든 위원들이 예상거래에서 발생하는 위험도 문단 B72에 따른 ‘식별된 위험’에 해당하는 것으로 보는 갑설을 지지하였으며, 다음과 같은 의견이 제시됨\nㅇ K-IFRS 제1118호 결론도출근거 BC227에 따르면, 파생상품이 K-IFRS 제1109호에 따른 위험회피수단으로 지정되지 않더라도 식별된 위험을 관리하는 목적으로 사용되고 있다면 해당 파생상품에서 발생하는 손익을 관리하고자 하는 위험과 관련된 손익과 동일한 범주로 분류하는 것이 재무제표 이용자에게 유용한 정보를 제공할 수 있음\n- 이러한 취지를 고려할 때, 특정 요건을 충족하는 경우 K-IFRS 제1109호에 따라 위험회피회계의 적용이 가능한 예상거래를 문단 B72의 적용범위에서 일률적으로 배제할 명확한 근거가 없음\nㅇ 또한 예상거래가 당기에 발생하지 않았더라도, 파생상품에서 발생하는 손익을 해당 예상거래로부터 발생할 손익과 동일한 범주로 분류하는 것이 손익계산서의 기간 간 비교가능성 측면에서 보다 유용한 정보를 제공할 수 있음\n➋ 예상거래에서 발생하는 위험도 K-IFRS 제1118호 문단 B72에 따른 식별된 위험에 해당하는 경우, 예상거래의 발생가능성이 매우 커야 하는지\n□ 다수의 위원들이 예상거래가 일률적인 발생가능성의 기준을 충족해야만 하는 것은 아니며, 거래별로 사실관계 판단에 따라 파생상품을 식별된 위험을 관리하는데 사용함을 입증하면 문단 B72를 적용할 수 있을 것으로 보는 병설을 지지하였으며, 다음과 같은 의견이 제시됨\nㅇ K-IFRS 제1118호 문단 B72는 위험회피회계가 적용되지 않은 파생상품의손익 범주 분류에 관한 규정이므로 K-IFRS 제1109호에 따른 위험회피대상이 되기 위한 예상거래의 요건을 K-IFRS 제1118호…\n안건.5 파생상품 손익의 범주별 분류\n3. 주요 논의내용\n□ 다수의 위원들이 K-IFRS 제1118호 문단 B72 적용 시, 식별된 위험을 관리하는지를 확인할 수 있는 문서가 없을 경우, 해당 파생상품을 식별된 위험을 관리하기 위해 사용되는 파생상품으로 보기 어렵다는 점에 인식을 같이 하였으나,\nㅇ 지분 취득 거래에서 다른 기준서를 적용함에 따라 인식된 파생상품을 식별된 위험을 관리하기 위해 사용되는 파생상품으로 볼 수 있는지에 대해서 견해가 나뉘었음\n□ 지분의 취득 과정에서 인식된 파생상품은 식별된 위험을 관리하기 위해 사용되는 파생상품으로 볼 수 없다고 보는 갑설(영업 범주로 분류)을 지지한 위원들은 다음과 같은 의견을 제시함\nㅇ 결제일과 인도일이 일치하지 않아 파생상품을 인식하는 지분 취득 거래는 실무에서 자주 발생할 것으로 예상하는데, 관련 파생상품에 위험관리 목적이 있다고 보는 것은 문단 B72를 너무 넓은 범위로 해석하여 적용하는 것임\nㅇ 일부 위원은 별도의 문서화만으로 위험관리 목적을 입증하도록 허용하는 기조에서, 이러한 파생상품을 위험관리로 넓게 해석하면 지분 취득 거래 관련 파생상품은 거의 모두 투자 범주로 분류될 수 있음을 우려함\n- 또한, 파생상품의 문서화 여부에 따른 자의적인 범주 구분의 가능성을 고려해 지분 취득 거래 관련 파생상품에서 발생하는 손익은 영업 범주로 분류하는 것이 경영진의 잠재적인 편의(bias) 가능성을 줄여줄 것으로 예상함\n□ 지분의 취득 과정에서 인식된 파생상품도 식별된 위험을 관리하기 위해 사용되는 파생상품으로 볼 수 있다고 보는 을설(투자 범주로 분류)을 지지한 위원들은 다음과 같은 의견을 제시함\nㅇ 지분 취득 거래 관련 파생상품 또한 거래에 내재된 위험과의 연계성이 식별될 수 있고, 기업이 그러한 파생상품을 통해 식별된 위험을 관리한다고 판단될 경우 문단 B72를 적용하는 것은 가능함\n- 기준서에서 그러한 파생상품을 별도 정의하거나, 문단 B…\n안건.6 매출채권 팩토링 거래 관련 손익 범주 분류\n3. 주요 논의내용\n□ 모든 위원들은 상환청구권의 유무에 따른 관련 손익을 상이한 범주로 분류하는 을설을 지지하였으며, 다음과 같은 의견을 제시함\nㅇ 상환청구권의 유무에 따라 한 거래는 진성매각, 다른 거래는 차입거래로 회계처리하므로 경제적 실질이 다른 별개의 거래임\n① (상환청구권이 없는 팩토링 거래: 진성매각)\n- 문단 B60에 따라 자산을 제거하거나 매각예정으로 분류할 때 발생하는 수익과 비용은 자산을 제거하기 직전에 그 자산에서 발생한 수익 및 비용과 동일한 범주로 분류해야 함\n- 상환청구권이 없는 팩토링 거래에서 인식되는 매출채권처분손실은 관련 자산이 제거될 때 발생하는 손익으로, 문단 B60을 적용하여 매출채권에서 발생한 손익과 동일한 범주인 영업 범주로 분류함이 타당함\n② (상환청구권이 있는 팩토링 거래: 차입거래)\n- 상환청구권이 있는 팩토링 거래에서 인식되는 이자비용은 관련 매출채권이 제거되지 않고, 문단 59⑴에 명시된 자금조달에만 관련된 거래에서 발생하는 부채의 후속 측정에서 발생한 손익에 해당하므로 문단 60에 따라 재무 범주로 분류함이 타당함\n※ 참고\n관련 기준서 등\n참고.1\n관련 기준서 등\n1\n기업회계기준서\nK-IFRS 제1118호 ‘재무제표 표시와 공시’\n재무 범주\n59\n⑴ 자금조달에만 관련된 거래에서 발생하는 부채(문단 B50~B51 참조)\n⑵ 위 ⑴에서 기술된 부채 이외의 부채. 즉, 자금조달에만 관련되지는 않는 거래에서 발생하는 부채(문단 B53 참조)\n60\n⑴ 최초 측정과 부채의 제거를 포함한 후속 측정에서 발생하는 수익과 비용 (문단 B52 참조)\n⑵ 부채의 발행 및 소멸과 직접 관련된 증분비용(예: 거래 원가)\n61\n⑴ 이자수익과 이자비용. 단, 기업이 한국채택국제회계기준의 다른 요구사항을 적용하기 위해 이러한 수익과 비용을 식별하는 경우에 한함\n⑵ 이자율 변동으로 인해 발생한 수익과 비용. 단, 기업…",
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-18"
     },
     {
       "id": "3efed538ddd334a9",
@@ -3808,7 +3882,8 @@
       "replied_at": "2026-07-16",
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-07-16"
     },
     {
       "id": "105985e6af8e1a59",
@@ -3850,7 +3925,8 @@
       "replied_at": "2026-06-16",
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-16"
     },
     {
       "id": "d8da68e1e70de5e6",
@@ -3892,7 +3968,8 @@
       "replied_at": "2026-05-15",
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-05-15"
     },
     {
       "id": "de5b07da583c370e",
@@ -3937,7 +4014,8 @@
       "replied_at": "2026-04-30",
       "disclosed_at": "2026-09-30",
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-29"
     },
     {
       "id": "1d65c5d3a73457c1",
@@ -3987,7 +4065,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-22"
     },
     {
       "id": "9698298d79ebb017",
@@ -4037,7 +4116,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "d6932c96df766ff4",
@@ -4087,7 +4167,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "f4956a910e65cf70",
@@ -4137,7 +4218,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "d79df0414f4f7217",
@@ -4187,7 +4269,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "ca79fc238be4964b",
@@ -4237,7 +4320,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "b81287c2f2482f0c",
@@ -4287,7 +4371,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "8c9fdf637ea31395",
@@ -4337,7 +4422,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "84e7c74a5aa89f1c",
@@ -4387,7 +4473,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "7f0a9f3d43237d06",
@@ -4437,7 +4524,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "20d1deb1058213da",
@@ -4487,7 +4575,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "e81b961eed012527",
@@ -4537,7 +4626,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "4b66ce824b933e36",
@@ -4587,7 +4677,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "45e736e894d6a7d1",
@@ -4637,7 +4728,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "80d0736d1fd1f945",
@@ -4687,7 +4779,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "db6ced6660ac19e9",
@@ -4737,7 +4830,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "92bcc92013a09a57",
@@ -4787,7 +4881,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "c1d1158c7f0e8cfc",
@@ -4837,7 +4932,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "0a99f1882d5b9930",
@@ -4887,7 +4983,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "8056e00dd648a3e7",
@@ -4937,7 +5034,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "365dbbfd6ff20fd3",
@@ -4987,7 +5085,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "e75150308ed8e5bf",
@@ -5037,7 +5136,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "6f048e4bb29c947c",
@@ -5087,7 +5187,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "ffb7d7a9904f74d3",
@@ -5137,7 +5238,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "800f7a03fdb83588",
@@ -5187,7 +5289,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "a9ecc21bc831574b",
@@ -5237,7 +5340,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "4cec8dbd259992e6",
@@ -5287,7 +5391,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "ae09f3587c5e3bf7",
@@ -5337,7 +5442,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-23"
     },
     {
       "id": "ed8aee0d1a28ad22",
@@ -5387,7 +5493,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-02-27"
     },
     {
       "id": "90013be1f707011f",
@@ -5437,7 +5544,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-03-20"
     },
     {
       "id": "fed6017ba1775bb2",
@@ -5485,7 +5593,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-02"
     },
     {
       "id": "b365c3a9b0cd2bb7",
@@ -5530,7 +5639,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "148eed8ca31106c2",
@@ -5575,7 +5685,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "034a023c7b155465",
@@ -5620,7 +5731,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "2d985b567a9e6d86",
@@ -5665,7 +5777,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "static"
+      "hidden_reason": "static",
+      "first_seen_at": "2024-11-04"
     },
     {
       "id": "9779f6a2681ce7b5",
@@ -5709,7 +5822,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-06"
     },
     {
       "id": "06c690617f72b1bd",
@@ -5754,7 +5868,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-01"
     },
     {
       "id": "8698402952ffb83f",
@@ -5800,7 +5915,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-23"
     },
     {
       "id": "1e9117712c94e118",
@@ -5845,7 +5961,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-12"
     },
     {
       "id": "d8ada4bf325e97f6",
@@ -5890,7 +6007,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-23"
     },
     {
       "id": "9c1ddc7b5074b513",
@@ -5935,7 +6053,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-23"
     },
     {
       "id": "de2085922a1c8626",
@@ -5980,7 +6099,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-27"
     },
     {
       "id": "b0947a26e7ef9b14",
@@ -6025,7 +6145,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-05-06"
     },
     {
       "id": "2b5a62082a0a590f",
@@ -6070,7 +6191,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-28"
     },
     {
       "id": "39f24c72a520fc08",
@@ -6115,7 +6237,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": "foreign"
+      "hidden_reason": "foreign",
+      "first_seen_at": "2026-09-26"
     },
     {
       "id": "cc4f54d6df553931",
@@ -6160,7 +6283,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-04-28"
     },
     {
       "id": "655cbf4f40b4bc11",
@@ -6205,7 +6329,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-02"
     },
     {
       "id": "6abec75e4cce170c",
@@ -6250,7 +6375,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-01"
     },
     {
       "id": "8630456bad26f08a",
@@ -6295,7 +6421,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-04"
     },
     {
       "id": "6811d5e2cb173531",
@@ -6340,7 +6467,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-03"
     },
     {
       "id": "de56966fbdf93a9c",
@@ -6392,7 +6520,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-13"
     },
     {
       "id": "ea9d33f3179fcc1a",
@@ -6436,7 +6565,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-13"
     },
     {
       "id": "5e44e5e2c355fdca",
@@ -6480,7 +6610,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "2933ad94dd048b65",
@@ -6524,7 +6655,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-04"
     },
     {
       "id": "39893cf41db6a25f",
@@ -6569,7 +6701,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-15"
     },
     {
       "id": "e4ace8ca6aa455d7",
@@ -6616,7 +6749,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-14"
     },
     {
       "id": "e28d28e52d501616",
@@ -6664,7 +6798,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-09"
     },
     {
       "id": "62df7c3100b4ec02",
@@ -6708,7 +6843,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-29"
     },
     {
       "id": "0abd6d48156678a2",
@@ -6760,7 +6896,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-13"
     },
     {
       "id": "b23bb6e737cf6210",
@@ -6805,7 +6942,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-08-31"
     },
     {
       "id": "64ab8c34f0f39b26",
@@ -6849,7 +6987,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-15"
     },
     {
       "id": "cc3c820ee48d3693",
@@ -6893,7 +7032,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-15"
     },
     {
       "id": "fc06699e4e7e00e7",
@@ -6937,7 +7077,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-13"
     },
     {
       "id": "f892cce2c6a3a1d1",
@@ -6984,7 +7125,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-09-02"
     },
     {
       "id": "38019ee57cb41b62",
@@ -7028,7 +7170,8 @@
       "replied_at": null,
       "disclosed_at": null,
       "attachment_text": null,
-      "hidden_reason": null
+      "hidden_reason": null,
+      "first_seen_at": "2026-10-19"
     }
   ],
   "schedules": [

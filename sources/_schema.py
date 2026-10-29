@@ -136,6 +136,8 @@ _ITEM_SCHEMA = {
         "attachment_text": {"type": ["string", "null"]},
         # 2026-10-20: 메일 신규·화면 기본 조회 공통 제외 사유(_utils.feed_hidden_reason()).
         "hidden_reason": {"enum": ["static", "foreign", "meeting", None]},
+        # 2026-10-29: 처음 수집일(data/first_seen.json). 최근 정책동향이 공식 자료에 쓴다.
+        "first_seen_at": {"type": ["string", "null"]},
     },
 }
 

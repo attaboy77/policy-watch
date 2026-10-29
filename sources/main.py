@@ -15,7 +15,7 @@ import os
 import sys
 from datetime import datetime, timezone, timedelta
 
-from . import _excluded_log, _gap_log, _source_health
+from . import _excluded_log, _first_seen, _gap_log, _source_health
 from ._config import CATEGORIES, COLLECT_WINDOW_DAYS, DISABLED_SOURCES, SOURCE_LABELS
 from ._schema import validate as validate_schema
 from ._summarize import summarize
@@ -431,6 +431,23 @@ def build_data_json(items: list[dict]) -> dict:
     }
 
 
+def stamp_first_seen(items: list[dict], today: str, path: str = _first_seen.PATH) -> None:
+    """2026-10-29: 최종 items의 처음 수집일을 `data/first_seen.json`에 반영하고 각 항목에
+    `first_seen_at`을 채운다(최근 정책동향이 공식 자료를 max(발행일, 처음 수집일)로 고름).
+    소스 실패로 전일 캐시를 쓴 항목도 id가 같아 처음 수집일이 유지된다."""
+    store = _first_seen.load(path)
+    if not store:
+        # 파일이 없거나 깨졌으면 전부 "오늘 처음 본 것"이 돼 최근 정책동향이 옛 자료로 찬다 —
+        # 처음 수집일을 모르는 걸로 보고 발행일로 시작한다(초기값 채울 때와 같은 원칙).
+        print(f"  ⚠ {path} 없음/읽기 실패 — 처음 수집일을 발행일로 초기화")
+        for it in items:
+            store[it["id"]] = {"first": (it.get("published_at") or today)[:10], "last": today}
+    _first_seen.update(store, [it["id"] for it in items], today)
+    for it in items:
+        it["first_seen_at"] = _first_seen.first_of(store, it["id"])
+    _first_seen.save(_first_seen.prune(store, datetime.strptime(today, "%Y-%m-%d").date()), path)
+
+
 def main() -> None:
     # 2026-09-02: Windows 콘솔(cp949 등)에서 "✓"/"—" 같은 유니코드 기호를
     # print()하면 UnicodeEncodeError로 죽는 문제 방지(실측 확인 — 로컬에서
@@ -448,6 +465,7 @@ def main() -> None:
 
     built = build_data_json(raw_items)  # 내부에서 google_news.resolve_finalized_urls() 호출
     counts_by_category = built.pop("_counts_by_category")
+    stamp_first_seen(built["items"], _now_kst_iso()[:10])
     # 2026-09-08: build_data_json()이 방금 채운 모듈 전역 통계를 읽어온다 —
     # collect_all()처럼 반환값 시그니처를 바꾸면 기존 테스트가 깨지므로 피한다.
     google_decode_stats = google_news.get_decode_stats()

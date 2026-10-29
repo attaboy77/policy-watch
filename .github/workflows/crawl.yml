@@ -134,7 +134,10 @@ jobs:
           # 2026-09-10: data/sent_log.json(메일로 실제 발송된 id 누적 기록)도
           # 포함 — 안 그러면 다음 실행이 "어제 이미 보냈다"는 이력을 몰라 구글
           # 뉴스 RSS 재등장 기사를 매번 신규로 오판한다(sources/_sent_log.py 참고).
-          git add site/data.json docs/EFFECTIVE_DATE_GAPS.md docs/EXCLUDED_LOG.md data/source_cache.json data/source_health.json data/sent_log.json
+          # 2026-10-29: data/first_seen.json(항목별 처음 수집일)도 포함 — 빠지면 매일 새 VM에서
+          # 모든 항목이 "오늘 처음 본 것"이 되어 최근 정책동향이 전부 오늘 자료로 보인다
+          # (sources/_first_seen.py 참고).
+          git add site/data.json docs/EFFECTIVE_DATE_GAPS.md docs/EXCLUDED_LOG.md data/source_cache.json data/source_health.json data/sent_log.json data/first_seen.json
           git diff --cached --quiet || git commit -m "chore: 정책 데이터 갱신 $(date +'%Y-%m-%d')"
 
           # 2026-09-15: 사용자가 크롤 실행 도중(수집에 몇 분 걸림) 직접 push하면,

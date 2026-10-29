@@ -1481,6 +1481,7 @@ ITEM_FIELDS = [
     "is_static", "date_estimated", "duplicate_count", "duplicate_sources", "related_news",
     "is_meeting_schedule", "ai_generated", "revision_reason", "is_roadmap_estimate",
     "effective_date_note", "replied_at", "disclosed_at", "attachment_text", "hidden_reason",
+    "first_seen_at",  # 2026-10-29: main.stamp_first_seen()이 채운다(finalize 시점엔 None)
 ]
 
 # 2026-09-02 사용자 지시: KSSB 자발적용 기준서(doc_type="자발적용")는 자체
