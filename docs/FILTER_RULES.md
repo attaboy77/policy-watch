@@ -86,7 +86,7 @@
 | 12 | 자기 조직 내부 활동 `excluded:internal_activity` | L3 | 제목에 내부 인원(`INTERNAL_AUDIENCE_KEYWORDS`: 직원·임직원·공무원·임원진·경영진·실무자·담당자)과 교육·연수(`INTERNAL_TRAINING_KEYWORDS`: 교육·연수·워크숍·특강·역량강화·아카데미)가 **같이** 있으면 주체(공적 기관·기업)와 무관하게 제외. 예외: 의무화·개정안·입법예고·시행령·발의·법안 | 10/29 · "장수군 회계교육에 직원 100여 명 참여…예산 집행 기준·감사 사례 학습" — 쉼표가 없어 #11이 안 걸렸고 "집행 기준"으로 #9를 통과 |
 | 13 | 논평성 기사 `excluded:opinion_piece` | L3 | 제목 맨 앞 대괄호가 [시선]·[칼럼]·[기고]·[사설] | 9/15 · "[시선] …빗썸, K-IFRS 전환"이 #10을 통과 |
 | 14 | 지자체 건의 `excluded:local_gov_petition` | L3 | 주체가 OO구/시/군이고 건의·촉구·요구·요청·요망 | 9/2 · 건의 단계는 확정 규제가 아님 |
-| 15 | 해외 전용 뉴스 `excluded:foreign_news` | L3 | 도메인이 tradingview.com(서브도메인·경로 포함), 또는 제목에 美·미국·EU·FASB·SEC가 있고 국내 도입 맥락이 없음(IASB/ISSB는 대상 아님 → §3 해외기준) | 9/2 · "서클 CEO 美 디지털자산 회계기준 개정" · 10/29 "https://…/경로" 꼴 도메인도 잡히게 수정 |
+| 15 | 해외 전용 뉴스 `excluded:foreign_news` | L3 | (가) 도메인이 `FOREIGN_NEWS_DOMAINS`(tradingview.com·idnfinancials.com·tradingkey.com·vietnam.vn·unite.ai·coindesk.com, 서브도메인·경로 포함), (나) 국가 도메인(.vn·.id·.jp·.cn …, `.kr`과 일반 용도로 쓰이는 .ai·.io·.co·.me·.tv 등 `GENERIC_USE_CCTLDS` 제외), (다) 제목에 美·미국·EU·FASB·SEC가 있고 국내 도입 맥락이 없음(IASB/ISSB는 대상 아님 → §3 해외기준) | 9/2 · "서클 CEO 美 디지털자산 회계기준 개정" · 10/29 "https://…/경로" 꼴 도메인도 잡히게 수정 · 10/29 "…IDX 종합 지수를 지지합니다 - IDNFinancials"(인도네시아 증시) — 해외 매체 한국어 번역판, 8/26~ 뉴스 1,381건 중 같은 유형 10건 |
 | 16 | 홍보성 보도 `excluded:corporate_pr` | L3 | `CORPORATE_PR_KEYWORDS`(출범·맞손·협약·수상·선정·구축·추진·지속가능경영보고서 발간·창사 첫 …). 예외: 개정·제정·공포·입법예고·기준서·모범규준·예규·의무화 등 | ADDENDUM-5 §3(8/31) · ESG 보고서 발간 문구 9/2 |
 | 17 | 카테고리 상한 `excluded:category_cap_tier4` · `excluded:category_cap` | L3 | 카테고리당 종합 경제지(tier 4)는 `final_score` 상위 5건(`_tier4`), 그다음 전체 뉴스 15건(`category_cap`). 공식은 무제한 | ADDENDUM §1(8/26) · 뉴스가 공식을 덮음 · 로그는 10/29부터 |
 | 18 | 관련 보도 흡수 `excluded:related_news_attached` | L3 | 같은 카테고리 공식 항목과 7일 이내 + 유사도 ≥0.30 또는 핵심 명사구 포함이면 공식 카드의 "관련 보도"(최대 3건)로 들어가고 피드에서는 빠짐. 비고에 붙은 공식 항목 제목 — **화면에서 그 공식 카드를 펼치면 보인다** | ADDENDUM-4 §4(8/31) · 같은 소식 중복 노출 · 로그는 10/29부터 |
@@ -126,7 +126,7 @@ EXCLUDED_LOG가 아니라 Actions 출력에만 남는다(`[notify_mail] … N건
 
 | 화면 | 거르는 것 | 도입 · 이유 |
 |---|---|---|
-| 최근 정책동향 (`renderTodayView`) | `hidden_reason`이 있는 항목 전부(static·foreign·meeting). 날짜는 **공식은 max(발행일, 처음 수집일)**, 언론은 발행일(`recentDateOf`). 기간은 1→3→7→14→30일로 늘리며 **5건 이상 + 공식 1건 이상**이 되면 멈춤(30일에서 무조건 멈춤). 공식·보도 각 12건까지 보이고 나머지는 "전체 동향에서 더 보기". 공식은 그 날짜 내림차순 → tier → 점수 순. 검색어는 기간을 정한 뒤 그 안에서만 적용 | 9/1 이름·점진 확대 · 10/20 공식 1건 조건(보도만 5건으로 공식을 놓침) · 10/29 meeting 제외 · 10/29 처음 수집일: 메일로 간 공식 36건 중 28건이 그날 화면에 없었음 |
+| 최근 정책동향 (`renderTodayView`) | `hidden_reason`이 있는 항목 전부(static·foreign·meeting). 날짜는 **공식은 max(발행일, 처음 수집일)**, 언론은 발행일(`recentDateOf`). 기간은 1→3→7→14→30일로 늘리며 **5건 이상 + 공식 1건 이상**이 되면 멈춤(30일에서 무조건 멈춤). 공식·보도 각 12건까지 보이고 나머지는 "전체 동향에서 더 보기". 공식은 그 날짜 내림차순 → tier → 점수, 보도는 그 날짜 내림차순 → 점수 순. 검색어는 기간을 정한 뒤 그 안에서만 적용 | 9/1 이름·점진 확대 · 10/20 공식 1건 조건(보도만 5건으로 공식을 놓침) · 10/29 meeting 제외 · 10/29 처음 수집일: 메일로 간 공식 36건 중 28건이 그날 화면에 없었음 |
 | 전체 동향 (`filterItems`) | 카테고리·문서 종류·기간(기본 최근 30일)·검색어. meeting은 항상 제외, foreign은 "해외기준"을 직접 골라야, static은 기간 90일 초과일 때만. static은 정렬에서 항상 아래 | ADDENDUM-4 §2-4 · 8/28 · 10/20 hidden_reason 통일 · 10/29 meeting 제외 |
 | 캘린더 (`schedules.build_schedules`) | `effective_date` 있는 항목 + `data/schedules_manual.yml`. **위원회 회의 예정(`is_meeting_schedule`)은 제외** | 9/14 · 회의 일정이 실제 시행일과 섞임 |
 

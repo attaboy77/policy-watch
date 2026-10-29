@@ -1920,3 +1920,24 @@ class TestExcludedVariants:
         assert [it["id"] for it in kept] == ["off1"]
         assert excluded[0]["excluded_reason"] == "excluded:related_news_attached"
         assert off["title"] in excluded[0]["excluded_note"]
+
+
+class TestForeignNewsDomainsExtended:
+    # 2026-10-29: 해외 매체 한국어 번역판(목록) + 국가 도메인(목록 없이).
+    @pytest.mark.parametrize("domain", ["https://www.idnfinancials.com", "https://www.tradingkey.com/x",
+                                        "https://vietnam.vn/abc", "https://www.coindesk.com/ko/x",
+                                        "https://news.example.jp", "https://www.example.co.id"])
+    def test_foreign(self, domain):
+        assert is_foreign_news_only("재무제표 발표 관련 소식", domain=domain) is True
+
+    @pytest.mark.parametrize("domain", ["https://www.hankyung.com", "https://kr.investing.com/news/1",
+                                        "https://www.etaxnews.co.kr", "https://unite.example.ai",
+                                        "https://some.io", "https://it.chosun.com/x"])
+    def test_not_foreign(self, domain):
+        assert is_foreign_news_only("재무제표 발표 관련 소식", domain=domain) is False
+
+    def test_idx_example_excluded(self):
+        item = {"category": "kifrs", "layer": "L3", "title": "다난타라 신호 및 재무제표 발표가 IDX 종합 지수를 지지합니다. - IDNFinancials",
+                "source": {"tier": 5, "domain": "https://www.idnfinancials.com"}, "urls": {"news": "https://x", "official": None}}
+        kept, excluded = apply_foreign_news_filter([item])
+        assert kept == [] and excluded[0]["excluded_reason"] == "excluded:foreign_news"

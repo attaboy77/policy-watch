@@ -17,7 +17,7 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       APPLICABILITY, COMPANY_EVENTS, COMPANY_EVENT_STRONG_SIGNALS,
                       MANUFACTURING_ACCOUNTING_CONTEXT, EVENT_ANNOUNCEMENT_STRONG_SIGNALS,
                       FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS,
-                      LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS,
+                      LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS, GENERIC_USE_CCTLDS,
                       NON_TARGET_TAX_SUBJECTS, OPINION_PREFIX_KEYWORDS,
                       STANDARD_SETTER_GOVERNANCE, STANDING_DOC, STANDING_DOC_FRESH_DAYS,
                       DOC_VARIANT_MODIFIERS, SELF_ACTIVITY_PUBLIC_SUFFIXES,
@@ -1203,7 +1203,11 @@ def _domain_in(domain: str | None, domains: list[str]) -> bool:
 
 def _is_foreign_news_domain(domain: str | None) -> bool:
     # 2026-10-29: 예전엔 문자열 그대로 endswith로 봐서 "https://x.tradingview.com/경로"는 못 잡았다.
-    return _domain_in(domain, FOREIGN_NEWS_DOMAINS)
+    if _domain_in(domain, FOREIGN_NEWS_DOMAINS):
+        return True
+    # 2026-10-29: 국가 도메인(.vn·.id·.jp …)은 목록 없이 해외 매체로 본다(`GENERIC_USE_CCTLDS` 제외).
+    tld = _host_of(domain).rsplit(".", 1)[-1]
+    return len(tld) == 2 and tld.isalpha() and tld not in GENERIC_USE_CCTLDS
 
 
 def is_foreign_news_only(title: str, domain: str | None = None) -> bool:

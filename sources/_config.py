@@ -295,7 +295,15 @@ LOCAL_GOV_PETITION_KEYWORDS = ["건의", "촉구", "요구", "요청", "요망"]
 FOREIGN_NEWS_SIGNALS = ["美", "미국", "EU", "FASB", "SEC"]
 # 발견되는 대로 추가(2026-09-02: fr.tradingview.com 실측 — 국가별 서브도메인이
 # 붙어도 걸리도록 서브도메인 포함 suffix 매칭).
-FOREIGN_NEWS_DOMAINS = ["tradingview.com"]
+# 2026-10-29: 해외 매체의 한국어 번역판이 더 있었다(8/26~10/29 뉴스 1,381건 조사). 실측:
+# "다난타라 신호 및 재무제표 발표가 IDX 종합 지수를 지지합니다. - IDNFinancials"(인도네시아 증시,
+# 화면 노출). 같은 유형: tradingkey.com(미국 종목 시세), vietnam.vn(베트남 회계기준), unite.ai,
+# coindesk.com(미국 기사 번역). kr.investing.com은 국내 매체(EBN 등) 기사 재게재라 넣지 않았다.
+FOREIGN_NEWS_DOMAINS = ["tradingview.com", "idnfinancials.com", "tradingkey.com", "vietnam.vn",
+                        "unite.ai", "coindesk.com"]
+# 목록은 늘 한발 늦으므로 국가 도메인(.vn·.id·.jp·.cn 등)은 목록 없이 해외로 본다(`.kr` 제외).
+# 아래는 국가 도메인이지만 일반 용도로 흔히 쓰여 국가를 뜻하지 않는 것들 — 이 TLD는 판정하지 않는다.
+GENERIC_USE_CCTLDS = {"kr", "ai", "io", "co", "me", "tv", "fm", "am", "ly", "gg", "to", "so", "sh", "cc", "ws"}
 
 # ── 블로그·커뮤니티 도메인 제외 (2026-10-29 사용자 지시) ─────────────────────
 # 언론이 아니라 개인이 쓴 글이다. 실측: "강냉이콘의 산업별 재무제표 해석법 - 브런치"(brunch.co.kr,

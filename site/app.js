@@ -813,11 +813,15 @@
     // §5-5 정렬: 공식 그룹은 tier 오름차순 → final_score 내림차순, 보도 그룹은 final_score 내림차순.
     // 2026-10-29: 공식 그룹은 recentDateOf() 내림차순을 맨 앞에 둔다 — 새 소스 첫 수집분(10/1 입법예고
     // 12건)이 점수로 위를 채워 TF 5차(10/16)가 "더 보기" 뒤로 밀렸다(사용자 결정).
-    official.sort(function (a, b) {
+    // 보도 그룹도 날짜 먼저(2026-10-29 사용자 지시 — 점수순이라 10/26 기사가 6번째, 9/30 기사가 2번째였다).
+    function byRecentDate(a, b) {
       var da = recentDateOf(a), db = recentDateOf(b);
-      return (da < db ? 1 : da > db ? -1 : 0) || (a.source.tier - b.source.tier) || (b.final_score - a.final_score);
+      return da < db ? 1 : da > db ? -1 : 0;
+    }
+    official.sort(function (a, b) {
+      return byRecentDate(a, b) || (a.source.tier - b.source.tier) || (b.final_score - a.final_score);
     });
-    news.sort(function (a, b) { return b.final_score - a.final_score; });
+    news.sort(function (a, b) { return byRecentDate(a, b) || (b.final_score - a.final_score); });
 
     document.getElementById("todayTitle").textContent = windowDays === 1
       ? fmtDateHeader(day) + " 소식"
