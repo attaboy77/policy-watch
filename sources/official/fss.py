@@ -23,7 +23,7 @@ from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
 
-from .. import _http, _gap_log
+from .. import _excluded_log, _http, _gap_log
 from .._source_health import PartialFetch
 from .._utils import (doc_type_of, extract_title_revision_date, is_event_announcement,
                       keyword_score, matched_keywords, make_id_exact, final_score, recency_score,
@@ -152,9 +152,11 @@ def fetch_data_board(*, fetch_attachments: bool = True) -> list[dict]:
         href = title_cell.get("href", "")
         if not title or not href:
             continue
-        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
-            continue
         url = href if href.startswith("http") else f"{FSS_BASE}{href}"
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
+            _excluded_log.skip(source="금융감독원", reason="collect:event_announcement", title=title,
+                               url=url, category="icfr")
+            continue
         published_at = cells[3].get_text(strip=True) or None
         doc_type = doc_type_of(title, source_tier=1)
         item = _build_item(title=title, url=url, published_at=published_at,
@@ -195,9 +197,11 @@ def fetch_kicfr_guidelines() -> list[dict]:
             continue
         if "모범규준" not in title and "설계" not in title and "평가" not in title:
             continue
-        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
-            continue
         url = href if href.startswith("http") else f"{KICFR_BASE}/sub/menu/{href.lstrip('./')}"
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
+            _excluded_log.skip(source="내부회계관리제도운영위원회", reason="collect:event_announcement",
+                               title=title, url=url, category="icfr")
+            continue
         doc_type = doc_type_of(title, source_tier=1)
         revision_date = extract_title_revision_date(title)
         items.append(_build_item(

@@ -28,7 +28,7 @@ from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
 
-from . import _http
+from . import _excluded_log, _http
 from ._config import TAX_SUBJECTS
 from ._utils import keyword_score, matched_keywords, make_id_exact, final_score, recency_score
 
@@ -188,6 +188,9 @@ def search_law(law_name: str, *, oc: str | None = None, wanted: set[str] | None 
     for law in root.findall("law"):
         name = _tag_text(law, "법령명한글") or ""
         if name not in wanted:
+            # 2026-10-29: 부분일치로 딸려온 다른 법령("지방교부세법" 등)도 EXCLUDED_LOG에.
+            _excluded_log.skip(source="법제처", reason="collect:law_name_mismatch",
+                               title=f"{name} (검색어 '{law_name}')", category="tax")
             continue
         out.append({
             "법령명한글": name,

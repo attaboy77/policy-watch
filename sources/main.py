@@ -20,13 +20,14 @@ from ._config import CATEGORIES, COLLECT_WINDOW_DAYS, DISABLED_SOURCES, SOURCE_L
 from ._schema import validate as validate_schema
 from ._summarize import summarize
 from .current_standards import build_current_standards
-from ._utils import (apply_applicability_gate, apply_category_caps,
-                     apply_company_event_filter, apply_company_self_activity_filter,
-                     apply_corporate_pr_filter,
+from ._utils import (apply_applicability_gate, apply_blog_community_filter,
+                     apply_category_caps_with_excluded,
+                     apply_company_event_filter_with_excluded, apply_company_self_activity_filter,
+                     apply_corporate_pr_filter, apply_internal_activity_filter,
                      apply_foreign_news_filter, apply_local_gov_petition_filter, apply_news_age_limit,
                      apply_non_target_tax_subject_filter, apply_opinion_piece_filter,
                      apply_regulatory_gate, apply_standard_setter_governance_filter,
-                     attach_related_news, dedupe,
+                     attach_related_news_with_excluded, dedupe,
                      dedupe_doc_variants, dedupe_similar_news_with_excluded, finalize_item,
                      mark_standing_documents, normalize_news_item)
 from .schedules import build_schedules
@@ -270,7 +271,8 @@ def _record_excluded(excluded: list[dict]) -> None:
             url=(it.get("urls") or {}).get("official") or (it.get("urls") or {}).get("news"),
             source=(it.get("source") or {}).get("name"),
             reason=it["excluded_reason"],
-            note=(f"→ 대표: {it['merged_into']}" if it.get("merged_into") else None),
+            note=(it.get("excluded_note")
+                  or (f"→ 대표: {it['merged_into']}" if it.get("merged_into") else None)),
         )
 
 
@@ -296,6 +298,11 @@ def build_data_json(items: list[dict]) -> dict:
     이번에 놓친 사례("[시선] ... 빗썸, K-IFRS 전환·내부통제 정비")가 바로
     개별 기업 필터를 통과한 건이라, 그 필터의 사각지대를 곧바로 메우는
     안전망 자리가 맞다.
+
+    2026-10-29: 블로그·커뮤니티 도메인 제외(언론 1년 상한 다음)와 자기 조직 내부 활동
+    제외(자사 활동 다음)를 추가했다. 개별 기업 소식·카테고리 상한·관련 보도 흡수까지
+    모든 단계의 제외분을 EXCLUDED_LOG에 남긴다 — 이 함수에 들어온 항목은 최종 items
+    아니면 로그 둘 중 하나에 반드시 있다(수집 단계 제외는 각 어댑터가 `collect:…`로 기록).
     """
     n = len(items)
     items, excluded = apply_applicability_gate(items)  # ADDENDUM-6 §1, 전 계층
@@ -316,6 +323,11 @@ def build_data_json(items: list[dict]) -> dict:
     items, excluded = apply_news_age_limit(items)
     _record_excluded(excluded)
     _log_stage("언론 발행일 1년 상한 후", items, n)
+    # 2026-10-29: 블로그·커뮤니티 글 — 중복 병합 전에 빼서 대표로 뽑히지도 않게.
+    n = len(items)
+    items, excluded = apply_blog_community_filter(items)
+    _record_excluded(excluded)
+    _log_stage("블로그·커뮤니티 도메인 제외 후", items, n)
     # 2026-10-08: §5·§1에서 빠진 항목도 EXCLUDED_LOG에 남긴다 — 로그가 없어서 10/1~10/8
     # 뉴스 54건이 §5→§1 사이에서 전부 빠지는 동안 8일간 몰랐다.
     n = len(items)
@@ -338,13 +350,19 @@ def build_data_json(items: list[dict]) -> dict:
     _record_excluded(excluded)
     _log_stage("§1 규제성 게이트 후", deduped, n)
     n = len(deduped)
-    deduped = apply_company_event_filter(deduped)  # ADDENDUM-7 §1
+    deduped, excluded = apply_company_event_filter_with_excluded(deduped)  # ADDENDUM-7 §1
+    _record_excluded(excluded)
     _log_stage("ADDENDUM-7 §1(개별 기업 소식) 제외 후", deduped, n)
     # 2026-10-14: 기업이 주체인 자사 활동 소식("한난, 경영진 내부회계 교육 시행" 등).
     n = len(deduped)
     deduped, excluded = apply_company_self_activity_filter(deduped)
     _record_excluded(excluded)
     _log_stage("기업 주체 자사 활동 소식 제외 후", deduped, n)
+    # 2026-10-29: 주체와 무관하게 자기 조직 내부 교육·연수("장수군 회계교육에 직원 100여 명 참여").
+    n = len(deduped)
+    deduped, excluded = apply_internal_activity_filter(deduped)
+    _record_excluded(excluded)
+    _log_stage("자기 조직 내부 활동 제외 후", deduped, n)
     n = len(deduped)
     deduped, excluded = apply_opinion_piece_filter(deduped)  # 2026-09-15
     _record_excluded(excluded)
@@ -362,12 +380,16 @@ def build_data_json(items: list[dict]) -> dict:
     _record_excluded(excluded)
     _log_stage("§3 홍보성 제외 후", deduped, n)
     n = len(deduped)
-    capped = apply_category_caps(deduped)
+    capped, excluded = apply_category_caps_with_excluded(deduped)
+    _record_excluded(excluded)
     _log_stage("카테고리 상한 적용 후", capped, n)
     # ADDENDUM-4 §4: 공식(L1/L2) 항목에 관련 L3 기사를 연결하고, 그렇게 붙은 L3는
     # 피드 중복 노출을 막기 위해 여기서 제외한다(layer 필드가 남아있는 동안 처리 —
     # finalize_item()이 layer를 지우므로 그 전에 해야 함).
-    capped = attach_related_news(capped)
+    n = len(capped)
+    capped, excluded = attach_related_news_with_excluded(capped)
+    _record_excluded(excluded)
+    _log_stage("공식 항목 관련 보도로 흡수 후", capped, n)
     # 2026-10-14: 상설 기준 문서(오래된 모범규준·적용지침·FAQ·가이드라인)는 is_static —
     # 메일 신규·"최근 정책동향"에서 빠진다. 새로 게시된 개정은 일정 기간 신규로 둔다.
     mark_standing_documents(capped)

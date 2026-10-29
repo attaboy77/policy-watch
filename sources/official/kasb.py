@@ -36,7 +36,7 @@ from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
 
-from .. import _gap_log, _http
+from .. import _excluded_log, _gap_log, _http
 from .._config import COLLECT_WINDOW_DAYS
 from .._utils import (
     classify,
@@ -92,6 +92,7 @@ _NOTICE_CATEGORY_MAP = {
     "지속가능성기준소식": "esg",
 }
 _EXCLUDED_NOTICE_CATEGORIES = {"공지사항"}  # 운영성 공지 — 사용자 지시로 제외
+_LOG_SOURCE = "한국회계기준원"  # EXCLUDED_LOG 출처 칸(2026-10-29: 수집 단계 제외도 기록)
 
 # calListA.do 중분류(<p class="cata03_..">) → 우리 category key. 실측 결과 KASB는
 # 회계기준·지속가능성기준 두 위원회만 운영하고(icfr/tax는 각각 FSS/NTS 소관이라
@@ -194,6 +195,8 @@ def fetch_notices(*, fetch_detail: bool = True, max_detail_fetches: int = 30) ->
             continue
         cat_text = cells[1].get_text(strip=True)
         if cat_text in _EXCLUDED_NOTICE_CATEGORIES:
+            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:out_of_scope",
+                               title=f"[{cat_text}] {cells[2].get_text(strip=True)}", url=NOTICE_LIST_URL)
             continue
         link = cells[2].find("a")
         if link is None:
@@ -203,6 +206,8 @@ def fetch_notices(*, fetch_detail: bool = True, max_detail_fetches: int = 30) ->
         if not title or not m:
             continue
         if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4: 인사·조직·운영 공지 + 행사/포럼 안내 제외(tier 무관)
+            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:event_announcement", title=title,
+                               url=f"{NOTICE_VIEW_URL}?seq={m.group(1)}")
             continue
         seq = m.group(1)
         date_p = row.select_one(".board_date")
@@ -210,6 +215,8 @@ def fetch_notices(*, fetch_detail: bool = True, max_detail_fetches: int = 30) ->
 
         category = _NOTICE_CATEGORY_MAP.get(cat_text) or classify(title)
         if category not in ("kifrs", "esg"):
+            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:no_category", title=title,
+                               url=f"{NOTICE_VIEW_URL}?seq={seq}")
             continue  # 매핑도 안 되고 키워드로도 못 걸리면 스킵(잘못된 카테고리 태깅 방지)
 
         url = f"{NOTICE_VIEW_URL}?seq={seq}"
@@ -283,16 +290,23 @@ def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
             minor_p = cells[2].select_one("p")
             minor = minor_p.get_text(strip=True) if minor_p else ""
             category = _CALENDAR_CATEGORY_MAP.get(minor)
-            if category is None:
-                continue  # 세미나/포럼 등 위원회 회의가 아닌 공통 행사는 스킵
             link = cells[3].find("a")
             title = link.get_text(strip=True) if link else ""
             m = re.search(r"fn_Detail\('(\d+)'\)", link.get("onclick", "") if link else "")
             if not title or not m or not published_at:
                 continue
+            log_url = f"{CALENDAR_VIEW_URL}?seq={m.group(1)}"
+            if category is None:  # 세미나/포럼 등 위원회 회의가 아닌 공통 행사는 스킵
+                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:out_of_scope",
+                                   title=f"[{minor}] {title}", url=log_url)
+                continue
             if "일반기업회계기준" in title:  # 2026-08-31 사용자 지시: K-IFRS 대상 아님
+                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:non_kifrs", title=title,
+                                   url=log_url, category=category)
                 continue
             if is_event_announcement(title):  # 세미나·포럼 등 제목 기반 보강 필터
+                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:event_announcement",
+                                   title=title, url=log_url, category=category)
                 continue
 
             seq = m.group(1)
@@ -380,6 +394,9 @@ def fetch_revisions() -> list[dict]:
             continue
         standard = cells[2].get_text(strip=True)
         if standard != _REVISION_APPLICABLE_STANDARD:
+            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:non_kifrs",
+                               title=f"[{standard}] {cells[0].get_text(strip=True)}년 {cells[3].get_text(strip=True)}",
+                               url=REVISION_LIST_URL)
             continue  # 일반기업회계기준 등 K-IFRS가 아니면 제외(사용자 지시)
 
         name = cells[3].get_text(strip=True)
@@ -565,12 +582,16 @@ def fetch_qna(*, fetch_attachments: bool = True) -> list[dict]:
         m = _QNA_DETAIL_RE.search(link.get("onclick", ""))
         if not title or not m:
             continue
-        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
-            continue
         seq, ctg_cd = m.group(1), m.group(2)
+        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
+            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:event_announcement", title=title,
+                               url=_qna_detail_url(seq, ctg_cd), category="kifrs")
+            continue
         date_p = row.select_one(".board_date")
         replied_at = date_p.get_text(strip=True) if date_p else None
         if not replied_at:
+            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:non_kifrs", title=title,
+                               url=_qna_detail_url(seq, ctg_cd), category="kifrs")
             continue  # 날짜 없는 상단 고정 항목 = 일반기업회계기준 계열, 제외
         disclosed_at = None
         if disclosed_idx is not None and disclosed_idx < len(cells):

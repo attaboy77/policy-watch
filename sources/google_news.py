@@ -11,13 +11,13 @@ from datetime import date
 
 import feedparser
 
-from . import _google_decode, _http
+from . import _excluded_log, _google_decode, _http
 from ._config import CATEGORIES, COLLECT_WINDOW_DAYS
 from ._utils import (
     google_news_rss_url,
     keyword_score,
     matched_keywords,
-    is_noise_l3,
+    noise_reason_l3,
     make_id,
     trust_of,
 )
@@ -128,7 +128,11 @@ def fetch_category(cat_key: str, days: int = COLLECT_WINDOW_DAYS, *,
             continue
         source_hint = _entry_source_hint(entry)
         tier, trust_score, source_name = trust_of(source_hint)
-        noise = is_noise_l3(title, tier=tier, category=cat_key)
+        noise_reason = noise_reason_l3(title, tier=tier, category=cat_key)
+        noise = noise_reason is not None
+        if noise and filter_noise:  # 2026-10-29: 수집 단계 제외도 EXCLUDED_LOG에
+            _excluded_log.skip(source=source_name, reason=noise_reason, title=title, url=link,
+                               category=cat_key)
         # 구글 뉴스 리다이렉트 링크 디코딩은 여기서 하지 않는다 — 이 시점엔
         # 아직 노이즈 필터만 거친 상태라 이후 파이프라인에서 걸러질 항목까지
         # 구글에 요청을 보내게 된다. main.py 파이프라인 맨 끝에서

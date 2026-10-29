@@ -32,6 +32,14 @@ def record(*, category: str, title: str, url: str | None, source: str | None,
     })
 
 
+def skip(*, source: str, reason: str, title: str, url: str | None = None,
+         category: str = "") -> None:
+    """수집 단계(어댑터)에서 버린 항목 기록용(2026-10-29). `reason`은 "collect:…".
+    어댑터는 파이프라인 item 모양을 만들기 전에 버리므로 `record()`보다 인자를 줄였다.
+    소스가 실패해 전일 캐시로 대체되면 그 소스의 이번 기록은 없다(캐시분은 이미 걸러진 것)."""
+    record(category=category, title=title, url=url, source=source, reason=reason)
+
+
 def excluded() -> list[dict]:
     """지금까지 record()된 항목 전체(읽기 전용 스냅샷)."""
     return list(_excluded)
@@ -51,17 +59,16 @@ def flush(path: str = "docs/EXCLUDED_LOG.md") -> None:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     now = datetime.now(_KST).strftime("%Y-%m-%d %H:%M:%S %z")
     lines = [
-        "# 적용 대상 판정 제외 목록 (EXCLUDED_LOG)",
+        "# 필터 제외 목록 (EXCLUDED_LOG)",
         "",
         f"생성 시각: {now}",
         "",
-        "SPEC-ADDENDUM-6.md §1(적용 대상 판정 게이트)에서 제외된 항목이다.",
-        "L1/L2/L3 전 계층 대상 — 공식 소스도 면제되지 않는다(§1-2).",
-        "2026-10-08부터 §5 중복 제거(`duplicate_exact`/`similar_news_merged`)와",
-        "§1 규제성 게이트(`no_regulatory_signal`)에서 빠진 뉴스도 함께 기록한다.",
-        "**과다 필터링 점검용**: 아래 목록 중 실제로는 우리에게 적용되는 항목이",
-        "있으면(오제외) 해당 키워드를 `sources/_config.py`의 `APPLICABILITY`에서",
-        "빼거나 예외 조건을 추가할 것(§9-2).",
+        "이번 수집 실행에서 필터에 걸려 빠진 항목 전부다(2026-10-29부터 — 규칙과 사유 코드는",
+        "`docs/FILTER_RULES.md`). `excluded:…`는 정제 파이프라인(`main.build_data_json`),",
+        "`collect:…`는 수집 단계(각 어댑터)에서 빠진 것이다. 여기 없는데 안 보이면 필터가",
+        "아니라 메일·화면 표시 조건이거나, 그 소스가 실패해 전일 캐시를 쓴 경우다.",
+        "**과다 필터링 점검용**: 실제로는 우리에게 적용되는 항목이 있으면(오제외)",
+        "`sources/_config.py`의 해당 키워드를 빼거나 예외 조건을 추가할 것.",
         "",
     ]
     if not _excluded:
@@ -70,12 +77,14 @@ def flush(path: str = "docs/EXCLUDED_LOG.md") -> None:
         by_reason: dict[str, list[dict]] = {}
         for e in _excluded:
             by_reason.setdefault(e["reason"], []).append(e)
+        # 정제 단계(excluded:)를 먼저 — 수집 단계(collect:)는 기관 보도자료 중 무관한 것이 많아 길다.
+        order = sorted(by_reason, key=lambda r: (r.startswith("collect:"), r))
         lines.append("| 사유 | 건수 |")
         lines.append("|---|---|")
-        for reason in sorted(by_reason):
+        for reason in order:
             lines.append(f"| {reason} | {len(by_reason[reason])} |")
         lines.append("")
-        for reason in sorted(by_reason):
+        for reason in order:
             group = by_reason[reason]
             lines.append(f"## {reason} ({len(group)}건)")
             lines.append("")

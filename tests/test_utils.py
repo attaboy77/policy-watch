@@ -1820,3 +1820,103 @@ class TestNewsAgeLimit:
         item = {"layer": "L3", "published_at": published_at, "title": "x"}
         kept, _ = apply_news_age_limit([item], today=self.TODAY)
         assert kept == [item]
+
+
+# ── 2026-10-29: 블로그·커뮤니티 도메인 / 자기 조직 내부 활동 / 제외 로그 보강 ──────────
+from sources._utils import (apply_blog_community_filter, apply_internal_activity_filter,
+                            apply_category_caps_with_excluded, apply_company_event_filter_with_excluded,
+                            attach_related_news_with_excluded, is_blog_community, is_internal_activity,
+                            noise_reason_l3)
+
+
+class TestBlogCommunity:
+    @pytest.mark.parametrize("domain", ["https://brunch.co.kr", "brunch.co.kr", "https://brunch.co.kr/@x/12",
+                                        "https://m.blog.naver.com/abc", "https://someone.tistory.com"])
+    def test_blog_domains(self, domain):
+        assert is_blog_community(domain) is True
+
+    @pytest.mark.parametrize("domain", ["https://www.hankyung.com", "https://news.naver.com", None, ""])
+    def test_news_domains(self, domain):
+        assert is_blog_community(domain) is False
+
+    def test_filter_drops_l3_blog_keeps_official(self):
+        blog = {"layer": "L3", "title": "강냉이콘의 산업별 재무제표 해석법 - 브런치",
+                "source": {"tier": 5, "domain": "https://brunch.co.kr"}}
+        official = {"layer": "L1", "title": "a", "source": {"tier": 1, "domain": "kasb.or.kr"}}
+        kept, excluded = apply_blog_community_filter([blog, official])
+        assert kept == [official]
+        assert excluded[0]["excluded_reason"] == "excluded:blog_community"
+
+
+class TestForeignNewsDomainWithScheme:
+    def test_scheme_and_path_still_matched(self):
+        # 2026-10-29: source.domain은 "https://…/경로" 꼴로도 온다.
+        assert is_foreign_news_only("국내 회계 소식", domain="https://fr.tradingview.com/news/1") is True
+
+
+class TestInternalActivity:
+    def test_local_gov_staff_training(self):
+        assert is_internal_activity("장수군 회계교육에 직원 100여 명 참여…예산 집행 기준·감사 사례 학습") is True
+
+    def test_company_executive_training(self):
+        assert is_internal_activity("한난, 경영진 대상 내부회계관리 교육 실시") is True
+
+    def test_mandatory_training_rule_kept(self):
+        assert is_internal_activity("임직원 내부회계 교육 의무화 외감법 개정안 발의") is False
+
+    def test_training_without_internal_audience_kept(self):
+        assert is_internal_activity("국세청, 개정세법 설명회 개최…법인 대상 교육") is False
+
+    def test_filter_l3_only(self):
+        title = "장수군 회계교육에 직원 100여 명 참여"
+        official = {"title": title, "layer": "L1", "source": {"type": "official", "tier": 1}}
+        news = {"title": title, "layer": "L3", "source": {"type": "news", "tier": 5}}
+        kept, excluded = apply_internal_activity_filter([official, news])
+        assert kept == [official]
+        assert excluded[0]["excluded_reason"] == "excluded:internal_activity"
+
+
+class TestNoiseReasonL3:
+    def test_reasons(self):
+        assert noise_reason_l3("제149회 KAI Forum 개최", tier=1, category="kifrs") == "collect:event_announcement"
+        assert noise_reason_l3("K-IFRS 수혜주 급등", tier=5, category="kifrs") == "collect:noise_keyword"
+        assert noise_reason_l3("세법 위반 혐의 기소", tier=5, category="tax") == "collect:incident"
+        assert noise_reason_l3("상속세 개정안 발표", tier=5, category="tax") == "collect:tax_subject"
+        assert noise_reason_l3("K-IFRS 제1118호 개정", tier=5, category="kifrs") is None
+
+    def test_matches_is_noise_l3(self):
+        for t in ["K-IFRS 수혜주 급등", "K-IFRS 제1118호 개정"]:
+            assert is_noise_l3(t, tier=5, category="kifrs") == (noise_reason_l3(t, tier=5, category="kifrs") is not None)
+
+
+class TestExcludedVariants:
+    def test_category_cap_excluded(self):
+        news = [{"category": "tax", "layer": "L3", "final_score": float(i), "title": str(i),
+                 "source": {"tier": 2}} for i in range(18)]
+        tier4 = [{"category": "tax", "layer": "L3", "final_score": 100.0 + i, "title": f"t{i}",
+                  "source": {"tier": 4}} for i in range(7)]
+        kept, excluded = apply_category_caps_with_excluded(news + tier4)
+        assert len(kept) == 15
+        reasons = [e["excluded_reason"] for e in excluded]
+        assert reasons.count("excluded:category_cap_tier4") == 2
+        assert reasons.count("excluded:category_cap") == 18 + 5 - 15
+        assert len(kept) + len(excluded) == 25
+
+    def test_company_event_excluded(self):
+        news = {"title": "OO전자 유상증자 결정", "layer": "L3", "source": {"tier": 5}}
+        official = {"title": "OO전자 유상증자 결정", "layer": "L1", "source": {"tier": 1}}
+        kept, excluded = apply_company_event_filter_with_excluded([news, official])
+        assert kept == [official]
+        assert excluded[0]["excluded_reason"] == "excluded:company_event"
+
+    def test_related_news_excluded_with_note(self):
+        off = {"id": "off1", "category": "esg", "title": "지속가능성 공시기준 제2호 공개초안 발표",
+               "final_score": 90.0, "published_at": "2026-08-20", "source": {"name": "금융위원회"},
+               "urls": {"news": None, "official": "https://fsc.go.kr/x"}, "layer": "L1"}
+        news = {"id": "n1", "category": "esg", "title": "지속가능성 공시기준 제2호 공개초안 관련 해설",
+                "final_score": 60.0, "published_at": "2026-08-20", "source": {"name": "임팩트온"},
+                "urls": {"news": "https://impacton.net/n1", "official": None}, "layer": "L3"}
+        kept, excluded = attach_related_news_with_excluded([off, news])
+        assert [it["id"] for it in kept] == ["off1"]
+        assert excluded[0]["excluded_reason"] == "excluded:related_news_attached"
+        assert off["title"] in excluded[0]["excluded_note"]

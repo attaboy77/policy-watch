@@ -29,7 +29,7 @@ from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
 
-from .. import _http
+from .. import _excluded_log, _http
 from .._utils import is_event_announcement, keyword_score, matched_keywords, make_id_exact, final_score, recency_score
 
 BASE = "https://www.nts.go.kr"
@@ -93,6 +93,9 @@ def _filter_recent_years(items: list[dict], *, keep: int = _KEEP_YEARS) -> list[
             dropped.append(it)
         else:
             kept.append(it)
+    for it in dropped:
+        _excluded_log.skip(source=SOURCE_NAME, reason="collect:old_year", title=it["title"],
+                           url=(it.get("urls") or {}).get("official"), category="tax")
     if dropped:
         print(f"[nts] 연도 필터: {len(dropped)}건 제외(최근 {sorted(keep_years, reverse=True)}년치만 유지) - "
               + ", ".join(it["title"][:20] for it in dropped))
@@ -117,10 +120,12 @@ def fetch() -> list[dict]:
         ntt_id = a.get("data-id", "")
         if not title or not ntt_id:
             continue
+        url = f"{DETAIL_URL}?mi={MI}&nttSn={ntt_id}"
         if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
+            _excluded_log.skip(source=SOURCE_NAME, reason="collect:event_announcement", title=title,
+                               url=url, category="tax")
             continue
         published_at = _parse_dotted_date(date_cell.get_text(strip=True)) if date_cell else None
-        url = f"{DETAIL_URL}?mi={MI}&nttSn={ntt_id}"
         kw = keyword_score(title, "tax")
         rec = recency_score(_parse_iso_date(published_at)) if published_at else 0
         items.append({

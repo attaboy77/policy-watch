@@ -26,7 +26,7 @@ from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
 
-from .. import _http
+from .. import _excluded_log, _http
 from .._config import COLLECT_WINDOW_DAYS
 from .._utils import (configured_tax_laws, doc_type_of, final_score, keyword_score, make_id_exact,
                       match_tax_law, matched_keywords, recency_score)
@@ -165,8 +165,13 @@ def fetch() -> list[dict]:
         for row in rows:
             law_name = law_name_of(row["title"])
             if not law_name or not match_tax_law([law_name]):
+                _excluded_log.skip(source="국민참여입법센터", reason="collect:law_name_mismatch",
+                                   title=row["title"], url=f"{BASE}/gcom/ogLmPp/{row['seq']}", category="tax")
                 continue
             if not row["start"] or row["start"] < cutoff:
+                _excluded_log.skip(source="국민참여입법센터", reason="collect:out_of_window",
+                                   title=f"{row['title']} (예고 시작 {row['start'] or '날짜 없음'})",
+                                   url=f"{BASE}/gcom/ogLmPp/{row['seq']}", category="tax")
                 continue
             item = _build_item(row)
             found.setdefault(item["id"], item)

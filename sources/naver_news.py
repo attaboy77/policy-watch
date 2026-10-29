@@ -15,7 +15,7 @@ import time
 from datetime import date, timedelta
 from email.utils import parsedate_to_datetime
 
-from . import _http
+from . import _excluded_log, _http
 from ._config import CATEGORIES, COLLECT_WINDOW_DAYS
 from ._utils import (
     build_naver_queries,
@@ -23,7 +23,7 @@ from ._utils import (
     match_loose,
     keyword_score,
     matched_keywords,
-    is_noise_l3,
+    noise_reason_l3,
     make_id,
     trust_of,
 )
@@ -86,14 +86,27 @@ def fetch_category(cat_key: str, days: int = COLLECT_WINDOW_DAYS, *,
             if not link or link in seen_urls:
                 continue
             title = _strip_html(raw.get("title", "")).strip()
-            if not title or not match_loose(title, cat_key):
+            if not title:
+                continue
+            # 2026-10-29: 아래 수집 단계 제외도 EXCLUDED_LOG에 남긴다(같은 링크는 한 번만).
+            if not match_loose(title, cat_key):
+                seen_urls.add(link)
+                _excluded_log.skip(source=trust_of(link)[2], reason="collect:no_category",
+                                   title=title, url=link, category=cat_key)
                 continue
             published = _parse_pubdate(raw.get("pubDate", ""))
             if published and published < cutoff:
+                seen_urls.add(link)
+                _excluded_log.skip(source=trust_of(link)[2], reason="collect:out_of_window",
+                                   title=title, url=link, category=cat_key)
                 continue
             seen_urls.add(link)
             tier, trust_score, source_name = trust_of(link)
-            noise = is_noise_l3(title, tier=tier, category=cat_key)
+            noise_reason = noise_reason_l3(title, tier=tier, category=cat_key)
+            noise = noise_reason is not None
+            if noise and filter_noise:
+                _excluded_log.skip(source=source_name, reason=noise_reason, title=title, url=link,
+                                   category=cat_key)
             items.append({
                 "id": make_id(link),
                 "category": cat_key,

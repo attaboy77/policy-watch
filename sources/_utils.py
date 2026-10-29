@@ -23,7 +23,9 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       DOC_VARIANT_MODIFIERS, SELF_ACTIVITY_PUBLIC_SUFFIXES,
                       SELF_ACTIVITY_PUBLIC_ABBREV_RE, SELF_ACTIVITY_STAKEHOLDERS,
                       SELF_ACTIVITY_NON_ENTITY_RE, NEWS_MAX_AGE_DAYS,
-                      SELF_ACTIVITY_PARTY_PREFIXES, SELF_ACTIVITY_COLLECTIVE_SUFFIXES)
+                      SELF_ACTIVITY_PARTY_PREFIXES, SELF_ACTIVITY_COLLECTIVE_SUFFIXES,
+                      BLOG_COMMUNITY_DOMAINS, INTERNAL_AUDIENCE_KEYWORDS,
+                      INTERNAL_TRAINING_KEYWORDS, INTERNAL_ACTIVITY_OVERRIDE)
 from . import _esg_roadmap
 
 
@@ -718,17 +720,23 @@ def is_noise_l3(text: str, tier: int, category: str) -> bool:
     `apply_corporate_pr_filter`)로 옮겼다. 그래야 §1/§3에 걸려 사라졌을 기사도
     §5 중복 병합의 후보(및 duplicate_count 집계 대상)에 먼저 포함된다.
     """
+    return noise_reason_l3(text, tier, category) is not None
+
+
+def noise_reason_l3(text: str, tier: int, category: str) -> str | None:
+    """`is_noise_l3()`와 같은 판정이지만 걸린 사유(EXCLUDED_LOG `collect:…` 코드)를 돌려준다.
+    안 걸리면 None. 2026-10-29: 수집 단계 제외도 로그에 남기려고 분리."""
     if is_event_announcement(text):
-        return True
+        return "collect:event_announcement"
     if tier == 1:
-        return False
+        return None
     if is_noise(text, tier=tier):
-        return True
+        return "collect:noise_keyword"
     if is_incident_noise(text, tier=tier):
-        return True
+        return "collect:incident"
     if category == "tax" and not pass_tax_filter(category=category, layer="L3", text=text):
-        return True
-    return False
+        return "collect:tax_subject"
+    return None
 
 
 # ── 10) 세목 화이트리스트 (SPEC-ADDENDUM-3.md §3) ───────────────────────────
@@ -819,6 +827,11 @@ def apply_category_caps(items: list[dict]) -> list[dict]:
     `MAX_TIER4_PER_CATEGORY`로 서브캡한 뒤 나머지 뉴스와 합쳐 최종 상한을 적용한다.
     카테고리별로 계층 정렬(L1/L2 먼저)까지 마친 리스트를 반환한다.
     """
+    return apply_category_caps_with_excluded(items)[0]
+
+
+def apply_category_caps_with_excluded(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """`apply_category_caps()`와 같지만 상한에 밀려 빠진 뉴스도 돌려준다(2026-10-29, EXCLUDED_LOG용)."""
     by_cat: dict[str, list[dict]] = {}
     for it in items:
         by_cat.setdefault(it["category"], []).append(it)
@@ -826,6 +839,7 @@ def apply_category_caps(items: list[dict]) -> list[dict]:
     cat_order = [c for c in CATEGORIES if c in by_cat] + [c for c in by_cat if c not in CATEGORIES]
 
     out: list[dict] = []
+    excluded: list[dict] = []
     for cat in cat_order:
         cat_items = by_cat[cat]
         official = [it for it in cat_items if layer_of(it) in ("L1", "L2", "L1_comprehensive")]
@@ -837,8 +851,14 @@ def apply_category_caps(items: list[dict]) -> list[dict]:
         capped_news = news_pool[:MAX_NEWS_PER_CATEGORY]
 
         out.extend(official + capped_news)
+        excluded.extend(dict(it, excluded_reason="excluded:category_cap_tier4",
+                             excluded_note=f"종합 경제지 카테고리당 {MAX_TIER4_PER_CATEGORY}건 상한")
+                        for it in tier4[MAX_TIER4_PER_CATEGORY:])
+        excluded.extend(dict(it, excluded_reason="excluded:category_cap",
+                             excluded_note=f"뉴스 카테고리당 {MAX_NEWS_PER_CATEGORY}건 상한")
+                        for it in news_pool[MAX_NEWS_PER_CATEGORY:])
     # SPEC-ADDENDUM.md §1: 최종 배열 정렬도 계층 우선(L1/L2 먼저) + final_score DESC.
-    return sort_by_layer_then_score(out)
+    return sort_by_layer_then_score(out), excluded
 
 
 def _add_months(d: date, months: int) -> date:
@@ -1167,13 +1187,23 @@ def apply_local_gov_petition_filter(items: list[dict]) -> tuple[list[dict], list
 
 
 # ── 해외 전용 뉴스 제외 (2026-09-02 사용자 지시) ────────────────────────────
+def _host_of(domain: str | None) -> str:
+    """source.domain은 "https://brunch.co.kr"처럼 스킴·경로가 붙어 오기도 한다 — 호스트만."""
+    u = (domain or "").strip()
+    if "://" not in u:
+        u = "//" + u
+    host = (urlparse(u).hostname or "").lower()
+    return host[4:] if host.startswith("www.") else host
+
+
+def _domain_in(domain: str | None, domains: list[str]) -> bool:
+    host = _host_of(domain)
+    return bool(host) and any(host == d or host.endswith("." + d) for d in domains)
+
+
 def _is_foreign_news_domain(domain: str | None) -> bool:
-    if not domain:
-        return False
-    host = domain.lower()
-    if host.startswith("www."):
-        host = host[4:]
-    return any(host == d or host.endswith("." + d) for d in FOREIGN_NEWS_DOMAINS)
+    # 2026-10-29: 예전엔 문자열 그대로 endswith로 봐서 "https://x.tradingview.com/경로"는 못 잡았다.
+    return _domain_in(domain, FOREIGN_NEWS_DOMAINS)
 
 
 def is_foreign_news_only(title: str, domain: str | None = None) -> bool:
@@ -1207,11 +1237,62 @@ def apply_foreign_news_filter(items: list[dict]) -> tuple[list[dict], list[dict]
     return kept, excluded
 
 
+# ── 블로그·커뮤니티 도메인 제외 (2026-10-29 사용자 지시, `_config.BLOG_COMMUNITY_DOMAINS`) ─
+def is_blog_community(domain: str | None) -> bool:
+    return _domain_in(domain, BLOG_COMMUNITY_DOMAINS)
+
+
+def apply_blog_community_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """L3 전용(tier 무관 — 블로그가 tier 1일 일은 없다). 중복 병합 전에 빼서 대표로 뽑히지 않게."""
+    kept, excluded = [], []
+    for it in items:
+        domain = (it.get("source") or {}).get("domain")
+        if layer_of(it) == "L3" and is_blog_community(domain):
+            excluded.append(dict(it, excluded_reason="excluded:blog_community"))
+        else:
+            kept.append(it)
+    return kept, excluded
+
+
+# ── 자기 조직 내부 활동 제외 (2026-10-29 사용자 지시, `_config.INTERNAL_*`) ────────
+def is_internal_activity(title: str) -> bool:
+    """제목에 내부 인원(직원·공무원·임직원 …)과 교육·연수가 같이 있으면 그 조직 안의 일.
+    주체(공적 기관/기업)는 따지지 않는다. 의무화·개정안·입법예고 등 제도 신호가 있으면 통과."""
+    t = _norm(title)
+    if not any(_norm(k) in t for k in INTERNAL_AUDIENCE_KEYWORDS):
+        return False
+    if not any(_norm(k) in t for k in INTERNAL_TRAINING_KEYWORDS):
+        return False
+    return not any(_norm(k) in t for k in INTERNAL_ACTIVITY_OVERRIDE)
+
+
+def apply_internal_activity_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """L3 전용 — `_l3_gate_exempt()`로 L1/L2·tier==1 뉴스는 면제."""
+    kept, excluded = [], []
+    for it in items:
+        if _l3_gate_exempt(it) or not is_internal_activity(it.get("title", "")):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:internal_activity"))
+    return kept, excluded
+
+
 def apply_company_event_filter(items: list[dict]) -> list[dict]:
     """ADDENDUM-7 §1. §5 처리순서 7번 — 규제성 게이트(6) 다음, 홍보성 제외(8) 이전에
     호출한다(main.py). `_l3_gate_exempt()`로 L1/L2·tier==1 뉴스는 그대로 면제한다.
     """
-    return [it for it in items if _l3_gate_exempt(it) or not is_company_event(it["title"])]
+    return apply_company_event_filter_with_excluded(items)[0]
+
+
+def apply_company_event_filter_with_excluded(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """`apply_company_event_filter()`와 같지만 제외분도 돌려준다(2026-10-29, EXCLUDED_LOG용)."""
+    kept, excluded = [], []
+    for it in items:
+        if _l3_gate_exempt(it) or not is_company_event(it["title"]):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:company_event"))
+    return kept, excluded
 
 
 # ── 언론 발행일 상한 (2026-10-14 사용자 지시, `_config.NEWS_MAX_AGE_DAYS`) ─────
@@ -1343,10 +1424,17 @@ def attach_related_news(items: list[dict]) -> list[dict]:
     매칭 조건: 같은 카테고리 + published_at 차이 `RELATED_NEWS_DAY_WINDOW`일 이내 +
     (title_similarity >= `RELATED_NEWS_MIN_SIMILARITY` 또는 핵심 명사구 포함).
     """
+    return attach_related_news_with_excluded(items)[0]
+
+
+def attach_related_news_with_excluded(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """`attach_related_news()`와 같지만 공식 카드로 흡수돼 피드에서 빠진 뉴스도 돌려준다
+    (2026-10-29, EXCLUDED_LOG용 — `merged_into`는 붙은 공식 항목 제목)."""
     official = [it for it in items if layer_of(it) in ("L1", "L2", "L1_comprehensive")]
     news = [it for it in items if layer_of(it) == "L3"]
 
     used_ids: set[str] = set()
+    attached_to: dict[str, str] = {}
     for off in official:
         core = extract_core_phrase(off["title"])
         candidates = []
@@ -1373,8 +1461,13 @@ def attach_related_news(items: list[dict]) -> list[dict]:
             for n in top
         ]
         used_ids.update(n["id"] for n in top)
+        attached_to.update((n["id"], off["title"]) for n in top)
 
-    return [it for it in items if not (layer_of(it) == "L3" and it["id"] in used_ids)]
+    kept = [it for it in items if not (layer_of(it) == "L3" and it["id"] in used_ids)]
+    excluded = [dict(it, excluded_reason="excluded:related_news_attached",
+                     excluded_note=f"→ 관련 보도로 붙음: {attached_to[it['id']]}")
+                for it in items if layer_of(it) == "L3" and it["id"] in used_ids]
+    return kept, excluded
 
 
 # ── 15) 최종 스키마 필드 화이트리스트 (SPEC.md §4 + ADDENDUM-2 stage + ADDENDUM §4-3 attachments

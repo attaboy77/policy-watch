@@ -297,6 +297,26 @@ FOREIGN_NEWS_SIGNALS = ["美", "미국", "EU", "FASB", "SEC"]
 # 붙어도 걸리도록 서브도메인 포함 suffix 매칭).
 FOREIGN_NEWS_DOMAINS = ["tradingview.com"]
 
+# ── 블로그·커뮤니티 도메인 제외 (2026-10-29 사용자 지시) ─────────────────────
+# 언론이 아니라 개인이 쓴 글이다. 실측: "강냉이콘의 산업별 재무제표 해석법 - 브런치"(brunch.co.kr,
+# 10/23~10/28 화면 노출). 서브도메인 포함 suffix 매칭(`_utils.is_blog_community()`).
+BLOG_COMMUNITY_DOMAINS = [
+    "brunch.co.kr", "blog.naver.com", "m.blog.naver.com", "post.naver.com", "cafe.naver.com",
+    "tistory.com", "velog.io", "medium.com", "blog.daum.net", "cafe.daum.net", "egloos.com",
+    "wordpress.com", "blogspot.com", "steemit.com", "dcinside.com", "clien.net", "fmkorea.com",
+    "theqoo.net", "teamblind.com", "blind.com",
+]
+
+# ── 기관·기업의 자기 조직 내부 활동 제외 (2026-10-29 사용자 지시) ──────────────
+# 실측: "장수군 회계교육에 직원 100여 명 참여…예산 집행 기준·감사 사례 학습" — 지자체가 자기
+# 직원을 교육한 소식. 제목이 "주체, …" 꼴이 아니라 자사 활동 필터(SELF_ACTIVITY_*)는 처음부터
+# 안 걸렸고, "집행 기준"(→ "집행기준")으로 §1 규제성 게이트를 통과했다. 주체가 공적 기관이든
+# 기업이든 "내부 인원" + "교육·연수"가 같이 있으면 그 조직 안의 일로 본다
+# (`_utils.is_internal_activity()`). 내부 교육을 제도로 의무화하는 기사는 아래 신호로 살린다.
+INTERNAL_AUDIENCE_KEYWORDS = ["직원", "임직원", "공무원", "임원진", "경영진", "실무자", "담당자"]
+INTERNAL_TRAINING_KEYWORDS = ["교육", "연수", "워크숍", "특강", "역량강화", "역량 강화", "아카데미"]
+INTERNAL_ACTIVITY_OVERRIDE = ["의무화", "개정안", "입법예고", "시행령", "발의", "법안"]
+
 # ── 논평성 기사(칼럼·사설류) 제외 (2026-09-15 사용자 지시) ──────────────────
 # 제목 말머리 대괄호("[시선]" 등)가 아래 목록 중 하나면 사실 전달이 아니라
 # 논평·의견 기사로 본다. 실측: "[시선] '세 번째 IPO 도전은 다르다'...빗썸,

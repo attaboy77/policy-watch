@@ -27,7 +27,7 @@ from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
 
-from .. import _http
+from .. import _excluded_log, _http
 from .._utils import (classify, doc_type_of, is_event_announcement, pass_tax_filter, keyword_score,
                       matched_keywords, make_id_exact, final_score, recency_score, match_tax_law)
 
@@ -155,10 +155,15 @@ def fetch(*, max_items: int | None = None) -> list[dict]:
             continue
         rows += 1
         title = a.get_text(strip=True)
+        log_url = (f"{PRESS_DETAIL_URL}?searchBbsId1={BBS_ID}&searchNttId1={m.group(1)}"
+                   f"&menuNo={MENU_NO}")
         if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
+            _excluded_log.skip(source=SOURCE_NAME, reason="collect:event_announcement",
+                               title=title, url=log_url)
             continue
         category = classify(title)
         if category is None:
+            _excluded_log.skip(source=SOURCE_NAME, reason="collect:no_category", title=title, url=log_url)
             continue  # 부동산 PF·국고채 등 우리 4개 카테고리와 무관한 보도자료는 버림
         # 이 게시판은 기재부 보도자료 전체라 "세제개편안" 종합문서(L1_comprehensive)가
         # 아니다 — tax로 분류된 항목은 세목 화이트리스트를 통과해야 한다
@@ -168,6 +173,8 @@ def fetch(*, max_items: int | None = None) -> list[dict]:
             # 여러 개를 묶은 보도자료는 제목에 첫 법령만 나와 키워드로는 못 잡는다 —
             # 첨부 본문의 법령 목록에 활성 세목 법령이 하나라도 있으면 통과.
             if category != "tax" or not _BUNDLE_RE.search(title):
+                _excluded_log.skip(source=SOURCE_NAME, reason="collect:tax_subject", title=title,
+                                   url=log_url, category=category)
                 continue
             try:
                 names = _LAW_NAME_RE.findall(title) + _bundle_law_names(m.group(1))
@@ -176,6 +183,8 @@ def fetch(*, max_items: int | None = None) -> list[dict]:
                 names = _LAW_NAME_RE.findall(title)
             matched = match_tax_law(names)
             if not matched:
+                _excluded_log.skip(source=SOURCE_NAME, reason="collect:tax_subject", title=title,
+                                   url=log_url, category=category)
                 continue
             print(f"[moef] 묶음 보도자료 통과: {title[:40]} → {', '.join(dict.fromkeys(matched))}")
 

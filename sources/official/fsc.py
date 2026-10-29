@@ -22,7 +22,7 @@ from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
 
-from .. import _http
+from .. import _excluded_log, _http
 from .._utils import (classify, doc_type_of, extract_effective_date, is_event_announcement,
                       pass_tax_filter, keyword_score, matched_keywords, make_id_exact,
                       final_score, recency_score)
@@ -105,16 +105,20 @@ def fetch_page(page: int = 1) -> list[dict]:
         href = subject_a.get("href", "")
         if not title or not href:
             continue
+        url = href if href.startswith("http") else f"{BASE}{href}"
         if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
+            _excluded_log.skip(source=SOURCE_NAME, reason="collect:event_announcement", title=title, url=url)
             continue
         category = _classify_own_press(title)
         if category is None:
+            _excluded_log.skip(source=SOURCE_NAME, reason="collect:no_category", title=title, url=url)
             continue  # 보험업 감독·가계부채 등 우리 4개 카테고리와 무관한 보도자료는 버림
         if not pass_tax_filter(category=category, layer="L1", text=title):
+            _excluded_log.skip(source=SOURCE_NAME, reason="collect:tax_subject", title=title, url=url,
+                               category=category)
             continue  # 드물지만 tax로 분류될 경우 세목 화이트리스트 적용(ADDENDUM-3 §3)
 
         published_at = day_div.get_text(strip=True) or None
-        url = href if href.startswith("http") else f"{BASE}{href}"
         doc_type = doc_type_of(title, source_tier=1)
         effective_date = extract_effective_date(title) if category != "tax" else None
         kw = keyword_score(title, category)

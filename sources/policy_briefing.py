@@ -31,7 +31,7 @@ from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
 
-from . import _http
+from . import _excluded_log, _http
 from ._utils import (classify, doc_type_of, extract_effective_date, is_event_announcement,
                      pass_tax_filter, keyword_score, matched_keywords, make_id_exact,
                      final_score, recency_score)
@@ -124,24 +124,29 @@ def fetch_page(page_index: int) -> list[dict]:
             continue
         _rows_seen += 1
         published_raw, dept = spans[0].get_text(strip=True), spans[1].get_text(strip=True)
-        if dept not in TARGET_DEPTS:
-            continue
-
         title = strong.get_text(strip=True)
         if not title or title in ("선택한 항목", "보도자료"):
             continue
+        href = a.get("href", "")
+        url = href if href.startswith("http") else f"{BASE}{href}"
+        log_source = f"정책브리핑({dept})"
+        if dept not in TARGET_DEPTS:
+            _excluded_log.skip(source=log_source, reason="collect:out_of_scope", title=title, url=url)
+            continue
         if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4: "금융위원회 인사보도(과장급 전보)"/행사 안내 등 제외
+            _excluded_log.skip(source=log_source, reason="collect:event_announcement", title=title, url=url)
             continue
         category = classify(title)
         if category is None:
+            _excluded_log.skip(source=log_source, reason="collect:no_category", title=title, url=url)
             continue  # 우리 4개 카테고리와 무관한 보도자료는 버림
         if not pass_tax_filter(category=category, layer="L2", text=title):
+            _excluded_log.skip(source=log_source, reason="collect:tax_subject", title=title, url=url,
+                               category=category)
             continue  # ADDENDUM-3 §3: L2 정책브리핑은 세목 화이트리스트 적용 대상
 
         lead_span = li.select_one("span.lead")
         lead = lead_span.get_text(" ", strip=True) if lead_span else ""
-        href = a.get("href", "")
-        url = href if href.startswith("http") else f"{BASE}{href}"
         published_at = _parse_dotted_date(published_raw)
         doc_type = doc_type_of(title, source_tier=1)  # ADDENDUM-3 §4: D3=보도자료 기본, 제목에 따라 세분화 가능
         items.append(_build_item(category=category, dept=dept, title=title, lead=lead,
