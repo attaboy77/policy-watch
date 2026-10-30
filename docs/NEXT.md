@@ -15,7 +15,7 @@
   `EXCLUDED_IDS`, `_utils.apply_excluded_ids_filter()`가 `build_data_json` **맨 앞**(적용 대상 게이트 전)에서 전 계층 제외.
   로그 `excluded:manual_id`, 비고 칸에 파일의 이유. 파일 없음·파싱 실패면 아무것도 안 뺀다(`source_toggles.yml`과 같은 원칙).
   id는 원문 URL 해시(`make_id`)라 URL이 바뀌면 다시 넣어야 한다. `FILTER_RULES.md` §2 #0·§6에 기록(기존 #1~#18 번호 유지).
-- 현재 data.json에 돌려 143→142건(그 1건만) 확인. 테스트 759→764개.
+- 10/29 data.json에 돌려 143→142건(그 1건만) 확인. 테스트 759→764개.
 - **미검증(다음 Actions 실행)**: 오늘 10/30 봇 갱신(`5cfd83f`)이 이 변경보다 먼저 돌아 해당 건은 아직 화면에 있다 — 다음 실행에서
   data.json에서 빠지고 EXCLUDED_LOG `excluded:manual_id`에 이유와 함께 남는지.
 - **10/29 미검증 해소**: 10/30 봇 커밋에서 `data/first_seen.json`은 `last`만 10/30으로 바뀌고 `first`는 한 줄도 안 바뀌었다
