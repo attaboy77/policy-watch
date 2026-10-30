@@ -1941,3 +1941,12 @@ class TestForeignNewsDomainsExtended:
                 "source": {"tier": 5, "domain": "https://www.idnfinancials.com"}, "urls": {"news": "https://x", "official": None}}
         kept, excluded = apply_foreign_news_filter([item])
         assert kept == [] and excluded[0]["excluded_reason"] == "excluded:foreign_news"
+
+
+def test_apply_excluded_ids_filter_removes_listed_ids_with_reason_note():
+    from sources._utils import apply_excluded_ids_filter
+    items = [{"id": "a", "title": "남김"}, {"id": "b", "title": "뺌"}]
+    kept, excluded = apply_excluded_ids_filter(items, {"b": "현행 유지 결론"})
+    assert [it["id"] for it in kept] == ["a"]
+    assert excluded[0]["excluded_reason"] == "excluded:manual_id"
+    assert excluded[0]["excluded_note"] == "현행 유지 결론"

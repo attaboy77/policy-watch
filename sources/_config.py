@@ -722,6 +722,35 @@ def _load_disabled_sources(path: str = SOURCE_TOGGLES_YML_PATH) -> dict[str, str
 
 DISABLED_SOURCES = _load_disabled_sources()
 
+# ── 개별 제외 목록 (2026-10-30 사용자 지시) ──────────────────────────────────
+# "이 한 건은 빼자"를 코드에 하드코딩하지 않고 id만 추가하면 되게 뺐다
+# (첫 사례: KASB 질의회신 "공정한 표시와 IFRS 회계기준서의 준수" — 결론이 현행 유지).
+EXCLUDED_IDS_YML_PATH = "data/excluded_ids.yml"
+
+
+def _load_excluded_ids(path: str = EXCLUDED_IDS_YML_PATH) -> dict[str, str]:
+    """data/excluded_ids.yml을 읽어 {id: 제외 이유} 딕셔너리를 반환한다.
+
+    파일이 없거나 파싱에 실패하면 **아무것도 빼지 않는다**(빈 딕셔너리) —
+    `_load_disabled_sources()`와 같은 원칙(조용히 항목이 사라지는 것보다 낫다).
+    """
+    try:
+        import yaml
+        with open(path, encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+        ids = {str(k).strip(): (v or "").strip() for k, v in (data.get("ids") or {}).items()}
+        if ids:
+            print(f"[main] 개별 제외 id {len(ids)}개(설정 파일)")
+        return ids
+    except FileNotFoundError:
+        return {}
+    except Exception as exc:  # noqa: BLE001 - YAML 파싱 실패 등, 조용히 죽는 것보다 낫다
+        print(f"[main] {path} 파싱 실패({exc}) — 개별 제외 없이 동작합니다.")
+        return {}
+
+
+EXCLUDED_IDS = _load_excluded_ids()
+
 # ── 2026-10-14: 상설 기준 문서 / 같은 문서의 변형 ────────────────────────────
 # 내부회계 공식 자료 중 상시 유효한 기준 문서(모범규준·평가·보고 기준·적용지침·FAQ·가이드라인).
 # 게시일이 `STANDING_DOC_FRESH_DAYS`보다 오래됐으면(또는 날짜 추정이면) is_static=True —

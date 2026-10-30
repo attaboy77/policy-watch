@@ -25,7 +25,7 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       SELF_ACTIVITY_NON_ENTITY_RE, NEWS_MAX_AGE_DAYS,
                       SELF_ACTIVITY_PARTY_PREFIXES, SELF_ACTIVITY_COLLECTIVE_SUFFIXES,
                       BLOG_COMMUNITY_DOMAINS, INTERNAL_AUDIENCE_KEYWORDS,
-                      INTERNAL_TRAINING_KEYWORDS, INTERNAL_ACTIVITY_OVERRIDE)
+                      INTERNAL_TRAINING_KEYWORDS, INTERNAL_ACTIVITY_OVERRIDE, EXCLUDED_IDS)
 from . import _esg_roadmap
 
 
@@ -1244,6 +1244,20 @@ def apply_foreign_news_filter(items: list[dict]) -> tuple[list[dict], list[dict]
 # ── 블로그·커뮤니티 도메인 제외 (2026-10-29 사용자 지시, `_config.BLOG_COMMUNITY_DOMAINS`) ─
 def is_blog_community(domain: str | None) -> bool:
     return _domain_in(domain, BLOG_COMMUNITY_DOMAINS)
+
+
+def apply_excluded_ids_filter(items: list[dict],
+                              excluded_ids: dict[str, str] | None = None) -> tuple[list[dict], list[dict]]:
+    """2026-10-30: `data/excluded_ids.yml`에 적힌 id를 전 계층에서 뺀다. 이유는 로그 비고 칸."""
+    ids = EXCLUDED_IDS if excluded_ids is None else excluded_ids
+    kept, excluded = [], []
+    for it in items:
+        if it.get("id") in ids:
+            excluded.append(dict(it, excluded_reason="excluded:manual_id",
+                                 excluded_note=ids[it["id"]] or None))
+        else:
+            kept.append(it)
+    return kept, excluded
 
 
 def apply_blog_community_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:

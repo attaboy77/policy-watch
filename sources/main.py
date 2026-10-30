@@ -23,7 +23,8 @@ from .current_standards import build_current_standards
 from ._utils import (apply_applicability_gate, apply_blog_community_filter,
                      apply_category_caps_with_excluded,
                      apply_company_event_filter_with_excluded, apply_company_self_activity_filter,
-                     apply_corporate_pr_filter, apply_internal_activity_filter,
+                     apply_corporate_pr_filter, apply_excluded_ids_filter,
+                     apply_internal_activity_filter,
                      apply_foreign_news_filter, apply_local_gov_petition_filter, apply_news_age_limit,
                      apply_non_target_tax_subject_filter, apply_opinion_piece_filter,
                      apply_regulatory_gate, apply_standard_setter_governance_filter,
@@ -300,10 +301,15 @@ def build_data_json(items: list[dict]) -> dict:
     안전망 자리가 맞다.
 
     2026-10-29: 블로그·커뮤니티 도메인 제외(언론 1년 상한 다음)와 자기 조직 내부 활동
-    제외(자사 활동 다음)를 추가했다. 개별 기업 소식·카테고리 상한·관련 보도 흡수까지
+    제외(자사 활동 다음)를 추가했다. 2026-10-30: 개별 제외 목록(`data/excluded_ids.yml`)을 맨 앞에. 개별 기업 소식·카테고리 상한·관련 보도 흡수까지
     모든 단계의 제외분을 EXCLUDED_LOG에 남긴다 — 이 함수에 들어온 항목은 최종 items
     아니면 로그 둘 중 하나에 반드시 있다(수집 단계 제외는 각 어댑터가 `collect:…`로 기록).
     """
+    # 2026-10-30: 개별 제외 목록(data/excluded_ids.yml) — 규칙이 아니라 지정한 건이라 맨 앞.
+    n = len(items)
+    items, excluded = apply_excluded_ids_filter(items)
+    _record_excluded(excluded)
+    _log_stage("개별 제외 목록(id) 후", items, n)
     n = len(items)
     items, excluded = apply_applicability_gate(items)  # ADDENDUM-6 §1, 전 계층
     _record_excluded(excluded)

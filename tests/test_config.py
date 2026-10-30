@@ -64,3 +64,26 @@ sources:
         파일 형식이 깨지거나 누가 다시 끄면 이 테스트가 바로 잡아낸다."""
         out = _config._load_disabled_sources()
         assert set(out) == set()
+
+
+class TestLoadExcludedIds:
+    """2026-10-30: 개별 제외 목록(data/excluded_ids.yml)."""
+
+    def _write(self, tmp_path, content):
+        p = tmp_path / "excluded_ids.yml"
+        p.write_text(content, encoding="utf-8")
+        return str(p)
+
+    def test_ids_are_loaded_with_reason(self, tmp_path):
+        path = self._write(tmp_path, 'ids:\n  abc123: "볼 값어치 낮음"\n  def456:\n')
+        assert _config._load_excluded_ids(path) == {"abc123": "볼 값어치 낮음", "def456": ""}
+
+    def test_missing_file_returns_empty_dict(self, tmp_path):
+        assert _config._load_excluded_ids(str(tmp_path / "nope.yml")) == {}
+
+    def test_malformed_yaml_returns_empty_dict(self, tmp_path):
+        path = self._write(tmp_path, "ids: [unclosed\n")
+        assert _config._load_excluded_ids(path) == {}
+
+    def test_real_config_file_excludes_fair_presentation_qna(self):
+        assert "dc121ecf1d8f8072" in _config._load_excluded_ids()
