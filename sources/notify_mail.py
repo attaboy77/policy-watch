@@ -111,7 +111,10 @@ def decode_notice_lines(meta: dict) -> list[str]:
     if fail_rate <= DECODE_FAIL_RATE_THRESHOLD:
         return []
     pct = round(fail_rate * 100)
-    return [f"구글 뉴스 URL 복원 실패율 높음: {failed}/{attempted}건 실패({pct}%) — 원문 링크가 구글 리다이렉트 링크로 남아있을 수 있습니다."]
+    # 2026-11-05: 실패분은 전날 원문 URL을 재사용하거나 빠진다 — 구글 링크로 남는 건 없다.
+    detail = (f" — 전날 원문 URL 재사용 {stats.get('reused') or 0}건, "
+              f"복원 못 한 새 기사 {stats.get('unresolved') or 0}건은 화면·메일에서 제외")
+    return [f"구글 뉴스 URL 복원 실패율 높음: {failed}/{attempted}건 실패({pct}%){detail}"]
 
 
 def fallback_notice_lines(meta: dict) -> list[str]:

@@ -277,7 +277,7 @@ def _record_excluded(excluded: list[dict]) -> None:
         )
 
 
-def build_data_json(items: list[dict]) -> dict:
+def build_data_json(items: list[dict], prior_news_urls: dict[str, str] | None = None) -> dict:
     """수집된 raw item 리스트 → site/data.json 전체 구조(메타 제외 조립은 main()에서).
 
     필터 순서: ADDENDUM-6 §1(적용 대상 게이트, 전 계층) → 2026-09-10 비대상
@@ -410,8 +410,16 @@ def build_data_json(items: list[dict]) -> dict:
     # 2026-09-08: 위 필터를 전부 통과해 실제로 살아남은 항목만 대상으로 구글
     # 뉴스 리다이렉트 링크(news.google.com/rss/articles/...)를 실제 원문 URL로
     # 디코딩한다(파이프라인 초입에서 하면 나중에 걸러질 항목까지 구글에
-    # 요청을 보내게 됨). 실패하면 항목을 버리지 않고 원래 링크를 그대로 둔다.
-    google_news.resolve_finalized_urls(finalized)
+    # 요청을 보내게 됨). 2026-11-05: 실패하면 전날 data.json의 원문 URL(`prior_news_urls`)을
+    # 재사용하고, 그것도 없으면 뺀다 — 구글 링크는 누르면 차단 페이지가 뜬다(11/3 10건).
+    unresolved = google_news.resolve_finalized_urls(finalized, prior_news_urls)
+    if unresolved:
+        drop = {id(it) for it in unresolved}
+        _record_excluded([dict(it, excluded_reason="excluded:google_url_unresolved")
+                          for it in unresolved])
+        n = len(finalized)
+        finalized = [it for it in finalized if id(it) not in drop]
+        _log_stage("구글 원문 URL 복원 실패 제외 후", finalized, n)
 
     schedules = build_schedules(finalized)
 
@@ -435,6 +443,15 @@ def build_data_json(items: list[dict]) -> dict:
         "current_standards": current_standards,
         "_counts_by_category": counts_by_category,  # main()에서 meta 조립용, 최종 출력엔 안 들어감
     }
+
+
+def _load_previous_data(path: str = DATA_JSON_PATH) -> dict | None:
+    """2026-11-05: 덮어쓰기 전의 site/data.json(전날 결과). 없거나 깨졌으면 None."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return None
 
 
 def stamp_first_seen(items: list[dict], today: str, path: str = _first_seen.PATH) -> None:
@@ -469,7 +486,7 @@ def main() -> None:
     raw_items, sources_ok, sources_failed = collect_all()
     print(f"  원본 수집: {len(raw_items)}건 (성공 소스 {len(sources_ok)}개, 실패 {len(sources_failed)}개)")
 
-    built = build_data_json(raw_items)  # 내부에서 google_news.resolve_finalized_urls() 호출
+    built = build_data_json(raw_items, google_news.prior_news_urls(_load_previous_data()))  # 내부에서 google_news.resolve_finalized_urls() 호출
     counts_by_category = built.pop("_counts_by_category")
     stamp_first_seen(built["items"], _now_kst_iso()[:10])
     # 2026-09-08: build_data_json()이 방금 채운 모듈 전역 통계를 읽어온다 —

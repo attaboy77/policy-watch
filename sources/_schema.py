@@ -292,6 +292,9 @@ DATA_SCHEMA = {
                     "properties": {
                         "attempted": {"type": "integer"},
                         "success": {"type": "integer"},
+                        # 2026-11-05: 복원 실패 → 전날 원문 URL 재사용 / 그것도 없어 제외
+                        "reused": {"type": "integer"},
+                        "unresolved": {"type": "integer"},
                     },
                 },
             },

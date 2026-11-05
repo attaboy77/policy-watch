@@ -299,8 +299,12 @@ FOREIGN_NEWS_SIGNALS = ["美", "미국", "EU", "FASB", "SEC"]
 # "다난타라 신호 및 재무제표 발표가 IDX 종합 지수를 지지합니다. - IDNFinancials"(인도네시아 증시,
 # 화면 노출). 같은 유형: tradingkey.com(미국 종목 시세), vietnam.vn(베트남 회계기준), unite.ai,
 # coindesk.com(미국 기사 번역). kr.investing.com은 국내 매체(EBN 등) 기사 재게재라 넣지 않았다.
+# 2026-11-05: datatooza.com(데이터투자) — 미국 상장사 SEC 공시(10-K·8-K)를 한국어로 요약하는 매체.
+# 실측: "퍼포먼스 푸드 그룹, 연료 파생상품으로 1분기 490만 달러 이익…헤지회계 기준 조기 도입"(11/5 메일
+# 발송). 9/1~11/5 수집분 60건이 전부 미국 기업 공시였다. 제목에 美·미국이 거의 없고 주체가 세 어절
+# 이상("퍼포먼스 푸드 그룹")이면 자사 활동 필터도 못 잡아서 도메인으로 뺀다.
 FOREIGN_NEWS_DOMAINS = ["tradingview.com", "idnfinancials.com", "tradingkey.com", "vietnam.vn",
-                        "unite.ai", "coindesk.com"]
+                        "unite.ai", "coindesk.com", "datatooza.com"]
 # 목록은 늘 한발 늦으므로 국가 도메인(.vn·.id·.jp·.cn 등)은 목록 없이 해외로 본다(`.kr` 제외).
 # 아래는 국가 도메인이지만 일반 용도로 흔히 쓰여 국가를 뜻하지 않는 것들 — 이 TLD는 판정하지 않는다.
 GENERIC_USE_CCTLDS = {"kr", "ai", "io", "co", "me", "tv", "fm", "am", "ly", "gg", "to", "so", "sh", "cc", "ws"}

@@ -153,6 +153,14 @@ class TestDecodeNoticeLines:
         assert len(lines) == 1
         assert "18/38건 실패(47%)" in lines[0]
 
+    def test_warning_mentions_reused_and_excluded(self):
+        # 2026-11-05: 실패분은 전날 URL 재사용 또는 제외 — 구글 링크로 남는다는 문구는 없다.
+        meta = {"google_decode_stats": {"attempted": 29, "success": 19, "reused": 10, "unresolved": 0}}
+        line = nm.decode_notice_lines(meta)[0]
+        assert "전날 원문 URL 재사용 10건" in line
+        assert "새 기사 0건은 화면·메일에서 제외" in line
+        assert "리다이렉트 링크로 남아" not in line
+
     def test_exactly_at_threshold_returns_empty(self):
         meta = {"google_decode_stats": {"attempted": 10, "success": 7}}  # 정확히 30% 실패
         assert nm.decode_notice_lines(meta) == []

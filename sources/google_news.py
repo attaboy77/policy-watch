@@ -31,12 +31,14 @@ DECODE_SLEEP_SECONDS = 1.0
 
 # 이번 프로세스 실행 동안의 디코딩 성공/시도 건수 — fetch_all() 시작 시
 # reset_decode_stats()로 초기화, main.py가 크롤링 로그/메일 경고에 활용한다.
-_DECODE_STATS = {"attempted": 0, "success": 0}
+# 2026-11-05: reused(복원 실패 → 전날 data.json의 원문 URL 재사용)·unresolved(그것도 없어
+# 구글 링크로 남은 건 — main.py가 화면·메일에서 뺀다) 추가.
+_DECODE_STATS = {"attempted": 0, "success": 0, "reused": 0, "unresolved": 0}
 
 
 def reset_decode_stats() -> None:
-    _DECODE_STATS["attempted"] = 0
-    _DECODE_STATS["success"] = 0
+    for k in _DECODE_STATS:
+        _DECODE_STATS[k] = 0
 
 
 def get_decode_stats() -> dict:
@@ -64,7 +66,11 @@ def resolve_news_url(link: str) -> str:
     return link
 
 
-def resolve_finalized_urls(items: list[dict]) -> None:
+def is_google_redirect(url: str | None) -> bool:
+    return bool(url) and "news.google.com" in url
+
+
+def resolve_finalized_urls(items: list[dict], prior_urls: dict[str, str] | None = None) -> list[dict]:
     """main.py의 필터 파이프라인(중복제거/규제성 게이트/개별기업소식 제외/
     홍보성 제외/카테고리 상한 등)을 전부 통과해 실제로 site/data.json에
     남는 항목만 대상으로, 아직 news.google.com 리다이렉트 링크인 `urls.news`를
@@ -75,18 +81,48 @@ def resolve_finalized_urls(items: list[dict]) -> None:
     항목(중복/규제성 없음/개별기업 소식 등)까지 구글에 요청을 보내게 돼
     불필요하게 느리고 차단 위험만 키웠다 — 파이프라인 맨 끝(finalize 직후)
     으로 옮겨 실제 생존 항목만 디코딩하도록 변경.
+
+    2026-11-05: 구글이 그날 러너 IP에 응답을 안 주면(10/4·10/10·11/3) 복원이 무더기로
+    실패해 구글 리다이렉트 링크(누르면 차단 페이지)가 화면에 남았다. 복원에 실패하면
+    `prior_urls`(전날 data.json의 id → 원문 URL)에서 같은 id의 원문 URL을 재사용한다 —
+    id가 구글 링크 해시라 같은 id면 같은 기사다. 그것도 없는 항목(전날엔 없던 새 기사)은
+    돌려준다 — 호출부(main.py)가 화면·메일에서 뺀다.
     """
     reset_decode_stats()
+    prior_urls = prior_urls or {}
+    unresolved = []
     for it in items:
         urls = it.get("urls") or {}
         news = urls.get("news")
-        if news and "news.google.com" in news:
-            urls["news"] = resolve_news_url(news)
+        if not is_google_redirect(news):
+            continue
+        urls["news"] = resolve_news_url(news)
+        if not is_google_redirect(urls["news"]):
+            continue
+        if prior_urls.get(it.get("id")):
+            urls["news"] = prior_urls[it["id"]]
+            _DECODE_STATS["reused"] += 1
+        else:
+            _DECODE_STATS["unresolved"] += 1
+            unresolved.append(it)
 
     stats = get_decode_stats()
     if stats["attempted"]:
         failed = stats["attempted"] - stats["success"]
-        print(f"[google_news] URL 복원 {stats['success']}/{stats['attempted']}건, 실패 {failed}건")
+        print(f"[google_news] URL 복원 {stats['success']}/{stats['attempted']}건, 실패 {failed}건"
+              + (f" (전날 URL 재사용 {stats['reused']}건, 복원 못 해 제외 {stats['unresolved']}건)"
+                 if failed else ""))
+    return unresolved
+
+
+def prior_news_urls(data: dict | None) -> dict[str, str]:
+    """전날 data.json에서 id → 원문 URL(구글 링크가 아닌 것만)."""
+    out = {}
+    for it in (data or {}).get("items") or []:
+        news = (it.get("urls") or {}).get("news")
+        if it.get("id") and news and not is_google_redirect(news):
+            out[it["id"]] = news
+    return out
 
 
 def _parse_published(entry) -> date | None:

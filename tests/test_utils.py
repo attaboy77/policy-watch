@@ -1926,7 +1926,8 @@ class TestForeignNewsDomainsExtended:
     # 2026-10-29: 해외 매체 한국어 번역판(목록) + 국가 도메인(목록 없이).
     @pytest.mark.parametrize("domain", ["https://www.idnfinancials.com", "https://www.tradingkey.com/x",
                                         "https://vietnam.vn/abc", "https://www.coindesk.com/ko/x",
-                                        "https://news.example.jp", "https://www.example.co.id"])
+                                        "https://news.example.jp", "https://www.example.co.id",
+                                        "https://www.datatooza.com/article/1"])
     def test_foreign(self, domain):
         assert is_foreign_news_only("재무제표 발표 관련 소식", domain=domain) is True
 
@@ -1935,6 +1936,15 @@ class TestForeignNewsDomainsExtended:
                                         "https://some.io", "https://it.chosun.com/x"])
     def test_not_foreign(self, domain):
         assert is_foreign_news_only("재무제표 발표 관련 소식", domain=domain) is False
+
+    def test_datatooza_us_filing_excluded(self):
+        # 2026-11-05: 11/5 메일 발송분 — 미국 기업 SEC 공시 요약. 주체가 세 어절이라 자사 활동 필터도 통과했다.
+        item = {"category": "kifrs", "layer": "L3", "trust_tier": 5,
+                "title": "퍼포먼스 푸드 그룹, 연료 파생상품으로 1분기 490만 달러 이익…헤지회계 기준 조기 도입 - 데이터투자",
+                "source": {"domain": "https://www.datatooza.com", "tier": 5, "type": "news"}}
+        kept, excluded = apply_foreign_news_filter([item])
+        assert kept == []
+        assert excluded[0]["excluded_reason"] == "excluded:foreign_news"
 
     def test_idx_example_excluded(self):
         item = {"category": "kifrs", "layer": "L3", "title": "다난타라 신호 및 재무제표 발표가 IDX 종합 지수를 지지합니다. - IDNFinancials",

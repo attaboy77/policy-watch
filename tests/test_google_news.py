@@ -115,7 +115,7 @@ def test_resolve_news_url_tracks_stats_and_sleeps(monkeypatch):
     result = gn.resolve_news_url("https://news.google.com/rss/articles/xyz")
 
     assert result == "https://real.example.com/a"
-    assert gn.get_decode_stats() == {"attempted": 1, "success": 1}
+    assert gn.get_decode_stats() == {"attempted": 1, "success": 1, "reused": 0, "unresolved": 0}
     assert sleeps == [gn.DECODE_SLEEP_SECONDS]
 
 
@@ -127,7 +127,7 @@ def test_resolve_news_url_stats_count_failure(monkeypatch):
     result = gn.resolve_news_url("https://news.google.com/rss/articles/xyz")
 
     assert result == "https://news.google.com/rss/articles/xyz"
-    assert gn.get_decode_stats() == {"attempted": 1, "success": 0}
+    assert gn.get_decode_stats() == {"attempted": 1, "success": 0, "reused": 0, "unresolved": 0}
 
 
 def test_resolve_news_url_ignores_non_google_links(monkeypatch):
@@ -152,16 +152,40 @@ class TestResolveFinalizedUrls:
 
         assert items[0]["urls"]["news"] == "https://real.example.com/a"
 
-    def test_falls_back_to_google_link_on_failure_without_dropping_item(self, monkeypatch):
+    def test_failure_without_prior_url_is_returned_as_unresolved(self, monkeypatch):
+        """2026-11-05: 전날 URL도 없으면 구글 링크 그대로 돌려준다 — 빼는 건 main.py."""
         monkeypatch.setattr(gn.time, "sleep", lambda s: None)
         monkeypatch.setattr(gn._google_decode, "decode_google_news_url", lambda url: None)
         google_link = "https://news.google.com/rss/articles/xyz"
         items = [{"id": "x", "urls": {"news": google_link, "official": None}}]
 
-        gn.resolve_finalized_urls(items)
+        unresolved = gn.resolve_finalized_urls(items)
 
-        assert len(items) == 1  # 항목 자체는 그대로(버려지지 않음)
+        assert unresolved == items
         assert items[0]["urls"]["news"] == google_link
+        assert gn.get_decode_stats()["unresolved"] == 1
+
+    def test_failure_reuses_prior_url_for_same_id(self, monkeypatch):
+        """2026-11-05: 11/3처럼 구글이 막힌 날 — 전날 복원해 둔 원문 URL을 쓴다."""
+        monkeypatch.setattr(gn.time, "sleep", lambda s: None)
+        monkeypatch.setattr(gn._google_decode, "decode_google_news_url", lambda url: None)
+        items = [{"id": "x", "urls": {"news": "https://news.google.com/rss/articles/xyz", "official": None}}]
+
+        unresolved = gn.resolve_finalized_urls(items, {"x": "https://www.impacton.net/a"})
+
+        assert unresolved == []
+        assert items[0]["urls"]["news"] == "https://www.impacton.net/a"
+        assert gn.get_decode_stats() == {"attempted": 1, "success": 0, "reused": 1, "unresolved": 0}
+
+    def test_success_does_not_use_prior_url(self, monkeypatch):
+        monkeypatch.setattr(gn.time, "sleep", lambda s: None)
+        monkeypatch.setattr(gn._google_decode, "decode_google_news_url", lambda url: "https://new.example.com/a")
+        items = [{"id": "x", "urls": {"news": "https://news.google.com/rss/articles/xyz", "official": None}}]
+
+        gn.resolve_finalized_urls(items, {"x": "https://old.example.com/a"})
+
+        assert items[0]["urls"]["news"] == "https://new.example.com/a"
+        assert gn.get_decode_stats()["reused"] == 0
 
     def test_ignores_non_google_and_missing_urls(self, monkeypatch):
         called = {"decode": False}
@@ -190,9 +214,9 @@ class TestResolveFinalizedUrls:
 
         gn.resolve_finalized_urls(items)
 
-        assert gn.get_decode_stats() == {"attempted": 3, "success": 2}
+        assert gn.get_decode_stats() == {"attempted": 3, "success": 2, "reused": 0, "unresolved": 1}
         out = capsys.readouterr().out
-        assert "URL 복원 2/3건, 실패 1건" in out
+        assert "URL 복원 2/3건, 실패 1건 (전날 URL 재사용 0건, 복원 못 해 제외 1건)" in out
 
     def test_no_google_links_prints_nothing(self, monkeypatch, capsys):
         items = [{"id": "a", "urls": {"news": None, "official": "https://law.go.kr/a"}}]
@@ -213,3 +237,13 @@ def test_fetch_all_isolates_category_failure(monkeypatch):
     assert results["tax"] == []
     assert all(cat in results for cat in ("kifrs", "tax", "icfr", "esg"))
     assert results["kifrs"] == [{"id": "x", "title": "ok"}]
+
+
+def test_prior_news_urls_skips_google_links_and_missing():
+    data = {"items": [
+        {"id": "a", "urls": {"news": "https://www.esgeconomy.com/1", "official": None}},
+        {"id": "b", "urls": {"news": "https://news.google.com/rss/articles/b", "official": None}},
+        {"id": "c", "urls": {"news": None, "official": "https://law.go.kr/c"}},
+    ]}
+    assert gn.prior_news_urls(data) == {"a": "https://www.esgeconomy.com/1"}
+    assert gn.prior_news_urls(None) == {}
