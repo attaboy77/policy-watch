@@ -25,7 +25,9 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       SELF_ACTIVITY_NON_ENTITY_RE, NEWS_MAX_AGE_DAYS,
                       SELF_ACTIVITY_PARTY_PREFIXES, SELF_ACTIVITY_COLLECTIVE_SUFFIXES,
                       BLOG_COMMUNITY_DOMAINS, INTERNAL_AUDIENCE_KEYWORDS,
-                      INTERNAL_TRAINING_KEYWORDS, INTERNAL_ACTIVITY_OVERRIDE, EXCLUDED_IDS)
+                      INTERNAL_TRAINING_KEYWORDS, INTERNAL_ACTIVITY_OVERRIDE, EXCLUDED_IDS,
+                      READER_EVENT_HEADS, READER_BOOK_HEADS, READER_EDU_HEADS, READER_HEAD_TAILS,
+                      READER_BRACKET_LABELS)
 from . import _esg_roadmap
 
 
@@ -631,9 +633,15 @@ def is_incident_noise(text: str, tier: int = 5) -> bool:
 
 
 # ── 규제성 판정 게이트 (SPEC-ADDENDUM-5.md §1) ──────────────────────────────
+# 2026-11-05: 신호 바로 뒤에 "서·북"이 붙으면 책·문서 이름(지침서·안내서·가이드북)이지 제도 변경이 아니다.
+# 실측: "…초보자용 실전 주식 지침서 - 뉴스1"이 "지침"으로 통과했다. 9/1~ 뉴스 1,831건 중 판정이 바뀐 건 이 1건.
+_SIGNAL_COMPOUND_RE = re.compile(
+    "(" + "|".join(sorted((re.escape(_norm(k)) for k in REGULATORY_SIGNALS), key=len, reverse=True)) + ")(서|북)")
+
+
 def has_regulatory_signal(title: str) -> bool:
     """제목에 "제도가 바뀌었다"는 신호가 있는지. L3 통과의 필요조건(§1)."""
-    t = _norm(title)
+    t = _SIGNAL_COMPOUND_RE.sub("", _norm(title))
     return any(_norm(k) in t for k in REGULATORY_SIGNALS)
 
 
@@ -1413,6 +1421,62 @@ def apply_opinion_piece_filter(items: list[dict]) -> tuple[list[dict], list[dict
             kept.append(it)
         else:
             excluded.append(dict(it, excluded_reason="excluded:opinion_piece"))
+    return kept, excluded
+
+
+# ── 독자 대상 도서·교육 상품·행사 안내 제외 (2026-11-05 사용자 지시, `_config.READER_*`) ──
+def _alt(words: list[str]) -> str:
+    # 한 글자 머리("책")는 앞에 한글이 붙으면 다른 낱말이다("정책").
+    return "|".join((r"(?<![가-힣])" if len(w) == 1 else "") + re.escape(w)
+                    for w in sorted(words, key=len, reverse=True))
+
+
+_READER_HEAD_RE = re.compile(
+    "(" + _alt(READER_EVENT_HEADS + READER_BOOK_HEADS + READER_EDU_HEADS) + ")"
+    r"(?:\s*(?:" + _alt(READER_HEAD_TAILS) + "))?" r"[\s.…!]*$")
+# 주최 주체: 제목 맨 앞부터 첫 쉼표까지(따옴표·말줄임표가 끼면 주체가 아님). "한국회계기준원-한국환경산업기술원"처럼
+# 공동 주최는 나눠서 전부 공적이어야 한다.
+_READER_HOST_RE = re.compile(r"^([^,…'\"‘’“”『』「」]{1,40}?)\s*,")
+
+
+def _reader_host_is_public(title: str) -> bool:
+    # 따옴표를 지우면 "'KSSB 공시 의무화 시대, 무엇을…' 세미나"의 행사명 앞부분이 주체로 읽힌다 — 말머리만 뗀다.
+    m = _READER_HOST_RE.match(_BRACKET_PREFIX_RE.sub("", title or ""))
+    if not m:
+        return False
+    parts = [p.strip() for p in re.split(r"[-·‧]", m.group(1)) if p.strip()]
+    return bool(parts) and all(is_public_or_non_entity_subject(p) for p in parts)
+
+
+def reader_content_kind(title: str) -> str | None:
+    """독자에게 내놓는 상품·행사 안내면 그 종류("bracket"/"edu"/"event"/"book"), 아니면 None.
+
+    제목 맨 앞 말머리(READER_BRACKET_LABELS) 또는 제목 머리(매체명 앞 마지막 어구)로 판정한다.
+    행사·도서는 주최·발간 주체가 공적 기관이면 None(제도 내용을 알리는 자리) — 교육 상품과 말머리는 주체 무관.
+    """
+    m = _BRACKET_PREFIX_RE.match(title or "")
+    if m and any(_norm(k) in _norm(m.group(0)) for k in READER_BRACKET_LABELS):
+        return "bracket"
+    h = _READER_HEAD_RE.search(clean_title_for_compare(title))
+    if not h:
+        return None
+    head = h.group(1)
+    if head in READER_EDU_HEADS:
+        return "edu"
+    if _reader_host_is_public(title):
+        return None
+    return "event" if head in READER_EVENT_HEADS else "book"
+
+
+def apply_reader_content_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """L3 전용 — `_l3_gate_exempt()`로 L1/L2·tier==1 뉴스는 면제."""
+    kept, excluded = [], []
+    for it in items:
+        kind = None if _l3_gate_exempt(it) else reader_content_kind(it.get("title", ""))
+        if kind is None:
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:reader_content", excluded_note=kind))
     return kept, excluded
 
 

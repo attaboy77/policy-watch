@@ -1960,3 +1960,57 @@ def test_apply_excluded_ids_filter_removes_listed_ids_with_reason_note():
     assert [it["id"] for it in kept] == ["a"]
     assert excluded[0]["excluded_reason"] == "excluded:manual_id"
     assert excluded[0]["excluded_note"] == "현행 유지 결론"
+
+
+class TestReaderContent:
+    """2026-11-05: 독자 대상 도서·교육 상품·행사 안내 — 제목 머리·말머리로 판정."""
+
+    def test_signal_inside_book_noun_is_not_regulatory(self):
+        from sources._utils import has_regulatory_signal
+        assert has_regulatory_signal('"재무제표 몰라도 매수에서 매도까지"…초보자용 실전 주식 지침서 - 뉴스1') is False
+        assert has_regulatory_signal("배출권거래제 지침으로 배출량 공시 기업, 보완할 점은? - ESG경제") is True
+        assert has_regulatory_signal("금감원, 내부회계 안내서 발간") is True  # "발간"은 따로 남는다
+
+    @pytest.mark.parametrize("title,kind", [
+        ('"재무제표 몰라도 매수에서 매도까지"…초보자용 실전 주식 지침서 - 뉴스1', "book"),
+        ("'KSSB 공시 의무화 시대, 무엇을 준비해야 하나' 세미나 - ESG경제", "event"),
+        ("영림원소프트랩, IFRS 18 전환 지원…ERP 고도화·고객 세미나 확대 - IT조선", "event"),
+        ("상장협, 'ESG 공시담당자 실무 쟁점' 과정 개설", "edu"),
+        ("ESG 공시 의무화 대응 전문인력 양성과정 확대 편성 - 에너지프로슈머", "edu"),
+        ("[강의 소개] 전·당기 감사인 간 의견불일치 조정 협의회 사례 해설 - CPA뉴스", "bracket"),
+        ("[신간] 좋은 회사 재무제표 - 한국사회복지저널", "bracket"),
+        ("[주린이를 위한 썰] 주식이 뭔지도 모르고 샀다면… '두 갈래 성장'부터 알자 - 자본시장뉴스", "bracket"),
+    ])
+    def test_excluded_kinds(self, title, kind):
+        from sources._utils import reader_content_kind
+        assert reader_content_kind(title) == kind
+
+    @pytest.mark.parametrize("title", [
+        "금감원, '新외감법 및 K-IFRS 제·개정' 설명회 개최 - 조세일보",  # 공적 주최 행사
+        "한국회계기준원-한국환경산업기술원, 지속가능성 공시기준 이행지원 세미나 개최 - intn.co.kr",
+        "한국공인회계사회, 『공익법인회계기준 실무사례와 해설』 발간 - CPA뉴스",
+        "[KAI 세미나] 주성호 KSSB실장 “KSSB 파일럿 테스트 연말까지…일관적 질의회신 체계 구축” - 조세금융신문",
+        "[정책자료] IFRS 지속가능성 공시기준 공개초안 주요 내용 요약(한국회계기준원) - 국가기후위기대응위원회",
+        "금융위, 중소기업 회계 지원 정책",  # "정책"의 "책"은 머리가 아니다
+        "내년 도입 新회계기준, 주요 변경사항은 - 데일리안",
+    ])
+    def test_kept(self, title):
+        from sources._utils import reader_content_kind
+        assert reader_content_kind(title) is None
+
+    def test_public_host_does_not_exempt_education_products(self):
+        from sources._utils import reader_content_kind
+        assert reader_content_kind("한국공인회계사회, 공시 실무 과정 개설") == "edu"
+
+    def test_l1_and_tier1_exempt(self):
+        from sources._utils import apply_reader_content_filter
+        title = "상장협, 'ESG 공시담당자 실무 쟁점' 과정 개설"
+        items = [
+            {"category": "esg", "layer": "L1", "title": title, "source": {"tier": 1, "type": "official"}},
+            {"category": "esg", "layer": "L3", "title": title, "source": {"tier": 1, "type": "news"}},
+            {"category": "esg", "layer": "L3", "title": title, "source": {"tier": 4, "type": "news"}},
+        ]
+        kept, excluded = apply_reader_content_filter(items)
+        assert len(kept) == 2
+        assert excluded[0]["excluded_reason"] == "excluded:reader_content"
+        assert excluded[0]["excluded_note"] == "edu"

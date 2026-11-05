@@ -26,7 +26,7 @@ from ._utils import (apply_applicability_gate, apply_blog_community_filter,
                      apply_corporate_pr_filter, apply_excluded_ids_filter,
                      apply_internal_activity_filter,
                      apply_foreign_news_filter, apply_local_gov_petition_filter, apply_news_age_limit,
-                     apply_non_target_tax_subject_filter, apply_opinion_piece_filter,
+                     apply_non_target_tax_subject_filter, apply_opinion_piece_filter, apply_reader_content_filter,
                      apply_regulatory_gate, apply_standard_setter_governance_filter,
                      attach_related_news_with_excluded, dedupe,
                      dedupe_doc_variants, dedupe_similar_news_with_excluded, finalize_item,
@@ -373,6 +373,11 @@ def build_data_json(items: list[dict], prior_news_urls: dict[str, str] | None = 
     deduped, excluded = apply_opinion_piece_filter(deduped)  # 2026-09-15
     _record_excluded(excluded)
     _log_stage("논평성 기사([시선]/[칼럼]/[기고]/[사설]) 제외 후", deduped, n)
+    # 2026-11-05: 독자 대상 도서·교육 상품·행사 안내 — 논평 말머리와 같은 "기사 성격" 판정이라 바로 다음.
+    n = len(deduped)
+    deduped, excluded = apply_reader_content_filter(deduped)
+    _record_excluded(excluded)
+    _log_stage("독자 대상 도서·교육·행사 안내 제외 후", deduped, n)
     n = len(deduped)
     deduped, excluded = apply_local_gov_petition_filter(deduped)  # 2026-09-02
     _record_excluded(excluded)
