@@ -23,6 +23,7 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from .. import _excluded_log, _http
+from .._source_health import PartialFetch
 from .._utils import (classify, doc_type_of, extract_effective_date, is_event_announcement,
                       pass_tax_filter, keyword_score, matched_keywords, make_id_exact,
                       final_score, recency_score)
@@ -80,6 +81,7 @@ def _extract_attachments(li) -> list[dict] | None:
 # 없어서 0건인 것(정상, main.ALLOW_EMPTY_SOURCES)과 구조 변경·차단으로 행 자체를
 # 못 읽은 것(실패)을 구분한다.
 _rows_seen = 0
+_row_errors = 0  # 2026-11-13: 날짜 등 해석 실패로 건너뛴 행 수
 
 # 2026-10-01 실측: 목록 페이지(no010101)는 한 페이지에 24~26초가 걸린다(메인 페이지는
 # 1초 — 서버 쪽 목록 조회가 느림). 기본 timeout 15초·재시도 3회로는 매번 read timeout,
@@ -90,7 +92,7 @@ PAGE_RETRIES = 1
 
 
 def fetch_page(page: int = 1) -> list[dict]:
-    global _rows_seen
+    global _rows_seen, _row_errors
     resp = _http.get_govt(LIST_URL, params={"curPage": page}, timeout=PAGE_TIMEOUT, retries=PAGE_RETRIES)
     soup = BeautifulSoup(resp.text, "html.parser")
     items: list[dict] = []
@@ -100,51 +102,67 @@ def fetch_page(page: int = 1) -> list[dict]:
         day_div = li.select_one(".day")
         if subject_a is None or day_div is None:
             continue
-        _rows_seen += 1
-        title = subject_a.get_text(strip=True)
-        href = subject_a.get("href", "")
-        if not title or not href:
-            continue
-        url = href if href.startswith("http") else f"{BASE}{href}"
-        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
-            _excluded_log.skip(source=SOURCE_NAME, reason="collect:event_announcement", title=title, url=url)
-            continue
-        category = _classify_own_press(title)
-        if category is None:
-            _excluded_log.skip(source=SOURCE_NAME, reason="collect:no_category", title=title, url=url)
-            continue  # 보험업 감독·가계부채 등 우리 4개 카테고리와 무관한 보도자료는 버림
-        if not pass_tax_filter(category=category, layer="L1", text=title):
-            _excluded_log.skip(source=SOURCE_NAME, reason="collect:tax_subject", title=title, url=url,
-                               category=category)
-            continue  # 드물지만 tax로 분류될 경우 세목 화이트리스트 적용(ADDENDUM-3 §3)
+        title, url = "", None
+        try:  # 2026-11-13: 행 하나의 해석 실패가 페이지 전체를 죽이지 않게 행 단위로 격리
+            title = subject_a.get_text(strip=True)
+            href = subject_a.get("href", "")
+            if not title or not href:
+                continue
+            url = href if href.startswith("http") else f"{BASE}{href}"
+            published_at = day_div.get_text(strip=True) or None
+            # 2026-11-13: 날짜 해석을 카테고리 필터보다 먼저, 행 수는 해석 성공 뒤에 센다 — 전엔
+            # 행 수를 먼저 세서 날짜 예외로 행이 전부 빠져도 "행은 읽었다 → 0건 정상"이 됐다.
+            pub_date = _parse_iso_date(published_at) if published_at else None
+            _rows_seen += 1
+            if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
+                _excluded_log.skip(source=SOURCE_NAME, reason="collect:event_announcement", title=title, url=url)
+                continue
+            category = _classify_own_press(title)
+            if category is None:
+                _excluded_log.skip(source=SOURCE_NAME, reason="collect:no_category", title=title, url=url)
+                continue  # 보험업 감독·가계부채 등 우리 4개 카테고리와 무관한 보도자료는 버림
+            if not pass_tax_filter(category=category, layer="L1", text=title):
+                _excluded_log.skip(source=SOURCE_NAME, reason="collect:tax_subject", title=title, url=url,
+                                   category=category)
+                continue  # 드물지만 tax로 분류될 경우 세목 화이트리스트 적용(ADDENDUM-3 §3)
 
-        published_at = day_div.get_text(strip=True) or None
-        doc_type = doc_type_of(title, source_tier=1)
-        effective_date = extract_effective_date(title) if category != "tax" else None
-        kw = keyword_score(title, category)
-        rec = recency_score(_parse_iso_date(published_at)) if published_at else 0
-        items.append({
-            "id": make_id_exact(url),
-            "category": category,
-            "doc_type": doc_type,
-            "title": title,
-            "summary": [],
-            "impact": None,
-            "published_at": published_at,
-            "collected_at": _now_kst_iso(),
-            "effective_date": effective_date,
-            "source": {"name": SOURCE_NAME, "domain": "fsc.go.kr", "tier": 1, "type": "official"},
-            "trust_score": 100,
-            "keyword_score": kw,
-            "final_score": final_score(100, kw, rec),
-            "matched_keywords": matched_keywords(title, category),
-            "urls": {"news": None, "official": url},
-            "law_meta": None,
-            "attachments": _extract_attachments(li),
-            "layer": "L1",
-            "is_noise": False,
-        })
+            doc_type = doc_type_of(title, source_tier=1)
+            effective_date = extract_effective_date(title) if category != "tax" else None
+            kw = keyword_score(title, category)
+            rec = recency_score(pub_date) if pub_date else 0
+            items.append({
+                "id": make_id_exact(url),
+                "category": category,
+                "doc_type": doc_type,
+                "title": title,
+                "summary": [],
+                "impact": None,
+                "published_at": published_at,
+                "collected_at": _now_kst_iso(),
+                "effective_date": effective_date,
+                "source": {"name": SOURCE_NAME, "domain": "fsc.go.kr", "tier": 1, "type": "official"},
+                "trust_score": 100,
+                "keyword_score": kw,
+                "final_score": final_score(100, kw, rec),
+                "matched_keywords": matched_keywords(title, category),
+                "urls": {"news": None, "official": url},
+                "law_meta": None,
+                "attachments": _extract_attachments(li),
+                "layer": "L1",
+                "is_noise": False,
+            })
+        except Exception as exc:  # noqa: BLE001
+            _row_errors += 1
+            shown = title or "(제목 없음)"
+            print(f"[fsc] 행 건너뜀: {shown} — {exc}")
+            _excluded_log.skip(source=SOURCE_NAME, reason="collect:row_parse_error",
+                               title=f"{shown} — {exc}", url=url)
     return items
+
+
+def part_of(item: dict) -> str:
+    """부분 폴백용(main.SUB_SOURCES["fsc"]) — 하위 수집이 보도자료 목록 하나뿐이다."""
+    return "list"
 
 
 def fetch(*, max_pages: int = 1) -> list[dict]:
@@ -152,10 +170,16 @@ def fetch(*, max_pages: int = 1) -> list[dict]:
 
     2026-10-01: 관련 항목이 없어 0건인 건 정상(main.ALLOW_EMPTY_SOURCES). 대신
     모든 페이지가 실패했거나 목록 행을 하나도 못 읽었으면 예외로 올려 실패 처리한다.
+
+    2026-11-13: 행 수는 날짜 해석이 성공한 행만 센다(위 fetch_page). 페이지 실패나 행 해석
+    실패가 있으면 `PartialFetch(failed={"list": …})`로 올려 source_health·메일에 남기고,
+    main이 전일 캐시에서 이번에 없는 항목만 채운다(fss B2/B3 10/14 방식).
     """
-    global _rows_seen
+    global _rows_seen, _row_errors
     _rows_seen = 0
+    _row_errors = 0
     items: list[dict] = []
+    page_errors: list[str] = []
     for page in range(1, max_pages + 1):
         if page > 1:
             import time
@@ -164,10 +188,17 @@ def fetch(*, max_pages: int = 1) -> list[dict]:
             items.extend(fetch_page(page))
         except Exception as exc:  # noqa: BLE001
             print(f"[fsc] page={page} 수집 실패: {exc}")
+            page_errors.append(f"page={page}: {exc}")
     if _rows_seen == 0:
-        raise RuntimeError("보도자료 목록 행 0개 — 전 페이지 실패 또는 페이지 구조 변경·차단 의심")
+        detail = "; ".join(page_errors) or (f"행 {_row_errors}개 전부 해석 실패" if _row_errors else "")
+        raise RuntimeError("보도자료 목록 행 0개 — 전 페이지 실패 또는 페이지 구조 변경·차단 의심"
+                           + (f" ({detail})" if detail else ""))
+    reasons = list(page_errors)
+    if _row_errors:
+        reasons.append(f"행 {_row_errors}개 해석 실패(건너뜀, EXCLUDED_LOG collect:row_parse_error)")
+    if reasons:
+        raise PartialFetch(items, {"list": " / ".join(reasons)}, part_of)
     return items
-
 
 if __name__ == "__main__":
     print("=== FSC probe ===")

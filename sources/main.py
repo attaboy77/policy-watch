@@ -69,7 +69,8 @@ ALLOW_EMPTY_SOURCES = {"moef", "fsc", "policy_briefing", "lawmaking"}
 # 2026-10-14: 하위 수집을 여러 개 가진 소스의 부분 키. 어댑터가 `PartialFetch`로
 # 일부 실패를 알리면 실패한 부분만 전일 캐시로 채우고, 연속 실패 횟수는
 # "{소스}_{부분}" 키로 따로 센다(라벨은 `SOURCE_LABELS`).
-SUB_SOURCES = {"fss": ("b2", "b3"), "kasb": ("schedule",)}  # kasb: 11/13 주요일정(C)
+SUB_SOURCES = {"fss": ("b2", "b3"), "kasb": ("notices", "qna", "schedule"),  # kasb·fsc: 11/13
+               "fsc": ("list",)}
 
 
 def _fetch_with_timeout(fetch_fn, *, timeout: float):
@@ -203,7 +204,10 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
             prior = cache.get(name) or []
             merged = list(pf.items)
             for part, reason in pf.failed.items():
-                part_cached = [it for it in prior if pf.part_of(it) == part]
+                # 2026-11-13: 행 일부만 해석 실패한 부분은 이번 수집분이 있으므로, 전일 캐시에서는
+                # 이번에 없는 id(=건너뛴 행의 어제 모습)만 채운다 — 중복 방지 + 하루 빠졌다 신규로 재발송 방지.
+                have = {it.get("id") for it in merged}
+                part_cached = [it for it in prior if pf.part_of(it) == part and it.get("id") not in have]
                 _use_fallback(f"{name}_{part}", reason, cache, health, now_iso,
                               merged, sources_failed, fallback_items=part_cached)
             for part in SUB_SOURCES.get(name, ()):

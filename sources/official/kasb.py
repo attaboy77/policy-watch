@@ -198,6 +198,21 @@ def _fetch_detail_body_text(seq: str, *, base_url: str = NOTICE_VIEW_URL) -> str
     return cont.get_text(" ", strip=True) if cont else ""
 
 
+# 2026-11-13: 하위 수집(A1 notices / A3 qna / C schedule)별로 해석 실패해 건너뛴 행 수.
+# 각 하위 수집이 시작할 때 0으로 되돌리고, fetch()가 0보다 크면 그 부분을 부분 실패로 올린다.
+_ROW_ERRORS: dict[str, int] = {}
+_PART_LABELS = {"notices": "소식", "qna": "질의회신", "schedule": "주요일정"}
+
+
+def _row_failed(part: str, title: str, url: str | None, exc: Exception) -> None:
+    """행 하나의 해석 실패 — 그 행만 건너뛰고 EXCLUDED_LOG(collect:row_parse_error)에 남긴다."""
+    _ROW_ERRORS[part] = _ROW_ERRORS.get(part, 0) + 1
+    shown = title or "(제목 없음)"
+    print(f"[kasb] {_PART_LABELS.get(part, part)} 행 건너뜀: {shown} — {exc}")
+    _excluded_log.skip(source=_LOG_SOURCE, reason="collect:row_parse_error",
+                       title=f"{shown} — {exc}", url=url)
+
+
 def fetch_notices(*, fetch_detail: bool = True, max_detail_fetches: int = 30) -> list[dict]:
     """A1: 공지사항/소식 게시판. "공지사항" 카테고리는 제외하고 반환한다."""
     resp = _http.get(NOTICE_LIST_URL)
@@ -205,54 +220,60 @@ def fetch_notices(*, fetch_detail: bool = True, max_detail_fetches: int = 30) ->
     items: list[dict] = []
     detail_fetches = 0
 
+    _ROW_ERRORS["notices"] = 0
     for row in soup.select("table tbody tr"):
-        cells = row.find_all("td")
-        if len(cells) < 3:
-            continue
-        cat_text = cells[1].get_text(strip=True)
-        if cat_text in _EXCLUDED_NOTICE_CATEGORIES:
-            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:out_of_scope",
-                               title=f"[{cat_text}] {cells[2].get_text(strip=True)}", url=NOTICE_LIST_URL)
-            continue
-        link = cells[2].find("a")
-        if link is None:
-            continue
-        title = link.get_text(strip=True)
-        m = re.search(r"fn_Detail\('(\d+)'\)", link.get("onclick", ""))
-        if not title or not m:
-            continue
-        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4: 인사·조직·운영 공지 + 행사/포럼 안내 제외(tier 무관)
-            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:event_announcement", title=title,
-                               url=f"{NOTICE_VIEW_URL}?seq={m.group(1)}")
-            continue
-        seq = m.group(1)
-        date_p = row.select_one(".board_date")
-        published_at = date_p.get_text(strip=True) if date_p else None
+        row_title, row_url = "", None
+        try:  # 2026-11-13: 행 하나의 해석 실패가 이 하위 수집 전체를 죽이지 않게 행 단위로 격리
+            cells = row.find_all("td")
+            if len(cells) < 3:
+                continue
+            cat_text = cells[1].get_text(strip=True)
+            if cat_text in _EXCLUDED_NOTICE_CATEGORIES:
+                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:out_of_scope",
+                                   title=f"[{cat_text}] {cells[2].get_text(strip=True)}", url=NOTICE_LIST_URL)
+                continue
+            link = cells[2].find("a")
+            if link is None:
+                continue
+            title = link.get_text(strip=True)
+            m = re.search(r"fn_Detail\('(\d+)'\)", link.get("onclick", ""))
+            if not title or not m:
+                continue
+            row_title, row_url = title, f"{NOTICE_VIEW_URL}?seq={m.group(1)}"
+            if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4: 인사·조직·운영 공지 + 행사/포럼 안내 제외(tier 무관)
+                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:event_announcement", title=title,
+                                   url=f"{NOTICE_VIEW_URL}?seq={m.group(1)}")
+                continue
+            seq = m.group(1)
+            date_p = row.select_one(".board_date")
+            published_at = date_p.get_text(strip=True) if date_p else None
 
-        category = _NOTICE_CATEGORY_MAP.get(cat_text) or classify(title)
-        if category not in ("kifrs", "esg"):
-            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:no_category", title=title,
-                               url=f"{NOTICE_VIEW_URL}?seq={seq}")
-            continue  # 매핑도 안 되고 키워드로도 못 걸리면 스킵(잘못된 카테고리 태깅 방지)
+            category = _NOTICE_CATEGORY_MAP.get(cat_text) or classify(title)
+            if category not in ("kifrs", "esg"):
+                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:no_category", title=title,
+                                   url=f"{NOTICE_VIEW_URL}?seq={seq}")
+                continue  # 매핑도 안 되고 키워드로도 못 걸리면 스킵(잘못된 카테고리 태깅 방지)
 
-        url = f"{NOTICE_VIEW_URL}?seq={seq}"
-        effective_date = None
-        if fetch_detail and detail_fetches < max_detail_fetches:
-            time.sleep(SLEEP_BETWEEN_REQUESTS)
-            try:
-                body_text = _fetch_detail_body_text(seq)
-                effective_date = extract_effective_date(body_text)
-            except Exception as exc:  # noqa: BLE001 - 상세 조회 실패해도 목록 항목은 살린다
-                print(f"[kasb] seq={seq} 상세 조회 실패: {exc}")
-            detail_fetches += 1
+            url = f"{NOTICE_VIEW_URL}?seq={seq}"
+            effective_date = None
+            if fetch_detail and detail_fetches < max_detail_fetches:
+                time.sleep(SLEEP_BETWEEN_REQUESTS)
+                try:
+                    body_text = _fetch_detail_body_text(seq)
+                    effective_date = extract_effective_date(body_text)
+                except Exception as exc:  # noqa: BLE001 - 상세 조회 실패해도 목록 항목은 살린다
+                    print(f"[kasb] seq={seq} 상세 조회 실패: {exc}")
+                detail_fetches += 1
 
-        tier, trust_score, source_name = trust_of(url)
-        doc_type = doc_type_of(title, tier)
-        items.append(_build_item(
-            category=category, title=title, url=url, published_at=published_at,
-            doc_type=doc_type, effective_date=effective_date,
-            tier=tier, trust_score=trust_score, source_name=source_name,
-        ))
+            tier, trust_score, source_name = trust_of(url)
+            doc_type = doc_type_of(title, tier)
+            items.append(_build_item(
+                category=category, title=title, url=url, published_at=published_at,
+                doc_type=doc_type, effective_date=effective_date,
+                tier=tier, trust_score=trust_score, source_name=source_name,
+            ))
+        except Exception as exc:  # noqa: BLE001
+            _row_failed("notices", row_title, row_url, exc)
     return items
 
 
@@ -287,6 +308,7 @@ def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
 
     items: list[dict] = []
     detail_fetches = 0
+    _ROW_ERRORS["schedule"] = 0
     for page in range(1, max_pages + 1):
         if page > 1:
             time.sleep(SLEEP_BETWEEN_REQUESTS)
@@ -358,9 +380,7 @@ def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
                     is_meeting_schedule=True,
                 ))
             except Exception as exc:  # noqa: BLE001
-                print(f"[kasb] calendar 행 건너뜀: {row_title or '(제목 없음)'} — {exc}")
-                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:row_parse_error",
-                                   title=f"{row_title or '(제목 없음)'} — {exc}", url=row_url)
+                _row_failed("schedule", row_title, row_url, exc)
 
         if len(rows) < 10:  # 페이지당 10건 — 덜 찼으면 마지막 페이지
             break
@@ -596,47 +616,53 @@ def fetch_qna(*, fetch_attachments: bool = True) -> list[dict]:
     today = _now_kst_iso()[:10]
     disclosed_idx = _qna_disclosed_column_index(soup)
     items: list[dict] = []
+    _ROW_ERRORS["qna"] = 0
     for row in soup.select("table tbody tr"):
-        cells = row.find_all("td", recursive=False)
-        if len(cells) < 3:
-            continue
-        link = row.find("a")
-        if link is None:
-            continue
-        title = link.get_text(strip=True)
-        m = _QNA_DETAIL_RE.search(link.get("onclick", ""))
-        if not title or not m:
-            continue
-        seq, ctg_cd = m.group(1), m.group(2)
-        if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
-            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:event_announcement", title=title,
-                               url=_qna_detail_url(seq, ctg_cd), category="kifrs")
-            continue
-        date_p = row.select_one(".board_date")
-        replied_at = date_p.get_text(strip=True) if date_p else None
-        if not replied_at:
-            _excluded_log.skip(source=_LOG_SOURCE, reason="collect:non_kifrs", title=title,
-                               url=_qna_detail_url(seq, ctg_cd), category="kifrs")
-            continue  # 날짜 없는 상단 고정 항목 = 일반기업회계기준 계열, 제외
-        disclosed_at = None
-        if disclosed_idx is not None and disclosed_idx < len(cells):
-            disclosed_at = cells[disclosed_idx].get_text(strip=True) or None
-            if disclosed_at and not _ISO_DATE_RE.match(disclosed_at):
-                disclosed_at = None
-        url = _qna_detail_url(seq, ctg_cd)
-        tier, trust_score, source_name = trust_of(url)
-        item = _build_item(
-            category="kifrs", title=title, url=url,
-            published_at=_qna_published_at(replied_at, disclosed_at, today),
-            doc_type="질의회신", effective_date=None,
-            tier=tier, trust_score=trust_score, source_name=source_name,
-            # id는 예전 링크(목록+#seq) 그대로 — 요약 캐시·sent_log가 id로 연결돼 있다.
-            id_source=f"{QNA_LIST_URL}#{seq}",
-        )
-        item["replied_at"] = replied_at
-        item["disclosed_at"] = disclosed_at
-        item["attachment_text"] = _qna_attachment_text(row, seq) if fetch_attachments else None
-        items.append(item)
+        row_title, row_url = "", None
+        try:  # 2026-11-13: 행 하나의 해석 실패가 이 하위 수집 전체를 죽이지 않게 행 단위로 격리
+            cells = row.find_all("td", recursive=False)
+            if len(cells) < 3:
+                continue
+            link = row.find("a")
+            if link is None:
+                continue
+            title = link.get_text(strip=True)
+            m = _QNA_DETAIL_RE.search(link.get("onclick", ""))
+            if not title or not m:
+                continue
+            seq, ctg_cd = m.group(1), m.group(2)
+            row_title, row_url = title, _qna_detail_url(seq, ctg_cd)
+            if is_event_announcement(title):  # ADDENDUM-4 §1 + ADDENDUM-7 §4
+                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:event_announcement", title=title,
+                                   url=_qna_detail_url(seq, ctg_cd), category="kifrs")
+                continue
+            date_p = row.select_one(".board_date")
+            replied_at = date_p.get_text(strip=True) if date_p else None
+            if not replied_at:
+                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:non_kifrs", title=title,
+                                   url=_qna_detail_url(seq, ctg_cd), category="kifrs")
+                continue  # 날짜 없는 상단 고정 항목 = 일반기업회계기준 계열, 제외
+            disclosed_at = None
+            if disclosed_idx is not None and disclosed_idx < len(cells):
+                disclosed_at = cells[disclosed_idx].get_text(strip=True) or None
+                if disclosed_at and not _ISO_DATE_RE.match(disclosed_at):
+                    disclosed_at = None
+            url = _qna_detail_url(seq, ctg_cd)
+            tier, trust_score, source_name = trust_of(url)
+            item = _build_item(
+                category="kifrs", title=title, url=url,
+                published_at=_qna_published_at(replied_at, disclosed_at, today),
+                doc_type="질의회신", effective_date=None,
+                tier=tier, trust_score=trust_score, source_name=source_name,
+                # id는 예전 링크(목록+#seq) 그대로 — 요약 캐시·sent_log가 id로 연결돼 있다.
+                id_source=f"{QNA_LIST_URL}#{seq}",
+            )
+            item["replied_at"] = replied_at
+            item["disclosed_at"] = disclosed_at
+            item["attachment_text"] = _qna_attachment_text(row, seq) if fetch_attachments else None
+            items.append(item)
+        except Exception as exc:  # noqa: BLE001
+            _row_failed("qna", row_title, row_url, exc)
     return items
 
 
@@ -769,27 +795,42 @@ def fetch(*, fetch_detail: bool = True) -> list[dict]:
             got = fn()
         except Exception as exc:  # noqa: BLE001
             print(f"[kasb] {name} 수집 실패: {exc}")
-            if name == "schedule":
-                failed["schedule"] = str(exc)
+            if name in TRACKED_PARTS:
+                failed[name] = str(exc)
             continue
-        if name == "schedule" and not got:
-            print("[kasb] schedule 수집 실패: 결과 0건")
-            failed["schedule"] = "결과 0건(목록 행 없음 또는 전 행 해석 실패)"
+        if name in TRACKED_PARTS:
+            if not got:
+                failed[name] = "결과 0건(목록 행 없음 또는 전 행 해석 실패)"
+            elif _ROW_ERRORS.get(name):
+                failed[name] = f"행 {_ROW_ERRORS[name]}개 해석 실패(건너뜀, EXCLUDED_LOG collect:row_parse_error)"
+            if name in failed:
+                print(f"[kasb] {name} 수집 실패: {failed[name]}")
         out.extend(got)
-    # 2026-11-13: 주요일정(C) 실패·0건을 부분 실패로 올린다(fss B2/B3 10/14 방식). 전엔 print만 하고
-    # kasb 전체를 성공으로 둬서 11/13 C가 통째로 빠진 걸 source_health·메일로 알 수 없었다.
+    # 2026-11-13: 소식(A1)·질의회신(A3)·주요일정(C)의 예외·0건·행 해석 실패를 부분 실패로 올린다
+    # (fss B2/B3 10/14 방식). 전엔 print만 하고 kasb 전체를 성공으로 둬서 11/13 C가 통째로 빠진 걸
+    # source_health·메일로 알 수 없었다. 실패한 부분은 main이 전일 캐시에서 빠진 항목만 채운다.
     if failed:
         if not out:
-            raise RuntimeError(f"kasb 전체 0건 — schedule: {failed['schedule']}")
+            raise RuntimeError("kasb 전체 0건 — " + " / ".join(f"{p}: {r}" for p, r in failed.items()))
         raise PartialFetch(out, failed, part_of)
     return out
 
 
-def part_of(item: dict) -> str:
-    """캐시 항목이 어느 하위 수집에서 왔는지 — 부분 폴백용(main.SUB_SOURCES). 주요일정(C)만 따로 센다."""
-    url = (item.get("urls") or {}).get("official") or ""
-    return "schedule" if "calViewA.do" in url else "other"
+# 부분 실패를 따로 세는 하위 수집(main.SUB_SOURCES["kasb"]와 같아야 한다).
+TRACKED_PARTS = ("notices", "qna", "schedule")
 
+
+def part_of(item: dict) -> str:
+    """캐시 항목이 어느 하위 수집에서 왔는지 — 부분 폴백용(main.SUB_SOURCES).
+    A1 소식(comm010View.do) / A3 질의회신(View{ctgCd}.do?…replySummary=Y) / C 주요일정(calViewA.do)."""
+    url = (item.get("urls") or {}).get("official") or ""
+    if "calViewA.do" in url:
+        return "schedule"
+    if "comm010View.do" in url:
+        return "notices"
+    if "replySummary=Y" in url:
+        return "qna"
+    return "other"
 
 if __name__ == "__main__":
     print("=== KASB probe ===")

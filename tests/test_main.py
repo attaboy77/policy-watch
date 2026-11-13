@@ -432,6 +432,18 @@ class TestCollectAllPartialFallback:
         assert {"id": "f1"} in items
         assert failed[0]["consecutive_failures"] == 2
 
+    def test_partially_parsed_part_fills_only_missing_ids(self, monkeypatch, tmp_path):
+        # 2026-11-13: 행 일부만 해석 실패한 부분은 이번 수집분 + 전일 캐시 중 이번에 없는 id만.
+        _isolate_cache_health(monkeypatch, tmp_path)
+        sh.save_cache({"fss": [{"id": "f1", "v": "old"}, {"id": "f2"}, {"id": "k1"}]})
+        monkeypatch.setattr(main, "OFFICIAL_SOURCES",
+                            [("fss", self._partial([{"id": "f1", "v": "new"}, {"id": "k1"}],
+                                                   {"b2": "행 1개 해석 실패"}))])
+        monkeypatch.setattr(main, "NEWS_SOURCES", [])
+        items, _, failed = main.collect_all()
+        assert items == [{"id": "f1", "v": "new"}, {"id": "k1"}, {"id": "f2"}]
+        assert failed[0]["name"] == "fss_b2" and failed[0]["fallback_count"] == 1
+
     def test_full_success_resets_part_health(self, monkeypatch, tmp_path):
         _isolate_cache_health(monkeypatch, tmp_path)
         sh.save_health({"fss_b2": {"consecutive_failures": 3, "last_success_at": None}})

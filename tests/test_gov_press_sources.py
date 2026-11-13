@@ -122,6 +122,58 @@ def test_fsc_unrelated_rows_return_empty_without_error(monkeypatch):
     assert fsc.fetch(max_pages=1) == []
 
 
+# 2026-11-13: 날짜가 깨진 행이 섞여도 나머지는 수집되고 부분 실패로 기록 / 전부 깨지면 실패
+def _fsc_li(title, day, n):
+    return (f'<li><div class="subject"><a href="/no010101/{n}">{title}</a></div>'
+            f'<div class="day">{day}</div></li>')
+
+
+def _mock_fsc(monkeypatch, lis):
+    html = "<ul>" + "".join(lis) + "</ul>"
+    monkeypatch.setattr(fsc._http, "get_govt", lambda *a, **kw: SimpleNamespace(text=html))
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    skipped = []
+    monkeypatch.setattr(fsc._excluded_log, "skip", lambda **kw: skipped.append(kw))
+    return skipped
+
+
+def test_fsc_bad_date_row_skipped_rest_kept_and_partial(monkeypatch):
+    from sources import _source_health as sh
+    skipped = _mock_fsc(monkeypatch, [
+        _fsc_li("금융위원회, 내부회계관리제도 평가·보고 기준 개정", "2026.11.12", 1),
+        _fsc_li("ESG 공시기준 로드맵 발표", "2026-11-12", 2),
+    ])
+    with pytest.raises(sh.PartialFetch) as ei:
+        fsc.fetch(max_pages=1)
+    assert [i["title"] for i in ei.value.items] == ["ESG 공시기준 로드맵 발표"]
+    assert set(ei.value.failed) == {"list"} and "행 1개 해석 실패" in ei.value.failed["list"]
+    assert ei.value.part_of is fsc.part_of
+    bad = [x for x in skipped if x["reason"] == "collect:row_parse_error"]
+    assert len(bad) == 1 and "내부회계관리제도" in bad[0]["title"]
+
+
+def test_fsc_all_rows_bad_date_is_failure_not_empty_success(monkeypatch):
+    # 전엔 행 수를 날짜 해석 전에 세서 이 경우 "0건 정상"이 됐다.
+    _mock_fsc(monkeypatch, [_fsc_li("보험업 감독규정 개정", "2026.11.12", 1)])
+    with pytest.raises(RuntimeError, match="행 0개"):
+        fsc.fetch(max_pages=1)
+
+
+def test_fsc_page_failure_is_partial(monkeypatch):
+    from sources import _source_health as sh
+    good = "<ul>" + _fsc_li("ESG 공시기준 로드맵 발표", "2026-11-12", 2) + "</ul>"
+
+    def get(url, params, **kw):
+        if params["curPage"] == 2:
+            raise RuntimeError("read timeout")
+        return SimpleNamespace(text=good)
+    monkeypatch.setattr(fsc._http, "get_govt", get)
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    with pytest.raises(sh.PartialFetch) as ei:
+        fsc.fetch(max_pages=2)
+    assert "page=2" in ei.value.failed["list"] and len(ei.value.items) == 1
+
+
 def test_policy_briefing_raises_when_no_rows(monkeypatch):
     monkeypatch.setattr(policy_briefing._http, "get_govt",
                         lambda *a, **kw: SimpleNamespace(text="<html>차단</html>"))
