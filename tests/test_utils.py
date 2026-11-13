@@ -1652,6 +1652,27 @@ class TestStandardSetterGovernanceFilter:
         assert [it["title"] for it in kept] == ["IASB 공개초안 '리스' 의견조회"]
         assert excluded[0]["excluded_reason"] == "excluded:standard_setter_governance"
 
+    # 2026-11-13 사용자 지시(안전장치): 10/1 결정은 유지하되, 기준 "내용"(공시기준·기준서
+    # 제정안/공개초안)은 이 필터에 걸리지 않고, 조직 거버넌스(재단 정관 등)만 빠지는지 고정.
+    CONTENT_TITLES = [
+        "지속가능성 공시기준 공개초안 의견조회",
+        "KSSB 제1호 제정안 '지속가능성 관련 재무정보 공시를 위한 일반 요구사항'",
+        "KSSB 제2호 제정안 '기후 관련 공시'",
+        "2026년 제11회 회계기준위원회(K-IFRS 제1119호 제정안 ‘공공에 대한 회계책임이 없는 종속기업: 공시’ 등)",
+        "ISSB 공개초안 '온실가스 배출 공시 개정' 의견조회",
+    ]
+    GOVERNANCE_TITLES = [
+        "IFRS 재단 정관 개정 공개초안",
+        "2026년 제9회 지속가능성기준위원회(IFRS 재단 정관 개정 공개초안에 대한 검토의견)",  # 11/13 실측
+    ]
+
+    def test_content_kept_only_governance_excluded(self):
+        items = [{"title": t, "layer": "L1", "source": {"tier": 1, "type": "official"}}
+                 for t in self.CONTENT_TITLES + self.GOVERNANCE_TITLES]
+        kept, excluded = type(self)._apply(items)
+        assert [it["title"] for it in kept] == self.CONTENT_TITLES
+        assert [it["title"] for it in excluded] == self.GOVERNANCE_TITLES
+
 
 # ── 2026-10-14: 같은 문서 변형본 병합 / 상설 기준 문서 ─────────────────────
 from sources._utils import (dedupe_doc_variants, doc_variant_key, is_standing_document,
