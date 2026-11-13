@@ -8,7 +8,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-26",
-      "collected_at": "2026-11-13T11:17:11+09:00",
+      "collected_at": "2026-11-13T18:13:48+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -40,7 +40,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-16",
-      "collected_at": "2026-11-13T11:17:12+09:00",
+      "collected_at": "2026-11-13T18:13:49+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -73,7 +73,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-18",
-      "collected_at": "2026-11-13T11:17:13+09:00",
+      "collected_at": "2026-11-13T18:13:51+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -106,7 +106,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-16",
-      "collected_at": "2026-11-13T11:17:14+09:00",
+      "collected_at": "2026-11-13T18:13:53+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -139,7 +139,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-16",
-      "collected_at": "2026-11-13T11:17:14+09:00",
+      "collected_at": "2026-11-13T18:13:53+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -172,7 +172,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-15",
-      "collected_at": "2026-11-13T11:17:14+09:00",
+      "collected_at": "2026-11-13T18:13:53+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -205,7 +205,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-13T11:17:14+09:00",
+      "collected_at": "2026-11-13T18:13:53+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -242,7 +242,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-13T11:17:14+09:00",
+      "collected_at": "2026-11-13T18:13:53+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -277,7 +277,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-13T11:17:14+09:00",
+      "collected_at": "2026-11-13T18:13:53+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -312,7 +312,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-13T11:17:14+09:00",
+      "collected_at": "2026-11-13T18:13:53+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -347,7 +347,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-13T11:17:14+09:00",
+      "collected_at": "2026-11-13T18:13:53+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -373,6 +373,202 @@
       "attachment_text": null
     },
     {
+      "id": "e73271df221287ae",
+      "category": "esg",
+      "doc_type": "보도자료",
+      "title": "2026년 제10회 지속가능성기준위원회(ISSB 10월 주요 논의내용 및 회의결과 보고 등)",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-19",
+      "collected_at": "2026-11-13T18:13:55+09:00",
+      "effective_date": "2026-11-19",
+      "source": {
+        "name": "한국회계기준원",
+        "domain": "kasb.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 20,
+      "final_score": 81.4,
+      "matched_keywords": [
+        "ISSB"
+      ],
+      "urls": {
+        "news": null,
+        "official": "https://www.kasb.or.kr/front/board/calViewA.do?seq=1134"
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L1",
+      "is_noise": false,
+      "is_meeting_schedule": true
+    },
+    {
+      "id": "6da8e1da8e49e43a",
+      "category": "kifrs",
+      "doc_type": "공개초안",
+      "title": "2026년 제11회 회계기준위원회(K-IFRS 제1119호 제정안 ‘공공에 대한 회계책임이 없는 종속기업: 공시’ 등)",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-06",
+      "collected_at": "2026-11-13T18:13:58+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "한국회계기준원",
+        "domain": "kasb.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 70,
+      "final_score": 84.7,
+      "matched_keywords": [
+        "K-IFRS",
+        "회계기준위원회",
+        "회계기준",
+        "제정"
+      ],
+      "urls": {
+        "news": null,
+        "official": "https://www.kasb.or.kr/front/board/calViewA.do?seq=1132"
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L1",
+      "is_noise": false,
+      "is_meeting_schedule": true
+    },
+    {
+      "id": "24e383bd43b3c5ca",
+      "category": "esg",
+      "doc_type": "공개초안",
+      "title": "2026년 제9회 지속가능성기준위원회(IFRS 재단 정관 개정 공개초안에 대한 검토의견)",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-10-30",
+      "collected_at": "2026-11-13T18:14:00+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "한국회계기준원",
+        "domain": "kasb.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 57.4,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.kasb.or.kr/front/board/calViewA.do?seq=1133"
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L1",
+      "is_noise": false,
+      "is_meeting_schedule": true
+    },
+    {
+      "id": "384acd931476aa45",
+      "category": "esg",
+      "doc_type": "보도자료",
+      "title": "2026년 제8회 지속가능성기준위원회(ISSB 9월 주요 논의내용 및 회의결과 보고 등)",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-10-22",
+      "collected_at": "2026-11-13T18:14:02+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "한국회계기준원",
+        "domain": "kasb.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 20,
+      "final_score": 61.0,
+      "matched_keywords": [
+        "ISSB"
+      ],
+      "urls": {
+        "news": null,
+        "official": "https://www.kasb.or.kr/front/board/calViewA.do?seq=1131"
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L1",
+      "is_noise": false,
+      "is_meeting_schedule": true
+    },
+    {
+      "id": "82cebea8a504ced0",
+      "category": "esg",
+      "doc_type": "보도자료",
+      "title": "2026년 제7회 지속가능성기준위원회(ISSB 7월 주요 논의내용 및 회의결과 보고 등)",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-09-17",
+      "collected_at": "2026-11-13T18:14:04+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "한국회계기준원",
+        "domain": "kasb.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 20,
+      "final_score": 61.0,
+      "matched_keywords": [
+        "ISSB"
+      ],
+      "urls": {
+        "news": null,
+        "official": "https://www.kasb.or.kr/front/board/calViewA.do?seq=1128"
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L1",
+      "is_noise": false,
+      "is_meeting_schedule": true
+    },
+    {
+      "id": "fb27d21c0f81f578",
+      "category": "kifrs",
+      "doc_type": "공개초안",
+      "title": "2026년 제9회 회계기준위원회(K-IFRS 제1016호 개정안 ‘토지 공시지가 공시’ 등)",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-09-04",
+      "collected_at": "2026-11-13T18:14:06+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "한국회계기준원",
+        "domain": "kasb.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 70,
+      "final_score": 76.0,
+      "matched_keywords": [
+        "K-IFRS",
+        "회계기준위원회",
+        "회계기준",
+        "개정"
+      ],
+      "urls": {
+        "news": null,
+        "official": "https://www.kasb.or.kr/front/board/calViewA.do?seq=1126"
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L1",
+      "is_noise": false,
+      "is_meeting_schedule": true
+    },
+    {
       "id": "1d65c5d3a73457c1",
       "category": "kifrs",
       "doc_type": "제·개정",
@@ -380,7 +576,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-04",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2026-12-31",
       "source": {
         "name": "한국회계기준원",
@@ -415,7 +611,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-11-21",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2027-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -456,7 +652,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-11-21",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2025-12-31",
       "source": {
         "name": "한국회계기준원",
@@ -491,7 +687,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-10-17",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -526,7 +722,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-11-22",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -565,7 +761,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-11-22",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -602,7 +798,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-12-22",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -640,7 +836,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-10-27",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -675,7 +871,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-10-13",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -712,7 +908,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-09-15",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -747,7 +943,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-09-15",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2023-12-13",
       "source": {
         "name": "한국회계기준원",
@@ -782,7 +978,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-05-12",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -817,7 +1013,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-03-17",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -854,7 +1050,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-12-02",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -891,7 +1087,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-02-11",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -926,7 +1122,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-15",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -961,7 +1157,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-09-10",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -996,7 +1192,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-09-10",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1033,7 +1229,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-04-23",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1068,7 +1264,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-04-01",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2021-04-01",
       "source": {
         "name": "한국회계기준원",
@@ -1103,7 +1299,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-12-18",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2021-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1138,7 +1334,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-10-16",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1175,7 +1371,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-09-25",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1210,7 +1406,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-09-25",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1245,7 +1441,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-09-25",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1280,7 +1476,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-09-11",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1318,7 +1514,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-05-29",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2020-06-01",
       "source": {
         "name": "한국회계기준원",
@@ -1353,7 +1549,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-04-24",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1390,7 +1586,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2019-12-20",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1425,7 +1621,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2019-04-19",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1462,7 +1658,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2019-04-19",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1497,7 +1693,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-12-21",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1534,7 +1730,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-11-14",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1574,7 +1770,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-10-16",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1611,7 +1807,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-05-25",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1648,7 +1844,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-05-25",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2021-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1707,7 +1903,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-04-27",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1745,7 +1941,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-02-28",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1780,7 +1976,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-01-26",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1815,7 +2011,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2017-12-15",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1850,7 +2046,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2017-05-22",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1885,7 +2081,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2017-04-21",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1920,7 +2116,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2017-03-24",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1955,7 +2151,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2017-02-24",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1990,7 +2186,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2016-11-15",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2025,7 +2221,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2016-11-15",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2060,7 +2256,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2016-11-15",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2017-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2095,7 +2291,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2016-05-27",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2017-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2134,7 +2330,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2015-12-24",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2169,7 +2365,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2015-11-06",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2204,7 +2400,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2015-09-25",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2239,7 +2435,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2015-05-26",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2280,7 +2476,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2015-05-08",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2337,7 +2533,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2015-02-27",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2375,7 +2571,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2015-02-06",
-      "collected_at": "2026-11-13T11:17:22+09:00",
+      "collected_at": "2026-11-13T18:14:10+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2412,7 +2608,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-02-26",
-      "collected_at": "2026-11-13T11:17:23+09:00",
+      "collected_at": "2026-11-13T18:14:12+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -2454,7 +2650,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-02-26",
-      "collected_at": "2026-11-13T11:17:25+09:00",
+      "collected_at": "2026-11-13T18:14:15+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -2498,7 +2694,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-12-23",
-      "collected_at": "2026-11-13T11:17:27+09:00",
+      "collected_at": "2026-11-13T18:14:17+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -2532,7 +2728,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-01-08",
-      "collected_at": "2026-11-13T11:17:32+09:00",
+      "collected_at": "2026-11-13T18:14:22+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -2566,7 +2762,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-01-02",
-      "collected_at": "2026-11-13T11:17:36+09:00",
+      "collected_at": "2026-11-13T18:14:27+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -2600,7 +2796,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-11-04",
-      "collected_at": "2026-11-13T11:17:40+09:00",
+      "collected_at": "2026-11-13T18:14:32+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -2631,7 +2827,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-06-05",
-      "collected_at": "2026-11-13T11:17:45+09:00",
+      "collected_at": "2026-11-13T18:14:37+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -2667,7 +2863,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-06-05",
-      "collected_at": "2026-11-13T11:17:49+09:00",
+      "collected_at": "2026-11-13T18:14:42+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -2701,7 +2897,7 @@
       "summary": [],
       "impact": null,
       "published_at": null,
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2734,7 +2930,7 @@
       "summary": [],
       "impact": null,
       "published_at": null,
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2767,7 +2963,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-06-01",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2800,7 +2996,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2012-12-01",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2833,7 +3029,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2867,7 +3063,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-05-11",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2901,7 +3097,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-05-11",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2935,7 +3131,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-02-07",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -2969,7 +3165,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-02-07",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -3003,7 +3199,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -3037,7 +3233,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-05-11",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -3071,7 +3267,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -3105,7 +3301,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-05-11",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -3139,7 +3335,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-11-13T11:17:56+09:00",
+      "collected_at": "2026-11-13T18:14:49+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -3177,7 +3373,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-15",
-      "collected_at": "2026-11-13T11:18:03+09:00",
+      "collected_at": "2026-11-13T18:14:59+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -3208,7 +3404,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-04-14",
-      "collected_at": "2026-11-13T11:18:03+09:00",
+      "collected_at": "2026-11-13T18:14:59+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -3243,7 +3439,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-12-23",
-      "collected_at": "2026-11-13T11:19:21+09:00",
+      "collected_at": "2026-11-13T18:15:31+09:00",
       "effective_date": "2026-01-02",
       "source": {
         "name": "재정경제부",
@@ -3279,7 +3475,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-02-27",
-      "collected_at": "2026-11-13T11:19:21+09:00",
+      "collected_at": "2026-11-13T18:15:31+09:00",
       "effective_date": "2026-02-27",
       "source": {
         "name": "재정경제부",
@@ -3315,7 +3511,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-03-20",
-      "collected_at": "2026-11-13T11:19:21+09:00",
+      "collected_at": "2026-11-13T18:15:31+09:00",
       "effective_date": "2026-03-20",
       "source": {
         "name": "재정경제부",
@@ -3351,7 +3547,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-12-23",
-      "collected_at": "2026-11-13T11:19:26+09:00",
+      "collected_at": "2026-11-13T18:15:33+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "재정경제부",
@@ -3390,7 +3586,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-13T11:19:26+09:00",
+      "collected_at": "2026-11-13T18:15:33+09:00",
       "effective_date": "2026-10-01",
       "source": {
         "name": "재정경제부",
@@ -3429,7 +3625,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-01",
-      "collected_at": "2026-11-13T11:19:26+09:00",
+      "collected_at": "2026-11-13T18:15:33+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "재정경제부",
@@ -3468,7 +3664,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-10-01",
-      "collected_at": "2026-11-13T11:19:30+09:00",
+      "collected_at": "2026-11-13T18:15:34+09:00",
       "effective_date": "2026-01-02",
       "source": {
         "name": "재정경제부",
@@ -3507,7 +3703,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-02-27",
-      "collected_at": "2026-11-13T11:19:30+09:00",
+      "collected_at": "2026-11-13T18:15:34+09:00",
       "effective_date": "2026-04-01",
       "source": {
         "name": "재정경제부",
@@ -3546,7 +3742,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-03-20",
-      "collected_at": "2026-11-13T11:19:30+09:00",
+      "collected_at": "2026-11-13T18:15:34+09:00",
       "effective_date": "2026-04-01",
       "source": {
         "name": "재정경제부",
@@ -3585,7 +3781,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-12-23",
-      "collected_at": "2026-11-13T11:19:33+09:00",
+      "collected_at": "2026-11-13T18:15:36+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "재정경제부",
@@ -3623,7 +3819,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-13T11:19:33+09:00",
+      "collected_at": "2026-11-13T18:15:36+09:00",
       "effective_date": "2026-10-01",
       "source": {
         "name": "재정경제부",
@@ -3661,7 +3857,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-22",
-      "collected_at": "2026-11-13T11:19:33+09:00",
+      "collected_at": "2026-11-13T18:15:36+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "재정경제부",
@@ -3699,7 +3895,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-03-17",
-      "collected_at": "2026-11-13T11:19:35+09:00",
+      "collected_at": "2026-11-13T18:15:37+09:00",
       "effective_date": "2026-09-18",
       "source": {
         "name": "재정경제부,행정안전부",
@@ -3737,7 +3933,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-18",
-      "collected_at": "2026-11-13T11:19:35+09:00",
+      "collected_at": "2026-11-13T18:15:37+09:00",
       "effective_date": "2026-09-18",
       "source": {
         "name": "재정경제부,행정안전부",
@@ -3775,7 +3971,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-31",
-      "collected_at": "2026-11-13T11:19:35+09:00",
+      "collected_at": "2026-11-13T18:15:37+09:00",
       "effective_date": "2026-09-18",
       "source": {
         "name": "재정경제부,행정안전부",
@@ -3813,7 +4009,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-12-31",
-      "collected_at": "2026-11-13T11:19:37+09:00",
+      "collected_at": "2026-11-13T18:15:38+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "행정안전부",
@@ -3851,7 +4047,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-13T11:19:37+09:00",
+      "collected_at": "2026-11-13T18:15:38+09:00",
       "effective_date": "2026-10-01",
       "source": {
         "name": "행정안전부",
@@ -3889,7 +4085,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-15",
-      "collected_at": "2026-11-13T11:19:37+09:00",
+      "collected_at": "2026-11-13T18:15:38+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "행정안전부",
@@ -3927,7 +4123,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-02",
-      "collected_at": "2026-11-13T11:19:42+09:00",
+      "collected_at": "2026-11-13T18:15:40+09:00",
       "effective_date": "2026-06-02",
       "source": {
         "name": "행정안전부",
@@ -3958,6 +4154,37 @@
   ],
   "google_news": [
     {
+      "id": "053eba01438699fd",
+      "category": "kifrs",
+      "doc_type": "감사·검토기준",
+      "title": "셀바스헬스케어, 회계기준 위반…외부감사인 2년 - 데일리메디",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-13",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "dailymedi.com",
+        "domain": "https://www.dailymedi.com",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 32.0,
+      "matched_keywords": [
+        "회계기준"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE4xaVlFekdIcGhMSndrR09HejgtSUlJY2ZodnRYRFpUTjhZRi11Q0JSbVBnUTA4RHhFNF9BQThOQVh4b0R4VE5qUVliV3hFVmItRUJadHZnLXZfX1N1b01Xd0hfdjF3QWpI?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "670a0af3084a3a3a",
       "category": "kifrs",
       "doc_type": "보도자료",
@@ -3965,7 +4192,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-13",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -3996,7 +4223,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "일간NTN",
@@ -4020,6 +4247,37 @@
       "is_noise": false
     },
     {
+      "id": "9dae3259ccb7fe26",
+      "category": "kifrs",
+      "doc_type": "기사",
+      "title": "[李玄崗의 泮中雜詠] 2025년 7월 감정 결과가 어떻게 2024년 재무제표에?... 성균관 회계 조작의 ‘결정적 물증’ - 유교신문",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-13",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "cfnews.kr",
+        "domain": "https://www.cfnews.kr",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 32.0,
+      "matched_keywords": [
+        "재무제표"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE1UUTU0NldQWmRmdS10NlZ1NEdhMTdmWC02Vlc2blRuZmVBLTVROXRBQ1VjWk9PcWJzbjI5bVJ4MmNySWVWNUNiRmx1VVRXS2tVT1ZXR29laWV6ZGEzRHVVdw?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "13ae880c4b1d4f18",
       "category": "kifrs",
       "doc_type": "감사·검토기준",
@@ -4027,7 +4285,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "yna.co.kr",
@@ -4051,68 +4309,6 @@
       "is_noise": false
     },
     {
-      "id": "e2353c54d89ab206",
-      "category": "kifrs",
-      "doc_type": "기사",
-      "title": "컬리·풀무원 재무제표…좋은 숫자만 믿으면 생기는 일 - 자본시장뉴스",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "jabon.co.kr",
-        "domain": "https://www.jabon.co.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 20,
-      "final_score": 31.1,
-      "matched_keywords": [
-        "재무제표"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE96S0pOeklqUjhkWngyNlYtaHJzN1VTREtXcXpzN0JjSTRVTWU2NEFHeEpsUEFwYU16SVA5TXpxM1gycDN6T3o5eE01Q1ozVzl2ekVWbm01Q0o5c0o4bG5pTDdPUlpKVjg?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
-      "id": "e404b28a34b033db",
-      "category": "kifrs",
-      "doc_type": "기사",
-      "title": "[재무제표 이야기] 재무제표는 기업 운명의 '신호등'...가수 이무진, 전 소속사 재무제표만 봤더라면 - 생생비즈플러스",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "livebiz.today",
-        "domain": "https://www.livebiz.today",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 20,
-      "final_score": 31.1,
-      "matched_keywords": [
-        "재무제표"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBuQnFpOHhKeU0wNHI4NVQzOTZfaW44UFBRVGRJSl9OY2RCSlVYV3FyeW5CSEVsUDIzdHZyTEVwbUlMc2tZN3FRWUJkVXoteC1CSmhPbF94djFTdkpYX3d2TVg5WHNPQjNvLU5IUg?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "6fc5463b00e99320",
       "category": "kifrs",
       "doc_type": "기사",
@@ -4120,7 +4316,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "news.bizwatch.co.kr",
@@ -4151,7 +4347,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "safetimes.co.kr",
@@ -4175,6 +4371,37 @@
       "is_noise": false
     },
     {
+      "id": "e2353c54d89ab206",
+      "category": "kifrs",
+      "doc_type": "기사",
+      "title": "컬리·풀무원 재무제표…좋은 숫자만 믿으면 생기는 일 - 자본시장뉴스",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-12",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "jabon.co.kr",
+        "domain": "https://www.jabon.co.kr",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 31.1,
+      "matched_keywords": [
+        "재무제표"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE96S0pOeklqUjhkWngyNlYtaHJzN1VTREtXcXpzN0JjSTRVTWU2NEFHeEpsUEFwYU16SVA5TXpxM1gycDN6T3o5eE01Q1ozVzl2ekVWbm01Q0o5c0o4bG5pTDdPUlpKVjg?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "47f13cebbdf5d09a",
       "category": "kifrs",
       "doc_type": "기사",
@@ -4182,7 +4409,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "munhwa.com",
@@ -4213,7 +4440,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "kr.investing.com",
@@ -4237,6 +4464,37 @@
       "is_noise": false
     },
     {
+      "id": "2b7868eb0b075b64",
+      "category": "kifrs",
+      "doc_type": "감사·검토기준",
+      "title": "재무제표 부풀린 셀바스헬스케어·대우산업개발…감사인 스스로 못 고른다 - 데일리팝",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-13",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "dailypop.kr",
+        "domain": "http://www.dailypop.kr",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 32.0,
+      "matched_keywords": [
+        "재무제표"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE44dDJ3N19XZGRnZDViYTRCbUdlcmEzcTc4OGRNNkJ5amdQTUdCZkdJQ18xbkpNcGhZM2t2MTRfWG9nSGI3MzVoUk5UM0VzR2U4emF6bC1mQU45dnlHbFNoM01RRnBVeFpo?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "fff941b7c78ac626",
       "category": "kifrs",
       "doc_type": "기사",
@@ -4244,7 +4502,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "newspim.com",
@@ -4268,6 +4526,37 @@
       "is_noise": false
     },
     {
+      "id": "e404b28a34b033db",
+      "category": "kifrs",
+      "doc_type": "기사",
+      "title": "[재무제표 이야기] 재무제표는 기업 운명의 '신호등'...가수 이무진, 전 소속사 재무제표만 봤더라면 - 생생비즈플러스",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-12",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "livebiz.today",
+        "domain": "https://www.livebiz.today",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 31.1,
+      "matched_keywords": [
+        "재무제표"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBuQnFpOHhKeU0wNHI4NVQzOTZfaW44UFBRVGRJSl9OY2RCSlVYV3FyeW5CSEVsUDIzdHZyTEVwbUlMc2tZN3FRWUJkVXoteC1CSmhPbF94djFTdkpYX3d2TVg5WHNPQjNvLU5IUg?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "cf22c2222ed3db52",
       "category": "kifrs",
       "doc_type": "기사",
@@ -4275,7 +4564,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "metroseoul.co.kr",
@@ -4306,7 +4595,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "파이낸셜뉴스",
@@ -4337,7 +4626,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "dnews.co.kr",
@@ -4368,7 +4657,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "seoulfn.com",
@@ -4399,7 +4688,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ezyeconomy.com",
@@ -4430,7 +4719,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "woorieconomy.com",
@@ -4454,6 +4743,97 @@
       "is_noise": false
     },
     {
+      "id": "9704c8e302bcde9e",
+      "category": "kifrs",
+      "doc_type": "기사",
+      "title": "이찬진 금감원장 \"회계 감리주기 단축 추진…고의 분식회계 무관용 제재\" - 뉴스핌",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-10",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "newspim.com",
+        "domain": "https://www.newspim.com",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 29.3,
+      "matched_keywords": [
+        "회계감리"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5idmFUaEJWUEF0bEdzNWl3dDVETFREdHFUdTVkNHBYeGFiSm0xSVhQYWh6MGlzd1JtUmNsTWJfNWRnYVdMUm04aTNuZ3dHNjNWNkF4OC1MVVZ2eVBa?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
+      "id": "36eee5809cd4d172",
+      "category": "kifrs",
+      "doc_type": "기사",
+      "title": "[MD포커스] ‘순손실 감수’ KB증권, ‘행정소송 예고’ 메리츠증권…담합 과징금 대응 온도차 - 마이데일리",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-13",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "mydaily.co.kr",
+        "domain": "https://mydaily.co.kr",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 0,
+      "final_score": 26.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9UWHVua0E1dERvRXRKMFUwUTJ0SGlJWXJnUG5qOUs4aDBjanlkSUFUSnlEdUFXU2hRODB0OHlCT1pYdEJSQnJIOGpzZExrNkxNUTZEb3BTYnkzZlg4aGpWUw?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
+      "id": "36521de06d728d2b",
+      "category": "kifrs",
+      "doc_type": "해설·교육자료",
+      "title": "서해구, 공동주택관리 법정교육 실시...화재 대응과 관리비 회계처리 실무 중심 - 인천의소리",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-13",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "voi.co.kr",
+        "domain": "https://www.voi.co.kr",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 32.0,
+      "matched_keywords": [
+        "회계처리"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5XZlZFdUpUM2ZsZEowdmdPQkV0UkhfbW5RQnpjdExCY3lvUnViLUZNcm1lNXlSREVWTnRBWFNIS2poWm9ESVo4T3I4UTMzTk42am9fT09EZVB5VkVNNGs2MzlxU1hlOVU?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "d7a131fc024e1e8f",
       "category": "kifrs",
       "doc_type": "감사·검토기준",
@@ -4461,7 +4841,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "이데일리",
@@ -4492,7 +4872,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "hdnews.co.kr",
@@ -4516,6 +4896,37 @@
       "is_noise": false
     },
     {
+      "id": "397d3c689626da4a",
+      "category": "kifrs",
+      "doc_type": "해설·교육자료",
+      "title": "서해구, 공동주택관리 법정교육 실시...화재 대응과 관리비 회계처리 실무 중심 - 세정포커스",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-13",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "sejungfocus.com",
+        "domain": "https://www.sejungfocus.com",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 32.0,
+      "matched_keywords": [
+        "회계처리"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMibkFVX3lxTFA4YzYyelRzMUVCTGNnUHAtT090REo5ZFRIc0RMbW4yZEhRb1ZYQ1J5LU5MV2J4cEpEV2FyeTFUSllaQ21BUEw0Y0ROOWhfUENEeDIxeXBuaUJMc3FucDZieEhyWGt4cmpsVnNiLW5B?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "5906d13dbde2e6f3",
       "category": "kifrs",
       "doc_type": "기사",
@@ -4523,7 +4934,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ajunews.com",
@@ -4547,37 +4958,6 @@
       "is_noise": false
     },
     {
-      "id": "9704c8e302bcde9e",
-      "category": "kifrs",
-      "doc_type": "기사",
-      "title": "이찬진 금감원장 \"회계 감리주기 단축 추진…고의 분식회계 무관용 제재\" - 뉴스핌",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "newspim.com",
-        "domain": "https://www.newspim.com",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 20,
-      "final_score": 29.3,
-      "matched_keywords": [
-        "회계감리"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5idmFUaEJWUEF0bEdzNWl3dDVETFREdHFUdTVkNHBYeGFiSm0xSVhQYWh6MGlzd1JtUmNsTWJfNWRnYVdMUm04aTNuZ3dHNjNWNkF4OC1MVVZ2eVBa?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "52c23902793af216",
       "category": "kifrs",
       "doc_type": "기사",
@@ -4585,7 +4965,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "이데일리",
@@ -4616,7 +4996,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-09",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "livebiz.today",
@@ -4647,7 +5027,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-12",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "yna.co.kr",
@@ -4678,7 +5058,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "tradersunion.com",
@@ -4709,7 +5089,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-13",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "일간NTN",
@@ -4736,35 +5116,6 @@
       "is_noise": false
     },
     {
-      "id": "8b4c6139bcf13792",
-      "category": "kifrs",
-      "doc_type": "보도자료",
-      "title": "GAAP 2026.06 - PwC",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-06-18",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "PwC",
-        "domain": "https://www.pwc.com",
-        "tier": 3,
-        "type": "news"
-      },
-      "trust_score": 70,
-      "keyword_score": 0,
-      "final_score": 38.5,
-      "matched_keywords": [],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE10WnRURVJhbE95UUxFdUVuVnlWakhCaEhMaXVxczhhdjlnbzJXQ251by1aUEd5NlpHTG9mbkZyMlBGREppZk9xYXNpVDRBc25ZdkhOVFgxQlBidTVIR3J4UzdR?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "7fd83f0ab6b10a4a",
       "category": "kifrs",
       "doc_type": "보도자료",
@@ -4772,7 +5123,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-17",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "EY한영",
@@ -4796,6 +5147,35 @@
       "is_noise": false
     },
     {
+      "id": "8b4c6139bcf13792",
+      "category": "kifrs",
+      "doc_type": "보도자료",
+      "title": "GAAP 2026.06 - PwC",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-06-18",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "PwC",
+        "domain": "https://www.pwc.com",
+        "tier": 3,
+        "type": "news"
+      },
+      "trust_score": 70,
+      "keyword_score": 0,
+      "final_score": 38.5,
+      "matched_keywords": [],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE10WnRURVJhbE95UUxFdUVuVnlWakhCaEhMaXVxczhhdjlnbzJXQ251by1aUEd5NlpHTG9mbkZyMlBGREppZk9xYXNpVDRBc25ZdkhOVFgxQlBidTVIR3J4UzdR?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "152c073fb4118f5e",
       "category": "kifrs",
       "doc_type": "기사",
@@ -4803,7 +5183,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "gamemeca.com",
@@ -4832,7 +5212,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-09",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국경제",
@@ -4863,7 +5243,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-12-18",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "금융위원회",
@@ -4892,7 +5272,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-07-19",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "eiec.kdi.re.kr",
@@ -4916,35 +5296,6 @@
       "is_noise": false
     },
     {
-      "id": "c83137442b94dee9",
-      "category": "kifrs",
-      "doc_type": "기사",
-      "title": "테더 골드, KPMG 감사서 적정 의견…22억 달러 금 확인했지만 보고서는 비공개 - 위키트리",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "wikitree.co.kr",
-        "domain": "https://www.wikitree.co.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 0,
-      "final_score": 25.1,
-      "matched_keywords": [],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9Vd0llNURtSHhZLXdTRS1xZjlHQlA4UGtVeHlPTk5PazZVdmdiZnU2SDVaZW91RUF4MWgtTGw5eS12Y19pQU1fczExeXE4cGY4NW4tbnlB?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "19c703c1554b4245",
       "category": "kifrs",
       "doc_type": "기사",
@@ -4952,7 +5303,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "sidae.com",
@@ -4983,7 +5334,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2014-12-31",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "crowe.com",
@@ -5016,7 +5367,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-19",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "imedialife.co.kr",
@@ -5047,7 +5398,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-01",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "kyeonggi.com",
@@ -5078,7 +5429,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-01",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "news.ifm.kr",
@@ -5109,7 +5460,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "news33.net",
@@ -5141,7 +5492,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-09",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "etaxnews.com",
@@ -5172,7 +5523,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "newsworks.co.kr",
@@ -5198,6 +5549,39 @@
       "is_noise": false
     },
     {
+      "id": "0ef26fc4ea65c99a",
+      "category": "icfr",
+      "doc_type": "기사",
+      "title": "이록, 3분기 분기보고서서 내부통제 중대한 취약점 미해소…경영진 최대 160만 주 매도 계획 - 데이터투자",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-12",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "datatooza.com",
+        "domain": "https://www.datatooza.com",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 50,
+      "final_score": 40.1,
+      "matched_keywords": [
+        "내부통제",
+        "내부 통제",
+        "취약점"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMic0FVX3lxTE93bFBCd0w1QjROS0E2Q3I1T2VSajN5WEFWVFZkQTIxV3pjbWtSTHMxSkNEb3hXMjhuMFZORDluUHdzRTVzdk03LWFOcTdzUTJQbzJ0TkNpaFFnd1QyY3pnQllSRWs1dFE1VmYyZ2c4YzE5d28?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "b37e288a4ae7ae50",
       "category": "icfr",
       "doc_type": "기사",
@@ -5205,7 +5589,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-23",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "energy-news.co.kr",
@@ -5238,7 +5622,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-01-04",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "news.koreanbar.or.kr",
@@ -5269,7 +5653,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-06-11",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "joongang.co.kr",
@@ -5300,7 +5684,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-12-28",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "매일경제",
@@ -5333,7 +5717,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-05-09",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "safetimes.co.kr",
@@ -5364,7 +5748,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-06-19",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "news.bizwatch.co.kr",
@@ -5395,7 +5779,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-08-21",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "EY한영",
@@ -5419,6 +5803,39 @@
       "is_noise": false
     },
     {
+      "id": "08aa0e88b1e05e19",
+      "category": "icfr",
+      "doc_type": "모범규준",
+      "title": "여전업권, 금융사고 사라지나…'내부통제 모범규준' 시행 - 딜사이트",
+      "summary": [],
+      "impact": null,
+      "published_at": "2024-04-25",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "dealsite.co.kr",
+        "domain": "https://dealsite.co.kr",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 50,
+      "final_score": 26.0,
+      "matched_keywords": [
+        "내부통제",
+        "내부 통제",
+        "모범규준"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE01R0VBYjlSdExiWjN3MUE3NFFaUU5zSEJFck1fTUFfZG16WVk1WmZYYXNGRkxSOVlpdWNxV21YSDU0aE80R0RvNVRfbjhTclE?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "3f45c2084f04d56d",
       "category": "icfr",
       "doc_type": "기사",
@@ -5426,7 +5843,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-04-14",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "asiae.co.kr",
@@ -5457,7 +5874,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-12-21",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "lawtimes.co.kr",
@@ -5488,7 +5905,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2019-11-05",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "skkuw.com",
@@ -5512,69 +5929,6 @@
       "is_noise": false
     },
     {
-      "id": "87f639bb50ccc912",
-      "category": "icfr",
-      "doc_type": "기사",
-      "title": "신외감법 시행 이후 과징금 부과현황 및 시사점입니다. - Crowe",
-      "summary": [],
-      "impact": null,
-      "published_at": "2023-04-28",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "crowe.com",
-        "domain": "https://www.crowe.com",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 20,
-      "final_score": 17.0,
-      "matched_keywords": [
-        "외감법"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9ONmp6d3VTVEVzdFBQUUprMEFZaXh3SzJ1Wml1dHdHWV9DR2NBQVpsZHJhMU5PSUtWOEwwN1RDbEthcnBYTGcxTHo1Q3hnOXFKeHZIclhiTEE?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
-      "id": "448f38417326cd4d",
-      "category": "icfr",
-      "doc_type": "공개초안",
-      "title": "서울변회 “외감법 개정안 발의 환영… 국회 조속한 통과 필요” - 법조신문",
-      "summary": [],
-      "impact": null,
-      "published_at": "2024-10-07",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "news.koreanbar.or.kr",
-        "domain": "https://news.koreanbar.or.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 30,
-      "final_score": 20.0,
-      "matched_keywords": [
-        "외감법",
-        "외감법 개정"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5MdnZCcEdDV09IaWw1VTFJcGVzMlUwMjl5X0V1cm5FMUF6V1VTSnhVZkRZS0NOS2NnUmRlOWtmNTN2Ql9pX3g5RUJRMjhFVlRlcURfbGRNbTF1NlRZdGRaSDV6M2d2MVJlMjl6TXY0MA?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "7aa9d7db9a6a5830",
       "category": "icfr",
       "doc_type": "기사",
@@ -5582,7 +5936,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2017-12-08",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "lawtimes.co.kr",
@@ -5613,7 +5967,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-12-28",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "매일경제",
@@ -5639,6 +5993,37 @@
       "is_noise": false
     },
     {
+      "id": "8c8abd1b95b8a83a",
+      "category": "icfr",
+      "doc_type": "감사·검토기준",
+      "title": "“기업 외부 감사인에 변호사 반드시 포함”… 이정문 의원, 외감법 발의 - 법조신문",
+      "summary": [],
+      "impact": null,
+      "published_at": "2025-04-10",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "news.koreanbar.or.kr",
+        "domain": "https://news.koreanbar.or.kr",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 17.0,
+      "matched_keywords": [
+        "외감법"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5ET254R1JIeWVNLWFKNlBVTUNJdkdzdHJqSTVKTURkeVZMYkxpc2RxZzlSU0p2a3pXbWxCNFQ0U0tRbVpaWk9zajZEYWZwSW5UQmY1ZFlnSmxpUFdqT2YxWFI3Wkp2R2RsUFljS2FDYw?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "4b1c3222299773a8",
       "category": "icfr",
       "doc_type": "기사",
@@ -5646,7 +6031,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-06-18",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국경제",
@@ -5677,7 +6062,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-03-06",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "매일경제",
@@ -5701,37 +6086,6 @@
       "is_noise": false
     },
     {
-      "id": "8c8abd1b95b8a83a",
-      "category": "icfr",
-      "doc_type": "감사·검토기준",
-      "title": "“기업 외부 감사인에 변호사 반드시 포함”… 이정문 의원, 외감법 발의 - 법조신문",
-      "summary": [],
-      "impact": null,
-      "published_at": "2025-04-10",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "news.koreanbar.or.kr",
-        "domain": "https://news.koreanbar.or.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 20,
-      "final_score": 17.0,
-      "matched_keywords": [
-        "외감법"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5ET254R1JIeWVNLWFKNlBVTUNJdkdzdHJqSTVKTURkeVZMYkxpc2RxZzlSU0p2a3pXbWxCNFQ0U0tRbVpaWk9zajZEYWZwSW5UQmY1ZFlnSmxpUFdqT2YxWFI3Wkp2R2RsUFljS2FDYw?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "388d3350696af976",
       "category": "icfr",
       "doc_type": "기사",
@@ -5739,7 +6093,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-03-06",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "매일경제",
@@ -5763,6 +6117,37 @@
       "is_noise": false
     },
     {
+      "id": "87f639bb50ccc912",
+      "category": "icfr",
+      "doc_type": "기사",
+      "title": "신외감법 시행 이후 과징금 부과현황 및 시사점입니다. - Crowe",
+      "summary": [],
+      "impact": null,
+      "published_at": "2023-04-28",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "crowe.com",
+        "domain": "https://www.crowe.com",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 17.0,
+      "matched_keywords": [
+        "외감법"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9ONmp6d3VTVEVzdFBQUUprMEFZaXh3SzJ1Wml1dHdHWV9DR2NBQVpsZHJhMU5PSUtWOEwwN1RDbEthcnBYTGcxTHo1Q3hnOXFKeHZIclhiTEE?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "66c7967f6424592e",
       "category": "icfr",
       "doc_type": "기사",
@@ -5770,7 +6155,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2019-12-27",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "crowe.com",
@@ -5795,6 +6180,37 @@
       "is_noise": false
     },
     {
+      "id": "dde08f8b28255956",
+      "category": "icfr",
+      "doc_type": "기사",
+      "title": "신외감법, 얼룩진 회계부정 지울 수 있을까 - 성대신문",
+      "summary": [],
+      "impact": null,
+      "published_at": "2019-11-05",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "skkuw.com",
+        "domain": "http://www.skkuw.com",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 17.0,
+      "matched_keywords": [
+        "외감법"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBQUkRSQWdfMzd6aHpxOG84TDhqYXFyeVNJUzJnYjQ5eF8wc2pPdU9Pa0hFVC1sbTIzWnZhd3NiWGl5T1hzbGhlUmtaLTEwX29rLUZRaXV6eDhfbjhRS3Y1SUo2ckTSAWhBVV95cUxQc2tHUFNoSWM1U2c4ZzF0WkZuTU5JVlZPbEJHaGxqQ1BvNDhZMk9qU1o1SjFnT0M3YTRPbEJiZS0wcHlRNTNZU1p4a0tKZ3FoOWNWd0I1czNiRHZqVm80aklhZjdYbEg3aw?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "a4c982903e0f16fa",
       "category": "icfr",
       "doc_type": "보도자료",
@@ -5802,7 +6218,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-12-29",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국세정신문",
@@ -5827,37 +6243,6 @@
       "is_noise": false
     },
     {
-      "id": "dde08f8b28255956",
-      "category": "icfr",
-      "doc_type": "기사",
-      "title": "신외감법, 얼룩진 회계부정 지울 수 있을까 - 성대신문",
-      "summary": [],
-      "impact": null,
-      "published_at": "2019-11-05",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "skkuw.com",
-        "domain": "http://www.skkuw.com",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 20,
-      "final_score": 17.0,
-      "matched_keywords": [
-        "외감법"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBQUkRSQWdfMzd6aHpxOG84TDhqYXFyeVNJUzJnYjQ5eF8wc2pPdU9Pa0hFVC1sbTIzWnZhd3NiWGl5T1hzbGhlUmtaLTEwX29rLUZRaXV6eDhfbjhRS3Y1SUo2ckTSAWhBVV95cUxQc2tHUFNoSWM1U2c4ZzF0WkZuTU5JVlZPbEJHaGxqQ1BvNDhZMk9qU1o1SjFnT0M3YTRPbEJiZS0wcHlRNTNZU1p4a0tKZ3FoOWNWd0I1czNiRHZqVm80aklhZjdYbEg3aw?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "e0fdd2f21ce97db1",
       "category": "icfr",
       "doc_type": "공개초안",
@@ -5865,7 +6250,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-06-01",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "lawtimes.co.kr",
@@ -5896,7 +6281,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-08-21",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "이데일리",
@@ -5927,7 +6312,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2020-09-28",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "khan.co.kr",
@@ -5960,7 +6345,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-04-23",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "businesspost.co.kr",
@@ -5993,7 +6378,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2019-01-07",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "investchosun.com",
@@ -6024,7 +6409,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-08-04",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국경제",
@@ -6055,7 +6440,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-08-21",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "머니투데이",
@@ -6086,7 +6471,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2019-11-26",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "매일경제",
@@ -6117,7 +6502,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-03-02",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "investchosun.com",
@@ -6149,7 +6534,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2014-03-30",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "crowe.com",
@@ -6173,31 +6558,29 @@
       "is_noise": false
     },
     {
-      "id": "f83ce9eefaf18c2a",
+      "id": "5c3773d4a91a1f1b",
       "category": "icfr",
-      "doc_type": "모범규준",
-      "title": "여전사도 준법감시 인원 의무화된다…내부통제 모범규준 시행 - 이투데이",
+      "doc_type": "해설·교육자료",
+      "title": "금감원, 신외감법·K-IFRS 제·개정 내용 설명회 개최 - 금융신문",
       "summary": [],
       "impact": null,
-      "published_at": "2024-04-25",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "published_at": "2018-10-25",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
-        "name": "etoday.co.kr",
-        "domain": "https://www.etoday.co.kr",
+        "name": "fntimes.com",
+        "domain": "https://www.fntimes.com",
         "tier": 5,
         "type": "news"
       },
       "trust_score": 20,
-      "keyword_score": 50,
-      "final_score": 26.0,
+      "keyword_score": 20,
+      "final_score": 17.0,
       "matched_keywords": [
-        "내부통제",
-        "내부 통제",
-        "모범규준"
+        "외감법"
       ],
       "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5FQjRaZWtNTGJlSnBSUm5rRU9GczQ5cnVuVEtkeDRKaU4tVVduUUNmVFhxRENMV2FJMkRaZkZOVVJ5aGtYY194TGI5NzNKSXR3T2Zzdg?oc=5",
+        "news": "https://news.google.com/rss/articles/CBMifEFVX3lxTE51eTFBa0dYOXQ5UEt2bmF4SFUtZ0cwS0l0NjZRSUZTYlQ5d01iOGNPNHBQTTBvQTA5N2lycVJYc0s3NW16T091M2xmRjVydmRJekFheUU1TXhvZU94MXNaZVBvQUVMLWtMUXdvWkcwalR4NTZIbUpnV1JSZnA?oc=5",
         "official": null
       },
       "law_meta": null,
@@ -6213,7 +6596,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2019-06-03",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국경제",
@@ -6237,37 +6620,6 @@
       "is_noise": false
     },
     {
-      "id": "80543b40a6da642a",
-      "category": "icfr",
-      "doc_type": "기사",
-      "title": "엇갈리는 신외감법 실효성 평가…“새 정부서 손질해야” - Chosunbiz",
-      "summary": [],
-      "impact": null,
-      "published_at": "2022-06-14",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "biz.chosun.com",
-        "domain": "https://biz.chosun.com",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 20,
-      "final_score": 17.0,
-      "matched_keywords": [
-        "외감법"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNUzFjNFNPUnBrT3ZjNGFtbDBKVVlQcHFna0puQUZIemxRQ013Z2tNUkRZQW9NQTA4WHhQZlMxYkZ6TmxWb2d4YVg1czBBcWtxTTNmcG52c1d2NDE4TVh1Uy0zekg1YV9mdTVDWDNKc3JyUjFBejlwQUVBWVdIY3pKMkp5ZksxS1ll0gGcAUFVX3lxTFBsa3BrTDBrZTlYWHZjZG1QVk1yRDBDRVFvTU8zbkdqYUppaGcwRmc1Vy1XSDlXRWRxX3RPcnhwSEdoVlNMVTBGMjQzZkxQSmxRdkliNFpiMGNOcHVqN1hzbjFPc0dCTDBCbkJoazEyZHhqRTBzTnd5U0E3cDc4cTlkNnVkTzd5UmppbXlYQ1FaODVmMEZEUTdieWdwYg?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "8eeb7e20c0314dad",
       "category": "icfr",
       "doc_type": "기사",
@@ -6275,7 +6627,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-02-08",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "etoday.co.kr",
@@ -6306,7 +6658,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -6338,7 +6690,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "vtimes.kr",
@@ -6367,7 +6719,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-08",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "PwC",
@@ -6396,7 +6748,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-08",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "KPMG",
@@ -6425,7 +6777,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-05",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -6457,7 +6809,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-16",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "lawtimes.co.kr",
@@ -6486,7 +6838,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-08",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "electimes.com",
@@ -6512,30 +6864,27 @@
       "is_noise": false
     },
     {
-      "id": "50dc8cae273e1cd0",
+      "id": "e93dec7a7a65a808",
       "category": "esg",
-      "doc_type": "로드맵·일정",
-      "title": "ESG 공시 로드맵 확정…10조 이상 기업부터 첫 적용 - 한경매거진",
+      "doc_type": "기사",
+      "title": "ESG 의무공시 본격화, 기업 밸류업 골든타임 왔다 - 한국경제",
       "summary": [],
       "impact": null,
-      "published_at": "2026-07-08",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "published_at": "2026-06-02",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국경제",
-        "domain": "https://magazine.hankyung.com",
+        "domain": "https://www.hankyung.com",
         "tier": 4,
         "type": "news"
       },
       "trust_score": 50,
-      "keyword_score": 30,
-      "final_score": 36.5,
-      "matched_keywords": [
-        "ESG 공시",
-        "로드맵"
-      ],
+      "keyword_score": 0,
+      "final_score": 27.5,
+      "matched_keywords": [],
       "urls": {
-        "news": "https://news.google.com/rss/articles/CBMibEFVX3lxTFBNSi1jOHJWMGZBWlJGbFEtODYxLUptaVliMWI1THFGNjhEU2NEYWpta0FtRlFieFN4MkpjcWp2RHFYcmcxQks0VUN2TWxpdFp0eHJ1cXdkS2FRaFBFZTU4UFBfWG5aR1BLSGRlZg?oc=5",
+        "news": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBMMkdOYi1ka3NqWVdLWHZPalRkcWplcUhuOWw2ODJwSTF3SUtUd3AwTlhhc2ZQZElaczlkdjRwSnotLVFyLWtHaDRIdG9RcW12VDB0UlRNNFk5QQ?oc=5",
         "official": null
       },
       "law_meta": null,
@@ -6551,7 +6900,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-09",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "lawtimes.co.kr",
@@ -6582,7 +6931,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-30",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -6614,7 +6963,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-14",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -6638,35 +6987,6 @@
       "is_noise": false
     },
     {
-      "id": "e93dec7a7a65a808",
-      "category": "esg",
-      "doc_type": "기사",
-      "title": "ESG 의무공시 본격화, 기업 밸류업 골든타임 왔다 - 한국경제",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-06-02",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "한국경제",
-        "domain": "https://www.hankyung.com",
-        "tier": 4,
-        "type": "news"
-      },
-      "trust_score": 50,
-      "keyword_score": 0,
-      "final_score": 27.5,
-      "matched_keywords": [],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBMMkdOYi1ka3NqWVdLWHZPalRkcWplcUhuOWw2ODJwSTF3SUtUd3AwTlhhc2ZQZElaczlkdjRwSnotLVFyLWtHaDRIdG9RcW12VDB0UlRNNFk5QQ?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "ff374ec3f519f784",
       "category": "esg",
       "doc_type": "기사",
@@ -6674,7 +6994,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-06",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "hellot.net",
@@ -6706,7 +7026,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-03-17",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "samsungsds.com",
@@ -6738,7 +7058,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-06",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -6770,7 +7090,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-03-31",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "PwC",
@@ -6795,6 +7115,38 @@
       "is_noise": false
     },
     {
+      "id": "d370e1e36df010dc",
+      "category": "esg",
+      "doc_type": "로드맵·일정",
+      "title": "[공동기자회견] 금융위원회는 반쪽짜리 ESG 공시 로드맵을 즉각 폐기하고 국제 기준에 부합하는 법정 공시 체계로 전환하라 - 경제정의실천시민연합",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-04-27",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "ccej.or.kr",
+        "domain": "https://ccej.or.kr",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 30,
+      "final_score": 20.0,
+      "matched_keywords": [
+        "ESG 공시",
+        "로드맵"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1LQk5PUE9HQUtOM3pKNFFYRlY2OHdpSWt3LUpCajlNdl9xY2ZWdDVBUENEaEdOSmV2eV9FS1BWbFNlVUp4T2xr?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "607301d4a8e9f778",
       "category": "esg",
       "doc_type": "기사",
@@ -6802,7 +7154,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-03-05",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "lawtimes.co.kr",
@@ -6833,7 +7185,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-02-25",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -6866,7 +7218,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-12",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -6891,38 +7243,6 @@
       "is_noise": false
     },
     {
-      "id": "d370e1e36df010dc",
-      "category": "esg",
-      "doc_type": "로드맵·일정",
-      "title": "[공동기자회견] 금융위원회는 반쪽짜리 ESG 공시 로드맵을 즉각 폐기하고 국제 기준에 부합하는 법정 공시 체계로 전환하라 - 경제정의실천시민연합",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-04-27",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "ccej.or.kr",
-        "domain": "https://ccej.or.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 30,
-      "final_score": 20.0,
-      "matched_keywords": [
-        "ESG 공시",
-        "로드맵"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1LQk5PUE9HQUtOM3pKNFFYRlY2OHdpSWt3LUpCajlNdl9xY2ZWdDVBUENEaEdOSmV2eV9FS1BWbFNlVUp4T2xr?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "b0947a26e7ef9b14",
       "category": "esg",
       "doc_type": "로드맵·일정",
@@ -6930,7 +7250,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-06",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -6962,7 +7282,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-07",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "m.ekn.kr",
@@ -6994,7 +7314,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-02",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "lawtimes.co.kr",
@@ -7019,37 +7339,6 @@
       "is_noise": false
     },
     {
-      "id": "b133dccb915832b2",
-      "category": "esg",
-      "doc_type": "기사",
-      "title": "ESG 공시 제도화 관련 이슈리포트 - 법률신문",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-03-26",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "lawtimes.co.kr",
-        "domain": "https://www.lawtimes.co.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 20,
-      "final_score": 17.0,
-      "matched_keywords": [
-        "ESG 공시"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5EMkpMWHJyY2VNTVVVNmtTY3kwZWZYWVZiVUJJckppUG1jVXVKNTgtVVNNUUR3ZjhRM1ZET1lVQjhsRVZsRUhiSUdkSTg4Zk1zbURTVWRoYXNrc0hzMjFmNFI0RDhqSDlZNWU5NGFR0gFyQVVfeXFMTjVFZ25veU9tNzdSeXRNRmFEc0t5MlY0ZVBOaV9mUTctZW1JeG5DNnA4amE4TmZRVEFxa2FfN1RDNkN2ZmkzVXNpeWk4V21FOXdYaURLWmc5eTZ2SE9nV3dScVFzM3JmTVNsUWlvSjZkZTNn?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "cc4f54d6df553931",
       "category": "esg",
       "doc_type": "로드맵·일정",
@@ -7057,7 +7346,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-28",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -7082,30 +7371,29 @@
       "is_noise": false
     },
     {
-      "id": "7b75aab984b73247",
+      "id": "b133dccb915832b2",
       "category": "esg",
       "doc_type": "기사",
-      "title": "ESG 공시 2028년 대기업부터 시작…스코프3는 3년 유예 - 전기신문",
+      "title": "ESG 공시 제도화 관련 이슈리포트 - 법률신문",
       "summary": [],
       "impact": null,
-      "published_at": "2026-02-25",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "published_at": "2026-03-26",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
-        "name": "electimes.com",
-        "domain": "https://www.electimes.com",
+        "name": "lawtimes.co.kr",
+        "domain": "https://www.lawtimes.co.kr",
         "tier": 5,
         "type": "news"
       },
       "trust_score": 20,
-      "keyword_score": 30,
-      "final_score": 20.0,
+      "keyword_score": 20,
+      "final_score": 17.0,
       "matched_keywords": [
-        "ESG 공시",
-        "스코프3"
+        "ESG 공시"
       ],
       "urls": {
-        "news": "https://news.google.com/rss/articles/CBMibEFVX3lxTFB0NEtXNnFZdGJLd01zRG5XaGUtZ1RyX1hFMTB2REQ5VlVJRkZzdVFJODBNVHdqTlhBZzZtQnZtM1N2dXhtc2tma3pMaEMzX3N1cjFjOVl3RE91Sjl6Rm9zV251UDBQYUo5NWtXMNIBcEFVX3lxTE1jYVpBZ1NRcDNjb0ZpaGh3Q09TZFpINmN2b3BxbTJMaGpJeVVqQ1loMHhkRjJYZkp2ZjVkTEN4R0FWM0lrcWtsSUphSW4wUHZ0MWw3ekgwb3JZeE5hcmNfUXE0VkxUcXhWOFdsYXlZVmM?oc=5",
+        "news": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5EMkpMWHJyY2VNTVVVNmtTY3kwZWZYWVZiVUJJckppUG1jVXVKNTgtVVNNUUR3ZjhRM1ZET1lVQjhsRVZsRUhiSUdkSTg4Zk1zbURTVWRoYXNrc0hzMjFmNFI0RDhqSDlZNWU5NGFR0gFyQVVfeXFMTjVFZ25veU9tNzdSeXRNRmFEc0t5MlY0ZVBOaV9mUTctZW1JeG5DNnA4amE4TmZRVEFxa2FfN1RDNkN2ZmkzVXNpeWk4V21FOXdYaURLWmc5eTZ2SE9nV3dScVFzM3JmTVNsUWlvSjZkZTNn?oc=5",
         "official": null
       },
       "law_meta": null,
@@ -7114,14 +7402,14 @@
       "is_noise": false
     },
     {
-      "id": "6abec75e4cce170c",
+      "id": "655cbf4f40b4bc11",
       "category": "esg",
-      "doc_type": "로드맵·일정",
-      "title": "국민연금, 금융위에 ESG 공시 로드맵 '전면 수정' 의견 - ESG경제",
+      "doc_type": "보도자료",
+      "title": "[단독] ESG 공시 2028년 법정공시·2029년 검인증 의무화 법안 발의 - ESG경제",
       "summary": [],
       "impact": null,
-      "published_at": "2026-04-06",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "published_at": "2026-03-30",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -7134,10 +7422,10 @@
       "final_score": 53.0,
       "matched_keywords": [
         "ESG 공시",
-        "로드맵"
+        "의무화"
       ],
       "urls": {
-        "news": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9sYWtZaXA5dUczZUZJTGxWWTBuUnMzazBxLUc4cUFGTi03OFFSWFo2Yi03QWNfaVhFckhfTi1BQXUyWjNPeHpwbnA0dGRncnFDVzVKSXFnWHcwQTBXUHlvZXUySGM0VllDNnU5Nw?oc=5",
+        "news": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5IMl8tNnVMY0FDVnRMSDRSYkEwX29od3lMeXg5Q0tVX0pVbEx0VW42Z0d4TUF5elRZaG12UC1qTUlqeXB0QmFHTEs4LXpnNjluMUNPcnRERDYyQ1l5UjNLZG1DM05aTk84OC1ocQ?oc=5",
         "official": null
       },
       "law_meta": null,
@@ -7153,7 +7441,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-09",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -7178,38 +7466,6 @@
       "is_noise": false
     },
     {
-      "id": "fb3fca921f3c8ded",
-      "category": "esg",
-      "doc_type": "로드맵·일정",
-      "title": "ESG 공시 로드맵 초안 공개...쟁점과 과제 남겼다 - 한국경제",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-03-31",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "한국경제",
-        "domain": "https://www.hankyung.com",
-        "tier": 4,
-        "type": "news"
-      },
-      "trust_score": 50,
-      "keyword_score": 30,
-      "final_score": 36.5,
-      "matched_keywords": [
-        "ESG 공시",
-        "로드맵"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5fUHhtNHpadHZiaHFKSWx1V2Rkd19hZzhkUkp1b1dIUGpMc1ZFWnZMMzhtcjg4cjhTeTNnNlpsYzhRZFNUMzlhN25mbURURVhjT2JvcVVqZUV0Zw?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "8630456bad26f08a",
       "category": "esg",
       "doc_type": "보도자료",
@@ -7217,7 +7473,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-03-06",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -7242,6 +7498,70 @@
       "is_noise": false
     },
     {
+      "id": "6abec75e4cce170c",
+      "category": "esg",
+      "doc_type": "로드맵·일정",
+      "title": "국민연금, 금융위에 ESG 공시 로드맵 '전면 수정' 의견 - ESG경제",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-04-06",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "ESG경제",
+        "domain": "https://www.esgeconomy.com",
+        "tier": 2,
+        "type": "news"
+      },
+      "trust_score": 80,
+      "keyword_score": 30,
+      "final_score": 53.0,
+      "matched_keywords": [
+        "ESG 공시",
+        "로드맵"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMibEFVX3lxTE9sYWtZaXA5dUczZUZJTGxWWTBuUnMzazBxLUc4cUFGTi03OFFSWFo2Yi03QWNfaVhFckhfTi1BQXUyWjNPeHpwbnA0dGRncnFDVzVKSXFnWHcwQTBXUHlvZXUySGM0VllDNnU5Nw?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
+      "id": "fb3fca921f3c8ded",
+      "category": "esg",
+      "doc_type": "로드맵·일정",
+      "title": "ESG 공시 로드맵 초안 공개...쟁점과 과제 남겼다 - 한국경제",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-03-31",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "한국경제",
+        "domain": "https://www.hankyung.com",
+        "tier": 4,
+        "type": "news"
+      },
+      "trust_score": 50,
+      "keyword_score": 30,
+      "final_score": 36.5,
+      "matched_keywords": [
+        "ESG 공시",
+        "로드맵"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5fUHhtNHpadHZiaHFKSWx1V2Rkd19hZzhkUkp1b1dIUGpMc1ZFWnZMMzhtcjg4cjhTeTNnNlpsYzhRZFNUMzlhN25mbURURVhjT2JvcVVqZUV0Zw?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "58186f7dd76760e4",
       "category": "esg",
       "doc_type": "로드맵·일정",
@@ -7249,7 +7569,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-02-04",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "insnews.co.kr",
@@ -7282,7 +7602,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-03-26",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "futurechosun.com",
@@ -7314,7 +7634,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-02-25",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -7345,7 +7665,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-04-27",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "hani.co.kr",
@@ -7370,6 +7690,37 @@
       "is_noise": false
     },
     {
+      "id": "efaa970fbab1d462",
+      "category": "esg",
+      "doc_type": "로드맵·일정",
+      "title": "[단독] 지속가능성 공시 로드맵 내년 1월 발표 계획 - ESG경제",
+      "summary": [],
+      "impact": null,
+      "published_at": "2025-12-14",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "ESG경제",
+        "domain": "https://www.esgeconomy.com",
+        "tier": 2,
+        "type": "news"
+      },
+      "trust_score": 80,
+      "keyword_score": 10,
+      "final_score": 47.0,
+      "matched_keywords": [
+        "로드맵"
+      ],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5wNV9rc2dQMTJKQTVLcnpSbmY2R21OYjRuUzBCSjU4YnNVbGdJMUtsRm53NGlKYVZ5bXg0a05wbmlfYnJzT29UR3R3N2JHaHMxQ1ktdmVxTk5rLXBIWUdDeHJ0bW9oU0haUkliQw?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "45db1fe9c9e2c525",
       "category": "esg",
       "doc_type": "기사",
@@ -7377,7 +7728,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-02-12",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "electimes.com",
@@ -7403,37 +7754,6 @@
       "is_noise": false
     },
     {
-      "id": "efaa970fbab1d462",
-      "category": "esg",
-      "doc_type": "로드맵·일정",
-      "title": "[단독] 지속가능성 공시 로드맵 내년 1월 발표 계획 - ESG경제",
-      "summary": [],
-      "impact": null,
-      "published_at": "2025-12-14",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "ESG경제",
-        "domain": "https://www.esgeconomy.com",
-        "tier": 2,
-        "type": "news"
-      },
-      "trust_score": 80,
-      "keyword_score": 10,
-      "final_score": 47.0,
-      "matched_keywords": [
-        "로드맵"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5wNV9rc2dQMTJKQTVLcnpSbmY2R21OYjRuUzBCSjU4YnNVbGdJMUtsRm53NGlKYVZ5bXg0a05wbmlfYnJzT29UR3R3N2JHaHMxQ1ktdmVxTk5rLXBIWUdDeHJ0bW9oU0haUkliQw?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "a090a72ab75e99fe",
       "category": "esg",
       "doc_type": "기사",
@@ -7441,7 +7761,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-02-25",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "한국경제",
@@ -7473,7 +7793,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-01-15",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -7505,7 +7825,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-12-01",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -7537,7 +7857,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-04-05",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "PwC",
@@ -7566,7 +7886,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-07-31",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "greenpeace.org",
@@ -7598,7 +7918,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-11-29",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -7630,7 +7950,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-08-21",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -7663,7 +7983,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2024-12-24",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -7690,37 +8010,6 @@
       "is_noise": false
     },
     {
-      "id": "49f8dff52f456f2d",
-      "category": "esg",
-      "doc_type": "기사",
-      "title": "금융위, ESG 공시 손 놓았나…국내 기업은 눈치 게임 - 한국경제",
-      "summary": [],
-      "impact": null,
-      "published_at": "2025-04-03",
-      "collected_at": "2026-11-13T11:20:15+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "한국경제",
-        "domain": "https://www.hankyung.com",
-        "tier": 4,
-        "type": "news"
-      },
-      "trust_score": 50,
-      "keyword_score": 20,
-      "final_score": 33.5,
-      "matched_keywords": [
-        "ESG 공시"
-      ],
-      "urls": {
-        "news": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1oemxQY2ZnOVZEdVdUaUFyaXYzTUpYR1Y2VDRZbEk3dHhlYVVXR0hfYkpNN0VXWG5iX2U3c29lRFlQLVlpaGdwSUp3aUZkYndLdURQMGRFY2kxUQ?oc=5",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "layer": "L3",
-      "is_noise": false
-    },
-    {
       "id": "e9827cf63bd0f0bc",
       "category": "esg",
       "doc_type": "보도자료",
@@ -7728,7 +8017,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-07-25",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -7753,27 +8042,29 @@
       "is_noise": false
     },
     {
-      "id": "4325d5e85be98e26",
+      "id": "49f8dff52f456f2d",
       "category": "esg",
-      "doc_type": "보도자료",
-      "title": "보 도 자 료 - 금융위원회",
+      "doc_type": "기사",
+      "title": "금융위, ESG 공시 손 놓았나…국내 기업은 눈치 게임 - 한국경제",
       "summary": [],
       "impact": null,
-      "published_at": "2022-12-15",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "published_at": "2025-04-03",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
-        "name": "금융위원회",
-        "domain": "https://www.fsc.go.kr",
-        "tier": 1,
+        "name": "한국경제",
+        "domain": "https://www.hankyung.com",
+        "tier": 4,
         "type": "news"
       },
-      "trust_score": 100,
-      "keyword_score": 0,
-      "final_score": 55.0,
-      "matched_keywords": [],
+      "trust_score": 50,
+      "keyword_score": 20,
+      "final_score": 33.5,
+      "matched_keywords": [
+        "ESG 공시"
+      ],
       "urls": {
-        "news": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPemhwMnRORE1fYU91ZUxxeU53UkROdFQyTHVlWHRZRXB0cHJza01WSGI1WHF6aXl0U2FyM3d6M2pHVlJLNU1RZzVsb3RkX2hCNmRGV0gwbUQwOHRrSnp3RU53WmdnVkIxem11R0VfcjA5LTlwYmdqSmx0UE1VS0Zac3o4ZWVyVXl3Z2ZFMlpn?oc=5",
+        "news": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1oemxQY2ZnOVZEdVdUaUFyaXYzTUpYR1Y2VDRZbEk3dHhlYVVXR0hfYkpNN0VXWG5iX2U3c29lRFlQLVlpaGdwSUp3aUZkYndLdURQMGRFY2kxUQ?oc=5",
         "official": null
       },
       "law_meta": null,
@@ -7789,7 +8080,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2023-05-12",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -7813,6 +8104,35 @@
       "is_noise": false
     },
     {
+      "id": "4325d5e85be98e26",
+      "category": "esg",
+      "doc_type": "보도자료",
+      "title": "보 도 자 료 - 금융위원회",
+      "summary": [],
+      "impact": null,
+      "published_at": "2022-12-15",
+      "collected_at": "2026-11-13T18:16:07+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융위원회",
+        "domain": "https://www.fsc.go.kr",
+        "tier": 1,
+        "type": "news"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": "https://news.google.com/rss/articles/CBMijgFBVV95cUxPemhwMnRORE1fYU91ZUxxeU53UkROdFQyTHVlWHRZRXB0cHJza01WSGI1WHF6aXl0U2FyM3d6M2pHVlJLNU1RZzVsb3RkX2hCNmRGV0gwbUQwOHRrSnp3RU53WmdnVkIxem11R0VfcjA5LTlwYmdqSmx0UE1VS0Zac3o4ZWVyVXl3Z2ZFMlpn?oc=5",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "0651120503fd7c69",
       "category": "esg",
       "doc_type": "기사",
@@ -7820,7 +8140,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-04-23",
-      "collected_at": "2026-11-13T11:20:15+09:00",
+      "collected_at": "2026-11-13T18:16:07+09:00",
       "effective_date": null,
       "source": {
         "name": "hani.co.kr",
@@ -7854,7 +8174,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-13",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "g-enews.com",
@@ -7885,7 +8205,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-23",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "yna.co.kr",
@@ -7920,7 +8240,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-09",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "서울경제",
@@ -7952,7 +8272,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-06",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "파이낸셜뉴스",
@@ -7984,7 +8304,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-06",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "newsis.com",
@@ -8016,7 +8336,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-14",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "tfmedia.co.kr",
@@ -8049,7 +8369,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-02",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "ebn.co.kr",
@@ -8080,7 +8400,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-19",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "futurechosun.com",
@@ -8112,7 +8432,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-22",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -8144,7 +8464,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-19",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -8176,7 +8496,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-18",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "hapt.co.kr",
@@ -8207,7 +8527,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -8239,7 +8559,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-08",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -8272,7 +8592,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-05",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -8304,7 +8624,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-22",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -8336,7 +8656,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-04",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "kgnews.co.kr",
@@ -8367,7 +8687,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-11",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -8398,7 +8718,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "seoul.co.kr",
@@ -8430,7 +8750,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-09",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "tfmedia.co.kr",
@@ -8461,7 +8781,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -8493,7 +8813,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "sateconomy.co.kr",
@@ -8524,7 +8844,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-11",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "머니투데이",
@@ -8555,7 +8875,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "cc.newdaily.co.kr",
@@ -8586,7 +8906,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "etoday.co.kr",
@@ -8617,7 +8937,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "머니투데이",
@@ -8642,6 +8962,37 @@
       "is_noise": false
     },
     {
+      "id": "6607d51fddd9970d",
+      "category": "esg",
+      "doc_type": "기사",
+      "title": "백화점 업계, 상생·지속가능경영 성과 결실",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-13",
+      "collected_at": "2026-11-13T18:16:30+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "cnbizm.com",
+        "domain": "https://www.cnbizm.com/news/articleView.html?idxno=321436",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 32.0,
+      "matched_keywords": [
+        "지속가능경영"
+      ],
+      "urls": {
+        "news": "https://www.cnbizm.com/news/articleView.html?idxno=321436",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "ea1c6017dcbf9830",
       "category": "esg",
       "doc_type": "기사",
@@ -8649,7 +9000,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "ziksir.com",
@@ -8680,7 +9031,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "weekly.hankooki.com",
@@ -8711,7 +9062,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "dailysmart.co.kr",
@@ -8742,7 +9093,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "globalepic.co.kr",
@@ -8773,7 +9124,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "choicenews.co.kr",
@@ -8804,7 +9155,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "fashionbiz.co.kr",
@@ -8835,7 +9186,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "thefairnews.co.kr",
@@ -8866,7 +9217,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "businessplus.kr",
@@ -8890,6 +9241,37 @@
       "is_noise": false
     },
     {
+      "id": "e3ba6193e2bddf76",
+      "category": "esg",
+      "doc_type": "기사",
+      "title": "ESG경영개발원, 지속가능경영·동반성장 우수 기업·공공기관 선정",
+      "summary": [],
+      "impact": null,
+      "published_at": "2026-11-13",
+      "collected_at": "2026-11-13T18:16:30+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "ajunews.com",
+        "domain": "https://www.ajunews.com/view/20261113135722843",
+        "tier": 5,
+        "type": "news"
+      },
+      "trust_score": 20,
+      "keyword_score": 20,
+      "final_score": 32.0,
+      "matched_keywords": [
+        "지속가능경영"
+      ],
+      "urls": {
+        "news": "https://www.ajunews.com/view/20261113135722843",
+        "official": null
+      },
+      "law_meta": null,
+      "attachments": null,
+      "layer": "L3",
+      "is_noise": false
+    },
+    {
       "id": "9779f6a2681ce7b5",
       "category": "esg",
       "doc_type": "보도자료",
@@ -8897,7 +9279,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-13",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -8928,7 +9310,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-04",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -8959,7 +9341,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-04",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -8991,7 +9373,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-03",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -9022,7 +9404,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-30",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "seoulfn.com",
@@ -9054,7 +9436,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-26",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "etoday.co.kr",
@@ -9085,7 +9467,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-23",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -9116,7 +9498,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-20",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "dt.co.kr",
@@ -9147,7 +9529,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-20",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "머니투데이",
@@ -9178,7 +9560,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-16",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -9209,7 +9591,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-13",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -9240,7 +9622,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-07",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -9271,7 +9653,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-21",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -9302,7 +9684,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-18",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "임팩트온",
@@ -9333,7 +9715,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-17",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "kyeonggi.com",
@@ -9364,7 +9746,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-16",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "tfmedia.co.kr",
@@ -9395,7 +9777,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "gukjenews.com",
@@ -9426,7 +9808,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "efnews.co.kr",
@@ -9457,7 +9839,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "cstimes.com",
@@ -9488,7 +9870,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "joongangenews.com",
@@ -9519,7 +9901,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-12",
-      "collected_at": "2026-11-13T11:20:35+09:00",
+      "collected_at": "2026-11-13T18:16:30+09:00",
       "effective_date": null,
       "source": {
         "name": "kyeonggi.com",
@@ -9552,7 +9934,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-03",
-      "collected_at": "2026-11-13T11:19:57+09:00",
+      "collected_at": "2026-11-13T18:15:51+09:00",
       "effective_date": null,
       "source": {
         "name": "재정경제부",
@@ -9584,7 +9966,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-05",
-      "collected_at": "2026-11-13T11:20:08+09:00",
+      "collected_at": "2026-11-13T18:16:01+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
@@ -9616,7 +9998,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-05",
-      "collected_at": "2026-11-13T11:20:08+09:00",
+      "collected_at": "2026-11-13T18:16:01+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
@@ -9648,7 +10030,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-09",
-      "collected_at": "2026-11-13T11:20:08+09:00",
+      "collected_at": "2026-11-13T18:16:01+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
@@ -9680,7 +10062,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-27",
-      "collected_at": "2026-11-13T11:20:08+09:00",
+      "collected_at": "2026-11-13T18:16:01+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
@@ -9712,7 +10094,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-27",
-      "collected_at": "2026-11-13T11:20:08+09:00",
+      "collected_at": "2026-11-13T18:16:01+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
@@ -9744,7 +10126,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-09",
-      "collected_at": "2026-11-13T11:20:12+09:00",
+      "collected_at": "2026-11-13T18:16:04+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
@@ -9774,7 +10156,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-08-27",
-      "collected_at": "2026-11-13T11:20:12+09:00",
+      "collected_at": "2026-11-13T18:16:04+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
