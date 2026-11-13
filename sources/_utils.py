@@ -1606,6 +1606,11 @@ def has_fiscal_year_override(item_id: str) -> bool:
 # 논의자료는 사유가 아니다 — 메일·화면 모두 보낸다/보인다(사용자 결정: 요약은 나중에 수동).
 HIDDEN_REASONS = ("static", "foreign", "meeting")
 
+# 2026-11-13 사용자 지시: 회의 안건 제목에 기준서 제·개정 문안이 걸려 있으면 회의 예정이어도
+# 숨기지 않는다(예: "제11회 회계기준위원회(K-IFRS 제1119호 제정안 …)"). 제목만 본다 —
+# 주요일정(C)은 첨부파일명을 수집하지 않는다(kasb.py 모듈 docstring, 2026-08-26 결정).
+MEETING_UNHIDE_TITLE_KEYWORDS = ("제정안", "개정안", "공개초안")
+
 
 def feed_hidden_reason(item: dict) -> str | None:
     if item.get("is_static"):
@@ -1613,6 +1618,9 @@ def feed_hidden_reason(item: dict) -> str | None:
     if item.get("doc_type") == "해외기준":
         return "foreign"
     if item.get("is_meeting_schedule"):  # 위원회 회의 예정 공지 — 의결 자료가 나오면 그게 소식
+        title = item.get("title") or ""
+        if any(k in title for k in MEETING_UNHIDE_TITLE_KEYWORDS):
+            return None
         return "meeting"
     return None
 

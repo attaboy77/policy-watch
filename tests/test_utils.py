@@ -425,6 +425,17 @@ class TestFinalizeItem:
         assert finalize_item(self._item(is_meeting_schedule=True))["hidden_reason"] == "meeting"
         assert finalize_item(self._item(title="제1118호 정착지원 TF 논의 내용(6차)"))["hidden_reason"] is None
 
+    def test_meeting_with_draft_standard_in_title_is_not_hidden(self):
+        # 2026-11-13 사용자 지시: 제목에 제정안·개정안·공개초안이 있으면 회의 예정이어도 노출.
+        for title in ("2026년 제11회 회계기준위원회(K-IFRS 제1119호 제정안 ‘공공에 대한 회계책임이 없는 종속기업: 공시’ 등)",
+                      "2026년 제9회 회계기준위원회(K-IFRS 제1016호 개정안 ‘토지 공시지가 공시’ 등)",
+                      "2026년 제9회 지속가능성기준위원회(IFRS 재단 정관 개정 공개초안에 대한 검토 등)"):
+            assert finalize_item(self._item(title=title, is_meeting_schedule=True))["hidden_reason"] is None
+        # 사용자가 보지 않기로 한 건 — 계속 숨김
+        for title in ("2026년 제7회 지속가능성기준위원회(ISSB 7월 주요 논의내용 및 회의결과 보고 등)",
+                      "2026년 제8회 지속가능성기준위원회(ISSB 9월 주요 논의내용 및 회의결과 보고 등)"):
+            assert finalize_item(self._item(title=title, is_meeting_schedule=True))["hidden_reason"] == "meeting"
+
     def test_published_at_falls_back_to_collected_at_date(self):
         out = finalize_item(self._item(published_at=None))
         assert out["published_at"] == "2026-08-26"
