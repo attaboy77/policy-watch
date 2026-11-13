@@ -37,6 +37,7 @@ from datetime import date, datetime, timezone, timedelta
 from bs4 import BeautifulSoup
 
 from .. import _excluded_log, _gap_log, _http
+from .._source_health import PartialFetch
 from .._config import COLLECT_WINDOW_DAYS
 from .._utils import (
     classify,
@@ -169,8 +170,23 @@ def _build_item(*, category: str, title: str, url: str | None, published_at: str
     }
 
 
+# 2026-11-13: 주요일정(C) 진행일이 기간("2026-10-30 ~ 2026-11-06", 서면결의)으로 오는 행이
+# 생겨 strptime이 ValueError → fetch_schedule 전체가 실패했다(11/13 C 0건). 기간이면 시작일을 쓴다.
+# 구분자는 물결표(~, 전각 ～, ∼, 〜)와 대시류(−, –, —, -), 앞뒤 공백 유무 무관.
+_DATE_RANGE_RE = re.compile(
+    r"^\s*(\d{4}-\d{2}-\d{2})(?:\s*[~～∼〜−–—-]\s*\d{4}-\d{2}-\d{2})?\s*$")
+
+
+def _start_date_text(s: str) -> str:
+    """"YYYY-MM-DD" 또는 기간 "YYYY-MM-DD ~ YYYY-MM-DD"에서 (시작)날짜 문자열. 형식이 다르면 ValueError."""
+    m = _DATE_RANGE_RE.match(s or "")
+    if not m:
+        raise ValueError(f"날짜 형식 아님: {s!r}")
+    return m.group(1)
+
+
 def _parse_iso_date(s: str) -> date:
-    return datetime.strptime(s, "%Y-%m-%d").date()
+    return datetime.strptime(_start_date_text(s), "%Y-%m-%d").date()
 
 
 def _fetch_detail_body_text(seq: str, *, base_url: str = NOTICE_VIEW_URL) -> str:
@@ -283,59 +299,68 @@ def fetch_schedule(*, fetch_detail: bool = True, max_detail_fetches: int = 20,
             break
 
         for row in rows:
-            cells = row.find_all("td")
-            if len(cells) < 5:
-                continue
-            published_at = cells[0].get_text(strip=True) or None
-            minor_p = cells[2].select_one("p")
-            minor = minor_p.get_text(strip=True) if minor_p else ""
-            category = _CALENDAR_CATEGORY_MAP.get(minor)
-            link = cells[3].find("a")
-            title = link.get_text(strip=True) if link else ""
-            m = re.search(r"fn_Detail\('(\d+)'\)", link.get("onclick", "") if link else "")
-            if not title or not m or not published_at:
-                continue
-            log_url = f"{CALENDAR_VIEW_URL}?seq={m.group(1)}"
-            if category is None:  # 세미나/포럼 등 위원회 회의가 아닌 공통 행사는 스킵
-                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:out_of_scope",
-                                   title=f"[{minor}] {title}", url=log_url)
-                continue
-            if "일반기업회계기준" in title:  # 2026-08-31 사용자 지시: K-IFRS 대상 아님
-                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:non_kifrs", title=title,
-                                   url=log_url, category=category)
-                continue
-            if is_event_announcement(title):  # 세미나·포럼 등 제목 기반 보강 필터
-                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:event_announcement",
-                                   title=title, url=log_url, category=category)
-                continue
+            row_title, row_url = "", None
+            try:  # 2026-11-13: 행 하나의 해석 실패가 C 전체를 죽이지 않게 행 단위로 격리
+                cells = row.find_all("td")
+                if len(cells) < 5:
+                    continue
+                published_at = cells[0].get_text(strip=True) or None
+                minor_p = cells[2].select_one("p")
+                minor = minor_p.get_text(strip=True) if minor_p else ""
+                category = _CALENDAR_CATEGORY_MAP.get(minor)
+                link = cells[3].find("a")
+                title = link.get_text(strip=True) if link else ""
+                m = re.search(r"fn_Detail\('(\d+)'\)", link.get("onclick", "") if link else "")
+                if not title or not m or not published_at:
+                    continue
+                log_url = f"{CALENDAR_VIEW_URL}?seq={m.group(1)}"
+                row_title, row_url = title, log_url
+                # 2026-11-13: 기간("A ~ B")이면 시작일 — published_at은 항상 YYYY-MM-DD로 저장
+                published_at = _start_date_text(published_at)
+                if category is None:  # 세미나/포럼 등 위원회 회의가 아닌 공통 행사는 스킵
+                    _excluded_log.skip(source=_LOG_SOURCE, reason="collect:out_of_scope",
+                                       title=f"[{minor}] {title}", url=log_url)
+                    continue
+                if "일반기업회계기준" in title:  # 2026-08-31 사용자 지시: K-IFRS 대상 아님
+                    _excluded_log.skip(source=_LOG_SOURCE, reason="collect:non_kifrs", title=title,
+                                       url=log_url, category=category)
+                    continue
+                if is_event_announcement(title):  # 세미나·포럼 등 제목 기반 보강 필터
+                    _excluded_log.skip(source=_LOG_SOURCE, reason="collect:event_announcement",
+                                       title=title, url=log_url, category=category)
+                    continue
 
-            seq = m.group(1)
-            url = f"{CALENDAR_VIEW_URL}?seq={seq}"
-            effective_date = None
-            if fetch_detail and detail_fetches < max_detail_fetches:
-                time.sleep(SLEEP_BETWEEN_REQUESTS)
-                try:
-                    body_text = _fetch_detail_body_text(seq, base_url=CALENDAR_VIEW_URL)
-                except Exception as exc:  # noqa: BLE001
-                    print(f"[kasb] calendar seq={seq} 상세 조회 실패: {exc}")
-                else:
-                    effective_date = extract_effective_date(body_text)
-                detail_fetches += 1
-            if effective_date is None:
-                try:
-                    if _parse_iso_date(published_at) > today:
-                        effective_date = published_at  # 2026-08-31: 미래 일정→schedules 노출
-                except ValueError:
-                    pass
+                seq = m.group(1)
+                url = f"{CALENDAR_VIEW_URL}?seq={seq}"
+                effective_date = None
+                if fetch_detail and detail_fetches < max_detail_fetches:
+                    time.sleep(SLEEP_BETWEEN_REQUESTS)
+                    try:
+                        body_text = _fetch_detail_body_text(seq, base_url=CALENDAR_VIEW_URL)
+                    except Exception as exc:  # noqa: BLE001
+                        print(f"[kasb] calendar seq={seq} 상세 조회 실패: {exc}")
+                    else:
+                        effective_date = extract_effective_date(body_text)
+                    detail_fetches += 1
+                if effective_date is None:
+                    try:
+                        if _parse_iso_date(published_at) > today:
+                            effective_date = published_at  # 2026-08-31: 미래 일정→schedules 노출
+                    except ValueError:
+                        pass
 
-            tier, trust_score, source_name = trust_of(url)
-            doc_type = doc_type_of(title, tier)
-            items.append(_build_item(
-                category=category, title=title, url=url, published_at=published_at,
-                doc_type=doc_type, effective_date=effective_date,
-                tier=tier, trust_score=trust_score, source_name=source_name,
-                is_meeting_schedule=True,
-            ))
+                tier, trust_score, source_name = trust_of(url)
+                doc_type = doc_type_of(title, tier)
+                items.append(_build_item(
+                    category=category, title=title, url=url, published_at=published_at,
+                    doc_type=doc_type, effective_date=effective_date,
+                    tier=tier, trust_score=trust_score, source_name=source_name,
+                    is_meeting_schedule=True,
+                ))
+            except Exception as exc:  # noqa: BLE001
+                print(f"[kasb] calendar 행 건너뜀: {row_title or '(제목 없음)'} — {exc}")
+                _excluded_log.skip(source=_LOG_SOURCE, reason="collect:row_parse_error",
+                                   title=f"{row_title or '(제목 없음)'} — {exc}", url=row_url)
 
         if len(rows) < 10:  # 페이지당 10건 — 덜 찼으면 마지막 페이지
             break
@@ -734,16 +759,36 @@ def fetch(*, fetch_detail: bool = True) -> list[dict]:
     계속 진행한다(SPEC §9-4).
     """
     out: list[dict] = []
+    failed: dict[str, str] = {}
     for name, fn in (("notices", lambda: fetch_notices(fetch_detail=fetch_detail)),
                       ("qna", fetch_qna),
                       ("schedule", lambda: fetch_schedule(fetch_detail=fetch_detail)),
                       ("revisions", fetch_revisions),
                       ("kssb_voluntary", fetch_kssb_voluntary_standards)):
         try:
-            out.extend(fn())
+            got = fn()
         except Exception as exc:  # noqa: BLE001
             print(f"[kasb] {name} 수집 실패: {exc}")
+            if name == "schedule":
+                failed["schedule"] = str(exc)
+            continue
+        if name == "schedule" and not got:
+            print("[kasb] schedule 수집 실패: 결과 0건")
+            failed["schedule"] = "결과 0건(목록 행 없음 또는 전 행 해석 실패)"
+        out.extend(got)
+    # 2026-11-13: 주요일정(C) 실패·0건을 부분 실패로 올린다(fss B2/B3 10/14 방식). 전엔 print만 하고
+    # kasb 전체를 성공으로 둬서 11/13 C가 통째로 빠진 걸 source_health·메일로 알 수 없었다.
+    if failed:
+        if not out:
+            raise RuntimeError(f"kasb 전체 0건 — schedule: {failed['schedule']}")
+        raise PartialFetch(out, failed, part_of)
     return out
+
+
+def part_of(item: dict) -> str:
+    """캐시 항목이 어느 하위 수집에서 왔는지 — 부분 폴백용(main.SUB_SOURCES). 주요일정(C)만 따로 센다."""
+    url = (item.get("urls") or {}).get("official") or ""
+    return "schedule" if "calViewA.do" in url else "other"
 
 
 if __name__ == "__main__":

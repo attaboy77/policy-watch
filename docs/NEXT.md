@@ -1,14 +1,20 @@
 # 다음에 이어서 할 일 (NEXT)
 
-마지막 갱신: 2026-11-13, 회의 예정 노출 예외 직후 기준(아래 "2026-11-13 세션", 그 전은 "2026-11-05 세션 (2)"·"2026-11-05 세션"). 필터 규칙은 `docs/FILTER_RULES.md`가 기준이다. **Phase 6(GitHub Pages 자동 배포) 완료·운영 중.**
+마지막 갱신: 2026-11-13, KASB 주요일정 부분 실패 처리 직후 기준(아래 "2026-11-13 세션 (2)"·"2026-11-13 세션", 그 전은 "2026-11-05 세션 (2)"·"2026-11-05 세션"). 필터 규칙은 `docs/FILTER_RULES.md`가 기준이다. **Phase 6(GitHub Pages 자동 배포) 완료·운영 중.**
 **정부 보도자료 3소스(moef/fsc/policy_briefing) 2026-10-01 재활성화 — 9/9 비활성화 사유("0건")는 정상 0건이었을 가능성이 높음. 아래 "2026-10-01 세션 (3)" 참고.**
 `data/source_toggles.yml`에서 `enabled: false`로 소스를 끌 수 있다(코드 수정 불필요) — 아래
-"2026-09-09 세션 요약" 참고. 테스트 789개 통과. **미검증(다음 Actions 실행 필요)** —
+"2026-09-09 세션 요약" 참고. 테스트 807개 통과. **미검증(다음 Actions 실행 필요)** —
 아래 "2026-09-14~09-30 요약"의 "미검증" 항목과 "2026-09-10 세션 요약"의 "미검증" 항목 참고.
+
+## 2026-11-13 세션 (2) — KASB 주요일정(C) 기간형 진행일 + 행 단위 격리 + 부분 실패 표시
+
+- **원인(아래 세션 1)**: 진행일 `2026-10-30 ~ 2026-11-06`(제9회 지속가능성기준위원회, 서면결의) 한 행의 ValueError로 `fetch_schedule` 전체 실패 → `kasb.fetch()`가 print만 하고 삼켜 kasb는 "성공", 11/13 C 0건.
+- **수정**: (1) `kasb._parse_iso_date`/`_start_date_text` — 기간이면 시작일(~·～·∼·〜·−·–·—·-, 공백 무관), `published_at`도 시작일로 저장. (2) `fetch_schedule` 행 단위 try — 실패 행만 `collect:row_parse_error`(제목 — 사유, URL)로 EXCLUDED_LOG·print. (3) `kasb.fetch()`가 C 예외·0건이면 `PartialFetch(failed={"schedule"})`(10/14 fss B2/B3 방식) — `main.SUB_SOURCES["kasb"]=("schedule",)`, `part_of`는 URL `calViewA.do`, 라벨 `kasb_schedule`. C만 전일 캐시로 대체되고 source_health·`meta.sources_failed`·메일 하단에 남는다. 테스트 `tests/test_kasb_schedule.py`.
+- **실측(11/13 로컬, 네이버는 로컬 키 없어 폴백 — 데이터 파일은 커밋 안 함)**: C 원본 6건. data.json 5건 — 제11회·제9회 회계기준위원회는 `hidden_reason=None`·메일 대상, 제7·8·10회 지속가능성기준위원회는 `meeting`. **제9회 지속가능성기준위원회(IFRS 재단 정관 개정 공개초안 검토의견)는 `excluded:standard_setter_governance`(10/1 사용자 지시, FILTER_RULES §2 #3)로 제외** — 11/13 "나와야 맞다"와 충돌, 사용자 확인 대기.
 
 ## 2026-11-13 세션 — 회의 예정이라도 제목에 제정안·개정안·공개초안이 있으면 노출(FILTER_RULES §3 meeting 예외)
 
-- `_utils.feed_hidden_reason`: `is_meeting_schedule`이어도 제목에 제정안·개정안·공개초안이 있으면 `hidden_reason=None`. 제7·8회 지속가능성기준위원회(ISSB 논의내용 보고)는 계속 숨김(테스트 고정). **미해결 — 아직 효과 없음**: 11/13 수집부터 KASB 주요일정(C)이 통째로 0건. 게시판에 진행일이 기간(`2026-10-30 ~ 2026-11-06`, 제9회 지속가능성기준위원회 서면결의)인 행이 생겨 `_build_item`의 `_parse_iso_date`가 ValueError → `fetch_schedule` 전체 실패 → `fetch()`가 `[kasb] schedule 수집 실패`로 삼켜서 `sources_ok`엔 kasb가 정상으로 남음. 게시판은 지난 일정을 내리지 않음(-90~+90일 요청에 9/3~11/19 행이 그대로 옴). 날짜 파싱 수정은 사용자 확인 대기. 수정되면 제9회 지속가능성기준위원회(제목에 "공개초안")도 이 예외로 노출됨 — 원하는지 확인 필요.
+- `_utils.feed_hidden_reason`: `is_meeting_schedule`이어도 제목에 제정안·개정안·공개초안이 있으면 `hidden_reason=None`. 제7·8회 지속가능성기준위원회(ISSB 논의내용 보고)는 계속 숨김(테스트 고정). **11/13 세션 (2)에서 해결**(이전 기록: 아직 효과 없음): 11/13 수집부터 KASB 주요일정(C)이 통째로 0건. 게시판에 진행일이 기간(`2026-10-30 ~ 2026-11-06`, 제9회 지속가능성기준위원회 서면결의)인 행이 생겨 `_build_item`의 `_parse_iso_date`가 ValueError → `fetch_schedule` 전체 실패 → `fetch()`가 `[kasb] schedule 수집 실패`로 삼켜서 `sources_ok`엔 kasb가 정상으로 남음. 게시판은 지난 일정을 내리지 않음(-90~+90일 요청에 9/3~11/19 행이 그대로 옴). 날짜 파싱은 세션 (2)에서 수정.
 
 ## 2026-11-05 세션 (2) — 독자 대상 도서·교육 상품·행사 안내 제외(FILTER_RULES §2 #13-1)
 
