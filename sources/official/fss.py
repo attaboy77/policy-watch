@@ -15,19 +15,24 @@ docs/SOURCE_PROBE.md §B 조사 결과에 기반한다.
 - B1(정적 개요 페이지)은 날짜가 있는 "항목"이 아니라 참고 링크 성격이라
   items로 만들지 않는다(probe만 제공).
 - B3(k-icfr.org)는 EUC-KR 인코딩 레거시 ASP 사이트다.
+- 2026-11-14: 하위 수집 press(금감원 보도자료 B0000188)·notes(주석공시 모범사례 B0000128)
+  추가. B2와 달리 카테고리를 icfr로 고정하지 않고 fsc 보도자료와 같은 기존 필터(행사 공지 →
+  classify → 세목)를 탄다. 첨부는 목록 행에 있어 상세 페이지를 열지 않는다.
 """
 from __future__ import annotations
 
+import re
 import time
 from datetime import date, datetime, timezone, timedelta
 
 from bs4 import BeautifulSoup
 
 from .. import _excluded_log, _http, _gap_log
+from .._config import COLLECT_WINDOW_DAYS, DISABLED_SOURCES
 from .._source_health import PartialFetch
-from .._utils import (doc_type_of, extract_title_revision_date, is_event_announcement,
-                      keyword_score, matched_keywords, make_id_exact, final_score, recency_score,
-                      has_fiscal_year_override)
+from .._utils import (classify, doc_type_of, extract_effective_date, extract_title_revision_date,
+                      is_event_announcement, keyword_score, matched_keywords, make_id_exact,
+                      final_score, pass_tax_filter, recency_score, has_fiscal_year_override)
 
 FSS_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
           "Chrome/124.0.0.0 Safari/537.36 (contact: alchem1024@gmail.com, project: policy-watch)")
@@ -68,12 +73,14 @@ def _now_kst_iso() -> str:
 
 def _build_item(*, title: str, url: str, published_at: str | None, doc_type: str,
                  domain: str, source_name: str, effective_date: str | None = None,
-                 is_static: bool = False, date_estimated: bool = False) -> dict:
-    kw = keyword_score(title, "icfr")
+                 is_static: bool = False, date_estimated: bool = False,
+                 category: str = "icfr") -> dict:
+    # 2026-11-14: press·notes는 classify()로 카테고리를 정하므로 인자로 받는다(B2·B3는 icfr 고정).
+    kw = keyword_score(title, category)
     rec = recency_score(_parse_iso_date(published_at)) if published_at else 0
     return {
         "id": make_id_exact(url),  # view.do?nttId=처럼 쿼리가 식별자(B2/B3 공용 헬퍼)
-        "category": "icfr",
+        "category": category,
         "doc_type": doc_type,
         "title": title,
         "summary": [],
@@ -85,7 +92,7 @@ def _build_item(*, title: str, url: str, published_at: str | None, doc_type: str
         "trust_score": 100,
         "keyword_score": kw,
         "final_score": final_score(100, kw, rec),
-        "matched_keywords": matched_keywords(title, "icfr"),
+        "matched_keywords": matched_keywords(title, category),
         "urls": {"news": None, "official": url},
         "law_meta": None,
         "attachments": None,  # TODO: fileDown.do 링크는 있으나 파일명 파싱은 후속 작업
@@ -212,19 +219,145 @@ def fetch_kicfr_guidelines() -> list[dict]:
     return items
 
 
+def _row_attachments(row) -> list[dict] | None:
+    """목록 행 안의 첨부(`a[href*=fileDown.do]` + `span.name`) — 상세 페이지를 따로 열지 않는다."""
+    out = []
+    for a in row.select('a[href*="fileDown.do"]'):
+        name_span = a.select_one("span.name")
+        name = name_span.get_text(strip=True) if name_span else ""
+        href = a.get("href", "")
+        if name and href:
+            out.append({"name": name, "url": href if href.startswith("http") else f"{FSS_BASE}{href}"})
+    return out or None
+
+
+_NTT_ID_RE = re.compile(r"nttId=(\d+)")
+
+
+def _fetch_board(part: str, list_url: str, params: dict, *, page_unit: int,
+                 max_pages: int) -> tuple[list[dict], list[str]]:
+    """FSS 일반 게시판(table tbody tr / td.title a / 4번째 칸 등록일) 한 곳을 읽어 우리 카테고리에
+    걸리는 행만 항목으로 만든다(2026-11-14, press·notes 공용). (항목, 부분 실패 사유)를 돌려주고,
+    목록 행을 하나도 못 읽으면 예외 — 관련 행이 없어 0건인 건 정상이다.
+
+    필터는 fsc 보도자료와 같은 기존 파이프라인 그대로: 행사 공지 → classify() → 세목 필터.
+    """
+    items: list[dict] = []
+    page_errors: list[str] = []
+    rows_seen = row_errors = 0
+    for page in range(1, max_pages + 1):
+        if page > 1:
+            time.sleep(SLEEP_BETWEEN_REQUESTS)
+        try:
+            resp = _http.get(list_url, params={**params, "pageUnit": page_unit, "pageIndex": page},
+                             headers={"User-Agent": FSS_UA})
+            rows = BeautifulSoup(resp.text, "html.parser").select("table tbody tr")
+        except Exception as exc:  # noqa: BLE001
+            print(f"[fss] {part} page={page} 수집 실패: {exc}")
+            page_errors.append(f"page={page}: {exc}")
+            break
+        for row in rows:
+            title, url = "", None
+            try:  # 행 단위 격리(11/13 kasb·fsc와 같은 방식)
+                link = row.select_one("td.title a")
+                cells = row.find_all("td")
+                if link is None or len(cells) < 4:
+                    continue  # "등록된 게시물이 없습니다" 같은 안내 행
+                title = link.get_text(strip=True)
+                m = _NTT_ID_RE.search(link.get("href", ""))
+                if not title or not m:
+                    raise ValueError("제목 또는 nttId 없음")
+                # 목록 href엔 sdate·edate·pageIndex가 붙어 매일 바뀐다 — 그대로 id를 만들면 같은 글이
+                # 날마다 새 id(=메일 "신규" 재발송)가 된다. nttId·menuNo만 남긴 URL로 고정한다.
+                url = f"{list_url.rsplit('/', 1)[0]}/view.do?nttId={m.group(1)}&menuNo={params['menuNo']}"
+                published_at = cells[3].get_text(strip=True)
+                pub_date = _parse_iso_date(published_at)
+                rows_seen += 1  # 날짜 해석 성공 뒤에 센다(11/13 fsc 방식)
+                if is_event_announcement(title):
+                    _excluded_log.skip(source="금융감독원", reason="collect:event_announcement",
+                                       title=title, url=url)
+                    continue
+                category = classify(title)
+                if category is None:
+                    _excluded_log.skip(source="금융감독원", reason="collect:no_category", title=title, url=url)
+                    continue
+                if not pass_tax_filter(category=category, layer="L1", text=title):
+                    _excluded_log.skip(source="금융감독원", reason="collect:tax_subject", title=title,
+                                       url=url, category=category)
+                    continue
+                item = _build_item(title=title, url=url, published_at=pub_date.isoformat(),
+                                   doc_type=doc_type_of(title, source_tier=1), domain="fss.or.kr",
+                                   source_name="금융감독원", category=category,
+                                   effective_date=extract_effective_date(title) if category != "tax" else None)
+                item["attachments"] = _row_attachments(row)
+                items.append(item)
+            except Exception as exc:  # noqa: BLE001
+                row_errors += 1
+                shown = title or "(제목 없음)"
+                print(f"[fss] {part} 행 건너뜀: {shown} — {exc}")
+                _excluded_log.skip(source="금융감독원", reason="collect:row_parse_error",
+                                   title=f"{shown} — {exc}", url=url)
+        if len(rows) < page_unit:
+            break  # 마지막 페이지
+    if rows_seen == 0:
+        detail = "; ".join(page_errors) or (f"행 {row_errors}개 전부 해석 실패" if row_errors else "")
+        raise RuntimeError(f"{part} 목록 행 0개 — 전 페이지 실패 또는 페이지 구조 변경·차단 의심"
+                           + (f" ({detail})" if detail else ""))
+    reasons = list(page_errors)
+    if row_errors:
+        reasons.append(f"행 {row_errors}개 해석 실패(건너뜀, EXCLUDED_LOG collect:row_parse_error)")
+    return items, reasons
+
+
+# ── press: 금감원 보도자료(B0000188) — 2026-11-14 사용자 지시로 추가 ──────────────────
+# 전 분야 보도자료(하루 3~8건)라 우리 카테고리에 걸리는 것만 남는다. 서버 쪽 날짜 필터
+# (sdate/edate)와 pageUnit이 실제로 먹는다(실측: 90일 220행을 한 번에 3.6초) — 최근
+# COLLECT_WINDOW_DAYS일만 받는다.
+PRESS_LIST_URL = f"{FSS_BASE}/fss/bbs/B0000188/list.do"
+PRESS_PAGE_UNIT = 300
+PRESS_MAX_PAGES = 2
+
+
+def fetch_press() -> tuple[list[dict], list[str]]:
+    today = datetime.now(_KST).date()
+    start = today - timedelta(days=COLLECT_WINDOW_DAYS)
+    return _fetch_board("press", PRESS_LIST_URL,
+                        {"menuNo": "200218", "sdate": start.isoformat(), "edate": today.isoformat()},
+                        page_unit=PRESS_PAGE_UNIT, max_pages=PRESS_MAX_PAGES)
+
+
+# ── notes: 주석공시 모범사례(B0000128) — 2026-11-14 사용자 지시로 추가 ─────────────────
+# 연 1~2건, 전체 13건(2014~)인 상설 성격 게시판이라 B2처럼 기간 제한 없이 전부 읽는다.
+NOTES_LIST_URL = f"{FSS_BASE}/fss/bbs/B0000128/list.do"
+
+
+def fetch_disclosure_notes() -> tuple[list[dict], list[str]]:
+    return _fetch_board("notes", NOTES_LIST_URL, {"menuNo": "200435"}, page_unit=100, max_pages=1)
+
+
 def part_of(item: dict) -> str:
-    """캐시 항목이 어느 하위 수집(B2/B3)에서 왔는지 — 부분 폴백용(main.SUB_SOURCES)."""
+    """캐시 항목이 어느 하위 수집에서 왔는지 — 부분 폴백용(main.SUB_SOURCES)."""
     url = (item.get("urls") or {}).get("official") or ""
-    return "b3" if "k-icfr.org" in url else "b2"
+    if "k-icfr.org" in url:
+        return "b3"
+    if "/B0000188/" in url:
+        return "press"
+    if "/B0000128/" in url:
+        return "notes"
+    return "b2"
 
 
 def fetch() -> list[dict]:
-    """B2+B3 전체(B1은 참고 자료라 제외). 소스 한 종류가 실패해도 나머지는 계속 진행.
+    """B2+B3+press+notes(B1은 참고 자료라 제외). 소스 한 종류가 실패해도 나머지는 계속 진행.
 
     2026-10-14: 하위 수집이 예외를 내거나 0건이면 실패로 본다. 일부만 실패하면
-    `PartialFetch`로 올려 main이 그 부분만 전일 캐시로 채우게 하고, 둘 다 실패하면
+    `PartialFetch`로 올려 main이 그 부분만 전일 캐시로 채우게 하고, 전부 실패하면
     일반 예외로 올려 소스 단위 폴백을 탄다. 전에는 실패를 print만 하고 삼켜서
-    10/9~10/10 B2 6건이 조용히 빠졌다가 10/11 신규 메일로 다시 나갔다."""
+    10/9~10/10 B2 6건이 조용히 빠졌다가 10/11 신규 메일로 다시 나갔다.
+
+    2026-11-14: press(보도자료)·notes(주석공시 모범사례) 추가. 이 둘은 행 단위 격리 +
+    "목록 행을 읽었는데 관련 항목이 없으면 정상 0건" 기준(fsc 11/13 방식) — 예외·행 0개·
+    행 해석 실패만 부분 실패다. B2·B3의 "0건 = 실패" 기준은 그대로 둔다."""
     out: list[dict] = []
     failed: dict[str, str] = {}
     try:
@@ -248,11 +381,36 @@ def fetch() -> list[dict]:
         failed["b3"] = str(exc)
     if "b3" in failed:
         print(f"[fss] B3(k-icfr.org) 수집 실패: {failed['b3']}")
-    if len(failed) == 2:
-        raise RuntimeError(f"B2·B3 모두 실패 — B2: {failed['b2']} / B3: {failed['b3']}")
+    for part, fn in (("press", fetch_press), ("notes", fetch_disclosure_notes)):
+        if not part_enabled(part):
+            print(f"[fss] {part}: data/source_toggles.yml에서 꺼짐(fss_{part}) — 건너뜀")
+            continue
+        time.sleep(SLEEP_BETWEEN_REQUESTS)
+        try:
+            got, reasons = fn()
+        except Exception as exc:  # noqa: BLE001
+            failed[part] = str(exc)
+            print(f"[fss] {part} 수집 실패: {failed[part]}")
+            continue
+        out.extend(got)
+        if reasons:
+            failed[part] = " / ".join(reasons)
+            print(f"[fss] {part} 부분 실패: {failed[part]}")
+    if len(failed) == sum(map(part_enabled, TRACKED_PARTS)) and not out:
+        raise RuntimeError("fss 하위 수집 모두 실패 — " + " / ".join(f"{p}: {r}" for p, r in failed.items()))
     if failed:
         raise PartialFetch(out, failed, part_of)
     return out
+
+
+# 부분 실패를 따로 세는 하위 수집(main.SUB_SOURCES["fss"]와 같아야 한다).
+TRACKED_PARTS = ("b2", "b3", "press", "notes")
+
+
+def part_enabled(part: str) -> bool:
+    """data/source_toggles.yml에서 `fss_{part}`를 enabled: false로 두면 그 하위 수집만 끈다
+    (2026-11-14, press·notes용 — 코드 수정 없이 한 줄로 끄기)."""
+    return f"fss_{part}" not in DISABLED_SOURCES
 
 
 if __name__ == "__main__":

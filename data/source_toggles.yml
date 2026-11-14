@@ -24,3 +24,14 @@ sources:
 
   - name: policy_briefing
     enabled: true
+
+  # 2026-11-14: 새로 추가한 게시판 3곳은 하위 수집 단위로 따로 끌 수 있다(이름은 "소스_부분").
+  # enabled: false로 바꾸면 그 게시판만 건너뛰고 같은 소스의 나머지 게시판은 그대로 수집한다.
+  - name: fsc_notice   # 금융위원회 입법예고/규정변경예고 (/po040301)
+    enabled: true
+
+  - name: fss_press    # 금융감독원 보도자료 (B0000188)
+    enabled: true
+
+  - name: fss_notes    # 금융감독원 주석공시 모범사례 (B0000128)
+    enabled: true

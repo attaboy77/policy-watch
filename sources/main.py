@@ -69,8 +69,9 @@ ALLOW_EMPTY_SOURCES = {"moef", "fsc", "policy_briefing", "lawmaking"}
 # 2026-10-14: 하위 수집을 여러 개 가진 소스의 부분 키. 어댑터가 `PartialFetch`로
 # 일부 실패를 알리면 실패한 부분만 전일 캐시로 채우고, 연속 실패 횟수는
 # "{소스}_{부분}" 키로 따로 센다(라벨은 `SOURCE_LABELS`).
-SUB_SOURCES = {"fss": ("b2", "b3"), "kasb": ("notices", "qna", "schedule"),  # kasb·fsc: 11/13
-               "fsc": ("list",)}
+SUB_SOURCES = {"fss": ("b2", "b3", "press", "notes"),  # fss press·notes, fsc notice: 11/14
+               "kasb": ("notices", "qna", "schedule"),  # kasb·fsc list: 11/13
+               "fsc": ("list", "notice")}
 
 
 def _fetch_with_timeout(fetch_fn, *, timeout: float):
@@ -188,6 +189,8 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
                 cache[name] = got
                 _source_health.record_success(health, name, now_iso)
                 for part in SUB_SOURCES.get(name, ()):
+                    if f"{name}_{part}" in DISABLED_SOURCES:  # 11/14: 하위 수집만 끈 경우 기록 안 함
+                        continue
                     _source_health.record_success(health, f"{name}_{part}", now_iso)
             else:
                 # 2026-09-09: 예외 없이 빈 리스트가 와도 실패로 본다 — 그대로
@@ -211,7 +214,7 @@ def collect_all() -> tuple[list[dict], list[str], list[dict]]:
                 _use_fallback(f"{name}_{part}", reason, cache, health, now_iso,
                               merged, sources_failed, fallback_items=part_cached)
             for part in SUB_SOURCES.get(name, ()):
-                if part not in pf.failed:
+                if part not in pf.failed and f"{name}_{part}" not in DISABLED_SOURCES:
                     _source_health.record_success(health, f"{name}_{part}", now_iso)
             items.extend(merged)
             sources_ok.append(name)

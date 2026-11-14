@@ -105,6 +105,34 @@ def test_moef_raises_when_no_rows(monkeypatch):
 
 
 # ── fsc / policy_briefing: 행 0개면 실패, 행은 있는데 관련 없으면 정상 0건 ──────
+# 2026-11-14: fsc 하위 수집이 list(보도자료)·notice(입법예고) 둘이 돼서 URL로 응답을 나눈다.
+def _notice_li(title, day, n, period=("2026-11-02", "2026-12-14")):
+    return (f'<li><div class="inner"><div class="count">{n}</div><div class="cont">'
+            f'<div class="subject"><a href="./po040301/view?noticeId={n}&curPage=&srchKey=">{title}</a></div>'
+            f'<div class="info"><span>구분 : 규정변경예고</span>'
+            f'<span>예고기간 : {period[0]} ~ {period[1]}</span></div>'
+            f'<div class="file"><div class="file-list"><span class="name">1. 공고문.hwpx (36 KB)</span>'
+            f'<span class="ico download"><a href="/comm/getFile?srvcId=RULENOTICE&upperNo={n}&fileNo=1">'
+            f'다운로드</a></span></div></div></div><div class="day">{day}</div></div></li>')
+
+
+def _recent(days_ago=1):
+    from datetime import date, timedelta
+    return (date.today() - timedelta(days=days_ago)).isoformat()
+
+
+UNRELATED_NOTICE = "<ul>" + _notice_li("「예금자보호법」 일부개정법률안 입법예고", _recent(), 9001) + "</ul>"
+
+
+def _route(list_html, notice_html=UNRELATED_NOTICE):
+    """list는 모든 페이지에 같은 HTML, notice는 1페이지에만 행이 있다(2페이지부터 빈 목록)."""
+    def get(url, params=None, **kw):
+        if "po040301" in url:
+            return SimpleNamespace(text=notice_html if (params or {}).get("curPage", 1) == 1 else "<ul></ul>")
+        return SimpleNamespace(text=list_html)
+    return get
+
+
 def test_fsc_raises_when_every_page_fails(monkeypatch):
     def boom(*a, **kw):
         raise RuntimeError("timeout")
@@ -117,7 +145,7 @@ def test_fsc_raises_when_every_page_fails(monkeypatch):
 def test_fsc_unrelated_rows_return_empty_without_error(monkeypatch):
     html = ('<ul><li><div class="subject"><a href="/no/1">보험업 감독규정 개정</a></div>'
             '<div class="day">2026-09-30</div></li></ul>')
-    monkeypatch.setattr(fsc._http, "get_govt", lambda *a, **kw: SimpleNamespace(text=html))
+    monkeypatch.setattr(fsc._http, "get_govt", _route(html))
     monkeypatch.setattr("time.sleep", lambda s: None)
     assert fsc.fetch(max_pages=1) == []
 
@@ -128,9 +156,9 @@ def _fsc_li(title, day, n):
             f'<div class="day">{day}</div></li>')
 
 
-def _mock_fsc(monkeypatch, lis):
+def _mock_fsc(monkeypatch, lis, notice_html=UNRELATED_NOTICE):
     html = "<ul>" + "".join(lis) + "</ul>"
-    monkeypatch.setattr(fsc._http, "get_govt", lambda *a, **kw: SimpleNamespace(text=html))
+    monkeypatch.setattr(fsc._http, "get_govt", _route(html, notice_html))
     monkeypatch.setattr("time.sleep", lambda s: None)
     skipped = []
     monkeypatch.setattr(fsc._excluded_log, "skip", lambda **kw: skipped.append(kw))
@@ -154,9 +182,12 @@ def test_fsc_bad_date_row_skipped_rest_kept_and_partial(monkeypatch):
 
 def test_fsc_all_rows_bad_date_is_failure_not_empty_success(monkeypatch):
     # 전엔 행 수를 날짜 해석 전에 세서 이 경우 "0건 정상"이 됐다.
+    # 2026-11-14: notice는 정상이라 소스 전체가 아니라 list 부분 실패로 올라온다.
+    from sources import _source_health as sh
     _mock_fsc(monkeypatch, [_fsc_li("보험업 감독규정 개정", "2026.11.12", 1)])
-    with pytest.raises(RuntimeError, match="행 0개"):
+    with pytest.raises(sh.PartialFetch) as ei:
         fsc.fetch(max_pages=1)
+    assert set(ei.value.failed) == {"list"} and "행 0개" in ei.value.failed["list"]
 
 
 def test_fsc_page_failure_is_partial(monkeypatch):
@@ -164,6 +195,8 @@ def test_fsc_page_failure_is_partial(monkeypatch):
     good = "<ul>" + _fsc_li("ESG 공시기준 로드맵 발표", "2026-11-12", 2) + "</ul>"
 
     def get(url, params, **kw):
+        if "po040301" in url:
+            return SimpleNamespace(text=UNRELATED_NOTICE)
         if params["curPage"] == 2:
             raise RuntimeError("read timeout")
         return SimpleNamespace(text=good)
@@ -172,6 +205,98 @@ def test_fsc_page_failure_is_partial(monkeypatch):
     with pytest.raises(sh.PartialFetch) as ei:
         fsc.fetch(max_pages=2)
     assert "page=2" in ei.value.failed["list"] and len(ei.value.items) == 1
+
+
+# ── 2026-11-14: fsc notice(입법예고/규정변경예고, /po040301) ─────────────────────────
+def test_fsc_notice_matching_row_becomes_item(monkeypatch):
+    day = _recent()
+    notice = "<ul>" + _notice_li("「외부감사 및 회계 등에 관한 규정」일부개정고시안 규정변경예고", day, 4170,
+                                 period=("2026-09-18", "2026-09-28")) + "</ul>"
+    _mock_fsc(monkeypatch, [_fsc_li("보험업 감독규정 개정", "2026-11-12", 1)], notice_html=notice)
+    items = fsc.fetch(max_pages=1)
+    assert len(items) == 1
+    it = items[0]
+    assert it["urls"]["official"] == "https://www.fsc.go.kr/po040301/view?noticeId=4170"
+    assert it["published_at"] == day and it["effective_date"] is None
+    assert it["_body"] == "의견 접수기간 2026.09.18~2026.09.28"
+    assert it["attachments"][0]["name"].startswith("1. 공고문")
+    assert fsc.part_of(it) == "notice"
+
+
+def test_fsc_notice_unrelated_rows_is_normal_zero(monkeypatch):
+    skipped = _mock_fsc(monkeypatch, [_fsc_li("보험업 감독규정 개정", "2026-11-12", 1)])
+    assert fsc.fetch(max_pages=1) == []
+    assert any(s["reason"] == "collect:no_category" and "예금자보호법" in s["title"] for s in skipped)
+
+
+def test_fsc_notice_no_rows_is_partial_and_list_kept(monkeypatch):
+    from sources import _source_health as sh
+    _mock_fsc(monkeypatch, [_fsc_li("ESG 공시기준 로드맵 발표", "2026-11-12", 2)],
+              notice_html="<html>차단</html>")
+    with pytest.raises(sh.PartialFetch) as ei:
+        fsc.fetch(max_pages=1)
+    assert set(ei.value.failed) == {"notice"} and "행 0개" in ei.value.failed["notice"]
+    assert [i["title"] for i in ei.value.items] == ["ESG 공시기준 로드맵 발표"]
+
+
+def test_fsc_notice_bad_row_isolated(monkeypatch):
+    from sources import _source_health as sh
+    notice = ("<ul>" + _notice_li("「외부감사 및 회계 등에 관한 규정」 개정고시안 규정변경예고", "2026.11.02", 1)
+              + _notice_li("「예금자보호법」 일부개정법률안 입법예고", _recent(), 2) + "</ul>")
+    skipped = _mock_fsc(monkeypatch, [_fsc_li("보험업 감독규정 개정", "2026-11-12", 1)], notice_html=notice)
+    with pytest.raises(sh.PartialFetch) as ei:
+        fsc.fetch(max_pages=1)
+    assert set(ei.value.failed) == {"notice"} and "행 1개 해석 실패" in ei.value.failed["notice"]
+    assert [s for s in skipped if s["reason"] == "collect:row_parse_error"]
+
+
+def test_fsc_notice_stops_paging_past_window_and_skips_old_rows(monkeypatch):
+    pages = {1: "<ul>" + _notice_li("「예금자보호법」 개정안 입법예고", _recent(), 2)
+                + _notice_li("「외부감사 및 회계 등에 관한 규정」 개정고시안 규정변경예고", _recent(400), 1)
+                + "</ul>"}
+    calls = []
+
+    def get(url, params=None, **kw):
+        if "po040301" in url:
+            calls.append(params["curPage"])
+            return SimpleNamespace(text=pages.get(params["curPage"], "<ul></ul>"))
+        return SimpleNamespace(text="<ul>" + _fsc_li("보험업 감독규정 개정", "2026-11-12", 1) + "</ul>")
+    monkeypatch.setattr(fsc._http, "get_govt", get)
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    skipped = []
+    monkeypatch.setattr(fsc._excluded_log, "skip", lambda **kw: skipped.append(kw))
+    assert fsc.fetch(max_pages=1) == []
+    assert calls == [1]  # 페이지의 가장 오래된 행이 기간 밖 → 다음 페이지는 안 읽음
+    assert any(s["reason"] == "collect:out_of_window" and "외부감사" in s["title"] for s in skipped)
+
+
+def test_fsc_notice_reads_next_page_while_in_window(monkeypatch):
+    pages = {1: "<ul>" + _notice_li("「예금자보호법」 개정안 입법예고", _recent(1), 2) + "</ul>",
+             2: "<ul>" + _notice_li("「은행법」 개정안 입법예고", _recent(400), 1) + "</ul>"}
+    calls = []
+
+    def get(url, params=None, **kw):
+        if "po040301" in url:
+            calls.append(params["curPage"])
+            return SimpleNamespace(text=pages.get(params["curPage"], "<ul></ul>"))
+        return SimpleNamespace(text="<ul>" + _fsc_li("보험업 감독규정 개정", "2026-11-12", 1) + "</ul>")
+    monkeypatch.setattr(fsc._http, "get_govt", get)
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    monkeypatch.setattr(fsc._excluded_log, "skip", lambda **kw: None)
+    fsc.fetch(max_pages=1)
+    assert calls == [1, 2]
+
+
+def test_fsc_both_parts_failed_raises(monkeypatch):
+    monkeypatch.setattr(fsc._http, "get_govt", lambda *a, **kw: SimpleNamespace(text="<html>차단</html>"))
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    with pytest.raises(RuntimeError, match="list: .*notice: "):
+        fsc.fetch(max_pages=1)
+
+
+def test_fsc_tracked_parts_match_main_sub_sources():
+    from sources import main
+    assert tuple(main.SUB_SOURCES["fsc"]) == fsc.TRACKED_PARTS
 
 
 def test_policy_briefing_raises_when_no_rows(monkeypatch):
@@ -186,3 +311,18 @@ def test_policy_briefing_other_ministries_only_is_normal_zero(monkeypatch):
             '<span class="source"><span>2026.09.30</span><span>고용노동부</span></span></li></ul>')
     monkeypatch.setattr(policy_briefing._http, "get_govt", lambda *a, **kw: SimpleNamespace(text=html))
     assert policy_briefing.fetch(max_pages=1) == []
+
+
+# ── 2026-11-14: fsc notice만 끄기(data/source_toggles.yml fsc_notice) ────────────────
+def test_fsc_disabled_notice_is_not_requested(monkeypatch):
+    monkeypatch.setattr(fsc, "DISABLED_SOURCES", {"fsc_notice": ""})
+    urls = []
+
+    def get(url, *a, **kw):
+        urls.append(url)
+        return SimpleNamespace(text="<ul>" + _fsc_li("ESG 공시기준 로드맵 발표", "2026-11-12", 2) + "</ul>")
+    monkeypatch.setattr(fsc._http, "get_govt", get)
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    items = fsc.fetch(max_pages=1)
+    assert [i["title"] for i in items] == ["ESG 공시기준 로드맵 발표"]
+    assert not any("po040301" in u for u in urls)
