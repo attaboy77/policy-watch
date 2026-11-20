@@ -58,6 +58,22 @@ img{ display:none; } /* SPEC §7-5: 이미지 사용 금지 — 실수로 들어
   }
 }
 
+/* 2026-11-20: 과거 기간(주소의 from/to) 안내 띠 */
+.stale-range{
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px 12px;
+  margin:12px 24px 0; padding:10px 16px;
+  background:#fff7ed; color:#9a3412;
+  border:1px solid #fdba74; border-radius:var(--r);
+  font-weight:600; font-size:14px;
+}
+.stale-range[hidden]{ display:none; }
+.stale-range-btn{
+  padding:4px 12px; border-radius:6px; border:1px solid #c2410c;
+  background:#c2410c; color:#fff; font:inherit; font-size:13px; cursor:pointer;
+}
+.stale-range-btn:hover{ background:#9a3412; }
+@media (max-width:640px){ .stale-range{ margin:8px 16px 0; } }
+
 /* ── 상단 네비게이션 ─────────────────────────────────────────────── */
 .nav{
   position:sticky; top:0; z-index:50;

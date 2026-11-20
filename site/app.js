@@ -129,6 +129,9 @@
     doctypes: [],   // 빈 배열 = 전체
     from: addDaysISO(todayISO(), -DEFAULT_RANGE_DAYS),
     to: todayISO(),
+    // 2026-11-20: 상대 기간(최근 N일)이면 N, 직접 입력한 절대 기간이면 null.
+    // 주소에는 상대 기간을 ?days=N으로 적어 즐겨찾기가 과거 기간에 고정되지 않게 한다.
+    days: DEFAULT_RANGE_DAYS,
     sort: "importance",
     q: "",  // ADDENDUM-8 §1: 검색어. 오늘의 정책동향/전체 동향 둘 다에 적용(§1-1).
   };
@@ -139,13 +142,47 @@
   var calFullViewDate = new Date(); calFullViewDate.setDate(1); // 시행일 캘린더 탭의 표시 중인 달
 
   // ── URL 쿼리 동기화 ──────────────────────────────────────────────────
+  var ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  var MAX_RANGE_DAYS = 3650;
+  var STALE_RANGE_DAYS = 14;  // 절대 기간 종료일이 오늘보다 이만큼 이상 과거면 안내
+
+  // 최근 N일 — 오늘 기준으로 매번 다시 계산되는 상대 기간.
+  function setRelativeRange(days) {
+    state.days = days;
+    state.to = todayISO();
+    state.from = addDaysISO(state.to, -days);
+  }
+
+  // 2026-11-20: 주소에 절대 날짜가 있고 종료일이 14일 이상 지났으면 화면 위쪽에 안내한다.
+  function isStaleRange() {
+    return state.days == null && dday(state.to) <= -STALE_RANGE_DAYS;
+  }
+
+  function updateStaleRangeBanner() {
+    var el = document.getElementById("staleRangeBanner");
+    if (!el) return;
+    var stale = isStaleRange();
+    el.hidden = !stale;
+    if (stale) {
+      document.getElementById("staleRangeText").textContent =
+        "과거 기간(" + fmtDot(state.from) + "~" + fmtDot(state.to) + ")을 보고 있습니다.";
+    }
+  }
+
   function stateFromURL() {
     var p = new URLSearchParams(location.search);
     if (["today", "all", "calendar", "standards"].indexOf(p.get("view")) !== -1) state.view = p.get("view");
     if (p.get("cat")) state.cats = p.get("cat").split(",").filter(Boolean);
     if (p.get("doctype")) state.doctypes = p.get("doctype").split(",").filter(Boolean);
-    if (p.get("from")) state.from = p.get("from");
-    if (p.get("to")) state.to = p.get("to");
+    // 2026-11-20: ?days=N(상대 기간)을 우선한다. 기존 ?from=&to= 공유 링크도 그대로 동작한다.
+    var days = parseInt(p.get("days"), 10);
+    if (/^\d+$/.test(p.get("days") || "") && days > 0 && days <= MAX_RANGE_DAYS) {
+      setRelativeRange(days);
+    } else {
+      var from = p.get("from"), to = p.get("to");
+      if (ISO_DATE_RE.test(from || "")) { state.from = from; state.days = null; }
+      if (ISO_DATE_RE.test(to || "")) { state.to = to; state.days = null; }
+    }
     if (p.get("sort") === "latest" || p.get("sort") === "importance") state.sort = p.get("sort");
     if (p.get("q")) state.q = p.get("q");
   }
@@ -155,8 +192,12 @@
     if (state.view !== "today") p.set("view", state.view);
     if (state.cats.length) p.set("cat", state.cats.join(","));
     if (state.doctypes.length) p.set("doctype", state.doctypes.join(","));
-    p.set("from", state.from);
-    p.set("to", state.to);
+    if (state.days != null) {
+      p.set("days", String(state.days));
+    } else {
+      p.set("from", state.from);
+      p.set("to", state.to);
+    }
     if (state.sort !== "importance") p.set("sort", state.sort);
     if (state.q) p.set("q", state.q);
     var qs = p.toString();
@@ -296,6 +337,7 @@
         document.getElementById("widenAllBtn").addEventListener("click", function () {
           state.from = "2000-01-01";
           state.to = todayISO();
+          state.days = null;
           refreshDateInputs();
           applyAndRender();
         });
@@ -305,8 +347,7 @@
         '<div class="empty-state">조건에 맞는 항목이 없습니다. 기간을 넓히거나 카테고리를 추가해 보세요.' +
         '<div><button type="button" class="btn btn-outline" id="widen90Btn">최근 90일로 보기</button></div></div>';
       document.getElementById("widen90Btn").addEventListener("click", function () {
-        state.from = addDaysISO(todayISO(), -90);
-        state.to = todayISO();
+        setRelativeRange(90);
         refreshDateInputs();
         applyAndRender();
       });
@@ -976,8 +1017,7 @@
   function resetFilters() {
     state.cats = [];
     state.doctypes = [];
-    state.to = todayISO();
-    state.from = addDaysISO(state.to, -DEFAULT_RANGE_DAYS);
+    setRelativeRange(DEFAULT_RANGE_DAYS);
     state.sort = "importance";
     setQuery("");
     refreshDateInputs();
@@ -992,6 +1032,7 @@
     renderScheduleList();
     updateCatChipsUI();
     updateQuickRangeUI();
+    updateStaleRangeBanner();
     // ADDENDUM-8 §1-1: 검색은 오늘의 정책동향에도 적용된다 — 그 탭이 보이는
     // 중이면 같이 다시 그린다(다른 필터는 today 탭에 영향 없음, 검색만 예외).
     if (state.view === "today") renderTodayView();
@@ -1051,20 +1092,27 @@
       var to = document.getElementById("dateTo").value;
       if (from) state.from = from;
       if (to) state.to = to;
+      state.days = null;  // 직접 입력한 기간만 주소에 ?from=&to=로 남긴다
       applyAndRender();
     });
 
     Array.prototype.forEach.call(document.querySelectorAll(".quick-range"), function (btn) {
       btn.addEventListener("click", function () {
         var days = parseInt(btn.getAttribute("data-days"), 10);
-        state.to = todayISO();
-        state.from = addDaysISO(state.to, -days);
+        setRelativeRange(days);
         refreshDateInputs();
         applyAndRender();
       });
     });
 
     document.getElementById("resetFiltersBtn").addEventListener("click", resetFilters);
+
+    // [최근으로 보기]: 주소의 날짜를 지우고 기본 범위(최근 DEFAULT_RANGE_DAYS일)로.
+    document.getElementById("staleRangeBtn").addEventListener("click", function () {
+      setRelativeRange(DEFAULT_RANGE_DAYS);
+      refreshDateInputs();
+      applyAndRender();
+    });
 
     document.getElementById("sortSelect").addEventListener("change", function (e) {
       state.sort = e.target.value;
