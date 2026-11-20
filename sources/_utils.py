@@ -19,6 +19,7 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS,
                       LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS, GENERIC_USE_CCTLDS,
                       NON_TARGET_TAX_SUBJECTS, OPINION_PREFIX_KEYWORDS,
+                      FOREIGN_TAX_COUNTRIES, FOREIGN_TAX_BILATERAL_PREFIXES,
                       STANDARD_SETTER_GOVERNANCE, STANDING_DOC, STANDING_DOC_FRESH_DAYS,
                       DOC_VARIANT_MODIFIERS, SELF_ACTIVITY_PUBLIC_SUFFIXES,
                       SELF_ACTIVITY_PUBLIC_ABBREV_RE, SELF_ACTIVITY_STAKEHOLDERS,
@@ -1299,6 +1300,35 @@ def is_foreign_news_only(title: str, domain: str | None = None) -> bool:
     if not any(_norm(k) in t for k in FOREIGN_NEWS_SIGNALS):
         return False
     return not any(_norm(k) in t for k in APPLICABILITY["foreign_exception_context"])
+
+
+def is_foreign_tax_news(category: str, title: str) -> bool:
+    """2026-11-20: tax 항목 중 외국 세제 기사(제목에 `FOREIGN_TAX_COUNTRIES` 국가·지역 이름).
+    "국내 진출기업" 맥락이 있어도 제외한다(현지 세무는 현지 법인 업무). 한국과의 양자
+    조세조약("한-베트남 …")은 예외. 해외 뉴스 필터(`is_foreign_news_only`)와는 별개다."""
+    if category != "tax":
+        return False
+    t = title or ""
+    tl = t.lower()
+    for name in FOREIGN_TAX_COUNTRIES:
+        start = tl.find(name.lower())
+        while start != -1:
+            before = t[max(0, start - 3):start]
+            if not any(before.endswith(p) for p in FOREIGN_TAX_BILATERAL_PREFIXES):
+                return True
+            start = tl.find(name.lower(), start + 1)
+    return False
+
+
+def apply_foreign_tax_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """전 계층, tax만. `is_foreign_tax_news()` 참고."""
+    kept, excluded = [], []
+    for it in items:
+        if not is_foreign_tax_news(it.get("category", ""), it.get("title", "")):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:foreign_tax"))
+    return kept, excluded
 
 
 def apply_foreign_news_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:

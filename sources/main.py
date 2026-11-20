@@ -25,7 +25,7 @@ from ._utils import (apply_applicability_gate, apply_blog_community_filter,
                      apply_company_event_filter_with_excluded, apply_company_self_activity_filter,
                      apply_corporate_pr_filter, apply_excluded_ids_filter,
                      apply_internal_activity_filter,
-                     apply_foreign_news_filter, apply_local_gov_petition_filter, apply_news_age_limit,
+                     apply_foreign_news_filter, apply_foreign_tax_filter, apply_local_gov_petition_filter, apply_news_age_limit,
                      apply_non_target_tax_subject_filter, apply_opinion_piece_filter, apply_reader_content_filter,
                      apply_regulatory_gate, apply_standard_setter_governance_filter,
                      attach_related_news_with_excluded, dedupe,
@@ -325,6 +325,11 @@ def build_data_json(items: list[dict], prior_news_urls: dict[str, str] | None = 
     items, excluded = apply_non_target_tax_subject_filter(items)  # 2026-09-10
     _record_excluded(excluded)
     _log_stage("비대상 세목 제외 후", items, n)
+    # 2026-11-20: 외국 세제 기사(베트남 부가세·UAE 법인세 등) — 비대상 세목과 같은 성격이라 바로 다음.
+    n = len(items)
+    items, excluded = apply_foreign_tax_filter(items)
+    _record_excluded(excluded)
+    _log_stage("외국 세제 기사 제외 후", items, n)
     # 2026-10-01: 기준 제정 절차·조직(IFRS 재단 정관·Due Process·Trustees·의제 협의)은
     # 공식 L1 포함 전 계층에서 제외 — 적용 대상 게이트와 같은 성격이라 바로 다음 자리.
     n = len(items)
