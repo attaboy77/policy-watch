@@ -250,8 +250,10 @@ class TestScoring:
 
 # ── 중복 제거 ────────────────────────────────────────────────────────────
 class TestDedupe:
-    def test_make_id_strips_query_and_fragment(self):
-        a = make_id("https://law.go.kr/path?x=1#frag")
+    def test_make_id_strips_tracking_params_and_fragment(self):
+        # 2026-11-20: 쿼리를 통째로 지우던 것을 추적 파라미터만 버리게 바꿨다
+        # (tests/test_make_id.py 참고). 프래그먼트·추적 파라미터만 있으면 경로와 같은 id.
+        a = make_id("https://law.go.kr/path?utm_source=naver&fbclid=x#frag")
         b = make_id("https://law.go.kr/path")
         assert a == b
 

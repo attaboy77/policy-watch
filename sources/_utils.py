@@ -3,7 +3,7 @@
 """
 import hashlib, re
 from datetime import date, datetime, timezone, timedelta
-from urllib.parse import urlparse, quote_plus
+from urllib.parse import urlparse, quote_plus, parse_qsl, urlencode
 from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       DEFAULT_TIER, DEFAULT_TRUST, DOC_TYPE_RULES,
                       INCIDENT_KEYWORDS, PROCEDURAL_KEYWORDS, TAX_INVESTIGATION_COMBO,
@@ -354,8 +354,36 @@ def final_score(trust: int, kw: int, rec: int) -> float:
 
 
 # ── 6) 중복 제거 ─────────────────────────────────────────────────────────
+# 2026-11-20: 뉴스 URL id에서 버리는 추적 파라미터(블랙리스트). 이 밖의 파라미터는 전부
+# id에 남긴다 — 모르는 사이트의 모르는 기사번호 파라미터가 뭉개지지 않게.
+# 예전 make_id()는 쿼리를 통째로 지워서 articleView.html?idxno=… 꼴 사이트의 기사가
+# 사이트당 id 하나로 뭉개졌다(정확 일치 중복으로 잘못 제거 — 10/29~ 32건, 조세일보
+# 감리지적사례 연재 등). 공식 소스는 같은 버그를 make_id_exact()로 이미 고쳤고(law_api
+# 18건→1건) 뉴스(google_news·naver_news)만 남아 있었다.
+# "oc"는 구글 뉴스 RSS 링크(…/rss/articles/<기사키>?oc=5)의 출력 옵션이다. 기사 키는 경로에
+# 있고, 남기면 구글 뉴스 항목 id가 전부 바뀌어 요약 캐시·디코딩 캐시를 잃는다.
+TRACKING_PARAM_PREFIXES = ("utm_",)
+TRACKING_PARAMS = frozenset({
+    "fbclid", "gclid", "igshid", "dclid", "gbraid", "wbraid", "msclkid", "yclid",
+    "mc_cid", "mc_eid", "_ga", "_gl", "oc",
+})
+
+
+def _is_tracking_param(name: str) -> bool:
+    n = name.lower()
+    return n in TRACKING_PARAMS or n.startswith(TRACKING_PARAM_PREFIXES)
+
+
 def make_id(url: str) -> str:
-    canon = re.sub(r"[?#].*$", "", (url or "").strip().lower())
+    """뉴스 URL id. 소문자화·프래그먼트 제거 후 추적 파라미터만 버리고 나머지 쿼리는
+    정렬해 남긴다(순서가 달라도 같은 id). 남는 파라미터가 없으면 예전 make_id()와 같은
+    값이다 — 쿼리 없는 URL·추적 파라미터만 있는 URL의 id는 바뀌지 않는다."""
+    u = (url or "").strip().lower()
+    u = u.split("#", 1)[0]
+    base, _, query = u.partition("?")
+    kept = sorted((k, v) for k, v in parse_qsl(query, keep_blank_values=True)
+                  if not _is_tracking_param(k))
+    canon = base + ("?" + urlencode(kept) if kept else "")
     return hashlib.sha1(canon.encode()).hexdigest()[:16]
 
 
