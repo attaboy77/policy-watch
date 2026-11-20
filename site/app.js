@@ -146,11 +146,14 @@
   var MAX_RANGE_DAYS = 3650;
   var STALE_RANGE_DAYS = 14;  // 절대 기간 종료일이 오늘보다 이만큼 이상 과거면 안내
 
+  var ALL_RANGE_FROM = "2000-01-01";  // "전체 기간"(?days=all)의 시작일
+
   // 최근 N일 — 오늘 기준으로 매번 다시 계산되는 상대 기간.
+  // days === "all"이면 전체 기간(ALL_RANGE_FROM ~ 오늘, 2026-11-20 추가).
   function setRelativeRange(days) {
     state.days = days;
     state.to = todayISO();
-    state.from = addDaysISO(state.to, -days);
+    state.from = days === "all" ? ALL_RANGE_FROM : addDaysISO(state.to, -days);
   }
 
   // 2026-11-20: 주소에 절대 날짜가 있고 종료일이 14일 이상 지났으면 화면 위쪽에 안내한다.
@@ -176,7 +179,9 @@
     if (p.get("doctype")) state.doctypes = p.get("doctype").split(",").filter(Boolean);
     // 2026-11-20: ?days=N(상대 기간)을 우선한다. 기존 ?from=&to= 공유 링크도 그대로 동작한다.
     var days = parseInt(p.get("days"), 10);
-    if (/^\d+$/.test(p.get("days") || "") && days > 0 && days <= MAX_RANGE_DAYS) {
+    if (p.get("days") === "all") {
+      setRelativeRange("all");
+    } else if (/^\d+$/.test(p.get("days") || "") && days > 0 && days <= MAX_RANGE_DAYS) {
       setRelativeRange(days);
     } else {
       var from = p.get("from"), to = p.get("to");
@@ -335,9 +340,7 @@
           applyAndRender();
         });
         document.getElementById("widenAllBtn").addEventListener("click", function () {
-          state.from = "2000-01-01";
-          state.to = todayISO();
-          state.days = null;
+          setRelativeRange("all");
           refreshDateInputs();
           applyAndRender();
         });

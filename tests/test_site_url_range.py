@@ -122,3 +122,32 @@ class TestStaleRangeBanner:
         assert page.input_value("#dateFrom") == "2026-10-21"
         assert page.input_value("#dateTo") == "2026-11-20"
         assert page.is_hidden("#staleRangeBanner")
+
+
+class TestAllRange:
+    """2026-11-20 추가: "전체 기간으로 조회"도 상대 표기(?days=all)로 적는다."""
+
+    def test_widen_all_button_writes_days_all(self, open_page):
+        # 검색 결과가 없을 때만 "전체 기간으로 조회" 버튼이 나온다.
+        page = open_page("?view=all&q=절대없는검색어zzqx")
+        page.click("#widenAllBtn")
+        q = _query(page)
+        assert q.get("days") == ["all"]
+        assert "from" not in q and "to" not in q
+        assert page.input_value("#dateFrom") == "2000-01-01"
+        assert page.input_value("#dateTo") == "2026-11-20"
+
+    def test_days_all_bookmark_tracks_today_without_banner(self, open_page):
+        page = open_page("?days=all")
+        assert page.input_value("#dateFrom") == "2000-01-01"
+        assert page.input_value("#dateTo") == "2026-11-20"
+        assert page.is_hidden("#staleRangeBanner")
+        assert _query(page).get("days") == ["all"]
+
+    def test_legacy_absolute_all_range_link_unchanged(self, open_page):
+        # 예전 방식으로 저장된 전체 기간 링크는 절대 기간 그대로 동작한다.
+        page = open_page("?from=2000-01-01&to=2026-10-01")
+        assert page.input_value("#dateTo") == "2026-10-01"
+        q = _query(page)
+        assert q.get("from") == ["2000-01-01"] and q.get("to") == ["2026-10-01"]
+        assert page.is_visible("#staleRangeBanner")
