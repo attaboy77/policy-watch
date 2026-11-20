@@ -20,10 +20,14 @@ name: 정책 수집 및 배포
 # 따로 돌려야 했다(사용자 지시). `detect` 잡을 추가해 push된 커밋 범위에
 # data/summary_cache.json이 포함됐는지 확인하고, 포함됐으면 crawl도 돌게
 # 했다 — site/ 같은 화면 파일만 바뀐 push는 여전히 배포만 한다.
+#
+# 2026-11-20: cron을 07:00 → 06:37 KST로 옮겼다(사용자 지시). 정각(분 0)은 전 세계
+# 예약 작업이 몰려 대기가 길어서 분을 어중간하게 두고, 지연이 생겨도 조금이라도
+# 이르게 받도록 23분 당겼다. 위 2026-09-01 메모의 "SPEC.md 07:00 KST"와는 이제 다르다.
 
 on:
   schedule:
-    - cron: "0 22 * * *"  # 07:00 KST
+    - cron: "37 21 * * *"  # 06:37 KST
   workflow_dispatch:
     inputs:
       force_mail:
