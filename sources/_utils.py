@@ -45,12 +45,70 @@ def _required_list(cat_key: str) -> list[str]:
     return c["required"]
 
 
+# ── 0-2) 분류 단계 전용 필수 키워드 (2026-11-20) ────────────────────────────
+# 필터·검색 쪽에서 이미 쓰는 목록이 분류(classify/match_loose)에는 안 쓰여 앞뒤가
+# 안 맞던 것을 맞춘다. 구글 뉴스 검색어(build_google_query → _required_list)에는
+# 넣지 않는다 — 수집 범위는 그대로 두고 "가져온 것을 버리지 않게"만 한다.
+#  - tax: data/tax_subjects.yml 활성 세목의 keywords·laws(세목 필터가 쓰는 목록 그대로).
+#    tax 필수 키워드가 세법·세제개편·유권해석 3개뿐이라 "글로벌최저한세 신고 준비"처럼
+#    세목 이름만 있는 제목은 세목 필터에 닿기도 전에 미분류로 버려졌다.
+#    상속세·증여세(NON_TARGET_TAX_SUBJECTS)는 분류 뒤 apply_non_target_tax_subject_filter가
+#    지금처럼 뺀다.
+#  - 그 밖의 카테고리: CATEGORIES[k]["classify_extra"](esg의 네이버 검색어 2개).
+#
+# 세목 이름 단어 경계: 앞쪽은 보지 않는다 — "국내생산세액공제"·"이연법인세"·
+# "매입세금계산서"처럼 앞에 다른 말이 붙은 합성어가 정상이다. 뒤쪽은 "…세" 다음에
+# 다른 낱말이 이어 붙어 뜻이 바뀌는 경우만 막는다(실측: "인천지방세무사회"가
+# "지방세"로 잡힘 → 세무·세대·세관·세계·세력·세균). "국제조세조정"·"법인세회계기준"·
+# "지방세제"처럼 뒤에 붙는 정상 합성어는 그대로 통과한다. 두 글자 이름("면세")은
+# 앞뒤 모두 한글이 붙으면 안 된다("감면세액"·"면세점" 방지).
+_TAX_NAME_BAD_NEXT_AFTER_SE = ("무", "대", "관", "계", "력", "균")
+
+
+def _tax_subject_name_patterns() -> list[tuple[str, "re.Pattern[str]"]]:
+    names: list[str] = []
+    for subject in TAX_SUBJECTS:
+        for k in list(subject.get("keywords", [])) + list(subject.get("laws", [])):
+            if k and k not in names:
+                names.append(k)
+    out = []
+    for k in names:
+        body = r"\s*".join(re.escape(ch) for ch in k.replace(" ", ""))
+        if len(k.replace(" ", "")) <= 2:
+            rx = r"(?<![가-힣])" + body + r"(?![가-힣])"
+        elif k.endswith("세"):
+            rx = body + "(?![" + "".join(_TAX_NAME_BAD_NEXT_AFTER_SE) + "])"
+        else:
+            rx = body
+        out.append((k, re.compile(rx, re.IGNORECASE)))
+    return out
+
+
+_TAX_NAME_PATTERNS = _tax_subject_name_patterns()
+
+
+def tax_subject_name_hits(text: str) -> list[str]:
+    """제목에 든 활성 세목 이름(data/tax_subjects.yml keywords·laws) — 단어 경계 적용."""
+    return [k for k, rx in _TAX_NAME_PATTERNS if rx.search(text or "")]
+
+
+def _classify_extra_hits(text: str, cat_key: str) -> list[str]:
+    """분류 단계에서만 필수 키워드로 인정하는 추가 목록의 히트(0-2 참고)."""
+    if cat_key == "tax":
+        return tax_subject_name_hits(text)
+    t = _norm(text)
+    return [k for k in CATEGORIES[cat_key].get("classify_extra", []) if _norm(k) in t]
+
+
 def _has_required_match(text: str, cat_key: str) -> bool:
     """카테고리 확정 여부(통과/탈락) 판정. required_strong/required_weak로 나뉜
     카테고리는 약한 키워드가 weak_context와 함께 있을 때만 통과시킨다.
+    2026-11-20: 분류 전용 추가 목록(`_classify_extra_hits`)에 걸려도 통과.
     """
     c = CATEGORIES[cat_key]
     t = _norm(text)
+    if _classify_extra_hits(text, cat_key):
+        return True
     if "required_strong" in c:
         if any(_norm(k) in t for k in c["required_strong"]):
             return True
@@ -103,6 +161,12 @@ def keyword_score(text: str, cat_key: str) -> int:
     c = CATEGORIES[cat_key]
     hit_req = sum(1 for k in _required_list(cat_key) if _norm(k) in t)
     hit_com = sum(1 for k in c["combine"]  if _norm(k) in t)
+    # 2026-11-20: 분류 전용 추가 목록(_classify_extra_hits)으로만 통과한 제목은 그 히트를
+    # 필수 키워드처럼 친다. 기존 필수 키워드가 이미 있으면 더하지 않는다 — 기존 항목의
+    # 점수·순위는 그대로 두기 위해서다("법인세법"은 "세법"으로 이미 20점). 조합 키워드와
+    # 같은 단어("공급망 실사")도 조합으로 이미 세었으니 빼고 센다.
+    if hit_req == 0:
+        hit_req = sum(1 for k in _classify_extra_hits(text, cat_key) if k not in c["combine"])
     # "세무조사"는 combine 목록에 없다(단독 매칭 금지, ADDENDUM-3 §5-2) — 조합 조건을
     # 만족할 때만 combine 히트 하나로 친다.
     if cat_key == "tax" and matches_tax_investigation_combo(text):
@@ -114,6 +178,7 @@ def matched_keywords(text: str, cat_key: str) -> list[str]:
     t = _norm(text)
     c = CATEGORIES[cat_key]
     hits = [k for k in (_required_list(cat_key) + c["combine"]) if _norm(k) in t]
+    hits += [k for k in _classify_extra_hits(text, cat_key) if k not in hits]
     if cat_key == "tax" and matches_tax_investigation_combo(text):
         hits.append("세무조사")
     return hits
