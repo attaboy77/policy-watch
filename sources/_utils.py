@@ -17,7 +17,7 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       APPLICABILITY, COMPANY_EVENTS, COMPANY_EVENT_STRONG_SIGNALS,
                       MANUFACTURING_ACCOUNTING_CONTEXT, EVENT_ANNOUNCEMENT_STRONG_SIGNALS,
                       FOREIGN_STANDARD_BODIES, STATISTICAL_REPORT_SIGNALS,
-                      LOCAL_GOV_PETITION_KEYWORDS, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS, GENERIC_USE_CCTLDS,
+                      LOCAL_GOV_NAMES, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS, GENERIC_USE_CCTLDS,
                       NON_TARGET_TAX_SUBJECTS, OPINION_PREFIX_KEYWORDS,
                       FOREIGN_TAX_COUNTRIES, FOREIGN_TAX_BILATERAL_PREFIXES,
                       STANDARD_SETTER_GOVERNANCE, STANDING_DOC, STANDING_DOC_FRESH_DAYS,
@@ -1257,24 +1257,33 @@ def apply_corporate_pr_filter(items: list[dict]) -> tuple[list[dict], list[dict]
     return kept, excluded
 
 
-# ── 지자체 건의·민원 제외 (2026-09-02 사용자 지시) ──────────────────────────
-# "OO구"/"OO시"/"OO군" 형태의 기초자치단체명 단독 주체만 매칭한다(광역단체
-# "서울특별시"/"경기도" 등은 포함 안 함 — 사용자가 예로 든 건 기초자치단체
-# 뉴스라 범위를 그만큼만 좁혔다).
+# ── 지자체 주체 뉴스 제외 (2026-09-02 사용자 지시, 2026-11-24 주체 기준으로 변경) ──
+# `_LOCAL_GOV_SUBJECT_RE`는 #8 유사 기사 병합(기초지자체 임계값)과 #11 공적 주체
+# 판정에서 쓴다 — 이 필터(#14)의 주체 판정은 `local_gov_lead_subject()`.
 _LOCAL_GOV_SUBJECT_RE = re.compile(r"^[가-힣]{1,8}(?:구|시|군)$")
+# 제목 맨 앞 "주체, …"(쉼표형) 또는 "주체 "…""(따옴표형). 따옴표를 지우는
+# clean_title_for_compare()/extract_subject()를 거치면 따옴표형을 못 잡으므로
+# 원 제목(앞 말머리만 뗀 것)에 직접 맞춘다.
+_LEAD_SUBJECT_RE = re.compile(r"^([가-힣]{2,10})\s*(?:,|[\"'‘’“”「『])")
+
+
+def local_gov_lead_subject(title: str) -> str | None:
+    """제목 맨 앞 주체가 지자체(`LOCAL_GOV_NAMES`)면 그 이름, 아니면 None.
+    "인천시, …" / 서울시 "…" / "[인천] 인천시 "…"" → 지자체.
+    "국세청, 서울시와 협력…"처럼 지자체가 제목 중간에 나오면 주체가 아니다."""
+    t = _BRACKET_PREFIX_RE.sub("", title or "").strip()
+    m = _LEAD_SUBJECT_RE.match(t)
+    return m.group(1) if m and m.group(1) in LOCAL_GOV_NAMES else None
 
 
 def is_local_gov_petition(title: str) -> bool:
-    """기초자치단체가 주체이고 건의/촉구/요구/요청/요망이 붙은 기사인지.
-    실측: "송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의" —
-    지방세 자체는 여전히 대상이지만, 지자체가 중앙부처에 "건의"하는 단계는
-    아직 확정된 규제가 아니라 실무적으로 챙길 게 없다(2026-09-02 사용자 지시).
-    """
-    subject = extract_subject(title)
-    if not subject or not _LOCAL_GOV_SUBJECT_RE.match(subject):
-        return False
-    t = _norm(title)
-    return any(_norm(k) in t for k in LOCAL_GOV_PETITION_KEYWORDS)
+    """제목 맨 앞 주체가 광역·기초 지자체면 동사와 상관없이 True.
+    9/2 원안은 건의/촉구/요구/요청/요망이 붙은 기초지자체 기사만 잡았는데, 동사가
+    목록에 없는 서울시 "친환경버스 부가세 면제 유지해 달라"(11/5) 등이 통과했다.
+    2026-11-24 사용자 지시: 동사 목록을 늘리지 말고 주체로 판단할 것 — 지자체가
+    주체로 내는 세제 기사는 건의·공동대응·자체 시책이고, 실제로 우리에게 적용되는
+    법령·조례 개정은 공식(L1/L2) 소스로 들어온다(이 필터는 L3 전용)."""
+    return local_gov_lead_subject(title) is not None
 
 
 def apply_local_gov_petition_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:

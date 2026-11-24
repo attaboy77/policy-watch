@@ -46,6 +46,7 @@ from sources._utils import (
     is_event_announcement,
     is_foreign_standard,
     is_local_gov_petition,
+    local_gov_lead_subject,
     apply_local_gov_petition_filter,
     is_foreign_news_only,
     apply_foreign_news_filter,
@@ -57,7 +58,7 @@ from sources._utils import (
 )
 from sources._config import (CATEGORIES, NOISE_KEYWORDS, ADMIN_NOISE_KEYWORDS,
                              REGULATORY_SIGNALS, APPLICABILITY, COMPANY_EVENTS,
-                             FOREIGN_STANDARD_BODIES, LOCAL_GOV_PETITION_KEYWORDS,
+                             FOREIGN_STANDARD_BODIES, LOCAL_GOV_NAMES,
                              FOREIGN_NEWS_SIGNALS, NON_TARGET_TAX_SUBJECTS,
                              OPINION_PREFIX_KEYWORDS,
                              SIMILARITY_THRESHOLD)
@@ -1394,29 +1395,52 @@ class TestApplyCorporatePrFilter:
         assert excluded == []
 
 
-# ── 지자체 건의·민원 제외 (2026-09-02 사용자 지시) ──────────────────────────
+# ── 지자체 주체 뉴스 제외 (2026-09-02, 2026-11-24 주체 기준으로 변경) ─────────
 class TestIsLocalGovPetition:
     def test_real_example_excluded(self):
         assert is_local_gov_petition("송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의") is True
 
-    def test_all_petition_keywords_individually_detected(self):
-        for kw in LOCAL_GOV_PETITION_KEYWORDS:
-            assert is_local_gov_petition(f"강남구, 지방세법 개정 {kw}") is True, f"{kw}가 통과됨"
+    def test_verb_not_needed_comma_form(self):
+        # 11/9 실측 — 건의·촉구 류 동사가 없어도 주체가 지자체면 제외.
+        assert is_local_gov_petition("인천시, 친환경 버스 부가세 면제 유지 공동 대응") is True
+        assert is_local_gov_petition("강남구, 지방세법 개정 시행 안내") is True
 
-    def test_local_gov_subject_without_petition_keyword_passes(self):
-        # 지자체가 주체여도 "건의" 류 표현이 없으면(예: 실제 시행 소식) 통과.
-        assert is_local_gov_petition("강남구, 지방세법 개정 시행 안내") is False
+    def test_quote_form(self):
+        # 11/5·11/6 실측 — 서울시 "…" 형태(쉼표 없음).
+        assert is_local_gov_petition("서울시 “친환경버스 부가세 면제 유지해 달라”") is True
+        assert is_local_gov_petition("서울시 “친환경 버스 부가세 면제 유지해야”…15개 지자체와 공동") is True
+        assert is_local_gov_petition('서울시 "친환경버스 부가세 면제 유지해 달라"') is True
+        assert is_local_gov_petition("서울시 '친환경버스 부가세 면제 유지'") is True
 
-    def test_petition_keyword_without_local_gov_subject_passes(self):
-        # 주체가 지자체가 아니면(기업·중앙부처 등) 이 필터 대상이 아니다.
+    def test_bracket_prefix_skipped(self):
+        assert is_local_gov_petition('[인천] 인천시 "친환경 버스 부가세 면제 혜택 유지 해야"') is True
+
+    def test_metropolitan_and_basic_govs(self):
+        for name in ["경기도", "서울특별시", "인천광역시", "제주특별자치도", "담양군", "서해구", "창원특례시"]:
+            assert is_local_gov_petition(f"{name}, 지방세 감면 확대") is True, name
+
+    def test_local_gov_in_middle_is_not_subject(self):
+        assert is_local_gov_petition("국세청, 서울시와 협력…지방세 체납 공동 징수") is False
+        assert is_local_gov_petition("[정책 짚어보기] 친환경 버스 부가세 면제 축소 추진…인천시 “내년 7월”") is False
+        assert is_local_gov_petition("전국 16개 지자체 “친환경버스 부가세 면제 특례 유지” 촉구") is False
+
+    def test_non_gov_names_ending_in_gov_suffix_not_matched(self):
+        # 과거 데이터 실측 오탐 후보: 인명·일반명사가 …시/도/군/구로 끝남.
+        for t in ["한병도, “대학을 지역의 심장으로”", '한병도 "대학을 지역 성장 거점으로"',
+                  "기후공시, 숫자만으론 부족", "임도, 설치를 넘어 현장 활용성 높인다",
+                  "해외에서도 '전역증 재발급' 손쉽게", "오시코시, 3분기 누적 순이익"]:
+            assert is_local_gov_petition(t) is False, t
+
+    def test_non_gov_subject_passes(self):
         assert is_local_gov_petition("대한상공회의소, 지방세법 개정 건의") is False
-
-    def test_no_subject_passes(self):
         assert is_local_gov_petition("지방세법 개정 건의 잇따라") is False
 
-    def test_metropolitan_gov_not_matched(self):
-        # 사용자 지시 범위: 기초자치단체(구/시/군)만. 광역단체는 포함 안 함.
-        assert is_local_gov_petition("경기도, 지방세법 개정 건의") is False
+    def test_lead_subject_returns_name(self):
+        assert local_gov_lead_subject("인천시, 친환경 버스 부가세 면제 유지 공동 대응") == "인천시"
+        assert local_gov_lead_subject("국세청, 서울시와 협력") is None
+
+    def test_name_list_has_no_generic_suffix_words(self):
+        assert "한병도" not in LOCAL_GOV_NAMES and "제도" not in LOCAL_GOV_NAMES
 
 
 class TestApplyLocalGovPetitionFilter:
@@ -1427,12 +1451,13 @@ class TestApplyLocalGovPetitionFilter:
     def test_splits_kept_and_excluded(self):
         items = [
             self._item("송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의"),
+            self._item("서울시 “친환경버스 부가세 면제 유지해 달라”"),
             self._item("기획재정부, 법인세법 시행령 개정"),
         ]
         kept, excluded = apply_local_gov_petition_filter(items)
         assert [it["title"] for it in kept] == ["기획재정부, 법인세법 시행령 개정"]
-        assert len(excluded) == 1
-        assert excluded[0]["excluded_reason"] == "excluded:local_gov_petition"
+        assert len(excluded) == 2
+        assert all(e["excluded_reason"] == "excluded:local_gov_petition" for e in excluded)
 
     def test_l1_exempt(self):
         items = [self._item("송파구, 신축주택 재산세 급증 막는다…지방세법 시행령 개정 건의",

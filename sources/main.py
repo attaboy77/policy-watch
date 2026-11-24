@@ -393,7 +393,7 @@ def build_data_json(items: list[dict], prior_news_urls: dict[str, str] | None = 
     n = len(deduped)
     deduped, excluded = apply_local_gov_petition_filter(deduped)  # 2026-09-02
     _record_excluded(excluded)
-    _log_stage("지자체 건의·민원 제외 후", deduped, n)
+    _log_stage("지자체 주체 뉴스 제외 후", deduped, n)
     n = len(deduped)
     deduped, excluded = apply_foreign_news_filter(deduped)  # 2026-09-02
     _record_excluded(excluded)
