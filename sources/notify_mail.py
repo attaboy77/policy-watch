@@ -21,6 +21,10 @@
 복원 실패율 경고는 신규 항목 메일 하단에서 빼고, 제목이 "[Policy Watch][점검] …"인
 별도 메일로 MAIL_TO_ADMIN에게만 보낸다(`send_ops_alert()`). 신규 항목이 없는 날에도
 경고가 있으면 보낸다. 신규 항목 메일은 지금처럼 MAIL_TO 전원에게.
+같은 [점검] 메일에 (1) 조용함 알림 — 마지막 신규 항목 메일 후 QUIET_ALERT_DAYS(3)일이
+지나면 공백 구간당 한 통, 제목 "최근 3일간 새 항목 없음 - YYYY.MM.DD" — 과 (2) 수집
+건너뜀 경고 — 직전 실행과 RUN_GAP_WARN_HOURS(30)시간 이상 벌어짐 — 를 모은다.
+실행 이력은 data/ops_state.json(OPS_STATE_PATH)에 30일치 남긴다(crawl.yml이 커밋).
 
 시크릿(GMAIL_USER/GMAIL_APP_PASSWORD/MAIL_TO) 중 하나라도 없으면 조용히 스킵
 하고 종료한다 — 수집·배포 파이프라인은 메일 기능과 무관하게 계속 진행돼야
@@ -55,7 +59,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
 
-from . import _sent_log
+from . import _sent_log, _source_health
 from ._config import CATEGORIES, SOURCE_LABELS
 from ._utils import feed_hidden_reason
 
@@ -297,6 +301,102 @@ def send_ops_alert(summary: str, lines: list[str], *, user: str, app_password: s
     return True
 
 
+# ── 조용함 알림 · 수집 건너뜀 경고 (2026-11-24 사용자 지시) ─────────────────
+# 조용함: 마지막 신규 항목 메일 후 이 일수가 지나면 [점검] 메일 한 통(공식·뉴스 구분 없음).
+QUIET_ALERT_DAYS = 3
+# 수집 건너뜀: 이번 실행과 직전 실행(이전 data.json의 meta.generated_at) 사이가 이 시간 이상.
+# 실측(9/1~11/24 실행 125회): 평소 간격 22~25시간, 월요일 지연이 최대 26.8시간,
+# 11/24(예약 실행 8시간 지연 + 수동 실행)가 27.3시간 — 30시간 미만이라 이 값으로는 안 걸린다
+# (docs/REPORT.md). 예약 실행이 하루 통째로 빠지면 약 48시간이라 걸린다.
+RUN_GAP_WARN_HOURS = 30
+# 수집 실행 이력(조용함 알림 본문의 "그 기간 수집 실행 횟수"용). crawl.yml이 커밋한다.
+OPS_STATE_PATH = "data/ops_state.json"
+OPS_STATE_KEEP_DAYS = 30
+
+
+def load_ops_state(path: str = OPS_STATE_PATH) -> dict:
+    """{"runs": [수집 실행 시각 ISO, ...], "quiet_alert_for": 조용함 알림을 보낸 기준 마지막 메일일}."""
+    state = _source_health._load(path)
+    return state if isinstance(state, dict) else {}
+
+
+def save_ops_state(state: dict, path: str = OPS_STATE_PATH) -> None:
+    _source_health._save(path, state)
+
+
+def record_run(state: dict, run_iso: str, now: datetime) -> None:
+    """이번 실행 시각을 이력에 추가(중복 제외)하고 OPS_STATE_KEEP_DAYS일보다 오래된 건 버린다."""
+    cutoff = now - timedelta(days=OPS_STATE_KEEP_DAYS)
+    runs = [r for r in (state.get("runs") or []) + [run_iso] if _parse_iso(r) and _parse_iso(r) >= cutoff]
+    state["runs"] = sorted(set(runs), key=_parse_iso)
+
+
+def _parse_iso(s: str | None) -> datetime | None:
+    try:
+        d = datetime.fromisoformat(s) if s else None
+    except ValueError:
+        return None
+    if d is not None and d.tzinfo is None:
+        d = d.replace(tzinfo=_KST)
+    return d
+
+
+def _fmt_kst(d: datetime) -> str:
+    d = d.astimezone(_KST)
+    return f"{d.month}/{d.day} {d:%H:%M}"
+
+
+def run_gap_line(prev_iso: str | None, current_iso: str | None,
+                 threshold_hours: float = RUN_GAP_WARN_HOURS) -> str | None:
+    """직전 수집과 RUN_GAP_WARN_HOURS시간 이상 벌어졌으면 경고 한 줄. 수동 실행 등으로
+    간격이 짧으면 None."""
+    prev, cur = _parse_iso(prev_iso), _parse_iso(current_iso)
+    if not (prev and cur):
+        return None
+    hours = (cur - prev).total_seconds() / 3600
+    if hours < threshold_hours:
+        return None
+    return f"직전 수집이 {_fmt_kst(prev)}이었습니다 — 약 {round(hours)}시간 걸렀습니다"
+
+
+def last_mail_date(sent_log: dict[str, str]):
+    """발송 이력에서 마지막 신규 항목 메일 날짜(date). 이력이 없으면 None."""
+    dates = []
+    for v in sent_log.values():
+        try:
+            dates.append(datetime.strptime(v, _sent_log.DATE_FMT).date())
+        except (TypeError, ValueError):
+            continue
+    return max(dates) if dates else None
+
+
+def oldest_source_success(health: dict) -> tuple[str, datetime] | None:
+    """source_health의 소스별 last_success_at 중 가장 오래된 것 (라벨, 시각)."""
+    found = [(name, _parse_iso(h.get("last_success_at"))) for name, h in (health or {}).items()
+             if isinstance(h, dict)]
+    found = [(n, d) for n, d in found if d]
+    if not found:
+        return None
+    name, when = min(found, key=lambda x: x[1])
+    return SOURCE_LABELS.get(name, name), when
+
+
+def quiet_alert_lines(last_mail, today, runs: list[str], health: dict) -> list[str]:
+    """조용함 알림 본문: 기간, 그 기간 수집 실행 횟수, 가장 오래된 소스 마지막 성공 시각."""
+    start = last_mail + timedelta(days=1)
+    n_runs = sum(1 for r in runs if (d := _parse_iso(r)) and last_mail < d.astimezone(_KST).date() <= today)
+    lines = [
+        f"마지막 신규 항목 메일: {last_mail:%Y.%m.%d} — 이후 {(today - last_mail).days}일간 새 항목이 없습니다",
+        f"그 기간({start.month}/{start.day}~{today.month}/{today.day}) 수집 실행: {n_runs}회",
+    ]
+    oldest = oldest_source_success(health)
+    if oldest:
+        lines.append(f"소스별 마지막 성공 시각 중 가장 오래된 것: {oldest[0]} {_fmt_kst(oldest[1])}")
+    else:
+        lines.append("소스별 마지막 성공 시각: 기록 없음")
+    return lines
+
+
 def _sections(new_official: list[dict], new_news: list[dict]):
     """텍스트/HTML 두 렌더러가 같은 구조를 공유하도록 공통 추출.
     (섹션 제목, 카테고리별 그룹 목록, 요약 표시 여부) 튜플의 리스트.
@@ -437,13 +537,6 @@ def _run() -> None:
         print(f"[notify_mail] {current_path}를 읽을 수 없어 건너뜁니다.")
         return
 
-    # 2026-11-24: 소스 실패·부분 실패·URL 복원 경고는 관리자에게만, 별도 [점검] 메일로.
-    # 신규 항목이 없는 날에도 보낸다(전엔 신규 메일 하단에만 붙어 조용한 날엔 안 나갔다).
-    current_meta = load_meta(current_path)
-    ops_lines = fallback_notice_lines(current_meta) + decode_notice_lines(current_meta)
-    send_ops_alert(ops_alert_summary(ops_lines), ops_lines, user=gmail_user, app_password=gmail_password,
-                   recipients=admins, dashboard_url=dashboard_url)
-
     # 2026-09-10: 90일 지난 항목을 정리한 상태를 먼저 저장해둔다 — 발송 여부와
     # 무관하게(신규가 없어 메일을 안 보내는 날에도) 이 파일은 계속 정리·유지돼야
     # 한다("매일 수집 결과와 무관하게 계속 쌓이게"라는 요구사항의 반대편:
@@ -451,13 +544,59 @@ def _run() -> None:
     sent_log = _sent_log.prune(_sent_log.load(sent_log_path))
     _sent_log.save(sent_log, sent_log_path)
 
+    # 2026-11-24: 운영 상태(수집 실행 이력·조용함 알림 발송 기록). 이번 실행을 먼저 기록한다.
+    current_meta = load_meta(current_path)
+    prev_meta = load_meta(prev_path) if prev_path else {}
+    ops_state_path = os.environ.get("OPS_STATE_PATH", OPS_STATE_PATH)
+    ops_state = load_ops_state(ops_state_path)
+    prev_run_iso = prev_meta.get("generated_at") or ((ops_state.get("runs") or [None])[-1])
+    now = datetime.now(_KST)
+    record_run(ops_state, current_meta.get("generated_at") or now.isoformat(timespec="seconds"), now)
+
+    try:
+        sent_count = _send_new_items_mail(
+            current_items=current_items, prev_path=prev_path, sent_log=sent_log, sent_log_path=sent_log_path,
+            forced=forced, recipients=recipients, gmail_user=gmail_user, gmail_password=gmail_password,
+            dashboard_url=dashboard_url)
+    except Exception as exc:  # noqa: BLE001 - 신규 메일이 실패해도 운영 알림은 보낸다
+        print(f"[notify_mail] 신규 항목 메일 발송 실패: {exc}")
+        sent_count = 0
+
+    # 2026-11-24: 운영 알림은 관리자에게만, [점검] 메일 한 통으로 모아서.
+    #  - 조용함: 마지막 신규 메일 후 QUIET_ALERT_DAYS일 지남(공백 구간당 한 번)
+    #  - 수집 건너뜀: 직전 실행과 RUN_GAP_WARN_HOURS시간 이상 벌어짐
+    #  - 소스 실패·부분 실패·구글 URL 복원 경고(전엔 신규 메일 하단에만 붙어 조용한 날엔 안 나갔다)
+    warn_lines = [line for line in [run_gap_line(prev_run_iso, current_meta.get("generated_at"))] if line]
+    warn_lines += fallback_notice_lines(current_meta) + decode_notice_lines(current_meta)
+    last_mail = last_mail_date(sent_log)
+    today = now.date()
+    quiet = (not sent_count and last_mail is not None
+             and (today - last_mail).days >= QUIET_ALERT_DAYS
+             and ops_state.get("quiet_alert_for") != last_mail.isoformat())
+    if quiet:
+        days = (today - last_mail).days
+        health = _source_health._load(os.environ.get("SOURCE_HEALTH_PATH", _source_health.HEALTH_PATH))
+        lines = quiet_alert_lines(last_mail, today, ops_state.get("runs") or [], health) + warn_lines
+        if send_ops_alert(f"최근 {days}일간 새 항목 없음 - {_now_kst_date_str()}", lines, user=gmail_user,
+                          app_password=gmail_password, recipients=admins, dashboard_url=dashboard_url):
+            ops_state["quiet_alert_for"] = last_mail.isoformat()
+    elif warn_lines:
+        send_ops_alert(ops_alert_summary(warn_lines), warn_lines, user=gmail_user, app_password=gmail_password,
+                       recipients=admins, dashboard_url=dashboard_url)
+    save_ops_state(ops_state, ops_state_path)
+
+
+def _send_new_items_mail(*, current_items: list[dict], prev_path: str | None, sent_log: dict,
+                         sent_log_path: str, forced: bool, recipients: list[str], gmail_user: str,
+                         gmail_password: str, dashboard_url: str) -> int:
+    """신규 항목 메일(MAIL_TO 전원). 메일에 실린 항목 수를 돌려준다(안 보냈으면 0)."""
     if prev_path and os.path.exists(prev_path):
         new_items = find_new_items(load_items(prev_path), current_items, sent_ids=set(sent_log))
     else:
         print("[notify_mail] 이전 data.json 백업이 없어 신규 판정을 못 합니다"
               + ("(강제 발송이라 신규 0건으로 진행)" if forced else " — 건너뜁니다."))
         if not forced:
-            return
+            return 0
         new_items = []
 
     # 2026-10-14 상설 기준 문서, 2026-10-20 해외기준·회의 예정 — 화면 기본 조회와 같은
@@ -480,9 +619,9 @@ def _run() -> None:
 
     if not new_official and not new_news and not forced:
         print("[notify_mail] 신규 항목이 없어 메일을 보내지 않습니다.")
-        return
+        return 0
 
-    # 운영 경고는 위에서 관리자에게 따로 보냈다 — 전원에게 가는 본문엔 안 붙인다.
+    # 운영 경고는 관리자 [점검] 메일로 따로 보낸다 — 전원에게 가는 본문엔 안 붙인다.
     subject = build_subject(len(new_official) + len(new_news))
     text_body = build_body_text(new_official, new_news, dashboard_url, forced=forced)
     html_body = build_body_html(new_official, new_news, dashboard_url, forced=forced)
@@ -498,6 +637,7 @@ def _run() -> None:
     if sent_now:
         _sent_log.record(sent_log, sent_now, _now_kst_date_iso())
         _sent_log.save(sent_log, sent_log_path)
+    return len(sent_now)
 
 
 def main() -> None:

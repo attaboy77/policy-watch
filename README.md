@@ -65,7 +65,7 @@ pip install -r requirements.txt
 | `NAVER_CLIENT_ID` / `NAVER_CLIENT_SECRET` | 네이버 뉴스 검색 API |
 | `LAW_API_OC` | 법제처 국가법령정보 Open API OC 코드 |
 | `PROXY_BASE` | 정부 사이트 IP 차단 우회용 Cloudflare Workers 프록시 URL |
-| `MAIL_TO_ADMIN` | 운영 알림(제목 `[Policy Watch][점검] …`: 소스 실패·부분 실패 경고 등) 수신자, 쉼표 구분. 비어 있으면 `MAIL_TO`의 첫 번째 주소로 보낸다. 신규 항목 메일은 `MAIL_TO` 전원 |
+| `MAIL_TO_ADMIN` | 운영 알림(제목 `[Policy Watch][점검] …`: 소스 실패·부분 실패 경고, 3일간 새 항목 없음, 수집 30시간 이상 공백) 수신자, 쉼표 구분. 비어 있으면 `MAIL_TO`의 첫 번째 주소로 보낸다. 신규 항목 메일은 `MAIL_TO` 전원 |
 
 로컬 실행 시 `.env` 파일 등으로 주입하거나 쉘 환경변수로 export 하세요(`.env`는 `.gitignore`에 포함되어 커밋되지 않습니다).
 

@@ -5,7 +5,7 @@
 "호출됐는지/안 됐는지, 어떤 인자로 호출됐는지"만 검증한다.
 """
 import json
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 import pytest
 
@@ -408,6 +408,10 @@ class TestRunGating:
         # 2026-09-10: _run()이 기본값(data/sent_log.json)을 쓰면 테스트가 실제
         # 저장소 파일을 건드린다 — 모든 테스트를 tmp_path로 격리.
         monkeypatch.setenv("SENT_LOG_PATH", str(tmp_path / "sent_log.json"))
+        # 2026-11-24: 운영 상태·소스 상태도 저장소 파일 대신 tmp로.
+        monkeypatch.setenv("OPS_STATE_PATH", str(tmp_path / "ops_state.json"))
+        monkeypatch.setenv("SOURCE_HEALTH_PATH", str(tmp_path / "source_health.json"))
+        monkeypatch.delenv("MAIL_TO_ADMIN", raising=False)
 
     def _patch_send(self, monkeypatch):
         calls = []
@@ -710,7 +714,8 @@ class TestRunGating:
         monkeypatch.setenv("SENT_LOG_PATH", str(sent_log_path))
         sent_log_path.write_text(json.dumps({"a": "2026-09-09"}), encoding="utf-8")
         nm._run()
-        assert calls == []
+        # 신규 항목 메일은 없다(이력이 오래돼 관리자 조용함 알림만 나갈 수 있음).
+        assert [c for c in calls if not c[0][0].startswith(nm.OPS_SUBJECT_PREFIX)] == []
 
     def test_sent_item_ids_recorded_after_successful_send(self, monkeypatch, tmp_path):
         calls = self._patch_send(monkeypatch)
@@ -788,3 +793,160 @@ class TestPartialFallbackNotice:
         meta = {"sources_failed": [{"name": "fss_b2", "used_fallback": True, "consecutive_failures": 2}]}
         assert nm.fallback_notice_lines(meta) == [
             "금융감독원(내부회계 자료 게시판) 수집 실패로 전일 데이터 사용 (연속 2일째)"]
+
+
+# ── 조용함 알림 · 수집 건너뜀 경고 (2026-11-24) ─────────────────────────────
+class TestRunGapLine:
+    def test_gap_over_threshold(self):
+        line = nm.run_gap_line("2026-11-23T11:00:33+09:00", "2026-11-25T09:10:00+09:00")
+        assert line == "직전 수집이 11/23 11:00이었습니다 — 약 46시간 걸렀습니다"
+
+    def test_normal_daily_gap_no_warning(self):
+        assert nm.run_gap_line("2026-11-22T10:35:59+09:00", "2026-11-23T11:00:33+09:00") is None
+
+    def test_manual_run_shortened_gap_no_warning(self):
+        # 11/24 실측: 수동 실행(14:17) 뒤 예약 실행(14:33) — 16분 간격.
+        assert nm.run_gap_line("2026-11-24T14:17:53+09:00", "2026-11-24T14:33:01+09:00") is None
+
+    def test_11_24_case_is_under_30h(self):
+        # 11/23 11:00 → 11/24 14:17 = 27.3시간 — 지시대로 30시간 기준이면 안 걸린다(REPORT 참고).
+        assert nm.run_gap_line("2026-11-23T11:00:33+09:00", "2026-11-24T14:17:53+09:00") is None
+
+    def test_exactly_threshold_warns(self):
+        assert nm.run_gap_line("2026-11-23T00:00:00+09:00", "2026-11-24T06:00:00+09:00") is not None
+
+    def test_missing_times(self):
+        assert nm.run_gap_line(None, "2026-11-24T14:33:01+09:00") is None
+        assert nm.run_gap_line("garbage", "2026-11-24T14:33:01+09:00") is None
+
+
+class TestQuietHelpers:
+    def test_last_mail_date(self):
+        assert nm.last_mail_date({"a": "2026-11-20", "b": "2026-11-21", "c": "bad"}) == date(2026, 11, 21)
+        assert nm.last_mail_date({}) is None
+
+    def test_oldest_source_success(self):
+        health = {"kasb": {"last_success_at": "2026-11-24T14:29:10+09:00"},
+                  "lawmaking": {"last_success_at": "2026-11-20T11:00:00+09:00"},
+                  "nts": {"last_success_at": None}}
+        label, when = nm.oldest_source_success(health)
+        assert label == "국민참여입법센터(입법예고)"
+        assert when.day == 20
+
+    def test_record_run_dedupes_and_prunes(self):
+        now = datetime(2026, 11, 24, 14, 0, tzinfo=nm._KST)
+        state = {"runs": ["2026-09-01T10:00:00+09:00", "2026-11-23T11:00:33+09:00"]}
+        nm.record_run(state, "2026-11-24T14:00:00+09:00", now)
+        nm.record_run(state, "2026-11-24T14:00:00+09:00", now)
+        assert state["runs"] == ["2026-11-23T11:00:33+09:00", "2026-11-24T14:00:00+09:00"]
+
+    def test_quiet_alert_lines(self):
+        runs = ["2026-11-21T10:00:00+09:00", "2026-11-22T10:00:00+09:00",
+                "2026-11-23T10:00:00+09:00", "2026-11-24T10:00:00+09:00", "2026-11-24T14:00:00+09:00"]
+        health = {"lawmaking": {"last_success_at": "2026-11-22T09:05:00+09:00"},
+                  "kasb": {"last_success_at": "2026-11-24T14:00:00+09:00"}}
+        lines = nm.quiet_alert_lines(date(2026, 11, 21), date(2026, 11, 24), runs, health)
+        assert lines == [
+            "마지막 신규 항목 메일: 2026.11.21 — 이후 3일간 새 항목이 없습니다",
+            "그 기간(11/22~11/24) 수집 실행: 4회",
+            "소스별 마지막 성공 시각 중 가장 오래된 것: 국민참여입법센터(입법예고) 11/22 09:05",
+        ]
+
+
+class TestQuietAndGapAlertsInRun:
+    @pytest.fixture(autouse=True)
+    def _env(self, monkeypatch, tmp_path):
+        self.tmp = tmp_path
+        self.calls = []
+        monkeypatch.setattr(nm, "send_via_gmail", lambda *a, **k: self.calls.append(a))
+        monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
+        monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
+        monkeypatch.setenv("MAIL_TO", "a@x.com,b@x.com")
+        monkeypatch.delenv("MAIL_TO_ADMIN", raising=False)
+        monkeypatch.delenv("FORCE_MAIL", raising=False)
+        monkeypatch.setenv("SENT_LOG_PATH", str(tmp_path / "sent_log.json"))
+        monkeypatch.setenv("OPS_STATE_PATH", str(tmp_path / "ops_state.json"))
+        monkeypatch.setenv("SOURCE_HEALTH_PATH", str(tmp_path / "source_health.json"))
+        monkeypatch.setenv("CURRENT_DATA_JSON", str(tmp_path / "current.json"))
+        monkeypatch.setenv("PREV_DATA_JSON", str(tmp_path / "prev.json"))
+        self.today = datetime.now(nm._KST).date()
+        (tmp_path / "source_health.json").write_text(json.dumps({
+            "lawmaking": {"last_success_at": "2026-11-22T09:05:00+09:00"},
+            "kasb": {"last_success_at": "2026-11-24T14:00:00+09:00"}}), encoding="utf-8")
+
+    def _write(self, *, last_mail_days_ago, prev_gen, cur_gen, cur_ids=("a",), prev_ids=("a",), state=None):
+        last = (self.today - timedelta(days=last_mail_days_ago)).strftime("%Y-%m-%d")
+        (self.tmp / "sent_log.json").write_text(json.dumps({"old": last}), encoding="utf-8")
+        (self.tmp / "current.json").write_text(json.dumps(
+            {"items": [_item(id=i) for i in cur_ids], "meta": {"generated_at": cur_gen}}), encoding="utf-8")
+        (self.tmp / "prev.json").write_text(json.dumps(
+            {"items": [_item(id=i) for i in prev_ids], "meta": {"generated_at": prev_gen}}), encoding="utf-8")
+        if state is not None:
+            (self.tmp / "ops_state.json").write_text(json.dumps(state), encoding="utf-8")
+
+    def _now_iso(self, hours_ago=0):
+        return (datetime.now(nm._KST) - timedelta(hours=hours_ago)).isoformat(timespec="seconds")
+
+    def test_quiet_alert_after_3_days_to_admin_only(self):
+        self._write(last_mail_days_ago=3, prev_gen=self._now_iso(24), cur_gen=self._now_iso())
+        nm._run()
+        assert len(self.calls) == 1
+        subject, text, _html, recipients, *_ = self.calls[0]
+        assert subject == f"[Policy Watch][점검] 최근 3일간 새 항목 없음 - {nm._now_kst_date_str()}"
+        assert recipients == ["a@x.com"]
+        assert "수집 실행: " in text
+        assert "가장 오래된 것: 국민참여입법센터(입법예고) 11/22 09:05" in text
+        assert "대시보드: " in text
+        state = json.loads((self.tmp / "ops_state.json").read_text(encoding="utf-8"))
+        assert state["quiet_alert_for"] == (self.today - timedelta(days=3)).isoformat()
+
+    def test_quiet_alert_only_once_per_quiet_stretch(self):
+        last = (self.today - timedelta(days=4)).isoformat()
+        self._write(last_mail_days_ago=4, prev_gen=self._now_iso(24), cur_gen=self._now_iso(),
+                    state={"runs": [], "quiet_alert_for": last})
+        nm._run()
+        assert self.calls == []
+
+    def test_no_quiet_alert_before_3_days(self):
+        self._write(last_mail_days_ago=2, prev_gen=self._now_iso(24), cur_gen=self._now_iso())
+        nm._run()
+        assert self.calls == []
+
+    def test_no_quiet_alert_when_new_items_mailed(self):
+        self._write(last_mail_days_ago=5, prev_gen=self._now_iso(24), cur_gen=self._now_iso(),
+                    cur_ids=("a", "b"), prev_ids=("a",))
+        nm._run()
+        assert len(self.calls) == 1
+        assert not self.calls[0][0].startswith(nm.OPS_SUBJECT_PREFIX)
+
+    def test_gap_warning_in_ops_mail(self):
+        self._write(last_mail_days_ago=1, prev_gen=self._now_iso(46), cur_gen=self._now_iso())
+        nm._run()
+        assert len(self.calls) == 1
+        subject, text, _html, recipients, *_ = self.calls[0]
+        assert subject.startswith("[Policy Watch][점검] 수집 경고 1건")
+        assert "직전 수집이 " in text and "시간 걸렀습니다" in text
+        assert recipients == ["a@x.com"]
+
+    def test_gap_warning_rides_along_with_new_items_mail(self):
+        self._write(last_mail_days_ago=1, prev_gen=self._now_iso(46), cur_gen=self._now_iso(),
+                    cur_ids=("a", "b"), prev_ids=("a",))
+        nm._run()
+        subjects = [c[0] for c in self.calls]
+        assert len(subjects) == 2
+        assert sum(s.startswith(nm.OPS_SUBJECT_PREFIX) for s in subjects) == 1
+
+    def test_quiet_and_gap_combined_in_one_mail(self):
+        self._write(last_mail_days_ago=3, prev_gen=self._now_iso(50), cur_gen=self._now_iso())
+        nm._run()
+        assert len(self.calls) == 1
+        subject, text, *_ = self.calls[0]
+        assert "최근 3일간 새 항목 없음" in subject
+        assert "시간 걸렀습니다" in text
+
+    def test_run_recorded_in_ops_state(self):
+        cur = self._now_iso()
+        self._write(last_mail_days_ago=1, prev_gen=self._now_iso(24), cur_gen=cur)
+        nm._run()
+        state = json.loads((self.tmp / "ops_state.json").read_text(encoding="utf-8"))
+        assert cur in state["runs"]
