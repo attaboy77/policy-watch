@@ -13,7 +13,14 @@
   GMAIL_USER          발신 Gmail 계정
   GMAIL_APP_PASSWORD  Gmail 앱 비밀번호
   MAIL_TO             수신자. 쉼표로 구분하면 여러 명(향후 확장 대비, 2026-09-02 지시)
+  MAIL_TO_ADMIN       운영 알림([점검] 메일) 수신자, 쉼표 구분. 비어 있으면 MAIL_TO의
+                       첫 번째 주소(2026-11-24 지시, `admin_recipients()`)
   DASHBOARD_URL       메일 하단 링크(기본값 있음)
+
+2026-11-24 사용자 지시 — 운영 알림은 관리자에게만: 소스 실패·부분 실패·구글 URL
+복원 실패율 경고는 신규 항목 메일 하단에서 빼고, 제목이 "[Policy Watch][점검] …"인
+별도 메일로 MAIL_TO_ADMIN에게만 보낸다(`send_ops_alert()`). 신규 항목이 없는 날에도
+경고가 있으면 보낸다. 신규 항목 메일은 지금처럼 MAIL_TO 전원에게.
 
 시크릿(GMAIL_USER/GMAIL_APP_PASSWORD/MAIL_TO) 중 하나라도 없으면 조용히 스킵
 하고 종료한다 — 수집·배포 파이프라인은 메일 기능과 무관하게 계속 진행돼야
@@ -223,6 +230,12 @@ def parse_recipients(mail_to: str | None) -> list[str]:
     return [addr.strip() for addr in mail_to.split(",") if addr.strip()]
 
 
+def admin_recipients(mail_to_admin: str | None, mail_to: str | None) -> list[str]:
+    """운영 알림 수신자(2026-11-24). MAIL_TO_ADMIN이 비어 있으면 MAIL_TO의 첫 주소 —
+    새 시크릿을 등록하지 않아도 관리자(첫 수신자)에게만 가도록."""
+    return parse_recipients(mail_to_admin) or parse_recipients(mail_to)[:1]
+
+
 def _item_link(item: dict) -> str:
     urls = item.get("urls") or {}
     return urls.get("official") or urls.get("news") or ""
@@ -233,6 +246,55 @@ def build_subject(count: int, date_str: str | None = None) -> str:
 
 
 _FOOTER_NOTE = "이 메일은 신규 항목이 있을 때만 발송됩니다."
+
+# 2026-11-24: 운영 알림(관리자 전용)은 제목 머리로 신규 항목 메일과 구분한다.
+OPS_SUBJECT_PREFIX = "[Policy Watch][점검]"
+_OPS_FOOTER_NOTE = "운영 알림입니다 — 관리자(MAIL_TO_ADMIN, 없으면 MAIL_TO 첫 주소)에게만 발송됩니다."
+
+
+def build_ops_subject(summary: str) -> str:
+    """예: "[Policy Watch][점검] 최근 3일간 새 항목 없음"."""
+    return f"{OPS_SUBJECT_PREFIX} {summary}"
+
+
+def ops_alert_summary(lines: list[str], date_str: str | None = None) -> str:
+    """소스 실패·부분 실패·URL 복원 경고 메일의 제목 요약."""
+    return f"수집 경고 {len(lines)}건 - {date_str or _now_kst_date_str()}"
+
+
+def build_ops_body_text(lines: list[str], dashboard_url: str) -> str:
+    out = [f"⚠ {line}" for line in lines]
+    out += ["", f"대시보드: {dashboard_url}", _OPS_FOOTER_NOTE]
+    return "\n".join(out)
+
+
+def build_ops_body_html(lines: list[str], dashboard_url: str) -> str:
+    parts = ['<div style="font-family:Arial, Helvetica, sans-serif; font-size:14px; '
+             'color:#111111; line-height:1.6;">']
+    for line in lines:
+        parts.append(f'<p style="color:#b45309; margin:0 0 6px;">⚠ {_esc(line)}</p>')
+    parts.append('<hr style="border:none; border-top:1px solid #e2e8f0; margin:16px 0;">')
+    parts.append(f'<p style="margin:0 0 8px;"><a href="{_esc(dashboard_url)}" style="color:#1a73e8;">'
+                 f'대시보드: {_esc(dashboard_url)}</a></p>')
+    parts.append(f'<p style="color:#888888; font-size:12px; margin:0;">{_esc(_OPS_FOOTER_NOTE)}</p>')
+    parts.append("</div>")
+    return "".join(parts)
+
+
+def send_ops_alert(summary: str, lines: list[str], *, user: str, app_password: str,
+                   recipients: list[str], dashboard_url: str) -> bool:
+    """운영 알림을 관리자에게만 보낸다(앞으로 생길 다른 운영 알림도 이 함수를 쓴다).
+    실패해도 예외를 올리지 않는다 — 뒤이은 신규 항목 메일을 막으면 안 된다."""
+    if not (lines and recipients):
+        return False
+    try:
+        send_via_gmail(build_ops_subject(summary), build_ops_body_text(lines, dashboard_url),
+                       build_ops_body_html(lines, dashboard_url), recipients, user, app_password)
+    except Exception as exc:  # noqa: BLE001
+        print(f"[notify_mail] 운영 알림 발송 실패(무시하고 계속): {exc}")
+        return False
+    print(f"[notify_mail] 운영 알림 발송: {summary} → 관리자 {len(recipients)}명")
+    return True
 
 
 def _sections(new_official: list[dict], new_news: list[dict]):
@@ -362,6 +424,8 @@ def _run() -> None:
     if not recipients:
         print("[notify_mail] MAIL_TO에 유효한 수신자가 없어 건너뜁니다.")
         return
+    admins = admin_recipients(os.environ.get("MAIL_TO_ADMIN"), mail_to)
+    dashboard_url = os.environ.get("DASHBOARD_URL", DEFAULT_DASHBOARD_URL)
 
     forced = os.environ.get("FORCE_MAIL", "").strip().lower() == "true"
     current_path = os.environ.get("CURRENT_DATA_JSON", "site/data.json")
@@ -372,6 +436,13 @@ def _run() -> None:
     if not current_items and not forced:
         print(f"[notify_mail] {current_path}를 읽을 수 없어 건너뜁니다.")
         return
+
+    # 2026-11-24: 소스 실패·부분 실패·URL 복원 경고는 관리자에게만, 별도 [점검] 메일로.
+    # 신규 항목이 없는 날에도 보낸다(전엔 신규 메일 하단에만 붙어 조용한 날엔 안 나갔다).
+    current_meta = load_meta(current_path)
+    ops_lines = fallback_notice_lines(current_meta) + decode_notice_lines(current_meta)
+    send_ops_alert(ops_alert_summary(ops_lines), ops_lines, user=gmail_user, app_password=gmail_password,
+                   recipients=admins, dashboard_url=dashboard_url)
 
     # 2026-09-10: 90일 지난 항목을 정리한 상태를 먼저 저장해둔다 — 발송 여부와
     # 무관하게(신규가 없어 메일을 안 보내는 날에도) 이 파일은 계속 정리·유지돼야
@@ -411,13 +482,10 @@ def _run() -> None:
         print("[notify_mail] 신규 항목이 없어 메일을 보내지 않습니다.")
         return
 
-    current_meta = load_meta(current_path)
-    fallback_lines = fallback_notice_lines(current_meta) + decode_notice_lines(current_meta)
-
-    dashboard_url = os.environ.get("DASHBOARD_URL", DEFAULT_DASHBOARD_URL)
+    # 운영 경고는 위에서 관리자에게 따로 보냈다 — 전원에게 가는 본문엔 안 붙인다.
     subject = build_subject(len(new_official) + len(new_news))
-    text_body = build_body_text(new_official, new_news, dashboard_url, forced=forced, fallback_lines=fallback_lines)
-    html_body = build_body_html(new_official, new_news, dashboard_url, forced=forced, fallback_lines=fallback_lines)
+    text_body = build_body_text(new_official, new_news, dashboard_url, forced=forced)
+    html_body = build_body_html(new_official, new_news, dashboard_url, forced=forced)
 
     send_via_gmail(subject, text_body, html_body, recipients, gmail_user, gmail_password)
     print(f"[notify_mail] 메일 발송 완료: 공식 {len(new_official)}건, 언론 {len(new_news)}건 → {len(recipients)}명")

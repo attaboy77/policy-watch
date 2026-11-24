@@ -125,6 +125,8 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           MAIL_TO: ${{ secrets.MAIL_TO }}
+          # 2026-11-24: 운영 알림([점검] 메일) 수신자. 시크릿이 없으면 빈 값 → MAIL_TO 첫 주소로.
+          MAIL_TO_ADMIN: ${{ secrets.MAIL_TO_ADMIN }}
         run: python -m sources.notify_mail
 
       - name: 변경사항 커밋

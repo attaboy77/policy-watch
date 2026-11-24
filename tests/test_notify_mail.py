@@ -244,6 +244,26 @@ class TestParseRecipients:
         assert nm.parse_recipients("") == []
 
 
+class TestAdminRecipients:
+    def test_uses_mail_to_admin_when_set(self):
+        assert nm.admin_recipients("ops@x.com,ops2@x.com", "a@x.com,b@x.com") == ["ops@x.com", "ops2@x.com"]
+
+    def test_falls_back_to_first_mail_to(self):
+        assert nm.admin_recipients(None, "a@x.com, b@x.com") == ["a@x.com"]
+        assert nm.admin_recipients("  ", "a@x.com,b@x.com") == ["a@x.com"]
+
+    def test_empty_when_both_empty(self):
+        assert nm.admin_recipients("", "") == []
+
+
+class TestOpsSubject:
+    def test_example_format(self):
+        assert nm.build_ops_subject("최근 3일간 새 항목 없음") == "[Policy Watch][점검] 최근 3일간 새 항목 없음"
+
+    def test_summary_for_source_warnings(self):
+        assert nm.ops_alert_summary(["x", "y"], "2026.11.24") == "수집 경고 2건 - 2026.11.24"
+
+
 class TestBuildSubject:
     def test_format(self):
         assert nm.build_subject(3, "2026.09.02") == "[Policy Watch] 신규 3건 - 2026.09.02"
@@ -586,9 +606,62 @@ class TestRunGating:
         nm._run()
         assert calls == []
 
-    def test_fallback_notice_reaches_sent_body(self, monkeypatch, tmp_path):
-        """2026-09-07: meta.sources_failed에 used_fallback=True가 있으면 실제로
-        발송되는 본문(text/html 둘 다)에 안내 줄이 들어가는지 종단 검증."""
+    # ── 운영 알림은 관리자에게만 (2026-11-24) ────────────────────────────────
+    def _setup_failed_source(self, monkeypatch, tmp_path, current_ids=("a", "b"), prev_ids=("a",)):
+        monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
+        monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
+        monkeypatch.setenv("MAIL_TO", "a@x.com,b@x.com")
+        monkeypatch.delenv("FORCE_MAIL", raising=False)
+        current = tmp_path / "current.json"
+        prev = tmp_path / "prev.json"
+        current.write_text(json.dumps({
+            "items": [_item(id=i) for i in current_ids],
+            "meta": {"sources_failed": [
+                {"name": "nts", "reason": "timeout", "used_fallback": True, "consecutive_failures": 2},
+            ]},
+        }), encoding="utf-8")
+        self._write_data(prev, [_item(id=i) for i in prev_ids])
+        monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
+        monkeypatch.setenv("PREV_DATA_JSON", str(prev))
+
+    def test_fallback_notice_goes_to_admin_only_not_in_main_body(self, monkeypatch, tmp_path):
+        """소스 실패 경고는 [점검] 메일로 관리자(MAIL_TO 첫 주소 폴백)에게만,
+        신규 항목 메일은 전원에게 가고 본문에 경고가 없다."""
+        calls = self._patch_send(monkeypatch)
+        monkeypatch.delenv("MAIL_TO_ADMIN", raising=False)
+        self._setup_failed_source(monkeypatch, tmp_path)
+        nm._run()
+        assert len(calls) == 2
+        ops = [c for c in calls if c[0][0].startswith("[Policy Watch][점검]")]
+        main = [c for c in calls if not c[0][0].startswith("[Policy Watch][점검]")]
+        assert len(ops) == 1 and len(main) == 1
+        (subject, text_body, html_body, recipients, *_), _ = ops[0]
+        assert subject.startswith("[Policy Watch][점검] 수집 경고 1건")
+        assert recipients == ["a@x.com"]
+        assert "국세청 수집 실패로 전일 데이터 사용 (연속 2일째)" in text_body
+        assert "국세청 수집 실패로 전일 데이터 사용 (연속 2일째)" in html_body
+        (_s, m_text, m_html, m_recipients, *_), _ = main[0]
+        assert m_recipients == ["a@x.com", "b@x.com"]
+        assert "수집 실패" not in m_text and "수집 실패" not in m_html
+
+    def test_mail_to_admin_overrides_fallback(self, monkeypatch, tmp_path):
+        calls = self._patch_send(monkeypatch)
+        monkeypatch.setenv("MAIL_TO_ADMIN", "ops@x.com, ops2@x.com")
+        self._setup_failed_source(monkeypatch, tmp_path)
+        nm._run()
+        ops = [c for c in calls if c[0][0].startswith("[Policy Watch][점검]")]
+        assert ops[0][0][3] == ["ops@x.com", "ops2@x.com"]
+
+    def test_ops_alert_sent_even_without_new_items(self, monkeypatch, tmp_path):
+        calls = self._patch_send(monkeypatch)
+        monkeypatch.delenv("MAIL_TO_ADMIN", raising=False)
+        self._setup_failed_source(monkeypatch, tmp_path, current_ids=("a",), prev_ids=("a",))
+        nm._run()
+        assert len(calls) == 1
+        assert calls[0][0][0].startswith("[Policy Watch][점검]")
+        assert calls[0][0][3] == ["a@x.com"]
+
+    def test_no_ops_alert_when_no_warnings(self, monkeypatch, tmp_path):
         calls = self._patch_send(monkeypatch)
         monkeypatch.setenv("GMAIL_USER", "u@gmail.com")
         monkeypatch.setenv("GMAIL_APP_PASSWORD", "pw")
@@ -596,20 +669,26 @@ class TestRunGating:
         monkeypatch.delenv("FORCE_MAIL", raising=False)
         current = tmp_path / "current.json"
         prev = tmp_path / "prev.json"
-        current.write_text(json.dumps({
-            "items": [_item(id="a"), _item(id="b")],
-            "meta": {"sources_failed": [
-                {"name": "nts", "reason": "timeout", "used_fallback": True, "consecutive_failures": 2},
-            ]},
-        }), encoding="utf-8")
+        self._write_data(current, [_item(id="a"), _item(id="b")])
         self._write_data(prev, [_item(id="a")])
         monkeypatch.setenv("CURRENT_DATA_JSON", str(current))
         monkeypatch.setenv("PREV_DATA_JSON", str(prev))
         nm._run()
         assert len(calls) == 1
-        (_subject, text_body, html_body, *_rest), _ = calls[0]
-        assert "국세청 수집 실패로 전일 데이터 사용 (연속 2일째)" in text_body
-        assert "국세청 수집 실패로 전일 데이터 사용 (연속 2일째)" in html_body
+        assert not calls[0][0][0].startswith("[Policy Watch][점검]")
+
+    def test_ops_alert_failure_does_not_block_main_mail(self, monkeypatch, tmp_path):
+        sent = []
+
+        def fake_send(subject, *a, **k):
+            if subject.startswith("[Policy Watch][점검]"):
+                raise RuntimeError("smtp down")
+            sent.append(subject)
+        monkeypatch.setattr(nm, "send_via_gmail", fake_send)
+        monkeypatch.delenv("MAIL_TO_ADMIN", raising=False)
+        self._setup_failed_source(monkeypatch, tmp_path)
+        nm._run()
+        assert len(sent) == 1 and "신규 1건" in sent[0]
 
     # ── 발송 이력(_sent_log) 연동 (2026-09-10) ───────────────────────────────
     def test_reappeared_item_already_sent_is_not_resent(self, monkeypatch, tmp_path):
