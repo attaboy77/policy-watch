@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """sources/google_news.py 단위 테스트 (네트워크 모킹, 실제 요청 없음)."""
 import time
-from datetime import date
+from datetime import date, timedelta
 from types import SimpleNamespace
 
 import pytest
@@ -14,8 +14,16 @@ class _FakeResp:
         self.content = content
 
 
-def _entry(title, link, source_href=None, published=(2026, 8, 5, 0, 0, 0, 0, 0, 0)):
+def _ts(d: date):
+    return time.struct_time((d.year, d.month, d.day, 0, 0, 0, 0, 0, 0))
+
+
+# 기본 발행일은 오늘 — 2026-11-25부터 fetch_category()가 90일 창을 적용해서, 고정 날짜를 쓰면
+# 시간이 지나며 테스트가 저절로 깨진다.
+def _entry(title, link, source_href=None, published="today"):
     ns = SimpleNamespace(title=title, link=link)
+    if published == "today":
+        published = _ts(date.today())
     if published:
         ns.published_parsed = time.struct_time(published)
     if source_href:
@@ -61,6 +69,67 @@ def test_fetch_category_skips_entries_without_title_or_link(monkeypatch):
     kept = gn.fetch_category("tax")
     assert len(kept) == 1
     assert kept[0]["url"] == "https://moef.go.kr/c"
+
+
+class TestCollectWindow:
+    """2026-11-25: 구글 뉴스도 네이버처럼 수집 기간(기본 90일) 밖 기사를 수집 단계에서 뺀다.
+    검색어의 when:90d를 구글이 지키지 않아 옛 기사가 ESG 상한 자리를 날마다 다르게 채웠다."""
+
+    def _run(self, monkeypatch, entries, **kw):
+        from sources import _excluded_log
+        monkeypatch.setattr(gn, "_http", SimpleNamespace(get=lambda url, **k: _FakeResp(b"")))
+        monkeypatch.setattr(gn.feedparser, "parse", lambda content: SimpleNamespace(entries=entries))
+        _excluded_log.clear()
+        kept = gn.fetch_category("esg", **kw)
+        logged = list(_excluded_log.excluded())
+        _excluded_log.clear()
+        return kept, logged
+
+    def test_old_article_excluded_and_logged(self, monkeypatch):
+        old = date.today() - timedelta(days=239)
+        entries = [
+            _entry("국회 정무위서 지속가능성 공시 로드맵 후퇴 지적 나와", "https://news.google.com/rss/articles/a",
+                   "https://www.esgeconomy.com", published=_ts(old)),
+            _entry("ESG 공시 의무화 법안 국회 통과", "https://news.google.com/rss/articles/b",
+                   "https://www.esgeconomy.com"),
+        ]
+        kept, logged = self._run(monkeypatch, entries)
+        assert [it["url"] for it in kept] == ["https://news.google.com/rss/articles/b"]
+        assert [(e["reason"], e["category"], e["source"]) for e in logged] == [
+            ("collect:out_of_window", "esg", "ESG경제")]
+
+    def test_boundary_90_days_kept_91_excluded(self, monkeypatch):
+        today = date.today()
+        entries = [
+            _entry("ESG 공시 로드맵 발표 90일", "https://x.example.com/90", published=_ts(today - timedelta(days=90))),
+            _entry("ESG 공시 로드맵 발표 91일", "https://x.example.com/91", published=_ts(today - timedelta(days=91))),
+        ]
+        kept, logged = self._run(monkeypatch, entries)
+        assert [it["url"] for it in kept] == ["https://x.example.com/90"]
+        assert [e["reason"] for e in logged] == ["collect:out_of_window"]
+
+    def test_missing_published_date_is_kept(self, monkeypatch):
+        # 네이버와 같다 — 발행일이 없으면 남긴다(언론 1년 상한 #4도 날짜 없으면 남김).
+        entries = [_entry("ESG 공시 로드맵 발표", "https://x.example.com/n", published=None)]
+        kept, logged = self._run(monkeypatch, entries)
+        assert len(kept) == 1 and kept[0]["published"] is None
+        assert logged == []
+
+    def test_days_argument_sets_window(self, monkeypatch):
+        entries = [_entry("ESG 공시 로드맵 발표", "https://x.example.com/d",
+                          published=_ts(date.today() - timedelta(days=40)))]
+        assert len(self._run(monkeypatch, entries, days=30)[0]) == 0
+        assert len(self._run(monkeypatch, entries, days=90)[0]) == 1
+
+    def test_window_applies_even_with_filter_noise_false(self, monkeypatch):
+        # 노이즈 표시 모드(filter_noise=False)는 노이즈만 남겨 표시한다 — 기간 밖은 네이버처럼 뺀다.
+        entries = [_entry("ESG 공시 로드맵 발표", "https://x.example.com/o",
+                          published=_ts(date.today() - timedelta(days=200)))]
+        assert self._run(monkeypatch, entries, filter_noise=False)[0] == []
+
+    def test_query_still_has_when_clause(self):
+        from urllib.parse import unquote_plus
+        assert "when:90d" in unquote_plus(gn.google_news_rss_url("esg", days=90))
 
 
 def test_entry_source_hint_prefers_source_href_over_link():

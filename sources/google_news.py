@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 import time
-from datetime import date
+from datetime import date, timedelta
 
 import feedparser
 
@@ -155,6 +155,11 @@ def fetch_category(cat_key: str, days: int = COLLECT_WINDOW_DAYS, *,
     url = google_news_rss_url(cat_key, days=days)
     resp = _http.get(url)
     feed = feedparser.parse(resp.content)
+    # 2026-11-25: 수집 기간 창을 코드에서도 적용한다(네이버 `naver_news.fetch_category()`와 같은
+    # 방식·같은 사유 코드). 검색어의 `when:{days}d`는 그대로 두지만 구글이 지키지 않는다 —
+    # 11/25 ESG 98건 중 72건이 90일 초과였고, 그 옛 tier2 기사들이 구글 표본에 따라 상한(#17)
+    # 15자리를 날마다 다르게 채웠다(docs/REPORT.md). 발행일이 없으면 네이버처럼 남긴다.
+    cutoff = date.today() - timedelta(days=days)
 
     items: list[dict] = []
     for entry in feed.entries:
@@ -164,6 +169,11 @@ def fetch_category(cat_key: str, days: int = COLLECT_WINDOW_DAYS, *,
             continue
         source_hint = _entry_source_hint(entry)
         tier, trust_score, source_name = trust_of(source_hint)
+        published = _parse_published(entry)
+        if published and published < cutoff:
+            _excluded_log.skip(source=source_name, reason="collect:out_of_window", title=title,
+                               url=link, category=cat_key)
+            continue
         noise_reason = noise_reason_l3(title, tier=tier, category=cat_key)
         noise = noise_reason is not None
         if noise and filter_noise:  # 2026-10-29: 수집 단계 제외도 EXCLUDED_LOG에
@@ -178,7 +188,7 @@ def fetch_category(cat_key: str, days: int = COLLECT_WINDOW_DAYS, *,
             "category": cat_key,
             "title": title,
             "url": link,
-            "published": _parse_published(entry),
+            "published": published,
             "source_name": source_name,
             "source_domain": source_hint,
             "trust_tier": tier,

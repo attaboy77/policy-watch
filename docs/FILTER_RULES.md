@@ -39,7 +39,7 @@
 | 규칙 · 로그 코드 | 거르는 것 | 도입 · 이유 |
 |---|---|---|
 | 검색어 / 카테고리 확정 — **건수만**: 로그 맨 위 "네이버 검색 결과 중 카테고리 미분류: N건" | 카테고리 필수 키워드가 없는 기사. icfr·kifrs는 `required_weak` 단어가 `weak_context`와 함께 있어야 인정. 구글은 검색어(필수 AND 조합, `-NOISE_KEYWORDS`, `when:90d`) 단계에서 걸러져 결과에 안 옴 → 로그 없음. 네이버는 수집 후 `match_loose` — 걸러진 게 아니라 애초에 우리 주제가 아닌 검색 결과라 **제목은 남기지 않고 건수만**(하루 1,700건 안팎) | SPEC 원안 · ADDENDUM-5 §4(8/31): "내부 통제"로 이란 군부 기사가 icfr에 잡힘. ADDENDUM-6 §2(8/31): "금융위원회" 키워드가 금융업 규제를 끌어와서 제거 · 10/29 건수 요약 · **11/20 분류 단계 보강**(`_utils._classify_extra_hits`): tax는 `tax_subjects.yml` 활성 세목의 keywords·laws("…세" 뒤에 무·대·관·계·력·균이 붙으면 불인정 — "인천지방세무사회" 오탐, 두 글자 이름은 앞뒤 한글 불가), esg는 네이버 검색어 "지속가능성 공시"·"공급망 실사"도 필수 키워드로 인정. 구글 검색어(`_required_list`)엔 안 넣음 — 수집 범위는 그대로. 기후·탄소·온실가스·배출권은 보류 |
-| 수집 기간 `collect:out_of_window` (네이버만) | 발행일이 90일(`COLLECT_WINDOW_DAYS`) 넘은 기사 | SPEC 원안 |
+| 수집 기간 `collect:out_of_window` | 발행일이 90일(`COLLECT_WINDOW_DAYS`) 넘은 기사. 날짜 없으면 남김(#4와 같음). 구글은 검색어의 `when:90d`도 그대로 둔다 | SPEC 원안(네이버) · **11/25 구글에도 적용**: 구글 경로엔 코드 쪽 날짜 창이 없어 `when:90d`를 구글이 안 지킨 90일 초과 기사(11/25 ESG 98건 중 72건)가 들어왔고, 그 옛 tier2 기사들이 구글 표본에 따라 ESG 상한 15자리를 채워 ESG 목록이 매일 바뀌었다 |
 | 투자·시황 노이즈 `collect:noise_keyword` | 제목에 `NOISE_KEYWORDS`(테마주·주가·급등·특징주·비트코인 …). tier 1 매체는 면제 | SPEC 원안 · 주식 기사 제거 |
 | 행사·운영 공지 `collect:event_announcement` | `ADMIN_NOISE_KEYWORDS`(인사·위촉·조직개편·점검·수상·MOU·Forum·세미나·개최 안내 …), 또는 "제N회/제N차"인데 개정·제정·공표·의결·확정이 없는 제목. **tier 무관** | ADDENDUM-4 §1(8/31) 인사·운영 공지 · ADDENDUM-6 §3 기관 홍보 · ADDENDUM-7 §4 "제149회 KAI Forum" 미탐 · "위촉" 9/1 |
 | 사건·사고 `collect:incident` | `INCIDENT_KEYWORDS`(검찰·수사·구속·기소·혐의·고발 …)가 있고 개정·시행령·예규·지침이 **없는** 기사. tier 1 면제 | ADDENDUM §5(8/26) · 탈세 사건 기사 제거, 예규 변경 기사는 살림 |
