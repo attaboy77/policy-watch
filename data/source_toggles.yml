@@ -35,3 +35,7 @@ sources:
 
   - name: fss_notes    # 금융감독원 주석공시 모범사례 (B0000128)
     enabled: true
+
+  # 2026-11-27
+  - name: fss_cases    # 금융감독원 심사·감리지적사례 (B0000135)
+    enabled: true

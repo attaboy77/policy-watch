@@ -15,9 +15,10 @@ def _no_sleep(monkeypatch):
 
 @pytest.fixture(autouse=True)
 def _quiet_new_parts(monkeypatch):
-    """B2/B3 테스트가 press·notes 때문에 실사이트에 나가지 않게 기본은 '행은 읽었고 관련 0건'."""
+    """B2/B3 테스트가 press·notes·cases 때문에 실사이트에 나가지 않게 기본은 '행은 읽었고 관련 0건'."""
     monkeypatch.setattr(fss, "fetch_press", lambda: ([], []))
     monkeypatch.setattr(fss, "fetch_disclosure_notes", lambda: ([], []))
+    monkeypatch.setattr(fss, "fetch_review_cases", lambda: ([], []))  # 2026-11-27
 
 
 B2 = {"id": "b2", "urls": {"official": "https://www.fss.or.kr/fss/bbs/B0000155/view.do?nttId=1"}}
@@ -70,6 +71,7 @@ def test_all_parts_failed_raises_plain_error(monkeypatch):
     monkeypatch.setattr(fss, "fetch_kicfr_guidelines", lambda: [])
     monkeypatch.setattr(fss, "fetch_press", _boom)
     monkeypatch.setattr(fss, "fetch_disclosure_notes", _boom)
+    monkeypatch.setattr(fss, "fetch_review_cases", _boom)
     with pytest.raises(RuntimeError, match="모두 실패"):
         fss.fetch()
 
@@ -224,7 +226,7 @@ def test_disabled_press_is_skipped_not_failed(monkeypatch):
 
 
 def test_disabled_parts_not_counted_for_all_failed(monkeypatch):
-    monkeypatch.setattr(fss, "DISABLED_SOURCES", {"fss_press": "", "fss_notes": ""})
+    monkeypatch.setattr(fss, "DISABLED_SOURCES", {"fss_press": "", "fss_notes": "", "fss_cases": ""})
     monkeypatch.setattr(fss, "fetch_data_board", _boom)
     monkeypatch.setattr(fss, "fetch_kicfr_guidelines", _boom)
     with pytest.raises(RuntimeError, match="모두 실패"):

@@ -15,6 +15,7 @@ docs/SOURCE_PROBE.md §B 조사 결과에 기반한다.
 - B1(정적 개요 페이지)은 날짜가 있는 "항목"이 아니라 참고 링크 성격이라
   items로 만들지 않는다(probe만 제공).
 - B3(k-icfr.org)는 EUC-KR 인코딩 레거시 ASP 사이트다.
+- 2026-11-27: 하위 수집 cases(심사·감리지적사례 B0000135) 추가 — kifrs 고정, 공개번호 FSS/24xx 이후.
 - 2026-11-14: 하위 수집 press(금감원 보도자료 B0000188)·notes(주석공시 모범사례 B0000128)
   추가. B2와 달리 카테고리를 icfr로 고정하지 않고 fsc 보도자료와 같은 기존 필터(행사 공지 →
   classify → 세목)를 탄다. 첨부는 목록 행에 있어 상세 페이지를 열지 않는다.
@@ -335,6 +336,97 @@ def fetch_disclosure_notes() -> tuple[list[dict], list[str]]:
     return _fetch_board("notes", NOTES_LIST_URL, {"menuNo": "200435"}, page_unit=100, max_pages=1)
 
 
+# ── cases: 심사·감리지적사례(B0000135) — 2026-11-27 사용자 지시로 추가 ─────────────────
+# 금감원이 반기마다 10건 안팎을 묶어 공개하는 쟁점별 감리 지적사례(익명). 목록에 등록일 칸이
+# 없고 상세 페이지에도 날짜가 없어 공개번호 `FSS/YYMM-NN`의 연월을 발행일(YYYY-MM-01)로 쓴다.
+# 수집 범위: 공개번호 FSS/24xx 이후만(사용자 지시 "최근 2년"). 공개번호가 없는 옛 행과 그 이전
+# 묶음은 건수만 남긴다(매일 170여 행이라 행별 로그는 생략). 관련 기준서가 일반기업회계기준인
+# 사례는 KASB 제개정현황(D)과 같이 `collect:non_kifrs`.
+# 회사별 조치 게시판(회계감리결과제재, accnutAdtorInfo)은 개별 기업 건이라 넣지 않았다
+# (docs/FILTER_RULES.md §1-2).
+CASES_LIST_URL = f"{FSS_BASE}/fss/bbs/B0000135/list.do"
+CASES_MENU_NO = "200448"
+CASES_MIN_YY = 24
+CASES_PAGE_UNIT = 300
+_CASE_NO_RE = re.compile(r"^FSS/(\d{2})(\d{2})-\d+$")
+CASES_TALLY_LABEL = "금감원 심사·감리지적사례 중 FSS/24xx 이전·공개번호 없는 행"
+
+
+def case_published_at(case_no: str) -> str | None:
+    """"FSS/2606-10" → "2026-06-01". 공개번호 형식이 아니면 None, 월이 이상하면 예외."""
+    m = _CASE_NO_RE.match(case_no.strip())
+    if not m:
+        return None
+    yy, mm = int(m.group(1)), int(m.group(2))
+    if not 1 <= mm <= 12:
+        raise ValueError(f"공개번호 월이 이상함: {case_no}")
+    return f"{2000 + yy:04d}-{mm:02d}-01"
+
+
+def parse_cases_rows(rows) -> tuple[list[dict], int, int]:
+    """심사·감리지적사례 목록 행들 → (항목, 읽은 행 수, 해석 실패 행 수). 행 단위 격리."""
+    items: list[dict] = []
+    rows_seen = row_errors = 0
+    for row in rows:
+        title, url = "", None
+        try:
+            cells = row.find_all("td")
+            link = row.select_one("td.title2 a, td.title a")
+            if link is None or len(cells) < 6:
+                continue  # "등록된 게시물이 없습니다" 같은 안내 행
+            title = link.get_text(strip=True)
+            m = _NTT_ID_RE.search(link.get("href", ""))
+            if not title or not m:
+                raise ValueError("제목 또는 nttId 없음")
+            url = f"{FSS_BASE}/fss/bbs/B0000135/view.do?nttId={m.group(1)}&menuNo={CASES_MENU_NO}"
+            case_no = cells[1].get_text(strip=True)
+            standard = cells[4].get_text(strip=True)
+            published_at = case_published_at(case_no)
+            rows_seen += 1
+            if published_at is None or int(published_at[2:4]) < CASES_MIN_YY:
+                _excluded_log.tally(CASES_TALLY_LABEL)
+                continue
+            # 같은 묶음에 같은 제목이 있어(예: 「매출 및 매출원가 허위계상」 FSS/2405-02·04) 공개번호를
+            # 붙인다 — 안 붙이면 정확 일치 중복·변형본 병합에 걸려 한 건이 사라진다.
+            shown = f"{title} ({case_no})"
+            if "일반기업회계기준" in standard:
+                _excluded_log.skip(source="금융감독원", reason="collect:non_kifrs",
+                                   title=f"{shown} — 관련 기준서: {standard}", url=url, category="kifrs")
+                continue
+            if is_event_announcement(shown):
+                _excluded_log.skip(source="금융감독원", reason="collect:event_announcement",
+                                   title=shown, url=url, category="kifrs")
+                continue
+            item = _build_item(title=shown, url=url, published_at=published_at, doc_type="결정례·판례",
+                               domain="fss.or.kr", source_name="금융감독원", category="kifrs",
+                               date_estimated=True)  # 일(day)은 모른다 — 공개번호엔 연월만 있다
+            item["attachments"] = _row_attachments(row)
+            items.append(item)
+        except Exception as exc:  # noqa: BLE001
+            row_errors += 1
+            shown = title or "(제목 없음)"
+            print(f"[fss] cases 행 건너뜀: {shown} — {exc}")
+            _excluded_log.skip(source="금융감독원", reason="collect:row_parse_error",
+                               title=f"{shown} — {exc}", url=url)
+    return items, rows_seen, row_errors
+
+
+def fetch_review_cases() -> tuple[list[dict], list[str]]:
+    """cases: 전체(약 240행)가 한 페이지에 온다. 목록 행을 하나도 못 읽으면 예외, 행 해석 실패는
+    부분 실패 사유로 돌려준다(press·notes와 같은 기준 — 대상 행이 0건인 건 정상)."""
+    resp = _http.get(CASES_LIST_URL, params={"menuNo": CASES_MENU_NO, "pageUnit": CASES_PAGE_UNIT,
+                                             "pageIndex": 1}, headers={"User-Agent": FSS_UA})
+    rows = BeautifulSoup(resp.text, "html.parser").select("table tbody tr")
+    items, rows_seen, row_errors = parse_cases_rows(rows)
+    if rows_seen == 0:
+        raise RuntimeError("cases 목록 행 0개 — 페이지 구조 변경·차단 의심"
+                           + (f" (행 {row_errors}개 전부 해석 실패)" if row_errors else ""))
+    reasons = []
+    if row_errors:
+        reasons.append(f"행 {row_errors}개 해석 실패(건너뜀, EXCLUDED_LOG collect:row_parse_error)")
+    return items, reasons
+
+
 def part_of(item: dict) -> str:
     """캐시 항목이 어느 하위 수집에서 왔는지 — 부분 폴백용(main.SUB_SOURCES)."""
     url = (item.get("urls") or {}).get("official") or ""
@@ -344,6 +436,8 @@ def part_of(item: dict) -> str:
         return "press"
     if "/B0000128/" in url:
         return "notes"
+    if "/B0000135/" in url:
+        return "cases"
     return "b2"
 
 
@@ -381,7 +475,8 @@ def fetch() -> list[dict]:
         failed["b3"] = str(exc)
     if "b3" in failed:
         print(f"[fss] B3(k-icfr.org) 수집 실패: {failed['b3']}")
-    for part, fn in (("press", fetch_press), ("notes", fetch_disclosure_notes)):
+    for part, fn in (("press", fetch_press), ("notes", fetch_disclosure_notes),
+                     ("cases", fetch_review_cases)):
         if not part_enabled(part):
             print(f"[fss] {part}: data/source_toggles.yml에서 꺼짐(fss_{part}) — 건너뜀")
             continue
@@ -404,12 +499,12 @@ def fetch() -> list[dict]:
 
 
 # 부분 실패를 따로 세는 하위 수집(main.SUB_SOURCES["fss"]와 같아야 한다).
-TRACKED_PARTS = ("b2", "b3", "press", "notes")
+TRACKED_PARTS = ("b2", "b3", "press", "notes", "cases")
 
 
 def part_enabled(part: str) -> bool:
     """data/source_toggles.yml에서 `fss_{part}`를 enabled: false로 두면 그 하위 수집만 끈다
-    (2026-11-14, press·notes용 — 코드 수정 없이 한 줄로 끄기)."""
+    (2026-11-14 press·notes, 2026-11-27 cases — 코드 수정 없이 한 줄로 끄기)."""
     return f"fss_{part}" not in DISABLED_SOURCES
 
 
