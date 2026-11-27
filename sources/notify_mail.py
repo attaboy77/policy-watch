@@ -60,7 +60,7 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 
 from . import _sent_log, _source_health
-from ._config import CATEGORIES, SOURCE_LABELS
+from ._config import CATEGORIES, MAIL_MAX_ITEMS, SOURCE_LABELS
 from ._utils import feed_hidden_reason
 
 _KST = timezone(timedelta(hours=9))
@@ -225,6 +225,32 @@ def group_by_category(items: list[dict]) -> list[tuple[str, list[dict]]]:
             group_items = sorted(group_items, key=lambda x: x.get("published_at") or "", reverse=True)
             ordered.append((meta["label"], group_items))
     return ordered
+
+
+def cap_mail_items(new_official: list[dict], new_news: list[dict],
+                   limit: int = MAIL_MAX_ITEMS) -> tuple[list[dict], list[dict], int]:
+    """2026-11-27: 메일 하루 신규 건수 상한. 메일 본문의 표시 순서(`_sections`: 공식 → 언론,
+    각 섹션 안은 `group_by_category` 순서)로 펼쳐 앞에서 `limit`건만 남긴다 — 새 정렬 기준은
+    만들지 않는다. 공식이 먼저 오므로 언론 때문에 공식이 잘리는 일은 없다.
+    (남긴 공식, 남긴 언론, 잘린 건수)를 돌려준다. `limit`이 None이면 자르지 않는다."""
+    ordered = ([it for _, g in group_by_category(new_official) for it in g]
+               + [it for _, g in group_by_category(new_news) for it in g])
+    if limit is None or len(ordered) <= limit:
+        return new_official, new_news, 0
+    keep = {id(it) for it in ordered[:limit]}
+    return ([it for it in new_official if id(it) in keep],
+            [it for it in new_news if id(it) in keep],
+            len(ordered) - limit)
+
+
+def cap_notice_line(total: int, limit: int = MAIL_MAX_ITEMS) -> str:
+    """메일 맨 위 한 줄(상한에 걸린 날만)."""
+    return f"신규 {total}건 — 많아서 {limit}건만 싣습니다"
+
+
+def omitted_line(omitted: int) -> str:
+    """본문 목록 끝 한 줄(잘린 항목 묶음)."""
+    return f"외 {omitted}건 — 대시보드에서 확인"
 
 
 def parse_recipients(mail_to: str | None) -> list[str]:
@@ -410,10 +436,16 @@ def _sections(new_official: list[dict], new_news: list[dict]):
 
 
 def build_body_text(new_official: list[dict], new_news: list[dict], dashboard_url: str, forced: bool = False,
-                     fallback_lines: list[str] | None = None) -> str:
+                     fallback_lines: list[str] | None = None, total: int | None = None,
+                     omitted: int = 0) -> str:
     """HTML을 못 읽는 클라이언트용 대체본. 링크를 제목에 걸 수 없으니 원문
-    그대로("링크: URL") 표시한다 — HTML 버전과 달리 이건 정상(주 경로가 아님)."""
+    그대로("링크: URL") 표시한다 — HTML 버전과 달리 이건 정상(주 경로가 아님).
+    `omitted` > 0이면(2026-11-27 상한) 맨 위에 `cap_notice_line(total)`, 목록 끝에
+    `omitted_line(omitted)`을 붙인다."""
     lines = []
+    if omitted:
+        lines.append(cap_notice_line(total))
+        lines.append("")
     if forced and not new_official and not new_news:
         lines.append("신규 항목이 없습니다. (workflow_dispatch의 force_mail 옵션으로 강제 발송된 테스트 메일입니다.)")
         lines.append("")
@@ -433,6 +465,9 @@ def build_body_text(new_official: list[dict], new_news: list[dict], dashboard_ur
                 if link:
                     lines.append(f"    링크: {link}")
             lines.append("")
+    if omitted:
+        lines.append(f"{omitted_line(omitted)}: {dashboard_url}")
+        lines.append("")
     lines.append("──────────")
     for note in (fallback_lines or []):
         lines.append(f"⚠ {note}")
@@ -453,9 +488,13 @@ def _esc(s) -> str:
 # 아웃룩(Word 렌더링 엔진)에서 깨지지 않도록 <div>/<p>/<a>/<b>/<hr> 같은 기본
 # 태그 + 인라인 style만 쓰고, flexbox/grid/외부 CSS/이미지는 쓰지 않는다.
 def build_body_html(new_official: list[dict], new_news: list[dict], dashboard_url: str, forced: bool = False,
-                     fallback_lines: list[str] | None = None) -> str:
+                     fallback_lines: list[str] | None = None, total: int | None = None,
+                     omitted: int = 0) -> str:
     parts = ['<div style="font-family:Arial, Helvetica, sans-serif; font-size:14px; '
              'color:#111111; line-height:1.6;">']
+    if omitted:
+        parts.append(f'<p style="color:#b45309; font-weight:bold; margin:0 0 16px;">'
+                     f'{_esc(cap_notice_line(total))}</p>')
     if forced and not new_official and not new_news:
         parts.append(
             '<p style="color:#b45309; margin:0 0 16px;">신규 항목이 없습니다. '
@@ -482,6 +521,9 @@ def build_body_html(new_official: list[dict], new_news: list[dict], dashboard_ur
                     if it.get("impact"):
                         parts.append(f'<br><span style="color:#333333;">실무영향: {_esc(it["impact"])}</span>')
                 parts.append("</p>")
+    if omitted:
+        parts.append(f'<p style="margin:16px 0 0;"><a href="{_esc(dashboard_url)}" style="color:#1a73e8;">'
+                     f'{_esc(omitted_line(omitted))}</a></p>')
     parts.append('<hr style="border:none; border-top:1px solid #e2e8f0; margin:20px 0;">')
     for note in (fallback_lines or []):
         parts.append(f'<p style="color:#b45309; font-size:12px; margin:0 0 4px;">⚠ {_esc(note)}</p>')
@@ -621,10 +663,18 @@ def _send_new_items_mail(*, current_items: list[dict], prev_path: str | None, se
         print("[notify_mail] 신규 항목이 없어 메일을 보내지 않습니다.")
         return 0
 
+    # 2026-11-27: 하루 신규 건수 상한(MAIL_MAX_ITEMS). 제목은 실제 신규 건수 그대로 둔다.
+    total = len(new_official) + len(new_news)
+    new_official, new_news, omitted = cap_mail_items(new_official, new_news)
+    if omitted:
+        print(f"[notify_mail] 신규 {total}건 중 {omitted}건은 상한({MAIL_MAX_ITEMS}건)으로 본문에서 생략")
+
     # 운영 경고는 관리자 [점검] 메일로 따로 보낸다 — 전원에게 가는 본문엔 안 붙인다.
-    subject = build_subject(len(new_official) + len(new_news))
-    text_body = build_body_text(new_official, new_news, dashboard_url, forced=forced)
-    html_body = build_body_html(new_official, new_news, dashboard_url, forced=forced)
+    subject = build_subject(total)
+    text_body = build_body_text(new_official, new_news, dashboard_url, forced=forced,
+                                total=total, omitted=omitted)
+    html_body = build_body_html(new_official, new_news, dashboard_url, forced=forced,
+                                total=total, omitted=omitted)
 
     send_via_gmail(subject, text_body, html_body, recipients, gmail_user, gmail_password)
     print(f"[notify_mail] 메일 발송 완료: 공식 {len(new_official)}건, 언론 {len(new_news)}건 → {len(recipients)}명")
@@ -632,7 +682,9 @@ def _send_new_items_mail(*, current_items: list[dict], prev_path: str | None, se
     # 2026-09-10: 실제로 메일에 실린 id만 발송 이력에 남긴다(발송 자체가
     # 실패하면 이 아래는 실행되지 않으므로 안 보낸 id가 "보냄"으로 잘못
     # 기록될 일은 없다) — 다음 실행부터 find_new_items()가 이 id들을
-    # 다시 신규로 잡지 않는다.
+    # 다시 신규로 잡지 않는다. 2026-11-27: 상한으로 본문에서 잘린 항목은 "실린" 게 아니라
+    # 여기 안 남긴다(이 원칙 그대로). 다음 날엔 직전 data.json에 있으니 신규로 다시 안 잡히고,
+    # data.json에서 빠졌다 돌아오는 경우에만 그때 다시 메일 후보가 된다.
     sent_now = [it.get("id") for it in new_official + new_news if it.get("id")]
     if sent_now:
         _sent_log.record(sent_log, sent_now, _now_kst_date_iso())

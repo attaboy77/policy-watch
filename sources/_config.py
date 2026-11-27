@@ -647,6 +647,13 @@ MAX_NEWS_PER_CATEGORY = 15      # L3 카테고리당 상한(기존 60 → 15)
 MAX_TIER4_PER_CATEGORY = 5      # L3 중 tier4(종합 경제지)는 카테고리당 최대 5건
 MAX_OFFICIAL_PER_CATEGORY = None  # L1/L2는 상한 없음(그대로 전량 노출)
 
+# ── 메일 하루 신규 건수 상한 (2026-11-27 사용자 지시) ─────────────────────────
+# 신규 항목이 이보다 많으면 메일 본문에는 지금 메일의 표시 순서(공식 섹션 → 언론 섹션,
+# 섹션 안은 카테고리 순서 → 최신순)로 앞에서부터 이만큼만 싣고, 나머지는
+# "외 N건 — 대시보드에서 확인" 한 줄로 묶는다. 공식이 먼저라 언론에 밀려 잘리지 않는다.
+# 대시보드(data.json)는 그대로다. 메일 본문에서만 줄인다(`notify_mail.cap_mail_items`).
+MAIL_MAX_ITEMS = 20
+
 # ── 유사 기사 중복 제거 (SPEC-ADDENDUM-4.md §3, SPEC-ADDENDUM-5.md §5로 개선) ─
 # L3(뉴스)에만 적용. SIMILARITY_THRESHOLD는 ADDENDUM-5 §5-3에서 0.65→0.55로
 # 낮추고, 대신 주체(§5-3 extract_subject) 일치 조건(b)으로 오탐을 방지한다.
