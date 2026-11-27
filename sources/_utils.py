@@ -20,6 +20,8 @@ from ._config import (CATEGORIES, NOISE_KEYWORDS, TRUST_TIERS,
                       LOCAL_GOV_NAMES, FOREIGN_NEWS_SIGNALS, FOREIGN_NEWS_DOMAINS, GENERIC_USE_CCTLDS,
                       NON_TARGET_TAX_SUBJECTS, OPINION_PREFIX_KEYWORDS,
                       FOREIGN_TAX_COUNTRIES, FOREIGN_TAX_BILATERAL_PREFIXES,
+                      OTHER_INDUSTRY_TAX_INDUSTRIES, OTHER_INDUSTRY_TAX_MEASURES,
+                      OTHER_INDUSTRY_TAX_GENERAL_MEASURES, OUR_INDUSTRY_KEYWORDS,
                       STANDARD_SETTER_GOVERNANCE, STANDING_DOC, STANDING_DOC_FRESH_DAYS,
                       DOC_VARIANT_MODIFIERS, SELF_ACTIVITY_PUBLIC_SUFFIXES,
                       SELF_ACTIVITY_PUBLIC_ABBREV_RE, SELF_ACTIVITY_STAKEHOLDERS,
@@ -1365,6 +1367,32 @@ def apply_foreign_tax_filter(items: list[dict]) -> tuple[list[dict], list[dict]]
             kept.append(it)
         else:
             excluded.append(dict(it, excluded_reason="excluded:foreign_tax"))
+    return kept, excluded
+
+
+def is_other_industry_tax(title: str) -> bool:
+    """2026-11-27: 당사 업종과 무관한 산업 전용 세제 기사("전기차 생산세액공제 …").
+    제목에 `OTHER_INDUSTRY_TAX_INDUSTRIES` 산업명과 `OTHER_INDUSTRY_TAX_MEASURES` 세제 단어가
+    같이 있으면 True. 업종 무관 세제(`OTHER_INDUSTRY_TAX_GENERAL_MEASURES`)나 당사 업종
+    (`OUR_INDUSTRY_KEYWORDS`)이 제목에 있으면 False. 카테고리·계층 무관."""
+    t = _norm(title or "")
+    if not any(_norm(k) in t for k in OTHER_INDUSTRY_TAX_INDUSTRIES):
+        return False
+    if not any(_norm(k) in t for k in OTHER_INDUSTRY_TAX_MEASURES):
+        return False
+    if any(_norm(k) in t for k in OTHER_INDUSTRY_TAX_GENERAL_MEASURES + OUR_INDUSTRY_KEYWORDS):
+        return False
+    return True
+
+
+def apply_other_industry_tax_filter(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    """전 계층. `is_other_industry_tax()` 참고."""
+    kept, excluded = [], []
+    for it in items:
+        if not is_other_industry_tax(it.get("title", "")):
+            kept.append(it)
+        else:
+            excluded.append(dict(it, excluded_reason="excluded:other_industry_tax"))
     return kept, excluded
 
 
