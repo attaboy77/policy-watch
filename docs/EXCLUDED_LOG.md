@@ -1,6 +1,6 @@
 # 필터 제외 목록 (EXCLUDED_LOG)
 
-생성 시각: 2026-11-27 12:49:52 +0900
+생성 시각: 2026-11-27 14:43:20 +0900
 
 이번 수집 실행에서 필터에 걸려 빠진 항목 전부다(2026-10-29부터 — 규칙과 사유 코드는
 `docs/FILTER_RULES.md`). `excluded:…`는 정제 파이프라인(`main.build_data_json`),
@@ -9,46 +9,47 @@
 **과다 필터링 점검용**: 실제로는 우리에게 적용되는 항목이 있으면(오제외)
 `sources/_config.py`의 해당 키워드를 빼거나 예외 조건을 추가할 것.
 
-- 네이버 검색 결과 중 카테고리 미분류: 1576건 (제목은 남기지 않음)
+- 금감원 심사·감리지적사례 중 FSS/24xx 이전·공개번호 없는 행: 178건 (제목은 남기지 않음)
+- 네이버 검색 결과 중 카테고리 미분류: 1580건 (제목은 남기지 않음)
 
 | 사유 | 건수 |
 |---|---|
-| excluded:company_event | 4 |
-| excluded:company_self_activity | 7 |
+| excluded:company_event | 3 |
+| excluded:company_self_activity | 5 |
 | excluded:corporate_pr | 1 |
 | excluded:doc_variant_merged | 1 |
-| excluded:duplicate_exact | 4 |
+| excluded:duplicate_exact | 3 |
 | excluded:foreign_news | 1 |
 | excluded:foreign_tax | 18 |
 | excluded:industry_specific | 9 |
 | excluded:manual_id | 2 |
-| excluded:no_regulatory_signal | 113 |
+| excluded:no_regulatory_signal | 96 |
 | excluded:nonprofit | 1 |
+| excluded:other_industry_tax | 18 |
 | excluded:related_news_attached | 1 |
-| excluded:similar_news_merged | 62 |
+| excluded:similar_news_merged | 49 |
 | excluded:smb_only | 3 |
 | excluded:standard_setter_governance | 1 |
-| collect:event_announcement | 41 |
+| collect:event_announcement | 40 |
 | collect:incident | 4 |
 | collect:law_name_mismatch | 7 |
 | collect:no_category | 285 |
 | collect:noise_keyword | 1 |
-| collect:non_kifrs | 26 |
+| collect:non_kifrs | 31 |
 | collect:old_year | 8 |
 | collect:out_of_scope | 209 |
-| collect:out_of_window | 149 |
-| collect:tax_subject | 62 |
+| collect:out_of_window | 122 |
+| collect:tax_subject | 59 |
 
-## excluded:company_event (4건)
+## excluded:company_event (3건)
 
 | 카테고리 | 출처 | 제목 | 링크 | 비고 |
 |---|---|---|---|---|
 | kifrs | 매일경제 | 내년 새 회계기준 도입…금감원 "기업 준비상황 점검해야" - 매일경제 마켓 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE5mdFY1aERzd2ZQLUpWWHVjVWxVZEZHMWZFVTc3WHQ3MzQ4ckVHd3hpMlRTVHd6MFdUb2NvTlBaUmZzUTNCdUFqdC03bkZkR1FZNWc?oc=5 |  |
 | kifrs | yna.co.kr | 금융위, '회계기준 위반' 금양에 76억3천만원 과징금 의결 - 연합뉴스 | https://news.google.com/rss/articles/CBMiW0FVX3lxTFA3ZXAtQlFZQjUwUV9rbDZDZ0dodTF2MGw1MG9NS09xRUFJekhCQlcxVk4wWkJmZVRoYlkwR2xNdGJEbmVrdU5LRV9qZXpzbkNXVVVNeXlDc3BRZ0XSAWBBVV95cUxQVjBoZ29XNWttV2hfYkFPTG1KWjRuTXRadFBtQnhON29lekYyck5PelV1b3hnbHZVa291TmpZQmdRak1FNmhKLTFTWkZsOGJSZnBUQV91eG9kNXNiV0sxcHE?oc=5 |  |
-| esg | 임팩트온 | GRI, 금융업 공시표준 3종 확정…대출·투자·보험인수 영향까지 공시 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTFBpcXlqWEtjdEg1SjU2LThva1BfVjIxNFY1dWhaWVpEODJxY1ZWOU9ZYTNvRnNYS09PMF8xenhvOXZ5am85alI4clBuWHJmVUZ5TDhvendLYlpNWHdmb3FPVkk0ci1JaEsyWEE?oc=5 |  |
 | tax | financialreview.co.kr | [강동형 칼럼] 대손세액공제, 부도보다 대손확정일이 가른다 | http://www.financialreview.co.kr/news/articleView.html?idxno=46483 |  |
 
-## excluded:company_self_activity (7건)
+## excluded:company_self_activity (5건)
 
 | 카테고리 | 출처 | 제목 | 링크 | 비고 |
 |---|---|---|---|---|
@@ -56,8 +57,6 @@
 | kifrs | futurechosun.com | 회계기준은 제각각, 보고는 중복…‘회계기본법’ 제정 목소리 나와 - 더나은미래 | https://news.google.com/rss/articles/CBMiUkFVX3lxTFBhZ3dNVjNHQldlUXYzVlltVzgwTGtmb1ZMWlh1SHZwNDBhemYtTkF6c1dPVmxyNHE1dlVuSTg1ck1yUHB4MzVqdlRjQ3R5R296RXc?oc=5 |  |
 | esg | ESG경제 | TNFD, ISSB에 자연 관련 공시 기준서 도입 촉구 | https://www.esgeconomy.com/news/articleView.html?idxno=17565 |  |
 | esg | fntimes.com | 동양생명, ESG 경영 내실 강화…우리금융과 지속가능경영 시너지 [보험... | https://www.fntimes.com/html/view.php?ud=2026112618041682009efc5ce4ae_18 |  |
-| esg | m.ekn.kr | TNFD, “자연공시 실무서 아닌 공시기준으로”…ISSB에 제도 강화 권고 - 에너지경제신문 | https://news.google.com/rss/articles/CBMiW0FVX3lxTE1ZRHhKeVl5Yi1rVTdJcGwyQ0dnUUFyR01SZGQtX252WTRVaTU1NEVDQVFmSncwcHYtMDZwbW1qUmhjN052U1IzSks1Ym5ISXhYWHNkdGo5bHg3Qzg?oc=5 |  |
-| esg | zdnet.co.kr | 코오롱베니트, ESG 공시 의무화 앞두고 통합관리 사업 확대…공급망 실사까지 지원 - 지디넷코리아 | https://news.google.com/rss/articles/CBMiVkFVX3lxTFBWM0xPLW1iR3p4UmM4NkgzZTk5U1cxY0VoamZ0LWZsQ0JwM3ozdTBnbmQwamt2SDNpZy03VHVCOTkzeEhwWHdzblNXcU52dGxtY0Q5Z3VB?oc=5 |  |
 | tax | sejungilbo.com | 김주영, 조세특례제한법 개정안 발의…2031년 말까지 연장 | https://www.sejungilbo.com/news/articleView.html?idxno=61103 |  |
 
 ## excluded:corporate_pr (1건)
@@ -72,14 +71,13 @@
 |---|---|---|---|---|
 | icfr | 금융감독원 | 내부회계관리제도 평가·보고 지침 Clean ver. ('24.12.23 개정) | https://www.fss.or.kr/fss/bbs/B0000155/view.do?nttId=189616&menuNo=201177&pageIndex=1 | → 대표: 내부회계관리제도 평가·보고 지침 ('24.12.23 개정) |
 
-## excluded:duplicate_exact (4건)
+## excluded:duplicate_exact (3건)
 
 | 카테고리 | 출처 | 제목 | 링크 | 비고 |
 |---|---|---|---|---|
 | icfr | 내부회계관리제도운영위원회 | 모범규준 | https://www.k-icfr.org/sub/menu/guideline.asp |  |
 | icfr | 내부회계관리제도운영위원회 | 중소기업 내부회계관리제도 설계 및 운영 적용기법 전문(2021.5.11. 제정) | https://www.k-icfr.org/sub/menu/guideline.asp?rWork=TblRead&rNo=38&rGotoPage=1&rSchText=&rType=1 |  |
 | icfr | 내부회계관리제도운영위원회 | 내부회계관리제도 설계 및 운영 적용기법 전문(2021.5.11. 개정) | https://www.k-icfr.org/sub/menu/guideline.asp?rWork=TblRead&rNo=36&rGotoPage=1&rSchText=&rType=1 |  |
-| esg | joseplus.com | 회계기준원, KSSB 공시기준 파일럿 테스트…전문가 TF 논의 착수 - 조세플러스 | https://news.google.com/rss/articles/CBMiWEFVX3lxTE1RaUpIeDFhcmlxZnNlRzdmaGpSQlVFSmNZVW5SZEE1a3JEQVEtQzc0MGJBWlg4dVRiSF80ZmREakM4NGVqbTJYcFhQNURTVV9DZ0J5T3JBd2TSAVNBVV95cUxQVXlNZWU5R19CVWs4MUZ3S3lnTEhGRGxmTlZCcXcwM1I2RkpwMWhDN2x0TkNkTlhyaGdKZ0FoZmU1T1BxRElhZ1N3M09ZaTJqTDAzYw?oc=5 |  |
 
 ## excluded:foreign_news (1건)
 
@@ -131,7 +129,7 @@
 | kifrs | 한국회계기준원 | 공정한 표시와 IFRS 회계기준서의 준수 IAS 1 ‘재무제표 표시’[IAS 8 ‘재무제표의 작성 기준’] | https://www.kasb.or.kr/front/board/View016002.do?siteCd=002000000000000&seq=40688&ctgCd=016002&replySummary=Y | 결론이 '별도 기준 제정 없이 현행 규정으로 충분' — 바뀌는 게 없음 (KASB 질의회신 '공정한 표시와 IFRS 회계기준서의 준수', 10/30) |
 | tax | 일간NTN | [국세 예규] 상시 주거용 임대 오피스텔 양도 때 부가세는? "사실판단 해... | http://www.intn.co.kr/news/articleView.html?idxno=2053355 | 주거용 오피스텔 임대·양도 부가세 — 제조업 법인과 무관 (일간NTN [국세 예규] 상시 주거용 임대 오피스텔 양도 때 부가세는?, 11/20) |
 
-## excluded:no_regulatory_signal (113건)
+## excluded:no_regulatory_signal (96건)
 
 | 카테고리 | 출처 | 제목 | 링크 | 비고 |
 |---|---|---|---|---|
@@ -144,8 +142,8 @@
 | kifrs | 조세일보 | 감리지적사례-매출채권 허위계상 [재무회계] 회계부정 적발과 분식회계... | http://www.joseilbo.com/news/news_read.php?uid=576157&class=18&grp= |  |
 | kifrs | 조세일보 | 감리지적사례-회사 자금 유용 [재무회계] 회계부정 적발과 분식회계 중... | http://www.joseilbo.com/news/news_read.php?uid=575552&class=18&grp= |  |
 | kifrs | CPA뉴스 | '회계처리 위반' 셀바스헬스케어·대우산업개발에 감사인지정 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBIQTJ0X1JOSU9ma2J1MTBkVG5aVVo5bmtPUF9PVy0tT3R4NFN1NE5CcndSOE9EQjgtVUNydXJXak9UcFpTZTFydUxzdnhnY1pqdy10U21mdVVSbVNNT0I2NEVocnhURmw4?oc=5 |  |
-| kifrs | CPA뉴스 | [재무제표 수다떨기] 기업 인수 뒤의 숨은 이야기, 외부평가 의견서와 M&A 공시 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFA4UVFYV2FvWGtPaTZjbVIxQjBESjVJenlJallEaERzQXhUczVGMm1KVmdYb1BwMzRlXzE0dXlhUXA5eS1ya0VwNVFRSnVWM08ybWJlalFfLUUzOUI0OTdVNUlaelFMTEFL?oc=5 |  |
 | kifrs | CPA뉴스 | [K-IFRS 제1118호 시리즈 ⑥] 두 개의 영업이익 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE5FRUxaZW9oYmNpYTBhR3h5d0VOQ0NtQmxKU0NHTTFsc3ltYkhTQURmNmV6TGMwNnBtOE85QjFvT1l5Sk9zRHpUX1lwZUYycTVsY1NYRW9seGpuN0QxaDZqdVZLeGczMk1i?oc=5 |  |
+| kifrs | CPA뉴스 | [재무제표 수다떨기] 기업 인수 뒤의 숨은 이야기, 외부평가 의견서와 M&A 공시 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFA4UVFYV2FvWGtPaTZjbVIxQjBESjVJenlJallEaERzQXhUczVGMm1KVmdYb1BwMzRlXzE0dXlhUXA5eS1ya0VwNVFRSnVWM08ybWJlalFfLUUzOUI0OTdVNUlaelFMTEFL?oc=5 |  |
 | kifrs | CPA뉴스 | [K-IFRS 제1118호 시리즈 ⑧] 현금흐름표도 함께 바뀐다 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE5OWVd5Z0VCYWFKcFRxZ2MydDVicTBORGU5YzhnTFpXQ1NLRFJ0ZHNLVzRKd3N2SEZuQlJqTFZWb1ZidWN2MGJfQmM5ZzdWZmVvVXBTcGNlNFRhT2ZTT2pqYnZ6bEc3aXJv?oc=5 |  |
 | kifrs | 조세일보 | [진단] 제각각 회계기준, '회계기본법'으로 통일되나 - 조세일보 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE1iZExnWDViSmtJa1VsVmpUS3MtTHpYcDNDQU1iWkFWMlBkYi1QMjljcW9za0MwUjE5Vmg4V2dkdDg5blhYZjFrNkhDRmRkbnZ2bjVla0pOR2xMenlvUEc4?oc=5 |  |
 | kifrs | EY한영 | EY한영 설문조사, K-IFRS 제1118호 준비 완료 기업 16%에 불과 \| EY - Korea - EY | https://news.google.com/rss/articles/CBMif0FVX3lxTE93b0lTOVNRRHk3am03YUdVT0hoVWQ4WHZfWTI4NFRZVmVidDV3Y2hJNEtneTBIMnFOb2w5WEItT0ZtT1BjMW14U2psY0xqcWd2d19feUs1cUNncnl5Ukg3N180U05ad1FlWGo2TXo4UzcyVVdub2pZSzlxNUdBdzg?oc=5 |  |
@@ -156,7 +154,7 @@
 | kifrs | 머니투데이 | "이런 회사는 거들떠보지도 마세요"…회계사가 경고한 재무제표 신호 \| 이대훈 회계사 - 머니투데이 | https://news.google.com/rss/articles/CBMiU0FVX3lxTE5JTkZueGtnejVfQkg5QkxUclVDUm8wVkRrVW9wamxneXp6R0lxdE9iRkpGell6N1dnTnhhTF91UlVlZ1EzQ3pIZl94MGZSbUhDcTVF?oc=5 |  |
 | kifrs | 파이낸셜뉴스 | IFRS18부터 PRS까지… 재무제표 바꿀 변수 쏟아진다 - 파이낸셜뉴스 | https://news.google.com/rss/articles/CBMiWkFVX3lxTE1qMmQyTGZyUUpzOFBMOVF0Z1I4WHNUcUFZLUo5ODRlMkdOMGNqZ2pvSXJGODl1eUFYT1lDanRka29kdkRuWEJPNGRYdWNxWHBXZlA1ZGFqMGJJZw?oc=5 |  |
 | kifrs | 서울경제 | [단독] 금감원, 제이알글로벌리츠 회계감리 착수…자산평가 논란 재점화하나 - 서울경제 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE9ncUJvZWtlNmZ2VnZHNUhpZnFoN2RrcTUwR2RBQUV0QkVpejJ5ZW5tQUVjMWRBalQ0Snp6Slpob28zeDNBazdIQ19XQmVEcDZUcFHSAVNBVV95cUxOcGpaa1J0eGxlaXl5TXB3aS1hMFlqVllzM3F5ZkhKem1JbE1WX2JyU3ZZRi10UUFnV3hzTXJmLWVWajVJODB5WlBxYThTS3BCSDlLOA?oc=5 |  |
-| kifrs | 이데일리 | 감사前 재무제표 제출 위반 기업 76곳…4년 내 최대 - 마켓인 | https://news.google.com/rss/articles/CBMic0FVX3lxTFBFU0NtR2I1WHhsUFlLaGt6Y2dmVU9EYWVibTFDeTB4WmFmb3N1UHAtdmZkZ3k2elhjTlFaZmdOOU1kejhOUDJrRVBwNW5Oa0pJeXdYVFpKV3NBNGVJODJfLUtrdWdkZ0FGQXo3LTdNQjNBbG8?oc=5 |  |
+| kifrs | joseplus.com | 회계기준원, 회계기준위원회 상임위원에 김재호 회계기준실장 선임 - 조세플러스 | https://news.google.com/rss/articles/CBMiWEFVX3lxTE02WFRCZnBNZXhhQVJLT2hKd0U2Slk3T1djSGZNdmY3bHRkM2lhU0xYVDdiVE8zdkp0WWxiSmFrdWhNbDJ3SVNTLUl0SEd4Unh0b2JJVlF2a2TSAVNBVV95cUxOVWdYS09ETTh0STZDbnJmb05fcjVUUWg2ZTZEelpHOXcxaU5DNWdGNDNFLWNROG52MWcwYXRMUTJtdmZTckhJMm5NbUhhaWdqbTBPZw?oc=5 |  |
 | kifrs | joseplus.com | 회계기준원, IASB 위원 초청 K-IFRS 제1118호 ‘재무제표 표시와 공시’ 세미나 개최 - 조세플러스 | https://news.google.com/rss/articles/CBMiWEFVX3lxTFBOTGZHQncyWkZkNWphSDRhUGV1S3ZSNDYxWmxtRVpVUkV4SzVxaGV0eWZ1allzUnJ1REVBTXBsY1BLcGpoVU9JblZRWjZQcy1MSFh4Ym5RWEnSAVNBVV95cUxORWdjXzk0bGwzdHhMMzJMQjNCWm5Rb0xxTWctc2lOaFZmQ215Tl9iZS1ZTGlwckpUTjBmUnVmQ2h1V0ZEdHQtUHJrOUhBZEtCUnJ5QQ?oc=5 |  |
 | kifrs | biz.chosun.com | [단독] 10대 그룹 CFO 내달 회동…국제회계기준 발언권 확대 논의 - Chosunbiz | https://news.google.com/rss/articles/CBMihAFBVV95cUxPbm9pdFYyUTV6YUU2ZkpEdVFVNmwyOXcyeF9TV3dMazRZdTRsMEJvYVNrSlJpSG5oODZkb2lJQ0tsRGNjbktXXzZkdlJTalNiYWJBVDhrUmktM3FUT2k0eWJ4SHJBdHNCdDVnNmUtUklSWnVsOU01X1NLcjVqQmhiRHFZNk7SAZgBQVVfeXFMTlVZMGMxWGMwdXg3SktMZ0JMSmZacFR1Z0g2WlFBZXZscVBvck9qYmdDa01qMFlJUEVCNjhaX1VIMkVKdkV0OERYYkRpWTdkQU96SDEzX0NXbFppN0hUMG9waHlEbHdwd05YQXM5UUZXV3J3cno2TzZpNjBhcG9zaUwtQ21zU05rWWdYVExsZFJlOERuQzNSSzI?oc=5 |  |
 | kifrs | youthdaily.co.kr | 항공기 팔아 당기순익 늘린 제주항공…부채비율 하락은 "대출 회계처리" - 청년일보 | https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5KMmdhVzV1UzlzSXo4SU5UNGFlQmNOTHF0RUFtTFc2NFFJMVlqZGZkZkFWaTU4M1hVWC1kdUhMTFJlY1lSeU1NN1loM0JLYlhsVGIxblhMVWVGREdXNXNlQ3hSbl9oY1U?oc=5 |  |
@@ -182,20 +180,13 @@
 | kifrs | hellot.net | [이슈 포커스] 기업 반발에 탄소회계 기준 후퇴 논란…과학계·투자자는 “그린워싱 우려” - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTFB4bmx2T2E5RnZBMmpMTGh2aVBrcHhsQWNoRHJlMy1SdjYyLUIxUU1JZ2cwSUtFYlFweUdSaHMyOE5yanVkSGVuOXhOeU1QVDVocXQ2bkhjcFR3cjVIRWQ4?oc=5 |  |
 | kifrs | yna.co.kr | 증선위, 해태제과에 감사인지정 등 조치…회계처리 위반 - 연합뉴스 | https://news.google.com/rss/articles/CBMiW0FVX3lxTE9VYm1UdW9mM2l1SG84VFJPSnBhSHNGa1dpUzJobWpjNnJ1aXliX2RGMkhNR3FPM09rYjQtREI1d0hBTHU3V2V5aGcwRzJfUEpvaFdvc1V3WENNeVHSAWBBVV95cUxQT2JUYXQzVE5hTGZwR0dROTBxLU93YWYyUDdjMkVxbjBtaEFMYzltaWNJRzRKLVh1OG1ZLWx1ZEJTOWktcHZFRmNOR1lfZzdjZG5wdnB5YzM0M3dra0hXaDU?oc=5 |  |
 | kifrs | news.bizwatch.co.kr | [SFS 2.0]재무제표 밖 거래망까지 읽는다…AI가 넓힌 신용평가 - 비즈워치 | https://news.google.com/rss/articles/CBMia0FVX3lxTFBBOFR0QWktVXlHMWpfSjFlTVEzTk1kTm9QQzhjN2VTYWpOVFcwVnlMUnNxNXZ5MzRqOWJBNnY0aWlPY2JWZ2NGNWdkV3hlMXpRdmxjQmtucVc3aHVDRVgxMHlVNGJhRGtQVldr?oc=5 |  |
-| kifrs | junggi.co.kr | 상장회사 재무제표·내부회계 감사의견 동반 개선 - 중기이코노미 | https://news.google.com/rss/articles/CBMiakFVX3lxTFBrUWtxdS00QlBvQjdDdGxaeUNqS1hwMzVlTUs5eExsVDBNOGlLWDlKUVF5clJIcHJWX2gxSlRVWk5NZ0FLZkZ6UDdHNXYwMF85Qkt0Z2dUWUFvZU5XVTlBX2YzRVVQajN0dWc?oc=5 |  |
+| kifrs | yna.co.kr | 감사 전 재무제표 제출 위반 76건…전년보다 24건↑ - 연합뉴스 | https://news.google.com/rss/articles/CBMiW0FVX3lxTE9lODhfd3R3TUpXOFZneW5tMjJ0OEVEeXBMWExHS1F1MzNOdExVUlNsdTFwYVpFZTRxLXNTZzZoZzRmQnhhYW5ZZlhtUjJJM1M4YXA0ZWNCbU5ubzjSAWBBVV95cUxNUWMwYlBCMlpvS2R1a2dOaVdCYkRqcE04YXNwb0JCSC0xb3NSc05OM194Z2dCcVhiSFU1elMzQklVZHNCc2dtRG1wMk5kSTJmMW1rVWZWdDFQcjZrZFVRTno?oc=5 |  |
 | kifrs | yna.co.kr | 증선위, '회계기준 위반' 금양에 감사인지정·과징금 조치(종합2보) - 연합뉴스 | https://news.google.com/rss/articles/CBMiW0FVX3lxTE84VG44Qzl6Wm1UcmV6LUVNNWFhXzNSdXlDLXE0bmhrLXBLSWpCQldRYy1uTkxMY1V1WWVmRFdLcmxnZUZGdHRXU3hVTzY1akhNbGFGUXVhM0Z5dWvSAWBBVV95cUxQT0RISWQycmFQX2pXQXZtN3g2Wk9xYm12OURoVXduNk1zUmNmUllsRGV0cG14bFJxU1c4bGFIQy1QNGZzZjJMQ180b1BoSHBJT2d6NGliMUJvS1N4dnRpRHc?oc=5 |  |
 | kifrs | ebn.co.kr | '감독회계 포획'에 갇힌 K-IFRS17…보험사 회계 착시와 주주환원 훼손 | https://www.ebn.co.kr/news/articleView.html?idxno=1729955 |  |
 | esg | 임팩트온 | KSSB “EU, ISSB 공시 인정하고 필요한 정보만 추가해야”…해외 공시매체 인터뷰서 밝혀 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE1QTEJtQU9nQkpqX1BCR24zM1RuQlNhNGJqQXlTUmpCNWJtNVh0VkM0TS1TbFJmYW5GbHpGNWVzbTdSMUVJSElhOFk2LURqX1B2OWNhby1aTHRqWE5oS0FwazFqNWxRb1pVSGc?oc=5 |  |
 | esg | 임팩트온 | 한국 기업 ESG 공시 아태 2위…자발적 공시 평가 반영하니 1위 | https://www.impacton.net/news/articleView.html?idxno=30817 |  |
-| esg | 임팩트온 | GRI, 식음료 산업 전용 공시기준 만든다 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE84ZFBJaEdtUlNMazEzdVRFN241MXNlMTRkZUtucld6Ry0xRkROaXlYcjhtdUQ4amE2MGczNDI5SXRhNmNmZXp0X0ZmaFZwRDRRa2hDMHA3RURNUEpJWU13SzYtTmh5WjZ0Z1E?oc=5 |  |
-| esg | 임팩트온 | ISSB, 22일 자연공시 초안 공개…사업장 위치·가치사슬까지 평가 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE5ibFRYdXJrMWtJRnhPUW1NTUR6bEZ1OWZ1ZUp4UmZIZ3hYNFUwZW5DUk4yZEhUSk5MVTZNdnQzaC1zajl0TzA5Tm9OTjI2SEdKaVE4WnN5NWFrVzRDYlp6MmtzbW5sU0dCX1E?oc=5 |  |
-| esg | 임팩트온 | ISSB, 자연위험 노출 자산 금액·비율 공시 제안…공급망 위치도 반영 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE5CaDVvOUluQ2JzNGRGNUxQaWctYVY0eEdyS0ZWTXQ3S3d6RmlZaG1CaWdJTkh6NFVuQktFYWZ5UUdVWnl2eWw1VGJDNjFELU9LTy1Ua2ptRFFabVR3aXNpLWhxQ3lsRFFla3c?oc=5 |  |
-| esg | 임팩트온 | 일본 금융청, 인적자본에 주목한 이유..."ESG 공시, 투자자에게 쓸모 있어야" - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE1wbl9FYkhYT2Q4MXJBcnRNSTJEb2ZrNnZEUXdob1FWRUdqcGdwd2JodXNrQXdGV25UNWVZeC1ZSDBxLUZFYWRRcS1zMzcwb19SbVROYmdIVERrRkZmYkRSQ1FhaHBsQk5lNEE?oc=5 |  |
-| esg | 임팩트온 | 스코프3 추정치 줄인다…에코바디스, 공급업체 실데이터 연동 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE80VVdfcHFzTXVLN1JTb0pZNk44cXQybm1wZ1UyeEluSEx3TzBabG0zUmhfTFd3T2hNQlJoS05PZXFBb3Q0UzV0Vl94Q1VkTjhFbEh6TVcxTE5WbkRTRldMM0VLcEhtWUdJZmc?oc=5 |  |
-| esg | CPA뉴스 | 2028년 시작되는 지속가능성(ESG) 공시 제도화 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE9YWWlTdzE5aE13VmhNQk4yZUJtZ0c1OVFDSzEzTFdlTDM3WnlMTHUxVzVPMVdtTTd0RHNNUko4alpKZXJFcmVlM2x6elFHTmp0TDIzVjVERjdScWk4U3Uza2htRTJuNXBz?oc=5 |  |
 | esg | 한국경제 | ESG 공시 표류와 RE100 위기…한국 경제 골든타임은 지금[기고] | https://magazine.hankyung.com/business/article/202611172333b |  |
 | esg | kpenews.com | [ESG전략] 사회공헌 프로젝트 인정 한화호텔·최신 ESG 공시 기준 적용 ... | https://kpenews.com/View.aspx?No=4328948 |  |
-| esg | netzeronews.kr | 'ISSB 공시기준' 50개국 확산…한국 2027년 적용 - 넷제로뉴스 | https://news.google.com/rss/articles/CBMia0FVX3lxTE9NNU5EaEhpSUtyOG9FYzdJcWQ5MGtod0xrQkR6WnoxS3NmenRxVkU3T1kxNHE1NzB0dWFJNk81OUpsbXJDV0tPNFhKelgwdEZfWjFob1VHN2tXNzdhTFBFSzA4UFpnMVVsT0JR0gFuQVVfeXFMUDlfbUpBRmNsNFRkOG9HUVFGemp4bzN0eUt5aWVac3NzTEZmUnlGc0xBSERjUG1uT0txZ0pBMHB3RXFsX3hwb3ZJbGJKZkJwLVdhNmtYbV9qeXhEcnZVNkE2MHVReG5RbVVscEdsdGc?oc=5 |  |
 | esg | news2day.co.kr | [2026 대한민국 지속가능경영 소통대상] 한국환경산업기술원, 녹색금융... | https://www.news2day.co.kr/article/20261126500379 |  |
 | esg | hansbiz.co.kr | ESG 공시 입법 지연…2028년 거래소 의무공시 대안 부상 | http://www.hansbiz.co.kr/news/articleView.html?idxno=887652 |  |
 | esg | news2day.co.kr | [2026 대한민국 지속가능경영 소통대상] LG생활건강, 국회 산자중기위원... | https://www.news2day.co.kr/article/20261126500142 |  |
@@ -203,37 +194,27 @@
 | esg | biztribune.co.kr | 교보증권, ESG 성과 잇따라… 지속가능경영 체계 고도화 | http://www.biztribune.co.kr/news/articleView.html?idxno=363157 |  |
 | esg | kdfnews.com | KB증권, ESG 공시체계 개선 성과…지속가능성보고서상 2년 연속 | http://www.kdfnews.com/news/articleView.html?idxno=191429 |  |
 | esg | newsprime.co.kr | 'ESG 경영 내실 다진' 정몽진號 KCC, 지속가능경영 성과 가시화 | http://www.newsprime.co.kr/news/article.html?no=756393 |  |
-| esg | seoulfn.com | 회계기준원, KSSB 공시기준 전문가 TF 가동···실무 쟁점 52건 논의 - 서울파이낸스 | https://news.google.com/rss/articles/CBMiakFVX3lxTFBycHhoWWZqWWRDeFVnV3k5UHZWYktkOFRyaUdodjBSV21ZRmhPSzZNaXk0b3JrVW5UbmFzaklYNmtTWFlza0ticG9fS2JRNnl0VFNYQndsLTVxZXY2VDZyRWtzeVdtWXdyTGc?oc=5 |  |
-| esg | fairn.co.kr | BSI 영국표준협회, 지속가능성 공시 대응 세미나 - 공정뉴스 | https://news.google.com/rss/articles/CBMiakFVX3lxTFBwelNZa29VbG4wQ2ItN3hhemZZQk96bmVOMUloemI3bGp2TXBtYnhLMnc3OEtlbC1PMmM4WUtzRUZ3TmJUQmU5bGJ2cHl4bm5WZkswTVplc21mbk91dVI3S1ZUM09TdVhjTmc?oc=5 |  |
-| esg | netzeronews.kr | 글로벌 금융기관 15곳, ISSB에 '자연공시' 독립기준 촉구 - 넷제로뉴스 | https://news.google.com/rss/articles/CBMiakFVX3lxTFBWSU1hS3pCWXdscVV2YWZpVnlUNDNxRElVemdIeC1ZWWhWMnc4cGJEaDFYUkpyZHM5MGlGM2dGTEFvREYzUV9XbHFyZ0sxNUJXbFVpZ0xPSmdCUk5ONU9rODB0MXF5RTVrbkHSAW5BVV95cUxQQ2F5ZmhEaVFoZkNzSWpPUGtMM3NoYjdMTGYzQXE5LUFPRkFqa2t5ZU5EZTRCVXNwdzRXeXl5SmQtVFBEbzJfeUxmSURiSEdwZ3dFbkViMFBrdV9xbFJZYVV1MEhkNU5PYmFpNmJOdw?oc=5 |  |
-| esg | hellot.net | [ESG 칼럼] 2028년부터 본격화되는 지속가능성 공시제도, 지금 무엇을 준비할 것인가 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTFBjZ0hCNjdsZ18ySnhycVRpbW5jZk1CVkZrZzVVMnQwdUtNRW1PTjZEMjZDSGZCbXJEQTh6cWhfUmkyNWI5cHFNejczel9GVFpaMkhQWm5sN2l1RnRhemdR?oc=5 |  |
-| esg | outsourcing.co.kr | [기획] ESG 공시, 대기업 보고서에서 협력사 장부로…아웃소싱 기업도 데이터 준비 서둘러야 - 아웃소싱타임스 | https://news.google.com/rss/articles/CBMickFVX3lxTFBHQjFYQllHZDR4OFJYT0VOX0hCMjJqUVphZ2RCanhjNVQwUDVQNXNhR01hWUJKOWw4b2lXdFBHN2tQeF9IU281cDBmVU5EX3RidUpWXzZWdVo2QlRjZ2dqU0gyRWxqSURoUkxSNWlKQnpadw?oc=5 |  |
 | tax | 한국세정신문 | 조세심판원 "재산세 납부 의무자가 반드시 종부세 납세의무자는 아냐" | https://www.taxtimes.co.kr/news/article.html?no=277875 |  |
 | tax | 한국세정신문 | 111일 만에 전입신고…실거주 확인 땐 취득세 감면 | https://www.taxtimes.co.kr/news/article.html?no=277876 |  |
 | tax | 일간NTN | 세무법인HKL '稅相 읽기'(67) 대도시 내 부동산 취득세 중과, '형식' 아닌... | https://www.intn.co.kr/news/articleView.html?idxno=3000354 |  |
 | tax | 일간NTN | 세무법인HKL '稅相 읽기'(64) 토지의 무상사용과 재산세 비과세의 실질 | http://www.intn.co.kr/news/articleView.html?idxno=2054488 |  |
+| tax | 한국경제 | 데이터센터 경쟁력 막는 세액공제 제도 | https://www.hankyung.com/article/2026112631761 |  |
 | tax | 서울경제 | 승용차 개소세 보전 예산 ‘0원’…국내 생산 세액공제도 공회전 | https://www.sedaily.com/article/20119059?ref=naver |  |
 | tax | 서울경제 | 與, SK ‘트리니티팹’ 지원 기업 법인세 감면 추진 | https://www.sedaily.com/article/20118946?ref=naver |  |
 | tax | 매일경제 | 법인세 늘고 과징금까지 … 금융지주 비상 | https://www.mk.co.kr/article/12211463 |  |
 | tax | sejungilbo.com | 이건태, 도시철도건설용역 부가세 영세율 2030년까지 4년 연장 추진 | https://www.sejungilbo.com/news/articleView.html?idxno=61246 |  |
-| tax | biz.heraldcorp.com | 전기차 세액공제 또 미뤄졌다 | https://biz.heraldcorp.com/article/10951683?ref=naver |  |
 | tax | news.tvchosun.com | 내년부턴 '종부세 폭탄'…세액 공제 혜택 확 줄어 | https://news.tvchosun.com/site/data/html_dir/2026/11/26/2026112690264.html |  |
 | tax | koscaj.com | "하도급받은 공사액보다 더 큰 세금계산서는 가공거래" | https://www.koscaj.com/news/articleView.html?idxno=327682 |  |
-| tax | metroseoul.co.kr | 전기차 국내생산세액공제, 국회서 '갈팡질팡'…중국 추격에도 지원 제외... | http://www.metroseoul.co.kr/article/20261125500360 |  |
 | tax | newstomato.com | 대법, 해외 세액공제 기준 제시…"영토 아닌 과세권" | http://www.newstomato.com/ReadNews.aspx?no=1321769&inflow=N |  |
 | tax | thedailyeconomy.kr | 자사주 매각 시점이 가른 법인세…올해 판 기업만 세금 부담하나 - https://www.thedailyeconomy.kr/ | https://news.google.com/rss/articles/CBMicEFVX3lxTE5OZkZQdDdfWENValBPcHBjRkxjeHpXWWNZTTRBZGZQUXdPU1E2SkV5c0FxLVZOYmhlUzFFODA1Szc4OUg3NFZZRThCZ09GSG9OUzZ3Q1dJRVVXRHlSM2RnN2E5WnVIRV8xWV9Dd1l4TXM?oc=5 |  |
 | tax | sejungilbo.com | 김석기, 게임물도 세액공제 대상 포함 추진…비수도권 제작 시 공제율 ... | https://www.sejungilbo.com/news/articleView.html?idxno=61213 |  |
-| tax | news.bizwatch.co.kr | 국산 전기차 세액공제 확대 가닥에도…정부 막판까지 고심 이유 | https://news.bizwatch.co.kr/article/industry/2026/11/20/0030 |  |
 | tax | sejungilbo.com | 사무장에게 상호 빌려주고 세금계산서 발급한 회계법인…심판원 "가산세... | https://www.sejungilbo.com/news/articleView.html?idxno=61223 |  |
 | tax | fieldnews.kr | [단독] 국세청 조사대로 법인세 낸 인천공항공사, 4년치 환급 거부 뒤집... | http://www.fieldnews.kr/news/articleView.html?idxno=33316 |  |
 | tax | updownnews.co.kr | 기아, 현대카드 포인트 부담분 부가세 환급 불발…"결정 존중·소송 취하... | https://www.updownnews.co.kr/news/articleView.html?idxno=319665 |  |
 | tax | sejungilbo.com | [판세] 과세기간이 다른 여러 국가의 소득, 외국납부세액공제 계산방식... | https://www.sejungilbo.com/news/articleView.html?idxno=60678 |  |
 | tax | dnews.co.kr | 도시철도 영세율 연장 입법 ‘잰걸음’…JTX·수도권서남부선 세 부담 ... | https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611181437550170654 |  |
-| tax | news.dealsitetv.com | 中 전기차에 안방 내줘…세액공제 시급 | https://news.dealsitetv.com/articles/178820 |  |
 | tax | koit.co.kr | 정보보호 투자·인력 채용에 세액공제 추진 | https://www.koit.co.kr/news/articleView.html?idxno=209966 |  |
-| tax | econovill.com | 국산 전기차 과반 무너져...생산세액공제 문 다시 열린다 | https://www.econovill.com/news/articleView.html?idxno=757588 |  |
 | tax | news.ifm.kr | [인터뷰] 추미애 경기지사, 재정 위기 돌파 총력…지방세제 개편·교부... | https://news.ifm.kr/news/articleView.html?idxno=484643 |  |
-| tax | nocutnews.co.kr | 300조원 보조금 받은 中 전기차…한국도 세액공제 절실 | https://www.nocutnews.co.kr/news/6608058?utm_source=naver&utm_medium=article&utm_campaign=20261117133938 |  |
 | tax | sejungilbo.com | [판세] 사업 관련성 없는 지출의 매입세액공제 여부와 부가세법상 '수입... | https://www.sejungilbo.com/news/articleView.html?idxno=60677 |  |
 | tax | sejungilbo.com | [절세톡톡] 일시적2주택 취득세, 용도변경도 종전주택처분일까요? | https://www.sejungilbo.com/news/articleView.html?idxno=61088 |  |
 | tax | fieldnews.kr | [단독] 하나투어, 항공권 부가세 환급 놓고 국세청과 공방…조세심판원... | http://www.fieldnews.kr/news/articleView.html?idxno=32758 |  |
@@ -255,13 +236,36 @@
 |---|---|---|---|---|
 | kifrs | CPA뉴스 | 한국공인회계사회, 『공익법인회계기준 실무사례와 해설』 발간 - CPA뉴스 | https://news.google.com/rss/articles/CBMiaEFVX3lxTFB1T0FfdnRKR0ExSkF3WmpfeE04WFlIc0Y2bFNSOGRxS3g1Um1uUjJycWgwUHk4a3hsd01DZnM1SzI1NGlmd3dQQk5TT3ktQklMWFg4aEd5OEZZbzdIVExsdUdsWTFfaFVl?oc=5 |  |
 
+## excluded:other_industry_tax (18건)
+
+| 카테고리 | 출처 | 제목 | 링크 | 비고 |
+|---|---|---|---|---|
+| tax | ajunews.com | 中 전기차 공세 거센데…세액공제 이견에 정부 대책 연기 | https://www.ajunews.com/view/20261127092823622 |  |
+| tax | metroseoul.co.kr | 전기차 국내생산세액공제, 국회서 '갈팡질팡'…중국 추격에도 지원 제외... | http://www.metroseoul.co.kr/article/20261125500360 |  |
+| tax | smedaily.co.kr | 전기차 세액공제 국회서 이틀째 제동…정부 대책 27일로 연기 | http://www.smedaily.co.kr/news/articleView.html?idxno=366581 |  |
+| tax | view.asiae.co.kr | [세제돋보기] 전기차 생산세액공제 포함 주목…정부 대책 앞두고 국회 ... | https://view.asiae.co.kr/article/2026112411245023254 |  |
+| tax | theopiniontimes.news | 중국산 전기차 점유율 4년 새 1%→34%…국산 전기차 세액공제, 국회 첫 ... | https://theopiniontimes.news/%ec%a4%91%ea%b5%ad%ec%82%b0-%ec%a0%84%ea%b8%b0%ec%b0%a8-%ec%a0%90%ec%9c%a0%ec%9c%a8-4%eb%85%84-%ec%83%88-1%e2%86%9234%ea%b5%ad%ec%82%b0-%ec%a0%84%ea%b8%b0%ec%b0%a8-%ec%84%b8%ec%95%a1%ea%b3%b5/ |  |
+| tax | news1.kr | 전기차 생산세액공제 도입 공감대…'공제액·수출차·통상 마찰' 변수 | https://www.news1.kr/industry/auto-industry/6362100 |  |
+| tax | news.bizwatch.co.kr | 국산 전기차 세액공제 확대 가닥에도…정부 막판까지 고심 이유 | https://news.bizwatch.co.kr/article/industry/2026/11/20/0030 |  |
+| tax | newspim.com | 중국산 전기차 침투 속도 韓 3위…"국내생산세액공제 필요성 커" | https://www.newspim.com/news/view/20261122000099 |  |
+| tax | news.dealsitetv.com | 中 전기차에 안방 내줘…세액공제 시급 | https://news.dealsitetv.com/articles/178820 |  |
+| tax | econovill.com | 국산 전기차 과반 무너져...생산세액공제 문 다시 열린다 | https://www.econovill.com/news/articleView.html?idxno=757588 |  |
+| tax | nocutnews.co.kr | 300조원 보조금 받은 中 전기차…한국도 세액공제 절실 | https://www.nocutnews.co.kr/news/6608058?utm_source=naver&utm_medium=article&utm_campaign=20261117133938 |  |
+| tax | biz.heraldcorp.com | 전기차 세액공제 또 미뤄졌다 | https://biz.heraldcorp.com/article/10951683?ref=naver |  |
+| tax | newsis.com | 국산 전기차 세액공제 막판 검토…"배터리·소재 생산지까지 따져야 실... | https://www.newsis.com/view/NISX20261126_0003885091 |  |
+| tax | chosun.com | [기고] 흔들리는 전기차 제조 기반, 국내 생산 세액공제 서둘러야 | https://www.chosun.com/opinion/contribution/2026/11/26/FYFX77N3URAEZHY62Q6SHRXLPM/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news |  |
+| tax | khan.co.kr | ‘국내 전기차 세액공제’ 논의 난항 | https://www.khan.co.kr/article/202611262048005 |  |
+| tax | khan.co.kr | 전기차 세액공제 논의 난항···정부, 경쟁력 강화방안 발표 연기 | https://www.khan.co.kr/article/202611261747001 |  |
+| tax | 서울경제 | 전기차 생산세액공제 국회 논의 지연…지원대책 발표 또 연기 | https://www.sedaily.com/article/20119476?ref=naver |  |
+| tax | 머니투데이 | 전기차 국내생산세액공제 국회 논의 지연…정부 지원책 다음주 발표되나 | https://www.mt.co.kr/economy/2026/11/27/2026112615335130527 |  |
+
 ## excluded:related_news_attached (1건)
 
 | 카테고리 | 출처 | 제목 | 링크 | 비고 |
 |---|---|---|---|---|
 | kifrs | tfmedia.co.kr | 회계기준원, 내년 K-IFRS 제1118호 시행…투자자들에 주요이슈 설명 - 조세금융신문 | https://news.google.com/rss/articles/CBMiY0FVX3lxTE9nRjdudGFRU2U4Ung3OGVXVWFnQ0xuLWFpZjhQVWxVbV9iZWwtNURvem1KX3EzbWttUnRRYVpXZC1sZW5iLXNWdGdwSGZZbjVwODUyRFpiQnZZbkQzRjFDcHNGUQ?oc=5 | → 관련 보도로 붙음: 2027년 K-IFRS 제1118호 시행, 준비상황을 점검하세요 |
 
-## excluded:similar_news_merged (62건)
+## excluded:similar_news_merged (49건)
 
 | 카테고리 | 출처 | 제목 | 링크 | 비고 |
 |---|---|---|---|---|
@@ -283,11 +287,11 @@
 | kifrs | 이데일리 | 금융위, '허위 매출' 피델릭스에 과징금 2억8690만 부과 결정 - 이데일리 | https://news.google.com/rss/articles/CBMigAFBVV95cUxNeDhFT1BzNjY2NEFYS3NGZVhGbDNHbUFrRnIycThMTFp3V1J4cHhCdGJfbnJhclgzcnVuMnl1SVdqWHhNMjg5ekNSMkYtd243RWlTa0tBXzRuTVNNNDgzbXFtWG9ubi1RUDBQdlJzbW5hRXQyVEFGY19rWVJYZmRHUA?oc=5 | → 대표: 금융위, ‘매출 허위 계상’ 피델릭스에 과징금 부과 - 서울경제 |
 | kifrs | 한국경제 | 유한종 삼성전자 재경팀 부사장, 국제회계기준委 GPF위원 선임 - 한국경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTE5SYy05eHZBcVRBaTcxbXlRNG5USFFUMjJ0ajNuZktXbF9NZEJlRWFVcC1WbXF1WjJNTXFvR2VtVDRWVk9DeG01R2oxaUV4V2ZBRnVHbElSVEhtZw?oc=5 | → 대표: 유한종 삼성전자 부사장, GPF 위원 선임…국제회계기준 제·개정 자문 - 뉴시스 |
 | kifrs | 이데일리 | 내년 K-IFRS 제1118호 의무 적용…금감원 "기업들, 도입 준비 철저히 해야" - 마켓인 | https://news.google.com/rss/articles/CBMic0FVX3lxTE5ld2NBM0dGUjlxX25jVjFiQmV3cVdPQ0FLYzFUQU8yX2lqUEItQ0JJZ0hEdVBVai1rNmlrZXc5b2stUHhoYWdkdDZpQTAyTWdBM3ZnQUNYX3ZMMjI0cXNKUjBRcjN0UjJXYWNkYkdvSzNOT2c?oc=5 | → 대표: 내년 새 회계기준 도입…금감원 "기업 준비상황 점검해야" - 매일경제 마켓 |
+| kifrs | 매일경제 | 내년부터 바뀌는 기업 영업이익 기준에 투자자 혼란 커질라…금감원, 사전검증 주문 - 매일경제 마켓 | https://news.google.com/rss/articles/CBMiUkFVX3lxTE1XbEZYTE0xMXk5NmdzaTRnR0h3MkFfNU9IQXVoMkozdFdQVUgteGQxeW1jQTZNQWdQZlRvSG5QdFR1d3ItSi1yU2tlOGJrQ1I1SkE?oc=5 | → 대표: 내년 새 회계기준 도입…금감원 "기업 준비상황 점검해야" - 매일경제 마켓 |
 | kifrs | yna.co.kr | 내년 새 회계기준 도입…금감원 "기업 준비상황 점검해야" - 연합뉴스 | https://news.google.com/rss/articles/CBMiW0FVX3lxTE9HdzNlalNOQ0Z1V1Bvc3htT0dPUTdRUG9xQWtTZmx4Ty1YdGRVNHEwZHM1RmZnMDNNYy1ta3k4Rkp4c1c5ak5abFRaemlkMVJxSndadFVYbXBWV2PSAWBBVV95cUxNMmJYczY2eWxWNlcybDIyMGlQbFJleWNWRUZJMi1Sb0V5d2EyTzlWcm5mbER2WXdzOGpRQ0JHREtubElCVl9PV3ZtN1I0N0JYTmpfY19YYjhPZkQxelRwM0o?oc=5 | → 대표: 내년 새 회계기준 도입…금감원 "기업 준비상황 점검해야" - 매일경제 마켓 |
 | kifrs | insnews.co.kr | 금감원, 내년 새 회계기준 시행… 기업 준비상황 점검 당부 - 한국보험신문 | https://news.google.com/rss/articles/CBMia0FVX3lxTE5PTnlLYzlLQklteE1MaW50MjZwRV9RQkRtZDAyal9rdVpCc1pvNXk0M2tCS2hLOVpFa18tVDFmd0VQTDh6bmVBZGR3dkdIU1VFR0ZrWWFrOFpRRkZ1a0Z1eUxsNG9UOG5ncjZF0gFvQVVfeXFMT3dydTBxd2xRSzI3ekVzdF9GVEdtakV1TURuT0VTOEFSbkloTURQV0UzX0F2NWk2MVFqYVBFaDdZN0M2V2xTOGhwR3N1RTB6QnNWUlhNLU9RNkVEbUpmZk12cXlUb3NXUmJJc2dWcFFn?oc=5 | → 대표: 내년 새 회계기준 도입…금감원 "기업 준비상황 점검해야" - 매일경제 마켓 |
 | kifrs | dhdaily.co.kr | 내년 K-IFRS 제1118호 도입 앞두고 기업 혼선 - 대한데일리 | https://news.google.com/rss/articles/CBMia0FVX3lxTE0wM3RhZzFMWlZuajAxa0kzU29yekNKVU9yZVNKeXR0Z2p2STZlRDgwQkFOVDBndGg1Y2FFSExwRHdRcWpIeVNxUnJsSV8wenJNWktTVTk4MWlOTEU4ZWl0S194ejhHYjlhalBz?oc=5 | → 대표: 내년 새 회계기준 도입…금감원 "기업 준비상황 점검해야" - 매일경제 마켓 |
 | kifrs | g-enews.com | 금감원 "내년 K-IFRS 제1118호 본격 적용…기업들, 점검 철저히" | https://www.g-enews.com/view.php?ud=202610130814147179923c501012_1 | → 대표: 내년 새 회계기준 도입…금감원 "기업 준비상황 점검해야" - 매일경제 마켓 |
-| kifrs | yna.co.kr | 감사 전 재무제표 제출 위반 76건…전년보다 24건↑ - 연합뉴스 | https://news.google.com/rss/articles/CBMiW0FVX3lxTE9lODhfd3R3TUpXOFZneW5tMjJ0OEVEeXBMWExHS1F1MzNOdExVUlNsdTFwYVpFZTRxLXNTZzZoZzRmQnhhYW5ZZlhtUjJJM1M4YXA0ZWNCbU5ubzjSAWBBVV95cUxNUWMwYlBCMlpvS2R1a2dOaVdCYkRqcE04YXNwb0JCSC0xb3NSc05OM194Z2dCcVhiSFU1elMzQklVZHNCc2dtRG1wMk5kSTJmMW1rVWZWdDFQcjZrZFVRTno?oc=5 | → 대표: 감사前 재무제표 제출 위반 기업 76곳…4년 내 최대 - 마켓인 |
 | kifrs | tfmedia.co.kr | 회계기준원, 지속가능성 공시기준에 투자자 수요 반영…전문 위원회 확... | https://www.tfmedia.co.kr/news/article.html?no=209073 | → 대표: 회계기준원, 지속가능성 공시기준에 투자자 수요 반영…전문 위원회 확대‧강화 - 조세금융신문 |
 | kifrs | tfmedia.co.kr | 회계기준원, 내년 K-IFRS 제1118호 시행…투자자들에 주요이슈 설명 | https://www.tfmedia.co.kr/news/article.html?no=208000 | → 대표: 회계기준원, 내년 K-IFRS 제1118호 시행…투자자들에 주요이슈 설명 - 조세금융신문 |
 | kifrs | biz.sbs.co.kr | 엔비디아 회계장부 들여다보는 美 SEC…매출 공시·회계 처리 조사 - SBS Biz | https://news.google.com/rss/articles/CBMiU0FVX3lxTE5iWm9mNWpzT2hVYmR1MkVOc0tVWHBpVm5Ebllyclh6RnlzUmZHM2hDY0lSWkpDV0h4amNJUFBOdG1GWDFBNXJ2RVdsWUlVNkhWRExZ0gFYQVVfeXFMUFFiUGh0azUxYUVFeHZzS1dqT0c1bE40TEdJYkV0OENjdjFqMjF6N2pseVlxOWRyYjVfdVhselFsQzJYeThBVFRyVzF3SjdRbUdHWHZ0WGhCLQ?oc=5 | → 대표: 美 증권위, 엔비디아 회계 처리 방식 조사 - 오피니언뉴스 |
@@ -301,30 +305,17 @@
 | esg | sentv.co.kr | 금호타이어, 지속가능성 평가 4년 연속 1위…ESG 공시 역량도 인정 | https://www.sentv.co.kr/article/view/sentv202611250120 | → 대표: 한국 기업 ESG 공시 아태 2위…자발적 공시 평가 반영하니 1위 |
 | esg | m-i.kr | ESG 공시 의무화·탄소 규제 대응…대·중소기업 공급망 상생 해법 모색 | https://www.m-i.kr/news/articleView.html?idxno=2023645 | → 대표: 정일택 금호타이어 사장 "ESG 공시 의무화 선제 대응…데이터 관리 고도화" - 파이낸셜뉴스 |
 | esg | edata.ekn.kr | ESG 공시 의무화 코앞으로…기업별 데이터 관리 ‘제각각’ - 기후에너지데이터뱅크 | https://news.google.com/rss/articles/CBMiXkFVX3lxTE4tMXlWRVBfMUpGeEtzWDZ3RjNjV2VRd2lyRThnVzRtcFlFNW92blhGZFNMSXN1Mk1icDZLVzlQWmIyblBJNDVCa0dkalVlMFQzblo5UF9NelBIZ0VwcEE?oc=5 | → 대표: 정일택 금호타이어 사장 "ESG 공시 의무화 선제 대응…데이터 관리 고도화" - 파이낸셜뉴스 |
-| esg | paxetv.com | 상장협, ESG 공시 실무교육 실시…2028년 의무화 대비 지원 - 팍스경제TV | https://news.google.com/rss/articles/CBMiaEFVX3lxTFBWVlJBV0tobXZxeWRCVEctRkpCeVptamdtX3czV2F1UldncUNvMzQwRmg1QnlhbVhXcTdRbjVJVEVhWWVoSzdKbmt5clJCSHIycHVUUHVYRmFuaFMtV3UzMzRDLVMtbUph?oc=5 | → 대표: ESG 공시 의무화 앞두고 기업 실무 점검···상장협, 대응 교육 강화 - 여성경제신문 |
 | tax | 매일경제 | "전입신고 늦어도 실거주땐 취득세 감면" | https://www.mk.co.kr/article/12214810 | → 대표: 111일 만에 전입신고…실거주 확인 땐 취득세 감면 |
 | tax | news1.kr | 조세심판원 "첫 집 전입신고 111일 만에 마쳤어도 취득세 감면 인정" | https://www.news1.kr/politics/president/6360765 | → 대표: 111일 만에 전입신고…실거주 확인 땐 취득세 감면 |
 | tax | biz.sbs.co.kr | 조세심판원 "전입신고 늦어도 실거주 땐 취득세 감면 유효" | https://biz.sbs.co.kr/article_hub/20000347776?division=NAVER | → 대표: 111일 만에 전입신고…실거주 확인 땐 취득세 감면 |
 | tax | yonhapnewstv.co.kr | 조세심판원 "전입신고 늦어도 실거주 땐 취득세 감면" | http://www.yonhapnewstv.co.kr/news/AKR20261120103447oGO | → 대표: 111일 만에 전입신고…실거주 확인 땐 취득세 감면 |
 | tax | yna.co.kr | 조세심판원 "전입신고 지연돼도 실거주 확인시 취득세 감면" | https://www.yna.co.kr/view/AKR20261119156700001?input=1195m | → 대표: 111일 만에 전입신고…실거주 확인 땐 취득세 감면 |
 | tax | taxwatch.co.kr | 111일 만에 전입신고…취득세 감면 인정된 이유 | https://www.taxwatch.co.kr/article/tax/2026/11/19/0002/naver | → 대표: 111일 만에 전입신고…실거주 확인 땐 취득세 감면 |
-| tax | 한국경제 | 데이터센터 경쟁력 막는 세액공제 제도 | https://www.hankyung.com/article/2026112631761 | → 대표: 전기차 세액공제 논의 난항···정부, 경쟁력 강화방안 발표 연기 |
-| tax | chosun.com | [기고] 흔들리는 전기차 제조 기반, 국내 생산 세액공제 서둘러야 | https://www.chosun.com/opinion/contribution/2026/11/26/FYFX77N3URAEZHY62Q6SHRXLPM/?utm_source=naver&utm_medium=referral&utm_campaign=naver-news | → 대표: 승용차 개소세 보전 예산 ‘0원’…국내 생산 세액공제도 공회전 |
-| tax | 머니투데이 | 전기차 국내생산세액공제 국회 논의 지연…정부 지원책 다음주 발표되나 | https://www.mt.co.kr/economy/2026/11/27/2026112615335130527 | → 대표: 전기차 생산세액공제 국회 논의 지연…지원대책 발표 또 연기 |
-| tax | ajunews.com | 中 전기차 공세 거센데…세액공제 이견에 정부 대책 연기 | https://www.ajunews.com/view/20261127092823622 | → 대표: 전기차 생산세액공제 국회 논의 지연…지원대책 발표 또 연기 |
-| tax | newsis.com | 전기차 생산세액공제 논의 지연…지원대책 다음주 발표되나 | https://www.newsis.com/view/NISX20261126_0003884937 | → 대표: 전기차 생산세액공제 국회 논의 지연…지원대책 발표 또 연기 |
-| tax | smedaily.co.kr | 전기차 세액공제 국회서 이틀째 제동…정부 대책 27일로 연기 | http://www.smedaily.co.kr/news/articleView.html?idxno=366581 | → 대표: 전기차 생산세액공제 국회 논의 지연…지원대책 발표 또 연기 |
-| tax | view.asiae.co.kr | [세제돋보기] 전기차 생산세액공제 포함 주목…정부 대책 앞두고 국회 ... | https://view.asiae.co.kr/article/2026112411245023254 | → 대표: 전기차 생산세액공제 국회 논의 지연…지원대책 발표 또 연기 |
-| tax | theopiniontimes.news | 중국산 전기차 점유율 4년 새 1%→34%…국산 전기차 세액공제, 국회 첫 ... | https://theopiniontimes.news/%ec%a4%91%ea%b5%ad%ec%82%b0-%ec%a0%84%ea%b8%b0%ec%b0%a8-%ec%a0%90%ec%9c%a0%ec%9c%a8-4%eb%85%84-%ec%83%88-1%e2%86%9234%ea%b5%ad%ec%82%b0-%ec%a0%84%ea%b8%b0%ec%b0%a8-%ec%84%b8%ec%95%a1%ea%b3%b5/ | → 대표: 전기차 생산세액공제 국회 논의 지연…지원대책 발표 또 연기 |
-| tax | news1.kr | 전기차 생산세액공제 도입 공감대…'공제액·수출차·통상 마찰' 변수 | https://www.news1.kr/industry/auto-industry/6362100 | → 대표: 전기차 생산세액공제 국회 논의 지연…지원대책 발표 또 연기 |
 | tax | dnews.co.kr | 대법 “괌ㆍ사이판 세액공제 한도, 美본토와 따로 계산” | https://www.dnews.co.kr/uhtml/view.jsp?idxno=202611251240008580561 | → 대표: [예규·판례] 대법 "미국령은 세법상 '다른 국가'…법인세 공제 시 따로... |
 | tax | widedaily.com | 대법원 "미국 본토와 미국령은 세법상 '다른 국가'…법인세 공제한도 따... | https://www.widedaily.com/news/articleView.html?idxno=304702 | → 대표: [예규·판례] 대법 "미국령은 세법상 '다른 국가'…법인세 공제 시 따로... |
 | tax | lawissue.co.kr | 대법원, 괌과 북마리아나제도 '미국'에 포함되지 않는 별개 국가 법인세... | https://www.lawissue.co.kr/view.php?ud=2026112419194157929a8c8bf58f_12 | → 대표: [예규·판례] 대법 "미국령은 세법상 '다른 국가'…법인세 공제 시 따로... |
 | tax | news1.kr | 대법 "괌·사이판은 美와 별개 '국가'…외국납부세액 공제한도 따로 계... | https://www.news1.kr/society/court-prosecution/6363869 | → 대표: [예규·판례] 대법 "미국령은 세법상 '다른 국가'…법인세 공제 시 따로... |
 | tax | newsis.com | 대법 "美본토-미국령은 세법상 '다른 국가'…법인세 공제 따로" | https://www.newsis.com/view/NISX20261124_0003880987 | → 대표: [예규·판례] 대법 "미국령은 세법상 '다른 국가'…법인세 공제 시 따로... |
-| tax | newsis.com | 국산 전기차 세액공제 막판 검토…"배터리·소재 생산지까지 따져야 실... | https://www.newsis.com/view/NISX20261126_0003885091 | → 대표: 전기차 세액공제 또 미뤄졌다 |
-| tax | khan.co.kr | ‘국내 전기차 세액공제’ 논의 난항 | https://www.khan.co.kr/article/202611262048005 | → 대표: 전기차 세액공제 또 미뤄졌다 |
-| tax | newspim.com | 중국산 전기차 침투 속도 韓 3위…"국내생산세액공제 필요성 커" | https://www.newspim.com/news/view/20261122000099 | → 대표: 전기차 국내생산세액공제, 국회서 '갈팡질팡'…중국 추격에도 지원 제외... |
 | tax | suwon.com | 추미애 지사 제안한 지방세제 구조 개편안 국회 입법 절차 돌입 - 수원신문 | https://news.google.com/rss/articles/CBMiZkFVX3lxTE0wNzAwdTRPSEJuYmlseURxMU1ZcTdCNHBWNURCTmF6NHJwVlhHNnBaT0RTMlREZkNRZ0V1VHh0XzFDa1BrMDRtanRnbU42TmI5QWpqRnBDNzFyNXR1dUtEUjRfSFNCdw?oc=5 | → 대표: 추미애 지사 '지방세제 개편안' 국회로…지방소비세율 25.3%→40.3% - 경인방송 뉴스 |
 | tax | newspim.com | 추미애 지사 제안 '지방세제 개편 3대 과제' 국회 입법 본격화 - 뉴스핌 | https://news.google.com/rss/articles/CBMiXEFVX3lxTFBWdVA4T0p0YVN4LUdhWTZfUnZTdjhhM2FRV0o1ZVROaXU2cUJRTVRZRG9jMEtkVEh1YW8wZzdycWJFVTYtVWc0S2FpXzQxMjN6N1RfYTFKZS1LMHhi?oc=5 | → 대표: 추미애 지사 '지방세제 개편안' 국회로…지방소비세율 25.3%→40.3% - 경인방송 뉴스 |
 
@@ -342,7 +333,7 @@
 |---|---|---|---|---|
 | esg | 한국회계기준원 | 2026년 제9회 지속가능성기준위원회(IFRS 재단 정관 개정 공개초안에 대한 검토의견) | https://www.kasb.or.kr/front/board/calViewA.do?seq=1133 |  |
 
-## collect:event_announcement (41건)
+## collect:event_announcement (40건)
 
 | 카테고리 | 출처 | 제목 | 링크 | 비고 |
 |---|---|---|---|---|
@@ -368,7 +359,7 @@
 | kifrs | dailian.co.kr | "회계현안 실무대응 모색"…상장협, 상장사 회계담당자 워크숍 - 데일리안 | https://news.google.com/rss/articles/CBMiogJBVV95cUxNYmtUQ1ZzRWU3Z2NERS0yNUE0N3lpZXBtcVlDS29DQWROV3pWU29jMHZjcUNiaFZiV2p6RzR2a1JJbDR1Zk9SYnlqTjhtUFRydjhubE55aGZ2eXJGRzUtbXc1TmFlRlFNS1JWLXBhbWRJOHJqNFR5VmRQSnlmdjdCa19LQ1J3Z1JCWnRnbDJ4bDRRWTVhLVdqWC1jbmhJdFExWFBXS2VQRS1haHFZd0w0WTk3U09rLXZNczh6NzVGdVlrMkZYRmpwYmtOU0swbFM0MGdXNkZSQkgtUjlnMTVpbWpOa2VfQlFWNXNoTmh3NF9OTjJEOU00dllHdWVLZWNPc0xWYWlFQ2VfWUxzdTlPZTktR2J1b0tIVk1Ta1FZTGIyZw?oc=5 |  |
 | esg | viva100.com | KB증권, 지속가능성보고서상 2년 연속 수상…ESG 공시 역량 인정 - 브릿지경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTFBIS1U5YTZWMkJPMGRheUhwbURGd3N1bFI3dG9Bb2ZkX3gxLWlOTlhuRTEtaTZGay1QWG16WGl0V1VEdlZFM3pGM1ltTEdEcVJuem5ZRDBxOHFjQQ?oc=5 |  |
 | esg | news1.kr | "ESG 공시 정교화"…KCC, 지속가능성보고서 12년 연속 수상 - 뉴스1 | https://news.google.com/rss/articles/CBMiXEFVX3lxTE1hcjlQcXhLWjFRZmhhajFIMTFHaG5tUW9rRzNNdDVyUjdYMTNCRTNjdExIVl8zeGp0bjZQcUo4S2N1clJvc0dNU0gzWTFCRUQ1MHdlRXV4bktiWUFk?oc=5 |  |
-| esg | thepublic.kr | KCC, 지속가능성보고서상 12년 연속 수상…ESG 공시 체계 강화 - 더퍼블릭 | https://news.google.com/rss/articles/CBMib0FVX3lxTE5pU2piLTlJdkNBUDRQa3lHZ2hUVEU3cVpnYnVUOEp6VUllWndCNjdOUVFMXzlTSGdqTFJOMG5zeUZTOXdsbG40dW4ydk1zN056bTBEYjBCRExWeklYbmxfOS12XzN3bHhiZjRTY0ZJa9IBb0FVX3lxTE5pU2piLTlJdkNBUDRQa3lHZ2hUVEU3cVpnYnVUOEp6VUllWndCNjdOUVFMXzlTSGdqTFJOMG5zeUZTOXdsbG40dW4ydk1zN056bTBEYjBCRExWeklYbmxfOS12XzN3bHhiZjRTY0ZJaw?oc=5 |  |
+| esg | smartbizn.com | 한샘, ESG 공시 기준 선제 반영···지속가능성보고서상 2년 연속 수상 - 스마트비즈 | https://news.google.com/rss/articles/CBMibEFVX3lxTFBuc09XVE42Z3AxdFRsaktRNWNxZkRuZ29YSnhLblpmdFVqVlBJdUY2U3VsOHE4YWI5bC1yVEV3T0swYURoU0N3X3I0MXIxSmIwNG9YVFB2ekoxWk5OZ3g4RXVnUHNmZEQtdWNBTg?oc=5 |  |
 | esg | sateconomy.co.kr | KB증권, 지속가능성보고서상 2년 연속 수상…투자자 중심 ESG 공시 강화 | https://sateconomy.co.kr/news/view/1065573636733530 |  |
 | esg | smartbizn.com | 한샘, ESG 공시 기준 선제 반영···지속가능성보고서상 2년 연속 수상 | https://www.smartbizn.com/news/articleView.html?idxno=160624 |  |
 | esg | thefirstmedia.net | 한샘, 지속가능성보고서상 2년 연속 수상…글로벌 ESG 공시 기준 반영 | http://www.thefirstmedia.net/news/articleView.html?idxno=214622 |  |
@@ -386,7 +377,6 @@
 | esg | the-pr.co.kr | KCC, 지속가능경영 12년 내공…보고서상 연속 수상 | https://www.the-pr.co.kr/news/articleView.html?idxno=63488 |  |
 | esg | bizwnews.com | KCC, '12년 연속 우수보고서상' 수상…"지속가능경영 경쟁력 입증" | http://www.bizwnews.com/news/articleView.html?idxno=153071 |  |
 | esg | megaeconomy.co.kr | 우성, ESG 공시 역량 인정…지속가능성보고서상 수상·평가등급 두 단계... | https://www.megaeconomy.co.kr/news/newsview.php?ncode=1065578156983631 |  |
-| esg | lcnews.co.kr | 호텔롯데, 지속가능성보고서상 첫 수상…ESG 공시 확대 | https://www.lcnews.co.kr/news/articleView.html?idxno=212060 |  |
 
 ## collect:incident (4건)
 
@@ -650,6 +640,7 @@
 |  | 금융감독원 | 공정가치 측정 관련 주석공시 모범사례 | https://www.fss.or.kr/fss/bbs/B0000128/view.do?nttId=36145&menuNo=200435 |  |
 |  | 금융감독원 | 타 기업에 대한 지분의 공시 관련 주석공시 모범사례 | https://www.fss.or.kr/fss/bbs/B0000128/view.do?nttId=36144&menuNo=200435 |  |
 |  | 금융감독원 | 특수관계자거래 주석공시 모범사례 | https://www.fss.or.kr/fss/bbs/B0000128/view.do?nttId=36143&menuNo=200435 |  |
+|  | 재정경제부 | 시장상황점검회의 개최 | https://mofe.go.kr/nw/nes/detailNesDtaView.do?searchBbsId1=MOSFBBS_000000000028&searchNttId1=MOSF_000000000080084&menuNo=4010100 |  |
 |  | 재정경제부 | 「한중일 및 아세안+3 재무차관 및 중앙은행  부총재 회의」 참석 및 주요인사 면담 결과 | https://mofe.go.kr/nw/nes/detailNesDtaView.do?searchBbsId1=MOSFBBS_000000000028&searchNttId1=MOSF_000000000080066&menuNo=4010100 |  |
 |  | 재정경제부 | 개인투자용 국채 12월 발행 미실시 | https://mofe.go.kr/nw/nes/detailNesDtaView.do?searchBbsId1=MOSFBBS_000000000028&searchNttId1=MOSF_000000000080049&menuNo=4010100 |  |
 |  | 재정경제부 | 26.12월 국고채, 재정증권, 원화표시 외평채 발행 계획 | https://mofe.go.kr/nw/nes/detailNesDtaView.do?searchBbsId1=MOSFBBS_000000000028&searchNttId1=MOSF_000000000080077&menuNo=4010100 |  |
@@ -659,7 +650,6 @@
 |  | 재정경제부 | 권대영 1차관, 「월급방위대 TF」 2차 회의 개최 | https://mofe.go.kr/nw/nes/detailNesDtaView.do?searchBbsId1=MOSFBBS_000000000028&searchNttId1=MOSF_000000000080055&menuNo=4010100 |  |
 |  | 재정경제부 | 이형일 부총리, 임금체계 개편 우수기업 방문 | https://mofe.go.kr/nw/nes/detailNesDtaView.do?searchBbsId1=MOSFBBS_000000000028&searchNttId1=MOSF_000000000080064&menuNo=4010100 |  |
 |  | 재정경제부 | 2026 다자개발은행(MDB) 프로젝트 플라자 개최 | https://mofe.go.kr/nw/nes/detailNesDtaView.do?searchBbsId1=MOSFBBS_000000000028&searchNttId1=MOSF_000000000080029&menuNo=4010100 |  |
-|  | 재정경제부 | 「아세안+3 재무차관 및 중앙은행 부총재회의」 참석 | https://mofe.go.kr/nw/nes/detailNesDtaView.do?searchBbsId1=MOSFBBS_000000000028&searchNttId1=MOSF_000000000080035&menuNo=4010100 |  |
 |  | 금융위원회 | 금융시장 동향 및  증시안정조치 진행상황 점검. 금일 등록된 게시글 | https://www.fsc.go.kr/no010101/88256?srchCtgry=&curPage=1&srchKey=&srchText=&srchBeginDt=&srchEndDt= |  |
 |  | 금융위원회 | 금융회사 검사‧제재‧인허가 전반의  공공성과 투명성을 제고합니다. - 「금융행정 쇄신방안」 마련. 금일 등록된 게시글 | https://www.fsc.go.kr/no010101/88250?srchCtgry=&curPage=1&srchKey=&srchText=&srchBeginDt=&srchEndDt= |  |
 |  | 금융위원회 | 이억원 금융위원장, 메리츠지주 김용범 부회장과 만나 민간 자본시장 개혁기구 구성 및 운영방안 논의 | https://www.fsc.go.kr/no010101/88245?srchCtgry=&curPage=1&srchKey=&srchText=&srchBeginDt=&srchEndDt= |  |
@@ -705,7 +695,7 @@
 |---|---|---|---|---|
 | tax | biz.chosun.com | 생맥주 가격 안 오를 수도…국회, 주세법 재검토 요청 | https://biz.chosun.com/policy/politics/assembly/2026/11/25/GOKIPKGU6VG7NJH2GDIW3F5D3M/?utm_source=naver&utm_medium=original&utm_campaign=biz |  |
 
-## collect:non_kifrs (26건)
+## collect:non_kifrs (31건)
 
 | 카테고리 | 출처 | 제목 | 링크 | 비고 |
 |---|---|---|---|---|
@@ -735,6 +725,11 @@
 |  | 한국회계기준원 | [일반기업회계기준] 2015년 건설계약 공시 | https://www.kasb.or.kr/front/board/List2006.do |  |
 |  | 한국회계기준원 | [일반기업회계기준] 2015년 물적분할(불비례적 인적분할 포함) 회계처리 변경 | https://www.kasb.or.kr/front/board/List2006.do |  |
 |  | 한국회계기준원 | [일반기업회계기준] 2015년 일반기업회계기준 연차개선(2015년) | https://www.kasb.or.kr/front/board/List2006.do |  |
+| kifrs | 금융감독원 | 매출 및 매출원가 허위계상 (FSS/2505-01) — 관련 기준서: 일반기업회계기준 제2장, 제16장 | https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194369&menuNo=200448 |  |
+| kifrs | 금융감독원 | 무형자산(개발비) 과대계상 (FSS/2409-11) — 관련 기준서: 일반기업회계기준 제11장 | https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138392&menuNo=200448 |  |
+| kifrs | 금융감독원 | 재고자산 허위계상 및 감사인의 독립성 의무 위반 (FSS/2409-07) — 관련 기준서: 일반기업회계기준 제7장 | https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138383&menuNo=200448 |  |
+| kifrs | 금융감독원 | 공사수익 및 공사미수금 과대계상 (FSS/2405-03) — 관련 기준서: 일반기업회계기준 제16장, 제5장 | https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135710&menuNo=200448 |  |
+| kifrs | 금융감독원 | 매출 및 매출원가 허위계상 (FSS/2405-02) — 관련 기준서: 일반기업회계기준 제16장 | https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135709&menuNo=200448 |  |
 
 ## collect:old_year (8건)
 
@@ -765,205 +760,205 @@
 |  | 한국회계기준원 | [세미나] IASB 위원(Nick Anderson) 초청 투자자 세미나: K-IFRS 제1118호 ‘재무제표 표시와 공시’ | https://www.kasb.or.kr/front/board/calViewA.do?seq=1129 |  |
 |  | 한국회계기준원 | [세미나] 회계기준원-환경산업기술원, 지속가능성 공시기준 이행지원 세미나 | https://www.kasb.or.kr/front/board/calViewA.do?seq=1127 |  |
 |  | 한국회계기준원 | [세미나] 한국회계기준원 개원 27주년 세미나: 지속가능성 공시, 새로운 기준의 시대 | https://www.kasb.or.kr/front/board/calViewA.do?seq=1125 |  |
+|  | 정책브리핑(고용노동부) | (참고) 국가자격시험 부정행위 방지대책, 시험 전·중·후 단계별로 빈틈없이 점검 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791202&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(재정경제부) | 시장상황점검회의 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791203&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(병무청) | 병무청, 한국생명존중희망재단과 협력으로 청년 병역의무자 정신건강 지원 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791201&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(과학기술정보통신부) | 함께 쓰는 연구 장비, 함께 여는 연구개발 미래 공동활용 우수성과 한자리에 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791196&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 산림청-지방정부, 산림분야 NDC 실행력 강화에 뜻 모아 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791199&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(병무청) | 병역처분은 공정하게, 부정한 병멱면탈은 끝까지 확인합니다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791194&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | [보도참고] 식약처, 무균의약품 GMP 이행지원 가이드라인 2종 제정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791193&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 산림청, 소나무재선충병 현장 중심의 방제 실행력 높인다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791191&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기후에너지환경부) | 한반도 물길에서 찾는 평화·상생의 해법 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791192&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국방부) | 국방부, 국군사관학교 창설 관련  육·해·공군 사관생도 설문조사 결과 공개 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791187&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산업통상부) | K-바이오 혁신을 이끄는 산업인 한 자리에 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791189&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산업통상부) | 산업부 장관, 베트남 중앙정책전략위원장 만나 첨단산업·원전·공급망 등  전략적 경제 협력 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791188&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(개인정보보호위원회) | 개인정보위, 유출 긴급대응 및 점검지원 체계 가동 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791185&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | 딥페이크·온라인 폭력 등 AI 시대 아동 위기, '아동의 시선'으로 해법 찾는다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791184&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 인공지능 활용 능력과 현장 대응력 갖춘지역 문제 해결사 389명이 간다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791183&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(농림축산식품부) | 농식품부 장관, 청년 농업인 협업경영 현장 찾아 경영모델 다양화 방안 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791181&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(농림축산식품부) | 2026년 K-라이스벨트 성과공유회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791180&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(과학기술정보통신부) | 대한민국, 국제전기통신연합 전권회의에서 디지털 의제 주도 및 세계적 지도력 강화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791175&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(인사혁신처) | "인공지능 전환 대응, 핵심 인재 역량·전략 개발해야" | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791178&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(교육부) | 학교에서 시작된 인공지능(AI) 교육의 변화, 전국으로 확산한다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791179&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 산림청, 소나무재선충병 대응 국제심포지엄 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791170&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(방송미디어통신위원회) | 전체 유료방송 103,974 가입자 감소, 인터넷멀티미디어방송 100,241 가입자 증가 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791166&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(우주항공청) | 뉴스페이스 펀드 운용사와 민간투자 활성화 방안 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791171&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(새만금개발청) | 새만금개발청, 새만금 관광분야 개발 방향 전문가 의견 수렴 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791162&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | "신체 닿기 전 '뚝' 멈추는 체인톱… 산림 현장의 고민,  '국민안전 발명품'으로 재탄생!" | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791158&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(관세청) | K-관세행정시스템, 중남미 수출 교두보 확보... 과테말라 전자통관시스템(유니패스) 개통 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791146&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | 추위 깊어져도 보호 빈틈 없도록 복지부·시도가 함께 메웁니다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791160&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | 공공정책급여로 필수진료체계 유지하고, 지역 가산분 본인부담 면제로 의료비 부담 완화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791159&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(통일부) | 통일부 국회와 「북한자료 공개 확대 그 이후 정책토론회」 공동개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791154&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 산림청, 겨울 앞두고 산림 주변 화목보일러 안전 살펴 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791156&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국가보훈부) | 보훈부， SKT와 히어로즈 패밀리에 특별한 하루 AI영상 헌정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791139&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국가보훈부) | 2026년 안중근의사 유해찾기 국제학술대회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791138&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국토교통부) | 모두의 성장으로 대전환을 위해 전 부처 역량 결집- 「양극화 대응 TF」 지역간 격차완화반 2차 회의 개최 - | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791140&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | "사회연대경제가 일상으로" 제8회 대한민국 사회연대경제박람회 개막 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791152&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | 모두의 성장으로 대전환을 위해 전 부처 역량 결집 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791150&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | 올해 현장 곳곳 누빈 '지방세입 체납관리단', 성공적 안착 넘어 더 큰 도약 나선다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791148&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(우주항공청) | 극한 환경 재현한 민간 최대 규모 '드론 비행시험평가 기반' 구축 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791145&pageIndex=1&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국방부) | 국방홍보원-MBN, 국민과 군을 잇는 미디어 협력 강화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791186&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 산림청, 소나무재선충병 대응 국제심포지엄 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791170&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(방송미디어통신위원회) | 전체 유료방송 103,974 가입자 감소, 인터넷멀티미디어방송 100,241 가입자 증가 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791166&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(우주항공청) | 뉴스페이스 펀드 운용사와 민간투자 활성화 방안 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791171&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(새만금개발청) | 새만금개발청, 새만금 관광분야 개발 방향 전문가 의견 수렴 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791162&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | "신체 닿기 전 '뚝' 멈추는 체인톱… 산림 현장의 고민,  '국민안전 발명품'으로 재탄생!" | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791158&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(관세청) | K-관세행정시스템, 중남미 수출 교두보 확보... 과테말라 전자통관시스템(유니패스) 개통 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791146&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | 추위 깊어져도 보호 빈틈 없도록 복지부·시도가 함께 메웁니다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791160&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | 공공정책급여로 필수진료체계 유지하고, 지역 가산분 본인부담 면제로 의료비 부담 완화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791159&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(통일부) | 통일부 국회와 「북한자료 공개 확대 그 이후 정책토론회」 공동개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791154&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 산림청, 겨울 앞두고 산림 주변 화목보일러 안전 살펴 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791156&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국가보훈부) | 보훈부， SKT와 히어로즈 패밀리에 특별한 하루 AI영상 헌정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791139&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국가보훈부) | 2026년 안중근의사 유해찾기 국제학술대회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791138&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국토교통부) | 모두의 성장으로 대전환을 위해 전 부처 역량 결집- 「양극화 대응 TF」 지역간 격차완화반 2차 회의 개최 - | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791140&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | "사회연대경제가 일상으로" 제8회 대한민국 사회연대경제박람회 개막 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791152&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 모두의 성장으로 대전환을 위해 전 부처 역량 결집 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791150&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 올해 현장 곳곳 누빈 '지방세입 체납관리단', 성공적 안착 넘어 더 큰 도약 나선다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791148&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(우주항공청) | 극한 환경 재현한 민간 최대 규모 '드론 비행시험평가 기반' 구축 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791145&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(산림청) | 영덕국유림관리소, 영농부산물 파쇄와 함께  산림분야 규제합리화 적극 홍보 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791144&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(산림청) | 산림청, 범정부 적극행정 우수사례 경진대회에서 최우수상(국무총리상) 수상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791142&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(조달청) | 조달청, 스마트건설기술 활성화로 공공공사 디지털 전환 가속화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791133&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(조달청) | 조달청, 12월 대형사업 총 182건, 3조 2,259억 원 상당 입찰 예정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791132&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(법무부) | 법무부, 중국 시안(西安)·선전(深圳)에서 '현장 밀착형' 법률지원 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791136&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(조달청) | 조달청 시설공사 주간('26.11.30.~'26.12.4.)입찰 동향 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791131&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국가유산청) | '국가유산 보호'로 사회에 공헌한 기업들의 한 해 성과 공유 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791134&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(고용노동부) | 근로복지공단, 일하는 부모와 함께한 보육 30년 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791172&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(고용노동부) | 건설기계·장비사고 예방, 전국 8개 권역 릴레이 세미나 마무리 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791128&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(과학기술정보통신부) | 인공지능 시대 연구개발 경쟁력의 핵심, '국가연구데이터' 생태계 기반 마련 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791130&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(과학기술정보통신부) | "물에서 수소로, 수소에서 전기로…" 국립과천과학관에서 수소에너지와 수소도시를 만난다. '수소에너지 작은 박람회' 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791176&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(감사원) | [사전컨설팅 보도자료 13] 희귀·난치병 학생 의료비 지원 확대 … 전년도 연말(10~12월) 지출한 의료비도 당해 연도에 지원 가능 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791177&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(질병관리청) | 조류인플루엔자 인체감염증 국내 유입 대비 제주공항 검역 현장 점검(11.27.금) | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791123&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(중소벤처기업부) | 기업 간 상생협력, 성과로 이어지다   「성과공유제 우수사례 공유회」 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791122&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(중소벤처기업부) | 대·중소기업 상생협력의 주역 한자리에,   「2026 올해의 상생기업대상」 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791121&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산업통상부) | AI 로봇이 배우는 동작 데이터, 국가표준(KS)으로 체계화 추진 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791120&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(중소벤처기업부) | 중기부·국조실, 창업·벤처 규제애로 전담 자문기구 '창업벤처규제혁신위원회' 출범 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791117&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(중소벤처기업부) | 중기부, 더 나은 의료서비스를 위한 비대면진료 스타트업 간담회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791116&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | [보도참고] 현장 목소리를 담아 안전과 무관한 수입식품 행정규제 정비 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791115&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | [보도참고] 첨단재생의료 범위 확대로 희귀질환 환자 치료의 길 넓힌다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791114&pageIndex=2&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(조달청) | 조달청, 스마트건설기술 활성화로 공공공사 디지털 전환 가속화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791133&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(조달청) | 조달청, 12월 대형사업 총 182건, 3조 2,259억 원 상당 입찰 예정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791132&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(법무부) | 법무부, 중국 시안(西安)·선전(深圳)에서 '현장 밀착형' 법률지원 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791136&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(조달청) | 조달청 시설공사 주간('26.11.30.~'26.12.4.)입찰 동향 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791131&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국가유산청) | '국가유산 보호'로 사회에 공헌한 기업들의 한 해 성과 공유 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791134&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(고용노동부) | 근로복지공단, 일하는 부모와 함께한 보육 30년 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791172&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(고용노동부) | 건설기계·장비사고 예방, 전국 8개 권역 릴레이 세미나 마무리 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791128&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(과학기술정보통신부) | 인공지능 시대 연구개발 경쟁력의 핵심, '국가연구데이터' 생태계 기반 마련 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791130&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(과학기술정보통신부) | "물에서 수소로, 수소에서 전기로…" 국립과천과학관에서 수소에너지와 수소도시를 만난다. '수소에너지 작은 박람회' 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791176&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(감사원) | [사전컨설팅 보도자료 13] 희귀·난치병 학생 의료비 지원 확대 … 전년도 연말(10~12월) 지출한 의료비도 당해 연도에 지원 가능 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791177&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(질병관리청) | 조류인플루엔자 인체감염증 국내 유입 대비 제주공항 검역 현장 점검(11.27.금) | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791123&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(중소벤처기업부) | 기업 간 상생협력, 성과로 이어지다   「성과공유제 우수사례 공유회」 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791122&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(중소벤처기업부) | 대·중소기업 상생협력의 주역 한자리에,   「2026 올해의 상생기업대상」 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791121&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산업통상부) | AI 로봇이 배우는 동작 데이터, 국가표준(KS)으로 체계화 추진 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791120&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(중소벤처기업부) | 중기부·국조실, 창업·벤처 규제애로 전담 자문기구 '창업벤처규제혁신위원회' 출범 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791117&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(중소벤처기업부) | 중기부, 더 나은 의료서비스를 위한 비대면진료 스타트업 간담회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791116&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | [보도참고] 현장 목소리를 담아 안전과 무관한 수입식품 행정규제 정비 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791115&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | [보도참고] 첨단재생의료 범위 확대로 희귀질환 환자 치료의 길 넓힌다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791114&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(식품의약품안전처) | [보도참고] 의료기기 사용적합성 평가,심사 안내서 2종 마련 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791113&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(문화체육관광부) | 문체부, 국민 체감 정책홍보부터 노사 상생 협력까지 혁신과 소통 이끈 직원 12명에게 6차 특별성과 포상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791110&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(문화체육관광부) | 도서관정책 현안과 발전 방향 논의에 중앙과 지방이 머리 맞댄다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791109&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | [보도참고] 식품위생 관리체계 정비로 안전은 강화하고, 영업자 부담은 낮춘다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791112&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | [보도참고] 식품 알레르기 유발물질 표시대상 4종 추가...소비자 알 권리 강화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791111&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | [보도참고] 식약처, 의약품 부작용 예측을 위한 통합 데이터 플랫폼 시범운영 착수 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791108&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | [보도참고] 식약처, 국제 식품위생 기준 논의에서 우리나라 의견 적극 제시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791107&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | 식약처, 영·유아용 화장품 사용 시 올바른 사용법 안내 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791106&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | 식약처, 어린이집 급식시설 위생관리 실태 점검...7곳 적발 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791105&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | 식약처, 식품.의약품 등 시험.검사기관 기획 점검 실시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791104&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(소방청) | 물류창고 화재, 설계부터 운영·현장 대응까지 안전관리 강화한다 - 관계부처 합동 「물류창고 화재안전 강화방안」 마련 - | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791137&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(소방청) | 소방청, 시도와 머리 맞대고 현장 중심 화재예방 정책 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791103&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(소방청) | "배터리(1차·2차 전지)의 화재안전성 강화를 위한" 중앙소방학교 주관, 산·학·관 학술대회 발표회(세미나) 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791102&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국토교통부) | 시내버스 두 대 중 한 대 이상은 저상버스 교통약자 이동환경의 꾸준한 개선, 모두를 위한 변화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791099&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(기후에너지환경부) | 기업 자연자본 영향 공개 기준 구체화… 자연자본공시 지원연합에서 해법 모색 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791101&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(기후에너지환경부) | 생성형 인공지능 시대 시험 공정성 지킨다… 기후부, 부정행위 차단 총력 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791100&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(질병관리청) | [11.27.금.석간] '무작위 표본 검역조사' 법제화, 항공기·선박 검역 사각지대 줄인다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791098&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(과학기술정보통신부) | 땅속 광섬유로 '작은 지진'의 파열 순간을 1000분의 1초 단위로 포착 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791097&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(재정경제부) | 「한중일 및 아세안+3 재무차관 및 중앙은행  부총재 회의」 참석 및 주요인사 면담 결과 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791153&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(교육부) | 국립대학 양성평등 추진 성과공유회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791118&pageIndex=3&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(고용노동부) | (참고)노동자 74명의 임금·퇴직급여 등  11억 4천만원 체불한 제조업체 대표 구속 (대구서부지청) | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791096&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(농림축산식품부) | 전남광주통합특별시 나주 육용오리 농장에서 H5형 조류인플루엔자 항원 확인 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791119&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 감의 새로운 가치, 푸드테크로 찾는다 - 국립산림과학원, 산청 숲푸드 현장설명회서 감 고부가가치  활용 방안 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791095&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 북부지방산림청, 산림유전자원보호구역 확대 지정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791093&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(기후에너지환경부) | (참고) ESS 중앙계약시장 14개소 선정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791125&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(외교부) | 차관보, 이라크 방문 및 현지 진출 우리 기업 간담회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791071&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(외교부) | 대기오염과 해양보호 등 환경 도전에 대한 동북아 공동 대응 강화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791070&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(소방청) | 소방관이 직접 만든 인공지능(AI)... 소방청, 공공 인공지능(AI) 대전환 도전 잇기(챌린지) 5개 팀 입상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791129&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(우주항공청) | 위성정보로 미래를 여는 도전 「2026 스페이스 해커톤」 결선 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791069&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(외교부) | 재외공관 역할 재창조 이행 특별성과 포상금 지급 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791067&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(외교부) | 청년과 함께 만들어가는 대한민국 무상원조의 미래 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791066&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(기본사회위원회) | "국민의 생각이 기본사회 정책으로!" 기본사회위원회, 정책아이디어 공모전 최종 시상식 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791065&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 중부지방산림청, 영농부산물 파쇄 지원으로 산불 예방 총력 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791064&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(농림축산식품부) | 송미령 농림축산식품부 장관, 토마토갈색주름과실바이러스(ToBRFV) 피해농가 현장 방문 및 총력대응 요청 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791062&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(과학기술정보통신부) | 과기정통부, 2026년 적극 행정 우수사례 경진대회 대상(대통령상) 수상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791057&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국무조정실) | [보도자료] 기후위기대응 권역별(경기) 포럼 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791059&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국무조정실) | [보도자료] 제23차 부동산 불법행위 대응협의회 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791058&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국방부) | 국방부장관, 외국사관학교 졸업 현역장교 간담회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791056&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(외교부) | 박윤주 외교부 제1차관, 온두라스·과테말라 외교차관 면담 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791050&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 영주국유림관리소, 산림현장 찾아  임가소통 및 규제합리화 사례 적극홍보 - 임업인 대상 애로사항 청취 및 산림 규제합리화 사례 홍보 등 - | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791049&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국가기후위기대응위원회) | 제4차 기후위기대응 권역별 포럼 개최(경기) | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791043&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(관세청) | 관세청, 무역기반 재정·금융 편취 범죄(TBFC)근절 협업을 위해 6개 기관과 양해각서(MOU) 체결 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791042&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국토교통부) | '26년 전세사기 기획조사 실시 결과 전세사기 의심 88건 적발… 22명 수사의뢰 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791038&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 북부지방산림청, 따뜻한 겨울 나기 '사랑의 땔감 나누기' 행사 실시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791040&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(외교부) | 한-이란 외교장관 통화(11.26.) 결과 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791037&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | 정은경 장관, 그냥드림과 우체국 협업한 찾아가는 서비스 운영 점검 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791036&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(법제처) | 국민의 아이디어를 통해 불편·불합리한 법령을 정비합니다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791034&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | 2027년 비급여 보고·공개항목 확대 등 비급여 관리방안 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791035&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 산림청 항공연구회, 공무원 우수 연구모임 4년 연속 선정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791033&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산업통상부) | 무역위, 중국산 폴리염화비닐 서스펜션 수지, 석도강판 덤핑조사 예비판정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791030&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산업통상부) | 해외직구 겨울용 섬유제품, 전기찜질기 등 31개 제품 안전기준 부적합 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791029&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산업통상부) | 한-일 정부와 민간, 반도체·AI 등 미래성장 협력 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791028&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산업통상부) | 산업부 장관, 체코 원전사업 계획의 철저한 이행과 체코와의 신뢰 공고화 방안 점검 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791027&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(해양수산부) | (동정) 황종우 해수부 장관, '어복버스' 지원 기업·기관에게 감사 표시 전해 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791054&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(외교부) | 2026 라틴아메리카 협력센터 심포지엄 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791019&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(개인정보보호위원회) | 「2026 개인정보 미래포럼」 제5차 전체회의 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791021&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(개인정보보호위원회) | 개인정보위, 인공지능 기반 보이스피싱 탐지 서비스로 적극행정 우수사례 경진대회 대상 수상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791020&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(문화체육관광부) | 도서관정책 현안과 발전 방향 논의에 중앙과 지방이 머리 맞댄다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791109&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | [보도참고] 식품위생 관리체계 정비로 안전은 강화하고, 영업자 부담은 낮춘다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791112&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | [보도참고] 식품 알레르기 유발물질 표시대상 4종 추가...소비자 알 권리 강화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791111&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | [보도참고] 식약처, 의약품 부작용 예측을 위한 통합 데이터 플랫폼 시범운영 착수 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791108&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | [보도참고] 식약처, 국제 식품위생 기준 논의에서 우리나라 의견 적극 제시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791107&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | 식약처, 영·유아용 화장품 사용 시 올바른 사용법 안내 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791106&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | 식약처, 어린이집 급식시설 위생관리 실태 점검...7곳 적발 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791105&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | 식약처, 식품.의약품 등 시험.검사기관 기획 점검 실시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791104&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(소방청) | 물류창고 화재, 설계부터 운영·현장 대응까지 안전관리 강화한다 - 관계부처 합동 「물류창고 화재안전 강화방안」 마련 - | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791137&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(소방청) | 소방청, 시도와 머리 맞대고 현장 중심 화재예방 정책 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791103&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(소방청) | "배터리(1차·2차 전지)의 화재안전성 강화를 위한" 중앙소방학교 주관, 산·학·관 학술대회 발표회(세미나) 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791102&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국토교통부) | 시내버스 두 대 중 한 대 이상은 저상버스 교통약자 이동환경의 꾸준한 개선, 모두를 위한 변화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791099&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기후에너지환경부) | 기업 자연자본 영향 공개 기준 구체화… 자연자본공시 지원연합에서 해법 모색 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791101&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기후에너지환경부) | 생성형 인공지능 시대 시험 공정성 지킨다… 기후부, 부정행위 차단 총력 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791100&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(질병관리청) | [11.27.금.석간] '무작위 표본 검역조사' 법제화, 항공기·선박 검역 사각지대 줄인다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791098&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(과학기술정보통신부) | 땅속 광섬유로 '작은 지진'의 파열 순간을 1000분의 1초 단위로 포착 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791097&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(재정경제부) | 「한중일 및 아세안+3 재무차관 및 중앙은행  부총재 회의」 참석 및 주요인사 면담 결과 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791153&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(교육부) | 국립대학 양성평등 추진 성과공유회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791118&pageIndex=4&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(인구전략위원회) | 김진오 인구위 부위원장, 전북대병원에서 출산·소아의료 여건 살피고 이원택 전북지사와 인구정책 협의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791197&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(고용노동부) | (참고)노동자 74명의 임금·퇴직급여 등  11억 4천만원 체불한 제조업체 대표 구속 (대구서부지청) | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791096&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(농림축산식품부) | 전남광주통합특별시 나주 육용오리 농장에서 H5형 조류인플루엔자 항원 확인 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791119&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 감의 새로운 가치, 푸드테크로 찾는다 - 국립산림과학원, 산청 숲푸드 현장설명회서 감 고부가가치  활용 방안 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791095&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 북부지방산림청, 산림유전자원보호구역 확대 지정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791093&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기후에너지환경부) | (참고) ESS 중앙계약시장 14개소 선정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791125&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(외교부) | 차관보, 이라크 방문 및 현지 진출 우리 기업 간담회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791071&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(외교부) | 대기오염과 해양보호 등 환경 도전에 대한 동북아 공동 대응 강화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791070&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(소방청) | 소방관이 직접 만든 인공지능(AI)... 소방청, 공공 인공지능(AI) 대전환 도전 잇기(챌린지) 5개 팀 입상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791129&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(우주항공청) | 위성정보로 미래를 여는 도전 「2026 스페이스 해커톤」 결선 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791069&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(외교부) | 재외공관 역할 재창조 이행 특별성과 포상금 지급 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791067&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(외교부) | 청년과 함께 만들어가는 대한민국 무상원조의 미래 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791066&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기본사회위원회) | "국민의 생각이 기본사회 정책으로!" 기본사회위원회, 정책아이디어 공모전 최종 시상식 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791065&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 중부지방산림청, 영농부산물 파쇄 지원으로 산불 예방 총력 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791064&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(농림축산식품부) | 송미령 농림축산식품부 장관, 토마토갈색주름과실바이러스(ToBRFV) 피해농가 현장 방문 및 총력대응 요청 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791062&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(과학기술정보통신부) | 과기정통부, 2026년 적극 행정 우수사례 경진대회 대상(대통령상) 수상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791057&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국무조정실) | [보도자료] 기후위기대응 권역별(경기) 포럼 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791059&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국무조정실) | [보도자료] 제23차 부동산 불법행위 대응협의회 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791058&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국방부) | 국방부장관, 외국사관학교 졸업 현역장교 간담회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791056&pageIndex=5&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(외교부) | 박윤주 외교부 제1차관, 온두라스·과테말라 외교차관 면담 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791050&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 영주국유림관리소, 산림현장 찾아  임가소통 및 규제합리화 사례 적극홍보 - 임업인 대상 애로사항 청취 및 산림 규제합리화 사례 홍보 등 - | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791049&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국가기후위기대응위원회) | 제4차 기후위기대응 권역별 포럼 개최(경기) | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791043&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(관세청) | 관세청, 무역기반 재정·금융 편취 범죄(TBFC)근절 협업을 위해 6개 기관과 양해각서(MOU) 체결 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791042&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국토교통부) | '26년 전세사기 기획조사 실시 결과 전세사기 의심 88건 적발… 22명 수사의뢰 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791038&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 북부지방산림청, 따뜻한 겨울 나기 '사랑의 땔감 나누기' 행사 실시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791040&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(외교부) | 한-이란 외교장관 통화(11.26.) 결과 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791037&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | 정은경 장관, 그냥드림과 우체국 협업한 찾아가는 서비스 운영 점검 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791036&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(법제처) | 국민의 아이디어를 통해 불편·불합리한 법령을 정비합니다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791034&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | 2027년 비급여 보고·공개항목 확대 등 비급여 관리방안 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791035&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 산림청 항공연구회, 공무원 우수 연구모임 4년 연속 선정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791033&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산업통상부) | 무역위, 중국산 폴리염화비닐 서스펜션 수지, 석도강판 덤핑조사 예비판정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791030&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산업통상부) | 해외직구 겨울용 섬유제품, 전기찜질기 등 31개 제품 안전기준 부적합 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791029&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산업통상부) | 한-일 정부와 민간, 반도체·AI 등 미래성장 협력 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791028&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산업통상부) | 산업부 장관, 체코 원전사업 계획의 철저한 이행과 체코와의 신뢰 공고화 방안 점검 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791027&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(해양수산부) | (동정) 황종우 해수부 장관, '어복버스' 지원 기업·기관에게 감사 표시 전해 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791054&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(외교부) | 2026 라틴아메리카 협력센터 심포지엄 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791019&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(개인정보보호위원회) | 「2026 개인정보 미래포럼」 제5차 전체회의 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791021&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(개인정보보호위원회) | 개인정보위, 인공지능 기반 보이스피싱 탐지 서비스로 적극행정 우수사례 경진대회 대상 수상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791020&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(국가데이터처) | 국가데이터처, 실용통계교육 컨퍼런스 개최 보도자료 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791022&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(외교부) | 2026년도 재외공관장회의 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791017&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국토교통부) | [장관동정] 홍지선 장관, 용인 반도체 국가산단 및 공공주택지구 현장점검 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791016&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | "참여자의 의지와 역량에 맞게" 맞춤형 자활 2차 시범사업 설명회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791015&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국민통합위원회) | 통합위, 김포공항 1차 행사에 이어 제주공항에서 두 번째 행사 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791014&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | 지역·필수·공공의료 강화 위한 공공보건의료기관 협력 방안 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791005&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | 숙의(熟議) 거친 의료혁신 시민패널 84%, "연명의료 유보 중단 시점 말기까지 확대 필요" | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791004&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | '꿈의 시작, 내일을 심다!' 제19회 드림스타트 사업보고대회 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791003&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | 지역·필수의료 강화부터 존엄한 임종까지, 의료혁신위, 대정부 권고안 마련 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791002&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | AI 시대 보건의료데이터의 윤리적 활용 방안 논의 제9회 국가생명윤리포럼 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791001&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국무조정실) | [보도자료] 국무조정실, 개인정보 유출사고를 낸 공공기관 대상 복무 점검 검토 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791011&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(법무부) | 검찰총장 제청대상자 추가 천거 공고 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791000&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(과학기술정보통신부) | 인공지능 시대, 우리 사회가 마주한 쟁점을 논하는｢인공지능 사회정책포럼｣ 공개 발표회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790997&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(과학기술정보통신부) | 『5세대 이동통신 단독 모드 전국망』 시대,  국민과 산업을 위한 통신서비스 혁신 본격 추진 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790996&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국토교통부) | 내년 수도권 공공주택 5.6만호 입주자 모집…집 짓는 속도도 더 빠르게! | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790999&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | 행안부 장관, 전국 1호 '햇빛소득마을' 김해 초전마을 방문 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791009&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국가데이터처) | 국가데이터처, 유엔마약범죄사무소(UNODC)와 범죄분류 공동세미나 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791007&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(기후에너지환경부) | 2035 제주, '녹색문명'의 새 길을 열다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791006&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(질병관리청) | 지역과 학교가 함께하는 아토피·천식 예방관리 성과 공유(11.26.목) | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790998&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(중소벤처기업부) | 역대 최대 규모 '컴업(COMEUP) 2026'의 시작을 알리다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790994&pageIndex=6&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(외교부) | 2026년도 재외공관장회의 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791017&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국토교통부) | [장관동정] 홍지선 장관, 용인 반도체 국가산단 및 공공주택지구 현장점검 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791016&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | "참여자의 의지와 역량에 맞게" 맞춤형 자활 2차 시범사업 설명회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791015&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국민통합위원회) | 통합위, 김포공항 1차 행사에 이어 제주공항에서 두 번째 행사 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791014&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | 지역·필수·공공의료 강화 위한 공공보건의료기관 협력 방안 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791005&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | 숙의(熟議) 거친 의료혁신 시민패널 84%, "연명의료 유보 중단 시점 말기까지 확대 필요" | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791004&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | '꿈의 시작, 내일을 심다!' 제19회 드림스타트 사업보고대회 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791003&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | 지역·필수의료 강화부터 존엄한 임종까지, 의료혁신위, 대정부 권고안 마련 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791002&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | AI 시대 보건의료데이터의 윤리적 활용 방안 논의 제9회 국가생명윤리포럼 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791001&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국무조정실) | [보도자료] 국무조정실, 개인정보 유출사고를 낸 공공기관 대상 복무 점검 검토 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791011&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(법무부) | 검찰총장 제청대상자 추가 천거 공고 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791000&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(과학기술정보통신부) | 인공지능 시대, 우리 사회가 마주한 쟁점을 논하는｢인공지능 사회정책포럼｣ 공개 발표회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790997&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(과학기술정보통신부) | 『5세대 이동통신 단독 모드 전국망』 시대,  국민과 산업을 위한 통신서비스 혁신 본격 추진 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790996&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국토교통부) | 내년 수도권 공공주택 5.6만호 입주자 모집…집 짓는 속도도 더 빠르게! | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790999&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 행안부 장관, 전국 1호 '햇빛소득마을' 김해 초전마을 방문 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791009&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국가데이터처) | 국가데이터처, 유엔마약범죄사무소(UNODC)와 범죄분류 공동세미나 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791007&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기후에너지환경부) | 2035 제주, '녹색문명'의 새 길을 열다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791006&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(질병관리청) | 지역과 학교가 함께하는 아토피·천식 예방관리 성과 공유(11.26.목) | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790998&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(중소벤처기업부) | 역대 최대 규모 '컴업(COMEUP) 2026'의 시작을 알리다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790994&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(법무부) | 교원 대상 무고성 아동학대 신고 제도개선 방안 발표 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790993&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 함께 모은 미선나무 자원, 공동연구로 보존·활용 가능성 넓힌다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790983&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(관세청) | 국민의 생명과 안전을 지키는 현장 최고의 발명은? | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790988&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국무조정실) | [보도자료] 제18회 국가정책조정회의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790977&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(고용노동부) | 일하는 사람 기본법, 현장의 목소리로 말하다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790976&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(고용노동부) | 노동부, 최초 지방감독 위임 사업장 선정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790975&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(해양수산부) | (동정) 황종우 해수부 장관, 한국항만협회 창립 50주년 기념 행사 참석 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791053&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | "민방위 재난문자 오발송 막는다"전국 민방위 경보 담당자 교육·훈련 강화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790990&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(질병관리청) | 국립보건연구원, 뇌질환 연구기반 구축 성과 공유 및 연구협력 확대 모색(11.26.목) | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790974&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(조달청) | '나라장터 원산지 관리 강화' 관련 조달업체 교육 실시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790973&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(교육부) | 아이들의 상처 난 마음, 현장의 세심한 손길로 보듬다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790959&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(교육부) | "아이의 성장 속도를 지켜주세요" 영유아 사교육 개선을 위한 공동 실천 약속 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790958&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(교육부) | 수업을 바꾸는 교사들, 교실 너머로 변화를 나누다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790957&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | 일하는 즐거움으로 여는 당당한 내일, 역대 최대 118만 개 노인일자리 사업에 참여하세요! | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790949&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | AI 시대, 의료데이터 더 안전하고 쉽게 활용 「보건의료데이터 활용 가이드라인」 전부개정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790948&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(개인정보보호위원회) | 내 정보, 더 안전하게 전송하여 국민 편익 높인다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790953&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(과학기술정보통신부) | '인공지능의 모든 순간에 사이버보안, 대한민국 인공지능 보안 역량을 하나로' 2026 인공지능 해킹 방어대회(ACDC) 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790946&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(인사혁신처) | 2026년 11월 퇴직공직자 취업심사 결과 공개 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790952&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | 공무원이 직접 만든 AI 서비스 한자리에... '제2회 AI 정부 실험실 이용자 포럼' | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790971&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | 올해 전국 빗물받이 898만 회 정비, 우수사례 30건 사례집 발간·배포 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790969&pageIndex=7&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(산림청) | 함께 모은 미선나무 자원, 공동연구로 보존·활용 가능성 넓힌다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790983&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(관세청) | 국민의 생명과 안전을 지키는 현장 최고의 발명은? | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790988&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국무조정실) | [보도자료] 제18회 국가정책조정회의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790977&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(고용노동부) | 일하는 사람 기본법, 현장의 목소리로 말하다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790976&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(고용노동부) | 노동부, 최초 지방감독 위임 사업장 선정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790975&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(해양수산부) | (동정) 황종우 해수부 장관, 한국항만협회 창립 50주년 기념 행사 참석 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791053&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | "민방위 재난문자 오발송 막는다"전국 민방위 경보 담당자 교육·훈련 강화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790990&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(질병관리청) | 국립보건연구원, 뇌질환 연구기반 구축 성과 공유 및 연구협력 확대 모색(11.26.목) | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790974&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(조달청) | '나라장터 원산지 관리 강화' 관련 조달업체 교육 실시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790973&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(교육부) | 아이들의 상처 난 마음, 현장의 세심한 손길로 보듬다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790959&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(교육부) | "아이의 성장 속도를 지켜주세요" 영유아 사교육 개선을 위한 공동 실천 약속 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790958&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(교육부) | 수업을 바꾸는 교사들, 교실 너머로 변화를 나누다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790957&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | 일하는 즐거움으로 여는 당당한 내일, 역대 최대 118만 개 노인일자리 사업에 참여하세요! | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790949&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | AI 시대, 의료데이터 더 안전하고 쉽게 활용 「보건의료데이터 활용 가이드라인」 전부개정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790948&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(개인정보보호위원회) | 내 정보, 더 안전하게 전송하여 국민 편익 높인다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790953&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(과학기술정보통신부) | '인공지능의 모든 순간에 사이버보안, 대한민국 인공지능 보안 역량을 하나로' 2026 인공지능 해킹 방어대회(ACDC) 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790946&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(인사혁신처) | 2026년 11월 퇴직공직자 취업심사 결과 공개 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790952&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 공무원이 직접 만든 AI 서비스 한자리에... '제2회 AI 정부 실험실 이용자 포럼' | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790971&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 올해 전국 빗물받이 898만 회 정비, 우수사례 30건 사례집 발간·배포 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790969&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(행정안전부) | 재난관리물품 보관부터 현장 운송까지, 민관 협력으로 재난대응 역량 높인다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790967&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | 행안부, '제5회 한-아세안 재난관리 장관회의' 아세안과 재난관리 협력 기반 마련 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790965&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | 국민 생활 바꿀 공공데이터×AI 아이디어, 왕중왕전 최종 승자 가려졌다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790963&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | 지역을 품은 '마을기업',  백화점과 상생협력 나선다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790961&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국가데이터처) | 2026년 3/4분기 가계동향조사 결과 보도자료 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790956&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(기후에너지환경부) | 올해 전국 빗물받이 898만 회 정비, 우수사례 30건 사례집 발간·배포 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790955&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(기후에너지환경부) | 물의 미래를 바꾸는 도전, 2026 대한민국 물산업 혁신 창업대전 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790954&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(기상청) | 날씨 예측은 더 정밀하게, 위험정보는 더 빠르게! 한층 촘촘해진 겨울철 기상 안전 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790951&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(질병관리청) | [11.27.금.조간] 2026년 청소년건강행태조사 결과 발표 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790947&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(공정거래위원회) | 애플 부당 광고 사건 심의 절차 개시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790945&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(원자력안전위원회) | 제2026-19회 원자력안전위원회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790944&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(보건복지부) | 통합돌봄 뒷받침할 '다양한 돌봄 공급주체' 키운다 복합사회서비스 운영모델 실증 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790943&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(과학기술정보통신부) | 양자컴퓨터 시대, 암호 전환의 길을 찾다, 제1회 양자내성암호 전환 경진대회･해커톤 시상식 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790930&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국토교통부) | 물류창고 화재, 설계부터 운영·현장 대응까지 안전관리 강화한다 - 관계부처 합동 「물류창고 화재안전 강화방안」 마련 - | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790937&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국토교통부) | 국토와 환경이 함께 만드는 지속가능한 미래 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790936&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(해양수산부) | 북항 방문을 보다 편리하게, 해수부, 부산북항 재개발 배후도로 준공 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790935&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(해양수산부) | 우리나라 해양법 전문가 김현정 교수, 해양법자문위원회(ABLOS) 위원으로 선출 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790934&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(기후에너지환경부) | (참고) 주행거리가 긴 렌터카부터 전기차로…제주 렌터카 업계와 전동화 방안 모색 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790939&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(기후에너지환경부) | 국토와 환경이 함께 만드는 지속가능한 미래 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790938&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(농림축산식품부) | 찬 바람 속에서도 따뜻한 마음으로, 반려동물과 겨울 동행 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790933&pageIndex=8&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 행안부, '제5회 한-아세안 재난관리 장관회의' 아세안과 재난관리 협력 기반 마련 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790965&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 국민 생활 바꿀 공공데이터×AI 아이디어, 왕중왕전 최종 승자 가려졌다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790963&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 지역을 품은 '마을기업',  백화점과 상생협력 나선다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790961&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국가데이터처) | 2026년 3/4분기 가계동향조사 결과 보도자료 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790956&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기후에너지환경부) | 올해 전국 빗물받이 898만 회 정비, 우수사례 30건 사례집 발간·배포 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790955&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기후에너지환경부) | 물의 미래를 바꾸는 도전, 2026 대한민국 물산업 혁신 창업대전 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790954&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기상청) | 날씨 예측은 더 정밀하게, 위험정보는 더 빠르게! 한층 촘촘해진 겨울철 기상 안전 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790951&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(질병관리청) | [11.27.금.조간] 2026년 청소년건강행태조사 결과 발표 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790947&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(공정거래위원회) | 애플 부당 광고 사건 심의 절차 개시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790945&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(원자력안전위원회) | 제2026-19회 원자력안전위원회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790944&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(보건복지부) | 통합돌봄 뒷받침할 '다양한 돌봄 공급주체' 키운다 복합사회서비스 운영모델 실증 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790943&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(과학기술정보통신부) | 양자컴퓨터 시대, 암호 전환의 길을 찾다, 제1회 양자내성암호 전환 경진대회･해커톤 시상식 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790930&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국토교통부) | 물류창고 화재, 설계부터 운영·현장 대응까지 안전관리 강화한다 - 관계부처 합동 「물류창고 화재안전 강화방안」 마련 - | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790937&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국토교통부) | 국토와 환경이 함께 만드는 지속가능한 미래 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790936&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(해양수산부) | 북항 방문을 보다 편리하게, 해수부, 부산북항 재개발 배후도로 준공 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790935&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(해양수산부) | 우리나라 해양법 전문가 김현정 교수, 해양법자문위원회(ABLOS) 위원으로 선출 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790934&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기후에너지환경부) | (참고) 주행거리가 긴 렌터카부터 전기차로…제주 렌터카 업계와 전동화 방안 모색 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790939&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(기후에너지환경부) | 국토와 환경이 함께 만드는 지속가능한 미래 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790938&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(농림축산식품부) | 찬 바람 속에서도 따뜻한 마음으로, 반려동물과 겨울 동행 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790933&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(농림축산식품부) | 돼지유행성설사(PED) 방어항체 보유율 하락, 양돈농가 방역 강화 필요 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790932&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(농림축산식품부) | '올해의 창작 K-Sool', 최고의 작품은? | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790931&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(공정거래위원회) | 공정거래위원장,  중소기업 현장 소통 간담회 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790929&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | 해외 밀반입부터 국내 불법 판매까지, 무허가 수입 의약품 등 유통 일당 적발 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790925&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국토교통부) | 행안부·국토부, 관계기관과 함께 도로살얼음 사고 예방 캠페인 전개 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790923&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | 행안부·국토부, 관계기관과 함께 도로살얼음 사고 예방 캠페인 전개 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790928&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(지식재산처) | 지식재산처-경찰청 수사협력 간담회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790914&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(지식재산처) | '가짜 K-상표' 정부가 직접 막는다! 범정부 적극행정 우수상 수상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790913&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(지식재산처) | 우리 기업의 국제 특허경쟁력 강화, 「해외특허 길잡이」가 함께합니다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790912&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(지식재산처) | 국민의 생명과 안전을 지키는 현장 최고의 발명은 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790911&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(법무부) | 동포는 전국에서 김장 중, 동포와 지역주민이 함께하는 김장 체험 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790908&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(고용노동부) | 한국산업인력공단, '인공지능(AI) 훈련 우수사례 경진대회' 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790918&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(개인정보보호위원회) | 개인정보위, 기업결합 관련 사전 실태점검 결과 발표 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790910&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(개인정보보호위원회) | 사전적정성 검토제, 사전 협의에 그치지 않고 현장까지 챙긴다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790909&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(소방청) | 국민안전 지키는 현장의 아이디어, 최고의 발명품은? | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790917&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(과학기술정보통신부) | 국민 가계통신비 부담 덜고 속도와 안정성은 높이고... 전국 시내·광역버스 약 3.3만 대 와이파이 7 고도화 완료 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790903&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국가보훈부) | 보훈증명서 10종， 전국 무인민원발급기에서 무료 발급 시행 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790902&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(행정안전부) | 공직사회에 새로운 변화를 불어넣다! 행안부, 조직문화 개선·공간혁신 우수기관 선정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790916&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(재정경제부) | 개인투자용 국채 12월 발행 미실시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790919&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(질병관리청) | [11.26.행사시작(10시)이후] 현장과 함께 만드는 감염병 대응의 미래, 「2026 감염병관리 콘퍼런스」 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790904&pageIndex=9&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(농림축산식품부) | '올해의 창작 K-Sool', 최고의 작품은? | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790931&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(공정거래위원회) | 공정거래위원장,  중소기업 현장 소통 간담회 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790929&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(식품의약품안전처) | 해외 밀반입부터 국내 불법 판매까지, 무허가 수입 의약품 등 유통 일당 적발 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790925&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국토교통부) | 행안부·국토부, 관계기관과 함께 도로살얼음 사고 예방 캠페인 전개 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790923&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 행안부·국토부, 관계기관과 함께 도로살얼음 사고 예방 캠페인 전개 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790928&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(지식재산처) | 지식재산처-경찰청 수사협력 간담회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790914&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(지식재산처) | '가짜 K-상표' 정부가 직접 막는다! 범정부 적극행정 우수상 수상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790913&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(지식재산처) | 우리 기업의 국제 특허경쟁력 강화, 「해외특허 길잡이」가 함께합니다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790912&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(지식재산처) | 국민의 생명과 안전을 지키는 현장 최고의 발명은 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790911&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(법무부) | 동포는 전국에서 김장 중, 동포와 지역주민이 함께하는 김장 체험 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790908&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(고용노동부) | 한국산업인력공단, '인공지능(AI) 훈련 우수사례 경진대회' 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790918&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(개인정보보호위원회) | 개인정보위, 기업결합 관련 사전 실태점검 결과 발표 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790910&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(개인정보보호위원회) | 사전적정성 검토제, 사전 협의에 그치지 않고 현장까지 챙긴다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790909&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(소방청) | 국민안전 지키는 현장의 아이디어, 최고의 발명품은? | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790917&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(과학기술정보통신부) | 국민 가계통신비 부담 덜고 속도와 안정성은 높이고... 전국 시내·광역버스 약 3.3만 대 와이파이 7 고도화 완료 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790903&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(국가보훈부) | 보훈증명서 10종， 전국 무인민원발급기에서 무료 발급 시행 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790902&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(행정안전부) | 공직사회에 새로운 변화를 불어넣다! 행안부, 조직문화 개선·공간혁신 우수기관 선정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790916&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(재정경제부) | 개인투자용 국채 12월 발행 미실시 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790919&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
+|  | 정책브리핑(질병관리청) | [11.26.행사시작(10시)이후] 현장과 함께 만드는 감염병 대응의 미래, 「2026 감염병관리 콘퍼런스」 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790904&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 |  | 정책브리핑(우주항공청) | 누리호 1·2·3단 모사체 이송 점검 완료 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790926&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | [보도참고] K-FIND, 건강한 일상과 식품산업 성장을 이끈다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790907&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 북부지방산림청, 산림복지시설 동절기 안전사고 제로화 총력 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790906&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(외교부) | 유럽국장 튀르키예 방문 결과 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790901&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산림청) | 국립수목원, 11월 '우리의 정원식물'로 비자나무 선정 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790900&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산업통상부) | 인공지능(AI), 기술 진화에서 산업 대전환까지 표준이 함께 한다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790893&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산업통상부) | 한국과 아세안 싱크탱크, 미래 경제 통상 협력방안 논의 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790892&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산업통상부) | 한-사우디, 원유 수급부터 비축까지 중동전쟁 위기 대응 공조 강화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790891&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(산업통상부) | (참고자료)美 무역대표부, 과잉생산 301조 조사결과 발표, 한미 관세합의 수준 15% 기본 제안 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790890&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(고용노동부) | "사람과 기술이 함께 성장하는 반도체 산업" 김영훈 장관, 반도체 연구개발 종사자들과 근로시간제도 운영 실태 등 현장 의견 청취 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790882&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(국가유산청) | 한국전통문화대학교, 디지털 기술과 국제협력으로 세계유산의 미래 모색 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790886&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(과학기술정보통신부) | 국립과천과학관 이동형 과학 체험 전시물, 페루 학교로 간다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156791010&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(방위사업청) | 방위사업청·국방기술품질원,  국방 표준화 발전방향 모색 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790881&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | [보도참고] 식약처, 2026년 하반기 범부처 통합식품안전정보망 운영협의회 개최 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790880&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | 식약처, GLP-1 계열 비만치료제 안전사용정보 안내 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790879&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | 식약처, 2026 적극행정 우수사례 경진대회 '국무총리상' 수상 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790878&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | K-푸드 국제규격 개발 위해 민·관 협력 강화 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790877&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(식품의약품안전처) | AI 가짜 의사 추천 광고행위 금지 본격 시행 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790876&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(문화체육관광부) | 4개월 연속, 방한 외국인 관광객 월 200만 명 돌파 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790875&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
-|  | 정책브리핑(교육부) | 교육부는 시도교육청과 함께 안정적 학교 운영에 만전을 기하겠습니다 | https://www.korea.kr/briefing/pressReleaseView.do?newsId=156790941&pageIndex=10&repCodeType=&repCode=&startDate=2025-11-27&endDate=2026-11-27&srchWord=&period= |  |
 
-## collect:out_of_window (149건)
+## collect:out_of_window (122건)
 
 | 카테고리 | 출처 | 제목 | 링크 | 비고 |
 |---|---|---|---|---|
@@ -993,103 +988,76 @@
 | icfr | news.koreanbar.or.kr | ‘통과 목전’ 비밀유지권부터 외감법까지… 변협 추진 입법, 어디까지 왔나 - 법조신문 | https://news.google.com/rss/articles/CBMib0FVX3lxTE9rRC1majFwY1RhWm1sblJhbnFmcXppU2owcjhmRmZOcmxNb3drX3MwWTNPR0Q5VjFUTGNLWXRaOC1ZZmJNWVhTT2VlV3UySWh0UmVXQTRmMTg1bXRxVlo2S0g5VWZ4Y0xJdC1oY201VQ?oc=5 |  |
 | icfr | EY한영 | EY한영 설문조사, 국내 기업들 신외감법 도입 효과 확연… 83% 회계투명성 개선 체감 \| EY - Korea - EY | https://news.google.com/rss/articles/CBMif0FVX3lxTE1SVm4xNGFDcVUzcDBKZWVPb09fd05NcFB5RmpuOW9jeVVrVXMtTjhOQU80MHZEWHJCUVh5VE9pMGJBeU1QYk1UWU1DZVBnUjQ4ZGNvTDhvb1V5ZkRiTDZ5ZnBVT2FtWFdGOEc3dE5VN09mLWZVbmQ4aXZLdVE1ZDQ?oc=5 |  |
 | icfr | dealsite.co.kr | 더코디, 회계조작 정황에 외감법 위반 의혹까지 - 딜사이트 | https://news.google.com/rss/articles/CBMiT0FVX3lxTE1lVFFZeTZTYjczY0ZEWURUMHlDT1U3UjE5Mk1UVUExaDg1bDFJektIZDdwY25iRGxVWEliRWo1NEphSzRNYmdNdWdCQUpjQlU?oc=5 |  |
-| icfr | 매일경제 | 내부회계관리제도 모범규준 규정화된다 - 매일경제 마켓 | https://news.google.com/rss/articles/CBMiUEFVX3lxTE5jbEMtcmhHcFdSd2lSYU9xbWtFY21HVnI2bTNwcXcxUnVSUmZJaktVSzZzelZEM2xYOUgxZVNkbkZkNU9yU0t6emU3NnJvdDhr?oc=5 |  |
 | icfr | safetimes.co.kr | '한국판 삭스법' 완화될까 … '신외감법' 5년만 누더기 - 세이프타임즈 | https://news.google.com/rss/articles/CBMib0FVX3lxTE1TSjE4VU1MTkcybmtWUFhvYTM4U0tJS19EZlhWMy12Y2FhLTZJRnRHcy1uQkVaNUZqMDJkLWRnVm4yWEYwWGpvSkhYN1FkOTdQTGRkU3JoYUhDd3JmVFhHREpqWFZWaDFlTm8xejNIZ9IBc0FVX3lxTE9YYUxEcFBCLW1xZ19RcTEwX1hzamVlY0QySi1yQ2RrOHNWVGNjbUdJYTg2eEtkd0N0Y2RDT1lUVEI1ckZ2Q0tvM2FBTVBMYV93NnVQSWNVcXNXejg3VWdtNWR5SFE0aFlDbGJSVnFBVmQ4LTQ?oc=5 |  |
-| icfr | joongang.co.kr | "5년 간 감사비용만 2배" '신외감법', 정부는 "일부만 보완" 왜 - 중앙일보 | https://news.google.com/rss/articles/CBMiVkFVX3lxTE1CWGlXei1TcmFmakl1RUhIbmh0R3pJS2xIWmY4cFh4V3ppT2tvOHUtcjdLaTl0VDBuUTBhWENyX3dFcVhtTE92VDU0RmVWT3NBWE9IakVR?oc=5 |  |
 | icfr | lawtimes.co.kr | 유한회사에 대한 외감법 적용 - 법률신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTE1FLUo3c1YzSlVQbVNDSHZZUFdfUDVyZ1FqZm93dzl3MFpUbVhXZTY1YXdBYjB4WFF2cjlFU2pVbHNIdlcwdGtOYzJrYUVwcGxOSEM1OXVsUXBiTi02M0E0dFN5ZEVIUGx5cWx2YXVn0gFyQVVfeXFMTldaZG54anZ2MkVIQW81YloyNFZISUNPVUhvdUJCNXd6YnJ6aV9XdWRWOXA0Y1FMeGRPcFowb0dSWExpMG1wSTJMc1JKM1ZPMmFEUzh5MlZURV9EZVFrNExocTREQTcyMGh5TF9rVUVIc1ln?oc=5 |  |
+| icfr | joongang.co.kr | "5년 간 감사비용만 2배" '신외감법', 정부는 "일부만 보완" 왜 - 중앙일보 | https://news.google.com/rss/articles/CBMiVkFVX3lxTE1CWGlXei1TcmFmakl1RUhIbmh0R3pJS2xIWmY4cFh4V3ppT2tvOHUtcjdLaTl0VDBuUTBhWENyX3dFcVhtTE92VDU0RmVWT3NBWE9IakVR?oc=5 |  |
 | icfr | news.bizwatch.co.kr | '신외감법 아버지' 최운열, 한공회 회장 당선 - 비즈워치 | https://news.google.com/rss/articles/CBMiakFVX3lxTE1ETWIzSm5ORHhWOFBHZ3BCYmt2N1laVVVIQXRPaDJVWmEyYXNYc1B5RmJYSUhZaWdwdDFnV2dmekY1bG9aQjZzazQ0Q1NEY1BNM0h1dlVoMnVEVkdhVzhXTUtyaDJsNDNtNkE?oc=5 |  |
+| icfr | 매일경제 | 내부회계관리제도 모범규준 규정화된다 - 매일경제 마켓 | https://news.google.com/rss/articles/CBMiUEFVX3lxTE5jbEMtcmhHcFdSd2lSYU9xbWtFY21HVnI2bTNwcXcxUnVSUmZJaktVSzZzelZEM2xYOUgxZVNkbkZkNU9yU0t6emU3NnJvdDhr?oc=5 |  |
 | icfr | skkuw.com | 신외감법, 얼룩진 회계부정 지울 수 있을까 - 성대신문 | https://news.google.com/rss/articles/CBMiZEFVX3lxTFBQUkRSQWdfMzd6aHpxOG84TDhqYXFyeVNJUzJnYjQ5eF8wc2pPdU9Pa0hFVC1sbTIzWnZhd3NiWGl5T1hzbGhlUmtaLTEwX29rLUZRaXV6eDhfbjhRS3Y1SUo2ckTSAWhBVV95cUxQc2tHUFNoSWM1U2c4ZzF0WkZuTU5JVlZPbEJHaGxqQ1BvNDhZMk9qU1o1SjFnT0M3YTRPbEJiZS0wcHlRNTNZU1p4a0tKZ3FoOWNWd0I1czNiRHZqVm80aklhZjdYbEg3aw?oc=5 |  |
-| icfr | crowe.com | 신외감법 시행 이후 과징금 부과현황 및 시사점입니다. - Crowe | https://news.google.com/rss/articles/CBMiWEFVX3lxTE9ONmp6d3VTVEVzdFBQUUprMEFZaXh3SzJ1Wml1dHdHWV9DR2NBQVpsZHJhMU5PSUtWOEwwN1RDbEthcnBYTGcxTHo1Q3hnOXFKeHZIclhiTEE?oc=5 |  |
+| icfr | 한국세정신문 | 금감원, 상장사 내부회계관리제도 평가·보고기준 마련 - 한국세정신문 | https://news.google.com/rss/articles/CBMiZEFVX3lxTFBvVVdNMHBLV3hMUzBpZTRsejB5VEp5d0w0UkhLbkxObXJGVk5mN3lDYW8tNUYzdlQ1UDd0cmZQZWsyczRXSWkyMXRINXc1VUQ1djJhODBHaGtoeC01eVE5eVFQS2g?oc=5 |  |
 | icfr | 이데일리 | 국내 기업들 83% "회계투명성 개선 체감"...신외감법 도입 효과적 - 마켓인 | https://news.google.com/rss/articles/CBMic0FVX3lxTE01cF9QZC1aZEw0WDJzWTNlNmJ5eXFwZU13dW9ndmFOMHRtWTR0NFlrbzJFTTRacVhEZUM3Nms0NmtsdFl5MlFQN3BnU2lTSlZMWF9YeW96RENNLXAwbU1mRUVhWDRoNll0XzZ0SHo5RDdwUUU?oc=5 |  |
 | icfr | lawtimes.co.kr | 주식회사 등의 외부감사에 관한 법률 시행 및 시행령/시행규칙 개정 - 법률신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTE5YczBOSVZJRVJMTGtyQkRxaXF0Vm01ZlR0Y01HZ25hakVXOWhoUWJRLXhfV3Ftc3ZNNWZsSldQaURSUUliZW56dmd6eDZ6aGdmelFqWkt1U0xMbHkwYUJzQzRvUGF1UlJpaTh4Z0Rn0gFyQVVfeXFMT3BKcmdfUEJVc3dmRjVzZFhPQzAyNEdUMEtMNW1MZmdTeUZaRkYtYVVneDJwbzViS3l5NEdvaW9mUVBoRFNCck9XZDM2aDhuWTB5RG1tOE9vQ010MXlqV2c4RGQ5UG9BODN1YkFzT3BYell3?oc=5 |  |
 | icfr | 한국경제 | 新외감법 4년 만에…회계사 몸값, 상장사보다 더 뛰어 - 한국경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTE8tT01TR29FZkUtcHpOSmVST2VFZEV5RUh4d2tFT3hQcTktMUFfRnFwbUF4dnpLQTNKODRXUEI3QTVGbW5OMWVXRkliR3huY09CTEVneHZId3VaZw?oc=5 |  |
 | icfr | skkuw.com | 양날의 검 신외감법, 좋게 쓰려면 - 성대신문 | https://news.google.com/rss/articles/CBMiZEFVX3lxTE9pb05fYnpsS1lVRWNJcEdocHRMdDF2LVc3ODVrOFp5YWttRHVEdDYyV1FwSERlZzcxUEFLQnF0emhvNnFpYW11U1hROWlEM0VwMGR1Um1pa0xRajlxSVktM0VEQ2rSAWhBVV95cUxNOTN1dzB0OG02SEJDY2J2WHVaVGF1eHdyVnBEYS1jN3JORE1kbUhSbW8zbTUzT09xWm5zVDRXdU1UZ0V0T0YxcVRXZXV3Nm04elpZRE9obzVLM3BmZkxtUFNzd3NYSDN0Vw?oc=5 |  |
-| icfr | crowe.com | 내부회계관리제도 위반에 대한 점검결과 및 유의사항 - Crowe | https://news.google.com/rss/articles/CBMiWEFVX3lxTE9ER3ZUdU1Wb1FkYjhrSWhCSUtWOWZ5dHllWU5tMHpPQ3NXSlRRNi1PM3BnNDliZjY0TXEtNkZNdHlyRFM4SVB6M3RMRFpvendjN241alBNc2M?oc=5 |  |
-| icfr | 매일경제 | "신외감법 시행 3년…외국인 투자자도 기업 투명성 개선 인정" - 매일경제 마켓 | https://news.google.com/rss/articles/CBMiT0FVX3lxTE4wVlVodXJlT256M0hxZEJESVQtX1J0S0I2aUk5b3VNUlFscHZ4NEhzcU1XQnhxcmlIczFkeVRyalo3X1h0MGNlRV9YS3B4b0k?oc=5 |  |
 | icfr | news.koreanbar.or.kr | “기업 외부 감사인에 변호사 반드시 포함”… 이정문 의원, 외감법 발의 - 법조신문 | https://news.google.com/rss/articles/CBMib0FVX3lxTE5ET254R1JIeWVNLWFKNlBVTUNJdkdzdHJqSTVKTURkeVZMYkxpc2RxZzlSU0p2a3pXbWxCNFQ0U0tRbVpaWk9zajZEYWZwSW5UQmY1ZFlnSmxpUFdqT2YxWFI3Wkp2R2RsUFljS2FDYw?oc=5 |  |
+| icfr | 매일경제 | "신외감법 시행 3년…외국인 투자자도 기업 투명성 개선 인정" - 매일경제 마켓 | https://news.google.com/rss/articles/CBMiT0FVX3lxTE4wVlVodXJlT256M0hxZEJESVQtX1J0S0I2aUk5b3VNUlFscHZ4NEhzcU1XQnhxcmlIczFkeVRyalo3X1h0MGNlRV9YS3B4b0k?oc=5 |  |
 | icfr | 매일경제 | 윤훈수 삼일회계 “외감법 3년 기업 회계 투명성 제고 기여” - 매일경제 마켓 | https://news.google.com/rss/articles/CBMiT0FVX3lxTFA4VjhHOTRoUnJKU1JHaE1pY2ZsY2IxRFJ3b2hqVmJwUU1pV3JTTXNLeFJ5dmwzVnRTQWw4ZWxvZVBqc0pScUpicnp2TW9xRGc?oc=5 |  |
-| icfr | ESG경제 | 공인회계사회 새 회장에 최운열 전 의원 당선..."신외감법 유지해야" - ESG경제 | https://news.google.com/rss/articles/CBMia0FVX3lxTE5wczU3VWVubFMtUTdpOUI4Sm5XQUozYW9mVjRwQVY5TlEtRE5heC1nSnZrWV8waWZjNktsX2MxZk14TC1sRTdCdUxhbDdtZldlQkhsRElIVFBya25mLW5PLUFMd2xpR3c0X3VV?oc=5 |  |
-| icfr | newstomato.com | (신외감법 도입 4년④)"유례 없는 감사인지정제 폐지해야" - 뉴스토마토 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE1SYVZyanVjZE9LQzY5OTdsWEtDNWhDMmxFZmh4eGNyYnN5RWZkZmNhdjd4M3Rra1FrRVh5dVFwem9CUjM1WkpOUlBaSUZ2ZzBzalJnaFN2M0tFSlQzaTJFeQ?oc=5 |  |
+| icfr | crowe.com | 신외감법 시행 이후 과징금 부과현황 및 시사점입니다. - Crowe | https://news.google.com/rss/articles/CBMiWEFVX3lxTE9ONmp6d3VTVEVzdFBQUUprMEFZaXh3SzJ1Wml1dHdHWV9DR2NBQVpsZHJhMU5PSUtWOEwwN1RDbEthcnBYTGcxTHo1Q3hnOXFKeHZIclhiTEE?oc=5 |  |
+| icfr | crowe.com | 내부회계관리제도 위반에 대한 점검결과 및 유의사항 - Crowe | https://news.google.com/rss/articles/CBMiWEFVX3lxTE9ER3ZUdU1Wb1FkYjhrSWhCSUtWOWZ5dHllWU5tMHpPQ3NXSlRRNi1PM3BnNDliZjY0TXEtNkZNdHlyRFM4SVB6M3RMRFpvendjN241alBNc2M?oc=5 |  |
 | icfr | hitnews.co.kr | 新외감법, 연말 ‘밀어내기’ 잘못하면 포렌식 당한다 - 히트뉴스 | https://news.google.com/rss/articles/CBMiakFVX3lxTE1SdW1ibmVsdHg0UGZIX2NnQmlWM0hEWUlBZHRMQXdPQzlDQzdnOXA0eHhKOVFsTFVZWGlLTnBlZmZsV3E5TlNrYWZBZS1MTW1OVi1MWjNFYVU2X3FmVEUyZ25mZzZtY3JDMHc?oc=5 |  |
+| icfr | newstomato.com | (신외감법 도입 4년④)"유례 없는 감사인지정제 폐지해야" - 뉴스토마토 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE1SYVZyanVjZE9LQzY5OTdsWEtDNWhDMmxFZmh4eGNyYnN5RWZkZmNhdjd4M3Rra1FrRVh5dVFwem9CUjM1WkpOUlBaSUZ2ZzBzalJnaFN2M0tFSlQzaTJFeQ?oc=5 |  |
 | icfr | lawtimes.co.kr | 「주식회사등의 외부감사에 관한 법률 시행령」 개정안 입법예고 - 법률신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTE1GUXd1R3FkbUJ2eU9BWTVIT1ZDZ2x6dHdOa3JVWmZ1VkxQby03V0dXeVJ3NzNCR1JaV2tjaTEyUTN2ZG5LdmozYUNQYXBjRlhSeHRJTWJmRUVpU09MV1dyWTZBX0RWOU5iLVdlNUJn0gFyQVVfeXFMUEdsbDB4aXg5dWhKMERoOS1NcVh4S3FBT3NRTXc0X0VieXpWZ1VKcWpSMTM4QlBTa24zQTRYSFZmVm1scFhwU1FOYkNSb0gwaWdZLW5sVVB5NlRiYk5NOXlWRk1tWXpBTl9uaFhVd2RPUS13?oc=5 |  |
-| icfr | 한국세정신문 | 금감원, 상장사 내부회계관리제도 평가·보고기준 마련 - 한국세정신문 | https://news.google.com/rss/articles/CBMiZEFVX3lxTFBvVVdNMHBLV3hMUzBpZTRsejB5VEp5d0w0UkhLbkxObXJGVk5mN3lDYW8tNUYzdlQ1UDd0cmZQZWsyczRXSWkyMXRINXc1VUQ1djJhODBHaGtoeC01eVE5eVFQS2g?oc=5 |  |
-| icfr | businesspost.co.kr | 카드사 준법감시조직 확대, '여전업권 내부통제 모범규준' 시행 앞두고 긴장 - 비즈니스포스트 | https://news.google.com/rss/articles/CBMic0FVX3lxTE9XcUxKY1p0b2VRblVXa2txOXp6OHpwcmRtVXQwMXpqNzI3a25KMFVaeVRqNFhiRWFBd3ZsX19rV0tJQmJDN3l6cHUtN3h4OGhhZVc2N3VKZDQwRjI1MU5fN1NMTjdXaUp0d1ZNdTVOY25IQTA?oc=5 |  |
-| icfr | 한국경제 | 회계기준 위반 내부감사에 과징금…외감법 개정 후 첫사례 - 한국경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTE5lQlUwNGVxRFhSVUUzSlRnemExbzQ2M0Zka3ZMS0pna0RFOFZVODRiLWJwN1Z1dF8ydS1JaEdFdXhHeVlUM3c3UHpXZ05oamt6a0NBY000a1NEdw?oc=5 |  |
-| icfr | khan.co.kr | 은행권, 내부통제 모범규준 마련...고위험 비예금상품 판매시 손실위험 정확히 설명해야 - 경향신문 | https://news.google.com/rss/articles/CBMiWkFVX3lxTFBUQ0l5TDdIX0ZNeVBKcWROYW9vZ0liZWJ1bzNGaVZhdHlDdUdYWm1xSWMtWkhQSUJ2LVMyOWQ3NU4xRWhCQ3R3VVBsMWJhMklxYUpJTEhaZ2d0d9IBX0FVX3lxTFA5X21XQUxJSnI1Um9ZaGNScHFsOFYtQ2xRQjMwa0hUQjJoeU5NeWtpVURONTVnSkd0cTYtN2ZZSFpmd0RLTWRRa2NpSzdSdmFzbU9IMG1TT0dzYU9CT3Fz?oc=5 |  |
 | icfr | crowe.com | 외감법 시행령 개정안(금융위, 2014.3.24.) - Crowe | https://news.google.com/rss/articles/CBMiWEFVX3lxTE5VTm1YRW9LcGZYRnJXLWNYcGhVeTZDemhhU2J4c1dBQ3NEeGZsaVNwYkxxNEZNS1lzNDlRNTFPamhNY3Y0T3RvdWlhdmRIWjVsOHZMTlB1RUE?oc=5 |  |
+| icfr | businesspost.co.kr | 카드사 준법감시조직 확대, '여전업권 내부통제 모범규준' 시행 앞두고 긴장 - 비즈니스포스트 | https://news.google.com/rss/articles/CBMic0FVX3lxTE9XcUxKY1p0b2VRblVXa2txOXp6OHpwcmRtVXQwMXpqNzI3a25KMFVaeVRqNFhiRWFBd3ZsX19rV0tJQmJDN3l6cHUtN3h4OGhhZVc2N3VKZDQwRjI1MU5fN1NMTjdXaUp0d1ZNdTVOY25IQTA?oc=5 |  |
 | icfr | newsis.com | 초유의 오스템임플란트 횡령, '신 외감법 무용론' 번지나 - 뉴시스 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE1SR1lOd2VmanJnVW9FQXRwSVJYUlIzSkNnRndGNEcyRmlxUGxiUUE4VHkyZUwxbFZOMk1wMWZ0dXh3QUlkOXlUWHNvYlh2Qm80QlhOMGlydTJvTXNyQVF3N9IBeEFVX3lxTE1CUVJtSHR0MHpJa2JOZ1dtODNsZUp4ZlEtZ0g0ZEFpNDVzNHM5RlZndGdpS2xoc3hDcUVuOUsybGxVQUotSzJmdlRadEdPX1lhMlVMTzN2RzJaakNuWmJrZko3ajBfbmVNVXZ6eWpOemh4ZVNrOWEzcQ?oc=5 |  |
+| icfr | 한국경제 | 회계기준 위반 내부감사에 과징금…외감법 개정 후 첫사례 - 한국경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTE5lQlUwNGVxRFhSVUUzSlRnemExbzQ2M0Zka3ZMS0pna0RFOFZVODRiLWJwN1Z1dF8ydS1JaEdFdXhHeVlUM3c3UHpXZ05oamt6a0NBY000a1NEdw?oc=5 |  |
 | icfr | 매일경제 | 신외감법 적용으로 2020년 달라지는 규정. - 매일경제 | https://news.google.com/rss/articles/CBMiU0FVX3lxTFBXT3J2cVgzODYtbnFFZkVxcHVsNHYtd0R5LU54SmRyWXFBTy1UWnU1dHJQYUpoSW5tUlRUTGM2SHc3b0dtN3JPSnBxQUNTSUVwcXhR?oc=5 |  |
-| icfr | crowe.com | 감사전 재무제표의 제출 시행 안내(외감법, 2013.12.30 개정) - Crowe | https://news.google.com/rss/articles/CBMiWEFVX3lxTFB3dVdRS2NNTTdZdXQwam9iZ2JmU1ZBcENOMGhER2c1ajh3WWZtZUUtdjg5ckdaZVdJRlNGc1RycGQ4NHBjdHMyOFd6QThCMDRqNkxjd2d4RS0?oc=5 |  |
 | icfr | 한국경제 | [한경 CFO Insight] 신외감법 2년...감사비용 70% 폭등 - 한국경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTFBCc1VNZVE2U181NVZDQzlZYnpVM2E1MEtxdXRDS00tUGVlN0ZSTFVzNTRhWFQxc1NKUFFtYjVKWEFDUmZkZVItN21jdkJvSFphVUVVY19QNVVlUQ?oc=5 |  |
+| icfr | crowe.com | 감사전 재무제표의 제출 시행 안내(외감법, 2013.12.30 개정) - Crowe | https://news.google.com/rss/articles/CBMiWEFVX3lxTFB3dVdRS2NNTTdZdXQwam9iZ2JmU1ZBcENOMGhER2c1ajh3WWZtZUUtdjg5ckdaZVdJRlNGc1RycGQ4NHBjdHMyOFd6QThCMDRqNkxjd2d4RS0?oc=5 |  |
+| icfr | khan.co.kr | 은행권, 내부통제 모범규준 마련...고위험 비예금상품 판매시 손실위험 정확히 설명해야 - 경향신문 | https://news.google.com/rss/articles/CBMiWkFVX3lxTFBUQ0l5TDdIX0ZNeVBKcWROYW9vZ0liZWJ1bzNGaVZhdHlDdUdYWm1xSWMtWkhQSUJ2LVMyOWQ3NU4xRWhCQ3R3VVBsMWJhMklxYUpJTEhaZ2d0d9IBX0FVX3lxTFA5X21XQUxJSnI1Um9ZaGNScHFsOFYtQ2xRQjMwa0hUQjJoeU5NeWtpVURONTVnSkd0cTYtN2ZZSFpmd0RLTWRRa2NpSzdSdmFzbU9IMG1TT0dzYU9CT3Fz?oc=5 |  |
 | esg | PwC | 지속가능성(ESG) 공시 제도화 확정 - PwC | https://news.google.com/rss/articles/CBMiqgFBVV95cUxQZFhyeXl2dTMtUEhMSDJRNHlmWGhZVFNuVGt2SzBTYnRzNTJhQ21NVlAzRHk3Ym9ESl9MbWZibnh4aG15V1lnLUdId0ZBY2RqR2VZd25QbjNhSlB5M19wQk5JcXdGVEdpRkFSYjZvRDFRSzRlNVNjSWtQQkV5UUlfSWJoVGFlVTh0MUsxYVZoQmp4MWhDTWxuX0c0V1EyV3B5SHBjX0dZRGNWZw?oc=5 |  |
 | esg | hellot.net | [ESG 칼럼] 미뤄졌던 ESG 공시 의무화, 2028년부터 단계적 시행 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE1BdXB6anZGSm9NNDRObEsyRjJJbGJlOUxnWk8yOFVUVXRsLTAxU0FMUDMwMXo1TXZzakNuanlEeHBaWnpFLXRWR3lXZ0ZJemhIcEo1MDVDX3JONFNvN20w?oc=5 |  |
 | esg | KPMG | 지속가능성 의무공시 시대, 기업의 공시는 어떻게 달라지는가? - kpmg.com | https://news.google.com/rss/articles/CBMibkFVX3lxTE1qWkg4MnRXWGhoQ0RHdFdwMlJOUTg4bm1FSWtobWw4X1JNdE0tTUlndWJ6QmktSHFidGgxVUFxQVBQeUhNbE9VTFdvcTV1OXVWYTdObFhLdElZYTg0NkQ0MUwwN0ZabGlVU3hMeWFR?oc=5 |  |
 | esg | samsungsds.com | 2026년 ESG 공시 의무화 동향과 시사점 고찰 \| 인사이트리포트 \| 삼성SDS - Samsung SDS | https://news.google.com/rss/articles/CBMiigFBVV95cUxPUUJ2WkFSOUN6N25YS1RjUTRlWS1EeWx6MUdhSVlVdjdMeWV2NHNyRTFwTVpuWDRvUElPVm43ZXJXQ3pLQ0M4NFlLdTJyZURiOTYwb3VXTHRBUnJQMFFTU3ZMYjRUcUF2OXZsWHlrYWhWSmJIWHV1WWJpOGFoTGc0VWNmdnl4NnBXYkE?oc=5 |  |
 | esg | ESG경제 | 정부·여당 ESG 공시 입법안 나왔다…제3자 인증 의무화 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE44WUtnTkREZjU4RzdtSFZIcG1PcUo2czNDX0RKdWFITEVsZXppZDk1QU5aS0JMdHRfTVFXOGR3WjVNc3R4eVNKZU9GeXVuNVplZkFIdjhwRmhTcGVxazZxeTNDSzRZbjQ4MUZmOQ?oc=5 |  |
 | esg | lawtimes.co.kr | 금융위, 지속가능성(ESG) 공시 로드맵을 통한 제도화 방안 확정 - 법률신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTE9HODdkYURIX08xRXZZWV80VG1LOExsYUlhYnhpbUlFWlJ6enFCM3ExRUdkekhEY180Sk9OS3lqenJhQmZ0WHRuVENaVWEyWTZQQ1lUTTkyUFgyT2pxdC01ek1JRXpOWm1hZXhPNTBn0gFyQVVfeXFMUFdFT2FsVlNLc1UyZHRRQUdzOGgzN2FXSWs4dnpXdncxVlMwbUlvRThTNi1OZldobktzSkVvS01PUk1IRHNHWVFXdXh2WXVHZHBMaUlRb1RkeGFBbjJnOVFhZk5pNmloSXp4OFBIdlZpTFV3?oc=5 |  |
-| esg | lawtimes.co.kr | 지속가능성(ESG) 공시 제도화 방안 확정에 따른 기업의 대응 전략 - 법률신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTFB2aGRwZ0x1V05meG5NY3I0ZFUtSmQ5bkZQSFN2c19wbzAxNjVZVzRNRElMSDdhWjJPeXdPRUd5Q2RBcWhwVWtQbkxka3FjQW1NOE9IR1dFeGtta3N3YVdOSDZzcTB3NFZjbVd3NHdn0gFyQVVfeXFMT1hzSVFtUURPX2hWY1VYeXYxS1I5OHUxQzE4enl0eFhLOGlFek5tdGxIUWRMNkpyYUdISm5mbmRXQ0V4WXJmT2xmR1J5eno3YW9pamo4MnpoVlkwZmVtLXh6WFRGRjJkd29iRVdJNzAyckRR?oc=5 |  |
-| esg | 임팩트온 | ESG 공시 로드맵 또 연기…국회 일정에 당정 협의 보류 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE10b2lHcFJxSk1ZN0ZNMUZFLUxzajM4XzktSUZzU1NaQ1B2WDNGX194UF9EUnVOZTJPcjBjTC1FbDI2R0xGSWFQTUc5d01xZ2NVRWZQVEwzcXlQQXM0aFFUYTJmS09iSGZjX2c?oc=5 |  |
-| esg | joongang.co.kr | 2028년부터 자산 10조 상장사 ESG공시 의무화…재계선 “기업 부담 가중" - 중앙일보 | https://news.google.com/rss/articles/CBMiVkFVX3lxTE00a0pwNnpEYU9UbzdhYUVGWThwVlY3OUlmRzVLaFM0azBDVkpHMGtDMVpPODZuZGJIbTJ4ZEI0XzRiMnV3aXpLbmk0T0QtcU95UXUyVWln?oc=5 |  |
-| esg | 임팩트온 | 한정애 의원, ESG 공시 의무화 법안 발의…사업보고서 공시·제3자 인증 의무화 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTFBvTG5aUFpieFNTQTRBMzNjcWk3X0tjQWlmYWdtT3A3SkhwcUhNZzdqLU5LLXBTeVllZk1IMkNEMGNyanRQNFh6cDlRZmNBZG9GX3RTUk0xZWprZG9icUk2MjBzOWZTMDhQcnc?oc=5 |  |
-| esg | joongang.co.kr | [사설] ESG 공시 의무화…기업에 부담 떠안겨선 안 된다 - 중앙일보 | https://news.google.com/rss/articles/CBMiVkFVX3lxTE1hOUU4ajk1NHRSRnpIR2FqQ3FvWjNqOEJFc2kzZW40bjljbzVTdGg5d29zNkpQcTQtSWRMVkhsXzc0V1RWc1VsRWllN000NmtwS0NHT1Vn?oc=5 |  |
+| esg | PwC | 지속가능성 공시 제도 로드맵 초안 및 확정 공시기준 주요 내용 - PwC | https://news.google.com/rss/articles/CBMif0FVX3lxTE1Gd29wMWxoczQwX09wRThxRzhCam43V3VTRHp6LWFzQWgyZUdjeTF5dzJBZUJoYnlLZFdYWEZlbWVmRDNEcHM5eGVpTGhPSThiUEtkNlpBTlVVb2laR1FlSnlCa2ZBeG5uWFFvaHNfdG9LeExxeFRLc1ltdXgzcmM?oc=5 |  |
 | esg | 한국경제 | ESG 의무공시 본격화, 기업 밸류업 골든타임 왔다 - 한국경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTFBMMkdOYi1ka3NqWVdLWHZPalRkcWplcUhuOWw2ODJwSTF3SUtUd3AwTlhhc2ZQZElaczlkdjRwSnotLVFyLWtHaDRIdG9RcW12VDB0UlRNNFk5QQ?oc=5 |  |
-| esg | 임팩트온 | 이웅희 위원, "ESG 공시 로드맵, 당정청 조율 단계"...상반기 발표 목표 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE1FSV9UekJiTzFXSUd6SWYxOWpyY3RIMkFSajZFVC1GYWJhRjYtd3JCTTBkbEpQMWJkcWNpRjN3LV9HSDBCWnFlUE1BbTJpQTdGZDBfV2pwZV85SWN2YXJNN3Q1WmhaODlYYUE?oc=5 |  |
-| esg | electimes.com | ESG 공시 로드맵 확정…10조 이상 코스피 상장사부터 의무화 - 전기신문 | https://news.google.com/rss/articles/CBMibEFVX3lxTE5XUnhUekpXVlVFZEFuR0ZtdldTYlhvX1A4Yk84UVZqc0xCLTVYQVlTT2wwLWZRUkNGb0FpWTZaeEJzUFNXWVpwYlFJQUhvTmR3aEtOS0FKeFVvQzBiVGJObkF4X3phc1VScmJMQdIBcEFVX3lxTE5HcHpjSzJTMnQyakNLT190LUVLX3ZGNXM0LWJKVzA1cXlHcjhVc1dWY1V4OGFrcG42REdfMWJRVmlXVUcwZ2JYTXE5ZE1BamduRllrbGZReTBqbjRUeWVQZUl2cEdfZ09CRVFRemlvS3Q?oc=5 |  |
-| esg | 임팩트온 | 【데일리 ESG정책 브리핑】ESG 공시 로드맵 확정, 무인 자율주행차 안전기준 마련 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTFBUNkxVMHJJQmdhQ1JkVTlRbGxqcl9NclhBeHMzWnVIbWlTWVRXLUVsbm9uektFRm5IUDNTaUUzMGpFdE85em80V3p4X2pQMmdQVWsySmZabTZTeVFMVkpRcGwxNjJJVGVSMmc?oc=5 |  |
-| esg | 임팩트온 | ESG 공시 로드맵 확정, 사업보고서 공시로 시작...2029년 3171개사 영향권 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE9iV29YRzlVTjJNb1JmalR6LTZLOXJlajZQeDdUN016eU1SSGNFZm9pWWVLYVhZcEk4OC1WejFaODdFZzFxVlF4aXpwd3pONHVncXp1UlBBQnlZanV6S3NJR19VQk5RQjZkbHc?oc=5 |  |
-| esg | edata.ekn.kr | 2028년 ESG 공시 의무화…10조 이상 기업부터 적용 - 기후에너지데이터뱅크 | https://news.google.com/rss/articles/CBMiXkFVX3lxTE9JT2doTTBTd2habVdUZVAwSWx6bWZnS0txQnF3SzF2U0ViU3d6TFMzOHBWa2FzMVBoUDY2cF9BRk1RQnZPekpZN2ZDMjdMYnNxcFg0ZjhFVElIY1FtbGc?oc=5 |  |
-| esg | hellot.net | [ESG 칼럼] ESG 경영의 주객전도, 보고서가 아닌 운영체계가 필요하다 - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE9tWktmcTYyVFQ0LXlXN01SNUFBUFB1S1MtY0NVaXVNMUpxd0d6aGFvd0EycU95Z0JzQW93Ul9OQllDRFBTcDFsUjdYZzhfLUVreE92LWFwSmtwd2tpaHJB?oc=5 |  |
-| esg | hellot.net | ESG 공시 3년 유예에 안심? “지금이 공급망 데이터 준비 골든타임” - 헬로티 | https://news.google.com/rss/articles/CBMiX0FVX3lxTE5iaGx6SGNQX1VPUDZ1cEJqcmg2T3FjM2JoRnV0d2hHWVRuYm8xaEhDd0FnVTItSHphSzVsWmpxd3djTVN5dWtGS0RtajZhTU9IT0ZySFFSbDh2R3pPLVFv?oc=5 |  |
-| esg | hydrogennews.co.kr | ESG 공시 의무화 앞두고 '양극화'…중소 제조기업 지원 관건 - 수소신문 | https://news.google.com/rss/articles/CBMicEFVX3lxTE5kdXpRWlJQTVRseXpxamJseDlTZ0NHOFNmRm0tYjFnMVhVcVc5RXR4SFRMUHVZZ3dLajYyX0pQMHBCWFlkS1FITkFHWmlxZlZ1eEljVWQza2Z0QjU0V2s2NXIxSF85RWtOSEdOMW9SU3XSAXRBVV95cUxPQi1BNnFqNThPQXhiQnp1SVlNTWJuYkhDMnBjTlJGYXJVX195V2hkbkpQSFpsQ1hLQlBsUTlRZHVJeE5jNElZY3NUTzhNT0pLeXl5d0F5R09rcG1INE56dE8xbnk0aXZqZFRnYkRBLXlSdjhmSQ?oc=5 |  |
-| esg | etnews.com | '자산 10조' ESG 공시 의무화…상장사 부담 커진다 - 전자신문 | https://news.google.com/rss/articles/CBMiTkFVX3lxTFAxclQ0TTYtZDdKc1VBMVhrVlhhZ0oycmdLU21rTHUwWk1UNTV0aUZzREZQa1FscWRVQU4yc0dFajJ4QVFpV1ZEUldBeW5YZw?oc=5 |  |
-| esg | 이데일리 | ESG 공시 의무화, 10조 이상 상장사로 확대…제도 안착 시험대 - 마켓인 | https://news.google.com/rss/articles/CBMic0FVX3lxTE9fZ280ZEZXcEFOWWxXV3Z5X2JXcGczQTRPcUNvTXVDdW5hQmlhZEVLTVhJZ0VRYnpJTHQ3cHdlMjg5QmlYZnBWN1BDU2hWZDlRMW5ub1lpMmk4QVFoODZpcndnVE1PcHU5Qmhsbmw1eU5iWHM?oc=5 |  |
-| esg | ESG경제 | 이억원 금융위원장, "ESG공시 일본보다 적극적인 안으로 확정" - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE83TWVDTHh5Y091YkphbVBfemk1R01QbXE2RXh3dWowb3JvTDBZdnhJVTZWZnZFWC1Ld2tXcUFnc2o1b0pXQmlFN2lNZlJGRS1LTUpfdW9kN1dvVVd2OHI0bnFNaU1GUTZINHdYVw?oc=5 |  |
-| esg | ESG경제 | [ESG 신간] 'KSSB 법정공시 전환 2026' 실전 가이드북 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTFBrUzRGU3pWdmpXamtLdlFab3psaXNSNWQ4UzVhTm12SDlsNkt1U2xxVFY0VFVGY2JScGxPX1o3cGRaY2JqSlJWT2QxRURKSGItTWVyLW4zY2h6bTNRYy1EOS1YUE9wUWJxamd5ZA?oc=5 |  |
-| esg | 한국경제 | 자산 10조 넘으면 ESG 공시 의무화…상장사 부담 더 커졌다 - 한국경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTFBwMjd4R2ZGNDZMejN3dFVaVy0td3k4LVRyMVBjZGw4RV9Bd1pGNWprbk1XVERmUnlYc2toaEZtUVNVRXg2T1BuQVFqZFpGdXRNWWgzQmJ4QnFEQQ?oc=5 |  |
+| esg | 임팩트온 | 【종합】2028년 ESG 공시 의무화 로드맵…핵심쟁점 6가지 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE9ERWRJb29XX3JMMmd4b2pLZU1SZmZoQURQOFZpdjZYeXlyandLUXhkdThRMDV1RUM5OUdLeDVYc3BDV2pWY3I3bHp2M3BLcW1SSnZuajBKRXZVQ05Qdm52MTg4OHVGcXozUXc?oc=5 |  |
+| esg | lawtimes.co.kr | 지속가능성(ESG) 공시 제도화 방안 확정에 따른 기업의 대응 전략 - 법률신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTFB2aGRwZ0x1V05meG5NY3I0ZFUtSmQ5bkZQSFN2c19wbzAxNjVZVzRNRElMSDdhWjJPeXdPRUd5Q2RBcWhwVWtQbkxka3FjQW1NOE9IR1dFeGtta3N3YVdOSDZzcTB3NFZjbVd3NHdn0gFyQVVfeXFMT1hzSVFtUURPX2hWY1VYeXYxS1I5OHUxQzE4enl0eFhLOGlFek5tdGxIUWRMNkpyYUdISm5mbmRXQ0V4WXJmT2xmR1J5eno3YW9pamo4MnpoVlkwZmVtLXh6WFRGRjJkd29iRVdJNzAyckRR?oc=5 |  |
 | esg | ESG경제 | ESG 공시 로드맵, 첫술에 배부를 순 없다 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTFBPX2hhTW1EMXNjREQ0VUNMX1JwMmNuWERxcm5QQ25RMkNvM0VaTXR6aGwwVmtvcXF1YnY3aWYtUGtsNW1ibFJ3QUtETlVEZ3AxU3lwU0tIam1XaHdvd3pTcXVBQ1BOYUktaWs4VA?oc=5 |  |
-| esg | newstree.kr | 'ESG공시' 10조원 이상부터 의무화?…금융위 최종안에 촉각 - 뉴스;트리 | https://news.google.com/rss/articles/CBMiXEFVX3lxTE44ajRzUW42eTRmVzNnME0zZzJvOHBVaHhxdDBpVk9DWFpfa3NXMWktN2pQTjlsWFlJWmExRmFUUlQwTkNVYzRFa0pPUWZNRW43OUxZVDZraHUxVHR1?oc=5 |  |
-| esg | dailyenews.co.kr | 2028년부터 연결자산 10조원 이상 코스피 상장사 ‘ESG 공시’ 의무화 - 데일리e뉴스 | https://news.google.com/rss/articles/CBMib0FVX3lxTE5hMk8zYmhVcnF2ZkJsNjF3NDNJbkc1emcydW81Z0FyNGN5RmROVkgxanVqTjVuQ1l5WDNxTHNQRDBoYUlTbEJLWFVJcDBUXzFRYmtXeU40RndrZ3ZnaGtHUV9IU2hXLWJPMTVRemk0OA?oc=5 |  |
-| esg | yna.co.kr | 이억원 "연결자산 10조 이상 코스피 상장사부터 ESG 공시의무화" - 연합뉴스 | https://news.google.com/rss/articles/CBMiW0FVX3lxTFBoQnh0am0tSlNDaGp3WlZvdHV6LUYyOWZYOXVkcEN4clo0S2dCYUJ4bmxROWJCZU1Sc2NQa2Jtd0hic0txM1NRaHo0dXlOSmxvWU9hWF9pR2VTZWPSAWBBVV95cUxQeGtfQmVIWGQ3ZVlhV2VRM19SbVRMWlUyWHBYMnFVLWlfbTdlaEE0VHpCQlR4dFI4VkxPV3BCNkNWWHlkeWgyTjdDQmtjclBfMWRDbmJETHQ0Q25YbkRJWks?oc=5 |  |
-| esg | netzeronews.kr | 닻 올린 'KSSB 법정공시 전환' 실전 나침반 "눈길" - 넷제로뉴스 | https://news.google.com/rss/articles/CBMiakFVX3lxTE1XdmdXS2VwaGRQaGI0Zi16Zm40bkZYOHZYX1A0VDJmQkYxUEFhUVpkRHFocDdfaDAwTUNmd3AzWEFhMVEzdExpZzUxbVFjdlhNcmVwOXhjYUplUno0V2UwOWRqVUJBUWNNYlE?oc=5 |  |
-| esg | greened.kr | ESG 공시 2028년 의무화…건설사 4곳 첫 대상 예상 - 녹색경제신문 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE1nVjVuUEFfNndhRDNqdndTXy1VWHVwc05Xbk1zVFpCaHo4SjItamNJeWlpZE5faTVwOWlSb09iV2ROYVFHMHV4U3JzVlAwVDNiT0dVcWUwMkFVMldHY0dRQm92Y1V5ZWZn?oc=5 |  |
-| esg | ESG경제 | [해외브리핑] 싱가포르, ESG 공시기준 초안 공개...스코프1·2 먼저 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTFB2d2RieWdDdXRHVU1aY2VlSkVIX1hQS2gtencwUkFZWVJwY094Yk0tcFlTZjliWVZ5YUhodU1McW5veTBNN0JRNTgtcDVqMG0tdjI2d0FzdGtUa1ZHTFNJeGt4eVhkaWdRQUV3cA?oc=5 |  |
-| esg | 임팩트온 | KSSB ‘2030년 병목’ 우려…“인증 앞당기고 스코프3 유예 분산해야” - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE9hN1YtS0x6aXE5Y0xKZDRWM3AwTmpISnhXQWExOG5nTGdDbXhjT3pIRnduUTB0cl9wd1gxNzhmWFF6cDJ1VzNyWm9oLW52NG9Gbk12SjQ1Wnd2LVlRcE1ncEY1RTAwZFpuaFE?oc=5 |  |
-| esg | 임팩트온 | ISSB, 자연공시 의무화 대신 '권고' 택했다...10월 초안 공개 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE94NlVxeGhCUm9GM21Gc1Jibm1HWlN0dHVMb2ROYlJHSS1KbHFzNEtmT2JYc1lxS0ZGV3hFblc3cUFZUTBwZG5mMGRNY3YwYTJjMXVYa3ltbkxnSzR2XzNuMkJGcjJ6cUVVNkE?oc=5 |  |
-| esg | greenpostkorea.co.kr | 4대 금융지주 ‘2025 ESG보고서’ … KSSB 도입 등 "업계 최초" 경쟁 치열 - 그린포스트코리아 | https://news.google.com/rss/articles/CBMidkFVX3lxTFBYTkk4Si1fYThuZk9xdnBYeEE1MG1TTVhQS1RSdTR0Rk9SdVhGYlZvT3E2R2ZXSjlreDR2RTVNZkpvV1BZRGZlMDJIX293RElqM1lieUZrYVZjRER3SWctai0wT19uQTVoTFd5a2NDYzI3aTBmanfSAXpBVV95cUxNZE9FRGVwd1pjMENfc1FlbXZSdVB1aHF5TmppaUpzOXdlVjZkNG9ZVDJfVDczSGhrV1NUMmREM3RYT0VCZGpvMkhzcXNOSnJPWVJ5T1ZqMDRJeTdHa1BjYWxjQ2MteWZ3ekJRX2tzS3ZRYURHUS1zb1lXUQ?oc=5 |  |
-| esg | energydaily.co.kr | ESG 공시 '법정 의무화' 추진… 지속가능보고서 제출·검증 의무 강화 - 에너지데일리 | https://news.google.com/rss/articles/CBMickFVX3lxTE41X1hTNERSeFU0a3VfQ3duWjBQVTROSGxxcVFYem9MbVVnaTRfb3JtNGpNSmR2dk1RTmdOd0FPZGJkX2lPaWRnS203R2lYVUw4ZmFPc3JRVEtJUXk1RHVSNGI2YTRnZ3dNc0F3QUoyaW5NQQ?oc=5 |  |
+| esg | 임팩트온 | ESG 공시 로드맵 또 연기…국회 일정에 당정 협의 보류 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE10b2lHcFJxSk1ZN0ZNMUZFLUxzajM4XzktSUZzU1NaQ1B2WDNGX194UF9EUnVOZTJPcjBjTC1FbDI2R0xGSWFQTUc5d01xZ2NVRWZQVEwzcXlQQXM0aFFUYTJmS09iSGZjX2c?oc=5 |  |
+| esg | lawtimes.co.kr | 국내 ESG 공시 제도화 본격 시동 - 법률신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTE5kbk1xU0x1a0cwQVljOE04dEhreG85a3BjM0t6c1FxSDlhNjlwYWFLTTY4SnV0OVNzNkhCYzBRcW00bm5BUUZTa3Mzc2MtaEZQbzljanBEeE1RaEx1bUstRDdZNHl5ZDF6dXl0Z0Rn0gFyQVVfeXFMTUVhTndvYnNDYmRtMnFfVFI4Y3FNNEotRU1jZEdyRVROb3gtdktfYUV0UTFaSWRELXZCZktPX1VqSU9mTGd3b3VoU0FyTHo5Qm5ybjkzTVNIVmVKLXRyb0F0bVp3eC1oMjVJa3lROVgycTlR?oc=5 |  |
+| esg | 임팩트온 | 이웅희 위원, "ESG 공시 로드맵, 당정청 조율 단계"...상반기 발표 목표 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE1FSV9UekJiTzFXSUd6SWYxOWpyY3RIMkFSajZFVC1GYWJhRjYtd3JCTTBkbEpQMWJkcWNpRjN3LV9HSDBCWnFlUE1BbTJpQTdGZDBfV2pwZV85SWN2YXJNN3Q1WmhaODlYYUE?oc=5 |  |
+| esg | 임팩트온 | ESG 공시 로드맵 확정, 사업보고서 공시로 시작...2029년 3171개사 영향권 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE9iV29YRzlVTjJNb1JmalR6LTZLOXJlajZQeDdUN016eU1SSGNFZm9pWWVLYVhZcEk4OC1WejFaODdFZzFxVlF4aXpwd3pONHVncXp1UlBBQnlZanV6S3NJR19VQk5RQjZkbHc?oc=5 |  |
 | esg | lawtimes.co.kr | ESG 공시 제도화 관련 이슈리포트 - 법률신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTE5EMkpMWHJyY2VNTVVVNmtTY3kwZWZYWVZiVUJJckppUG1jVXVKNTgtVVNNUUR3ZjhRM1ZET1lVQjhsRVZsRUhiSUdkSTg4Zk1zbURTVWRoYXNrc0hzMjFmNFI0RDhqSDlZNWU5NGFR0gFyQVVfeXFMTjVFZ25veU9tNzdSeXRNRmFEc0t5MlY0ZVBOaV9mUTctZW1JeG5DNnA4amE4TmZRVEFxa2FfN1RDNkN2ZmkzVXNpeWk4V21FOXdYaURLWmc5eTZ2SE9nV3dScVFzM3JmTVNsUWlvSjZkZTNn?oc=5 |  |
-| esg | newstree.kr | 'ESG 공시' 2028년 전격 도입...'자산 10조 이상 상장사' 의무화 - 뉴스;트리 | https://news.google.com/rss/articles/CBMiXEFVX3lxTE54SllKYmtLZ0JmSEMydXBsTmNZVExUSm9wU0JpeUl6bnNCZXg5S1JQdWduMTJ0WjhRbHBxOV9HYVhQbDZRX1dfZTF5YjVESkhaOGR3LVdwaE11ZjlL?oc=5 |  |
 | esg | lawtimes.co.kr | 금융위원회, 지속가능성 공시 로드맵 발표: ESG 공시 제도화의 본격 개막과 시사점 - 법률신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTE1nVEVSX2pWYkx2QUFiakxBejZKeEE4R2NSUTdZTklmaDdSSzBldDd2ampaUnBadjlfWEgtU3FPcHBKNGc1SEM3b2tROFU4NWNZUzVpXzRvNEY1V1oyaHNfZnNIQy1IZjVoZHpHc3l30gFyQVVfeXFMTS1NcDE3Sm5xZVFlbjJ2ajJqVGNpWmRUVFM2X0tjM0tIdE9NSHp2NmtyNEcwc1JPU1o4MXdEVXJVWnJfdmJLN090T1JRU3JEai1aejhxMVhxQXpGdVJvY0xGSTA1NlJIcElPTUoyVlZnUFpR?oc=5 |  |
+| esg | ESG경제 | [ESG 신간] 'KSSB 법정공시 전환 2026' 실전 가이드북 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTFBrUzRGU3pWdmpXamtLdlFab3psaXNSNWQ4UzVhTm12SDlsNkt1U2xxVFY0VFVGY2JScGxPX1o3cGRaY2JqSlJWT2QxRURKSGItTWVyLW4zY2h6bTNRYy1EOS1YUE9wUWJxamd5ZA?oc=5 |  |
 | esg | ESG경제 | ESG공시 로드맵 확정 막판 진통...발표 5월 초로 연기 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE5Sd0U3WnpadDd3RUJXbGhrb001NW03SWZPYXI5SUlrX3VtVjBucGJDN1lYUU4taEpNSFZEVjVLaDJwRzNOcUwzSTBsV3JzVWoyZ01BeUp4ajhGbmxJVE9kOVB0NmpIa3RkZE1SQw?oc=5 |  |
-| esg | thedailyeconomy.kr | ESG 공시, 2028년부터 대폭 확대…자산 10조 이상 코스피 기업 의무화 - https://www.thedailyeconomy.kr/ | https://news.google.com/rss/articles/CBMicEFVX3lxTE1jZm5pSjVVaVN2aEl4YmZuOFI3MkpCYlNrNEtCT1NEYVJJOGdMWnNCOXBCSXpFbG1id2pWZERGTUE3U1hYbl94d0JZQmJHY0NzNnBBdTJqMDcwTExYWGJBZ3pNNkZxMUpYbi1jekdZUjg?oc=5 |  |
-| esg | sdgnews.net | 【ESG 공시 대전환④】 ESG는 규제가 아니라 국가 경쟁력…'지속가능성 자본주의' 시대가 열린다 - SDG뉴스 | https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1HanZVZ1ppRm9vRlBRXzhMMUlRQWtqWUxDTGV4ZzV0LWhTMlhLZE1DM0NsTVIwbmZ4M2pHNC1LUFdJR29PQlBkWXdMQzRCWUJqdzRkWWZ2ZmdVa0hySXNrRGVsaWZoaFnSAWtBVV95cUxOam1qc05UNEQ1Tm1xbWNXVUZRNXpxZThXT1psdnBDWW1yU01UR0ZpVXU5dWpBMS11X243RUlIVmZlYnFpQmdoOGE1Y0NIVWRVUVdKNDk4QnBvVkQyX2hTZFktX3Uta3hlZEQycw?oc=5 |  |
 | esg | edata.ekn.kr | ESG 공시 의무화 충돌…“글로벌 기준에 맞춰” vs “기업 부담 적게” - 기후에너지데이터뱅크 | https://news.google.com/rss/articles/CBMiXkFVX3lxTE5ud29WMHQ5RnNleWFLbDR2TFJfSzh2UXlZWjZoWndQUnp6NHI3NWJmaUlfOFgwcXFSM1liQ1E0MEZZZWhDMXRsZjhiT0g2SW91azQybGw1aGVDSUMxZ0E?oc=5 |  |
-| esg | m.ekn.kr | ESG 공시 의무화 충돌…“글로벌 기준에 맞춰” vs “기업 부담 적게” - 에너지경제신문 | https://news.google.com/rss/articles/CBMiW0FVX3lxTE9EWXdPc0xMbjZHaDlIS3JCaHlveDRwUXV4d0Qzenpud0gzdjRabWQzQW5zMmxyTVJzZmVqUTZYazRfb3h1dlcyaDJTNHJydGpNYnZsY3ZBQnhtVkk?oc=5 |  |
-| esg | 임팩트온 | 【기획】국내 대기업 99개사 KSSB 전수 분석⑤ - 현대모비스 97점 1위…재무·경영 연계서 격차 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE9rTS05cDJWUENMM20tVGJLcDd6Z21Wd3p6TTFFRGZ1YVdzRlh4and5andCSThBQy1wNHFRT3VpMDUzNDBPNUhYb21vb2xLMENKZXlsTWRUeG5sV3BfWXcycWtwNmJFdGtEN2c?oc=5 |  |
-| esg | 이데일리 | 이억원 "연결자산 10조 이상 코스피 기업부터 ESG 공시 의무" - 마켓인 | https://news.google.com/rss/articles/CBMic0FVX3lxTE5YTjEwbmxBTWlJZUlPSkVCQ3JaTzJhOEZUUlVDaXh5LUx1cUZVXzE3QVYzUVFoaU1UU2ljMWhlRTZhRHFrODNKWUdRWTdFWUkwTjREanRHaEQwcmNoS0VkZXl1X0ZOTEZWNjI4RTFURTZkcUU?oc=5 |  |
-| esg | newspim.com | [종합] 당정, ESG공시 법정공시 전환 확정...2028년 107社 대상 - 뉴스핌 | https://news.google.com/rss/articles/CBMiXEFVX3lxTE8tYWZaS1REeTVxSXNDaFFWNWwtZlBnSGY1Uk03M1UwUURhZkFiVlVVZkoxM3BZTzFGNlIxT1hOSGRqLTY5MThLOW1aRjlsTEtQbEZNRTJYMDYxNTFZ?oc=5 |  |
-| esg | busan.com | 코스피 10조 이상 상장사, 내후년부터 ESG 공시 의무화 - 부산일보 | https://news.google.com/rss/articles/CBMidEFVX3lxTE1SUzNES21YX3JvS0hjM2RrSDRLMWY3T0VWOVBVV2k0UGZiM1NhalJ5MVltcHBPYmNqYlhPZzBuTDBPdDhBVmZOalo2cm5VVWV4SG5za3pieXg0c0J5OTRyMWp6NS1vOW0tS3V5NWM2ckNBeDhu?oc=5 |  |
-| esg | seconomy.kr | ESG 공시 2028년 의무화···자산 10조 기업부터 ‘탄소 성적표’ 공개 - 공유경제신문 | https://news.google.com/rss/articles/CBMiakFVX3lxTE9qMnQ5d3NHZXBuaEV3TV9nbUVLaW4zQ0VvN2owejZfcW1ZVHM5WmRVSVlJaV9XcEJFQzBXSE1TTmRjQzA0S1o3bDRkaUQzWnIwcTBXbFhMUTdCRG9lLVhfbG5tb3FqY3RmMUE?oc=5 |  |
-| esg | energyprosumer.info | ESG 공시 의무화 대응 전문인력 양성과정 확대 편성 - 에너지프로슈머 | https://news.google.com/rss/articles/CBMiTEFVX3lxTE96QmpoQXJwVXRPcnlwN2VrRFZZZHpzSVZ1RzZiV2haajRTRmxDZklkRGVkVFhmRWszWmM0eE1JLUR1T1JqOTlVSHc3dmM?oc=5 |  |
-| esg | socialimpactnews.net | 경제·환경 단체, ESG 공시 로드맵 '실효성 논란’ 제기…"국제 표준 준수해야” - 소셜임팩트뉴스 | https://news.google.com/rss/articles/CBMic0FVX3lxTE5MWWUxdDB2Zm1PSWJWYUJ5aWZnc1pYWE1iVUJ5ekppZ1NrNUJBT3p2bzFFYUF1X0RCMl9hQ3JXSE5sT0V0alA3TnhTa1F2MVRFWldOckNVbzcyRWZYY1phcmthR3ZKeEN2ZmJraGI3eUU5bk0?oc=5 |  |
-| esg | kbthink.com | "ESG 공시, 홍보가 아니라 책임"…2028년 의무화에 재계 '긴장' - KB Think | https://news.google.com/rss/articles/CBMickFVX3lxTE5abVIyYkJSajVjMEhXZ21uVFl3WThTNXlhVDlobDBIWVBZeDBiVzdDTWRzOU4xVFktVFdpWm9WVHJ2WXVZclRKUjNZX3B6NEgyUnhrR0VWZUdwTmZsSWVydEdxU0s5V0ZxNUZUR2ppdGMzQQ?oc=5 |  |
-| esg | ESG경제 | 하나금융, 공시 넘어 기후금융 관리 강화…KSSB·전환금융 동시 대응 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE1IUFFLR0dBamZfTThZako0aEZUZGdSVjQ2eWxLVmRsOGV3WEp0VU11dGVsS1hwR2FNcVRYZkx1a1FoaGFBckVRd1ctdXdrMkRCR1lMSVQwdmwyV0xBQ2dkMFJRVDVzNF9XX0MwWA?oc=5 |  |
-| esg | netzeronews.kr | 한정애 의원, 'ESG 공시 의무화' 법안 발의 - 넷제로뉴스 | https://news.google.com/rss/articles/CBMiakFVX3lxTE53MnVvandUR3lCRjExelB4MUhjVTBtRHU1eXlvVWcxTTFwQndfNzAwbHZXcUJscWN6QTY2VXEzbWpjQXlST3Q5ZkFNVlY1TjNHZEloQ0s0N1daOUtfVVRic1RYTG10ZjEwMFHSAW5BVV95cUxPTnl3czhTNWJlaWxSd0lYV1hJUW5CblZyV0ZfNDhNeGwxYkxGYTBPdnQxV2RUeFFMQ0V1dmgwN1hMOS0yVjh2MVZJMWEzRW0zVC1CZFNmUFlia19reFpQSm5lck5tS3RaM1ppaHU4Zw?oc=5 |  |
-| esg | 한국경제 | ESG 공시 로드맵 확정…10조 이상 기업부터 첫 적용 - 한경매거진 | https://news.google.com/rss/articles/CBMibEFVX3lxTFBNSi1jOHJWMGZBWlJGbFEtODYxLUptaVliMWI1THFGNjhEU2NEYWpta0FtRlFieFN4MkpjcWp2RHFYcmcxQks0VUN2TWxpdFp0eHJ1cXdkS2FRaFBFZTU4UFBfWG5aR1BLSGRlZg?oc=5 |  |
-| esg | 임팩트온 | 【클릭ESG】 “3월엔 추정치, 6월엔 정정?”…ESG 공시에 IR 부서가 난색 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE9oay01YjlVajVfZ3NoS0V6OHJTbVZaZHJIaTlqQlZzZkhNeWRaeEpQU0tET1l4VVNDdlE1Zm1QM2k4NjdvcGtjbFFtRndwUUtyaFdVdzU4MXlOY2tqMmtkeE1WelRiNVBYTlE?oc=5 |  |
-| esg | safetimes.co.kr | ESG 공시 2028년부터 의무화 … '그린워싱' 책임 강화 - 세이프타임즈 | https://news.google.com/rss/articles/CBMib0FVX3lxTE9ya3ltZnBNSTJMSjlvbmdSRHdCV243TTl0WGJXYXhMY0xoN2YteEdETDhIcVhIR2pqLXEzbU9TcmsyZ0pkWTJDOXYxMzVQMTh5TExOcFFhRERVOUV5YmdFNUU3X3YzWlFLS2hpR1Aya9IBc0FVX3lxTE5GYnNFWlNVc0RaN1lWVjJyN2JOdnRuSk5wQ1RpNzdxeHI0WDV5OUo3T0pzbUNQQ0FEb2dQOHR3bXJhQ2syYU52VUJyMEl0MGYxclJnampIZkdVQ01kM1hWVGZwZGJCWTkyNGNyT3dTVlVVSFU?oc=5 |  |
-| esg | newsfc.co.kr | '자산 10조' 코스피 상장사부터 ESG공시 의무화 - 금융소비자뉴스 | https://news.google.com/rss/articles/CBMiakFVX3lxTE5renNiRTJnemsyc0NGTFdta0M4N1NiY0ZfZDcwbHY1dzJYSXRjaHRxMkpOZXVtT24wdXRYQ0NpVWxLTmdoSllyVFE0REc4cnNqQ0Z5RG5xUnZGMktCUk5McFVkd2hiRnBJekE?oc=5 |  |
-| esg | ESG경제 | 금융위, 지속가능성 공시 로드맵 이달 발표 목표 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTFBIM3YtSXZjVkl3M0Rya2hPZWNjUlNTUGFDR0FXbTlfOG9aVkljRE1fUzJtMUxGb0c0UW1wUFpkbDJGME43MTQyU1V2Q2hpcXRRMUd6ZDUwb3doM0FxdzRPaGlUYlcwajhOZktSSg?oc=5 |  |
-| esg | news.mtn.co.kr | ESG 공시 의무화 본궤도…기후·거버넌스 대응 주목 - MTN 머니투데이방송 | https://news.google.com/rss/articles/CBMiZEFVX3lxTE1ZYjdkVUM3UXFLc1I4MndSOGxjVlBTLVdzQUUtcEdaaU9JSUU3ZVNIY1RuSHRlX0JCMGZYa2NLQUNISG02UmlCWEYxRnBZblB2ZnJVZHhpcHJZejlDcl9TM2Z1QW0?oc=5 |  |
-| esg | 임팩트온 | 【칼럼】기후 공시 의무화, 그 다음은? TISFD로 보는 사회 공시의 미래 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE9zZ3BvOTJGbXQ1YVZSZF96elB5RUV0NGVkYzdNS25reW9teVhZbnk1dzE1RlFKdGdRQm9VSWxiTGNqSmw5Z3NBZzJlWjlrcEhVTDU3SVF3cFdveF9ZbGpFWWJxV25xSkZCeGc?oc=5 |  |
 | esg | ESG경제 | [단독] ESG 공시 2028년 법정공시·2029년 검인증 의무화 법안 발의 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE5IMl8tNnVMY0FDVnRMSDRSYkEwX29od3lMeXg5Q0tVX0pVbEx0VW42Z0d4TUF5elRZaG12UC1qTUlqeXB0QmFHTEs4LXpnNjluMUNPcnRERDYyQ1l5UjNLZG1DM05aTk84OC1ocQ?oc=5 |  |
-| esg | ecofile.kr | 2028년 ‘ESG 의무 공시’... 우리 기업, 무엇을 어떻게 준비해야 하나? - 강찬수의 에코파일 | https://news.google.com/rss/articles/CBMiW0FVX3lxTE5VX2FFQ1lVNlIxbGxDT0NUdEN5QUN4cG52aGtZN3lNVTJtWGZPamdkcVVPaGJJRHlLYjJqU2ZZN2hDLW1XZnhmTXRFNkVxWUFpSTJzTF82Uk9oOXc?oc=5 |  |
-| esg | ESG경제 | 국회 정무위서 지속가능성 공시 로드맵 후퇴 지적 나와 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE1GcHI4QTVOSEY0VUcxaXJEZzNSWW1wU2VRaEZYNXpwMkZ5Zk41aGpVWm1nSmJQLWdtRDU5dlpaZkwtTG9xNEdjaV80azh6Y09NOGZTbEp2UkRqZ2VLaUk5VzNRSkU2ZlA4c3pXOQ?oc=5 |  |
-| esg | news.mtn.co.kr | 염정섭 기후부 녹색전환정책과장 "ESG 공시 기업 부담 낮출 것" [2026 ESG 경제포럼] - MTN 머니투데이방송 | https://news.google.com/rss/articles/CBMiZEFVX3lxTE1VS29JSWN0VmEzdXRNbWg0VExwRlYtQ243U3RXTlRoN254dTRtVXctcDkwclcyQndHRGlVZWZZRURKdjRxdkJVaEFPNEd4OHEyR1J4dFktNG9JRkFfTmVkX1ZBME0?oc=5 |  |
 | esg | 임팩트온 | 【단독】청와대, 국민연금 CIO 긴급면담…ESG 공시로드맵 전면 수정하나 - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE5EZEpERUZyWFJJZUd1dDY4blhENWMwajk3SU9kcGVzeDlsUzRLOG5PVkdRUTJEVnZITHNZcXZtNm1RN0l2aXpuZHQ5a25BRkExOVhMODV6czRtNjJDb2htbFJHQ3lrb214Umc?oc=5 |  |
-| esg | seouleconews.com | 2028년부터 ESG 공시 의무화…“자산 10조 이상 코스피 상장사부터” - 서울이코노미뉴스 | https://news.google.com/rss/articles/CBMibkFVX3lxTE1uXzhoQlR2VmpvZjBVaGdmZ0VkRHZkSEhOZjBycjVMVjFOb2E0dzFfaUJFTGUxc2NfTThwaE5QZ21GZ0RYSEpmWjhaOFFha1g0OXZ2ZS1IT1J4eEZiWWQ1OUtuMFhWb3BqcHhZUjZB?oc=5 |  |
-| esg | bizwnews.com | 'ESG 공시' 의무화 앞둔 제약·바이오, '스코프3' 기준 마련 필요성↑ - 비즈월드 | https://news.google.com/rss/articles/CBMia0FVX3lxTE1LeGhNM2VieHAzRGFlamR3YUJSWUFPbXZMbEhxbUNfQ09rcHJLMWVjdm1MMGk1bGFRTEYzUkplUF96alhzTTZETTgydU00SFF0ZEVGLVpBVlBQVHY4S1otTDdvZ3U5cEhuNVV3?oc=5 |  |
-| esg | ESG경제 | [단독] 민주당, 금융위에 ESG공시 로드맵 강화 요구...“법정공시·대상확대 해야” - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE5rZXVmOFVQTFhmcThaV25oRm55UGxUalllN1gzenVUVnh1NjJpTlljZ3FYZ2h4MWpGd0dsM1dyRXpudUdnWTJuX0VoU3lfODdwN2V2NjQ3OF8xa1lFWlRYQ2d0UkhMMVliWE9peQ?oc=5 |  |
+| esg | 한국경제 | ESG 공시 로드맵 확정…10조 이상 기업부터 첫 적용 - 한경매거진 | https://news.google.com/rss/articles/CBMibEFVX3lxTFBNSi1jOHJWMGZBWlJGbFEtODYxLUptaVliMWI1THFGNjhEU2NEYWpta0FtRlFieFN4MkpjcWp2RHFYcmcxQks0VUN2TWxpdFp0eHJ1cXdkS2FRaFBFZTU4UFBfWG5aR1BLSGRlZg?oc=5 |  |
+| esg | 한국경제 | ESG 공시 로드맵 초안 공개...쟁점과 과제 남겼다 - 한국경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTE5fUHhtNHpadHZiaHFKSWx1V2Rkd19hZzhkUkp1b1dIUGpMc1ZFWnZMMzhtcjg4cjhTeTNnNlpsYzhRZFNUMzlhN25mbURURVhjT2JvcVVqZUV0Zw?oc=5 |  |
+| esg | ESG경제 | 국민연금, 금융위에 ESG 공시 로드맵 '전면 수정' 의견 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE9sYWtZaXA5dUczZUZJTGxWWTBuUnMzazBxLUc4cUFGTi03OFFSWFo2Yi03QWNfaVhFckhfTi1BQXUyWjNPeHpwbnA0dGRncnFDVzVKSXFnWHcwQTBXUHlvZXUySGM0VllDNnU5Nw?oc=5 |  |
+| esg | ESG경제 | 'KSSB 공시 의무화 시대, 무엇을 준비해야 하나' 세미나 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE81V1p4YkEyeGp6aWFCY2lCYmcxVXNZYm5ZWEJrV21QR0NOSjZfMFN0RWgza3otTFR4ZjZzTnBoQU9sWkw5SDFkSS05bkRQUXBxY0l2LTVQaW5QbWFOR2FWcUZWVE1oSlpNR193ZQ?oc=5 |  |
+| esg | hani.co.kr | ESG공시, 공약은 ‘신속 추진’ 로드맵은 ‘늦장 추진’ [왜냐면] - 한겨레 | https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBQR0NwWHowWHdLZ2lPVG8tdm5fcm9pRm5pc1hVdVh0S2s4U2ZnRUx0VGJ2a2Rxb0xWNjF1V0J5bWJadkdwTnVjUWJDYkNwYjJOZS1OSERWWHlwQW1oWmJwT1V0MTY5cTg?oc=5 |  |
+| esg | dhdaily.co.kr | KSSB, 지속가능성 공시기준 첫 세트 공표…기업 대응전략은 - 대한데일리 | https://news.google.com/rss/articles/CBMia0FVX3lxTE1qTnFWLWFlSWx2cjVmaEswUXdpRUVlLU5BZHpTN3VlQWZWOHd4NEhqSVZxOThmRXR0eHpVbTlmcjNacFQ2RVl4Mlpmd0g3eXY4eGxVNDhzWUtTaEdCUUl3OHdNdVJfcnBHQnlr?oc=5 |  |
+| esg | ESG경제 | [단독] 지속가능성 공시 로드맵 내년 1월 발표 계획 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE5wNV9rc2dQMTJKQTVLcnpSbmY2R21OYjRuUzBCSjU4YnNVbGdJMUtsRm53NGlKYVZ5bXg0a05wbmlfYnJzT29UR3R3N2JHaHMxQ1ktdmVxTk5rLXBIWUdDeHJ0bW9oU0haUkliQw?oc=5 |  |
+| esg | ESG경제 | 아시아 각국, ESG 공시 의무화 '질주'...한국은 계속 '헛바퀴'만 - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTE9iT1p3aDQ1bGItZFl4NDZ4Z3QxVGtEUS0wYnpjZ1BkTmF6MF9aakdtRVpBaGdIN3dUSms2bkxKUlBjU1VkT2NUaDRpNVdEaEExdDZjWkZEQlI0RjFQS0gwZ3IwRTVpTmNHNWJTMw?oc=5 |  |
+| esg | ESG경제 | KSSB “연내 지속가능성 공시 기준 제정...정부 로드맵 기대” - ESG경제 | https://news.google.com/rss/articles/CBMibEFVX3lxTFBQcXVQeC1yRDJjTUtFalZtUlkwd2owdlNKbU5GQlNKWlZrVEUxOWM1WW9iNUFQbVNRZUdCRVVvanV3endMWU1IRU9fMHFIUHdnRGczbzV6eFNOX2lubE1SbEoyOWRvc0F3QkxBNA?oc=5 |  |
+| esg | PwC | 아시아·태평양 14개국 지속가능성(ESG) 공시 현황 - PwC | https://news.google.com/rss/articles/CBMihwFBVV95cUxOZXlXZzdsZGtiYXBTTlM2b2pfYWJGbVEwWU5xVTJ2alhvOUdLeHVRVkZVMnRTWGJQbXVENW5Fbk1GUnIxSFdKSEtlbVFMbklWSmpwMmlyM3czSlRyN1ZCRnlXQXgwMVFyUFZIbWhEUzlIZTlGOExkaXFSYnpKczMxd0tlM0E5ems?oc=5 |  |
+| esg | greenpeace.org | ESG 공시는 무엇이고 왜 중요할까요? 글로벌 ESG 공시 의무화 이해하기 ① - Greenpeace | https://news.google.com/rss/articles/CBMikgFBVV95cUxNLW1pY1JGTUNqTUZKakJCemhOdW5famNyeVNBSmc0Rno4ZFk4a3VJRFVlM3NYa3g4elhWVXkzaGdtZlRRc21ROVNhdXdMejlMTGlfWGZRZTJqSXVJZU43ZV9EYUZYRTRubHBPenZPTGFEakpjTkhTTHBrdThOMTE2SkFhMXh3azIzU29yRDNWdFl5Zw?oc=5 |  |
+| esg | ESG경제 | KSSB, 지속가능성 공시기준 12월 의결...내년 기업 대상 파일럿 테스트 - ESG경제 | https://news.google.com/rss/articles/CBMia0FVX3lxTE5GUDZYRVVFNTRYLV9YNEd3ODdtQjNFQjlxci1ya2FRblU1dndlYm5nS1FLM2NsSnNBOVpyZG1IS0VlQ28tOXZJNklnRW1BRFZuMGFCWnVoYXhiT0dQUk91UUZ0LUlzbUlJT2lR?oc=5 |  |
+| esg | hani.co.kr | ESG 공시 의무화 미루던 정부, 경제 불확실성 내세워 ‘신중론’ - 한겨레 | https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBBNGw4dVZlb0dyekFQOHI5Z3RucTdHNThoWTRvcGVnV0tIY2pJQnRsU1EwLXpwelUxOU13M1VJbm5jRnV4dGpxTVRJV21qaUR6UDBjcGVCdUgwdDZDVDhPUVEtaU9wcXM?oc=5 |  |
+| esg | ESG경제 | KSSB, ESG공시 기준서 권고안 의결 연기...로드맵 발표 결국 내년으로 - ESG경제 | https://news.google.com/rss/articles/CBMia0FVX3lxTE1Rc1JfaXo1Y2pHTkxyMGFwam55Q0IzUlVkMmhSaEVjYjRJVkVvd09vbERpVWtxU3U3SkduT2xWRDQzOEQwcEREVFFFVzVDcjBscWxJa0cyTlZIcjVSNXVHZTZYckZIdEJCaWw4?oc=5 |  |
+| esg | 임팩트온 | ESG 공시 의무화, “스코프3 포함하여, 사업보고서에 2년 내 공시” - 임팩트온 | https://news.google.com/rss/articles/CBMiakFVX3lxTE1fTi1xaGVFNUNFb0RzakhKYkJ6dEgxUkhDSndoV1JOUTFKdVpxdGNRNDFxUC1RUjViVE9uM2xva1hhMDZLQXRrOFdvaU5SSFBocS11LTlXWV9vWm1paW1rS2tWMk0yTXUzZ3c?oc=5 |  |
+| esg | 한국경제 | 금융위, ESG 공시 손 놓았나…국내 기업은 눈치 게임 - 한국경제 | https://news.google.com/rss/articles/CBMiWkFVX3lxTE1oemxQY2ZnOVZEdVdUaUFyaXYzTUpYR1Y2VDRZbEk3dHhlYVVXR0hfYkpNN0VXWG5iX2U3c29lRFlQLVlpaGdwSUp3aUZkYndLdURQMGRFY2kxUQ?oc=5 |  |
+| esg | ESG경제 | 국내 ESG 공시기준 초안 뜯어보니...ISSB 기준 기반, 기후공시부터 의무화 - ESG경제 | https://news.google.com/rss/articles/CBMia0FVX3lxTFBLVlVLT1pHMDUwWVA2Nk1xMXFUNENZdzZRT2luYjdJdXdxT1ZsYkg1LXJtcEQzbE1jY3h6LWtWeHFGb3ZvWmhoQXN0OEUxeE9GcE8xWWtqc25kRUtjSU9yRThFLUpmbU53Y1dN?oc=5 |  |
+| esg | 임팩트온 | ESG 공시의무화 2단계 적용하나...정부 공시 기본방안은? - 임팩트온 | https://news.google.com/rss/articles/CBMiaEFVX3lxTE10SGgydk8wUXJqOWg5VVI0WUFLNVFRT3d1TWVKX3phQ1lFd2M2UzB3M2RyamZ4WmIwTzFaYlN6ZjVvM0VNQUZlSGhBdVBIMzdBTmFjeFBNYWFOUHVHdnl4WjRLb3JJMFZ5?oc=5 |  |
+| esg | 금융위원회 | 보 도 자 료 - 금융위원회 | https://news.google.com/rss/articles/CBMijgFBVV95cUxPemhwMnRORE1fYU91ZUxxeU53UkROdFQyTHVlWHRZRXB0cHJza01WSGI1WHF6aXl0U2FyM3d6M2pHVlJLNU1RZzVsb3RkX2hCNmRGV0gwbUQwOHRrSnp3RU53WmdnVkIxem11R0VfcjA5LTlwYmdqSmx0UE1VS0Zac3o4ZWVyVXl3Z2ZFMlpn?oc=5 |  |
+| esg | ESG경제 | 국내 ESG 공시, "27년부터 법정 공시로 순차적 전환" - ESG경제 | https://news.google.com/rss/articles/CBMia0FVX3lxTE94R3l4RXlud2VfYjMwMGNvcldzQXhYaXo4UFBpdXlINW5qV2ZfRHJCeFdhNlJLdWdjNXpjV19CbGc0RXlFZV95SW5SemxZa2M2RG1VQ25RbS1zeXJCWEMzUzJ0a2p3X05fZ2hv?oc=5 |  |
+| esg | ESG경제 | KSSB 지속가능성 공시기준 초안...'유감'과 '기대' - ESG경제 | https://news.google.com/rss/articles/CBMia0FVX3lxTE5IbzRUeVpVLUVnVUk4MGRxWHBfRmN2ZW0yU3VDYkxLbUdteXFPWGdVb05ueXNwTzBSS0ExSUU2V1BTd0xLYUo4eDlLVjc3LTFJS1QtQVVJNVdtZzNvcHF4UjdsVjFFUHdKZnJJ?oc=5 |  |
 | kifrs | 한국경제 | 회계기준원, 지속가능성기준 자문위원 10명 위촉…공시 이행지원 강화 | https://magazine.hankyung.com/business/article/202608126865b |  |
 | kifrs | tfmedia.co.kr | 회계기준원, 지속가능성기준 자문위 신임 위원 10명 위촉 | https://www.tfmedia.co.kr/news/article.html?no=206420 |  |
 | kifrs | 임팩트온 | 기후위험, 재무제표 주석까지 들어온다…회계기준원, 공시 사례 공개 | http://www.impacton.net/news/articleView.html?idxno=19406 |  |
@@ -1117,7 +1085,7 @@
 | icfr | 한국세정신문 | 이상휘 의원, 외감법 개정안 발의…배수벌금형·벌금상한액 함께 규정 | https://www.taxtimes.co.kr/news/article.html?no=268780 |  |
 | icfr | 이데일리 | 금감원 "2024회계연도서 내부회계관리제도 위반 14건…과태료 부과" | http://www.edaily.co.kr/news/newspath.asp?newsid=01725286642401800 |  |
 
-## collect:tax_subject (62건)
+## collect:tax_subject (59건)
 
 | 카테고리 | 출처 | 제목 | 링크 | 비고 |
 |---|---|---|---|---|
@@ -1133,40 +1101,39 @@
 | tax | sejungilbo.com | 국회예산정책처, 오는 9일 `26 세법개정안 토론회 개최 - 세정일보 | https://news.google.com/rss/articles/CBMibEFVX3lxTE5RRXJZOHc1RzlVakJaMnltS2VRVExTb3l2UHFpeGctSGR2SFJXdFBrWHY1dzAtVW1ob0doeDFBRmo1QWFTRDFwajU4YU1PcVctb1V6YzZNVV9wY2pBYi1VOXROWFRna1UxMllfTQ?oc=5 |  |
 | tax | webzine.kacta.or.kr | “세법을 넘어 ‘판단’을 담았다”… 한국세무사회, 3년 연속 재산제세 실무서 발간 - 세무사신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTE0xM3RjUFVubTBZbkZDbGwza3V1TUlpaHVrZkxfRlo1eUpPR24zNC1JdU84aWhGRUlkRl9SX1ExQ0pHZWxhZ2pZYkg5cmxoM3RQQUlFRWFzdU1mWkJlWm1LU2tzNlNicGY0ME1TUnpB?oc=5 |  |
 | tax | m.ignnews.kr | 고동진 의원, 부동산 세제개편안에 강남구민 의견 반영 촉구 - 강남포스트 | https://news.google.com/rss/articles/CBMiY0FVX3lxTE5xU0FuX2xzZWJrSHU3a3dQampWd0ZkeVpCSG83eGVodnJSbmdlb0dJSFdQcVU3T1VydGEzTllRMWg4Rk1FcDNEYjEyY21BclR0MGoxNWZrbW5WUHZLVzFhcjhjTQ?oc=5 |  |
+| tax | m.ignnews.co.kr | 고동진 국회의원, 세제개편안 보완 촉구 - 강남내일신문 | https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9xd0d6S0Q1XzJTM3JCMlhtTTQ2UkhaUkhrM1BQZkZRVW9WWWNvSTNya3F1TkdhdUxRMFRkd1RtX1lscUdPbUU5MzZUVUE2LVIxV3N2cGZwUVh3a2kwdGI2TlFINjJhb2M?oc=5 |  |
 | tax | 한국세정신문 | 한국조세법학회·국회입법조사처, 30일 '세법개정안 쟁점' 추계학술대회 - 한국세정신문 | https://news.google.com/rss/articles/CBMiZEFVX3lxTE1yMHdHRnYwQWhEN0s5V2ZxNG02aFloamNqalgtc19vdFNwQjI5UldRTXhtTzhyeDB1ZVNiU0FObndnM1p4WFJtWV9scnIyRHJwa05iWHF0eUtuUzdROTllOVNuMWE?oc=5 |  |
 | tax | yna.co.kr | 수도권주거혁신포럼, 정부 세법개정안 관련 입장발표 - 연합뉴스 | https://news.google.com/rss/articles/CBMiW0FVX3lxTE9WeXlSSUIwZUVTUEg2amFnNWJqbTRLa0prcFBodkozdVpGRzVTMW44YkVoS0haLU43TDc1Vnh1T2hQdFhCN0JtbENmRl9iNjNHYVJrLTI2Ukt4QkXSAWBBVV95cUxPM3ducDJrU2lIdTJELXlCSk5SSi1xMUx2M1dYODU4NUF3UWR6STF0d21RbWkzTjFoYlVyc2xiNE5aS28wSmczTjVuWldkM0NXWjBRMWgwRGFVUnVvbHVzTE4?oc=5 |  |
 | tax | lawtimes.co.kr | 정종채 변호사 《조세법 대계》 출간 - 법률신문 | https://news.google.com/rss/articles/CBMibkFVX3lxTE1RUEVtUmF4bFJyQk9BdU10SEdNU3YyRXdIeW9PRE9BWDAtUkdfNDVHempTbFhPZG5NSTdDV2hwQjZRSHY0WjRiTVlzODlxRFV1VjRVTEs1ODNGeWNkb2cyWHpCZk1FM1hLcm5tQlZR0gFyQVVfeXFMTWQwc0JYV2dwYWlJOTdranNyZ29XbFJzbkdaazhvb2oxcTJ6UklYMWI1VE5SOHhham5oTXVkeFpsRWFCTzNqdnptVXBQS0JvR091NjJaUkI2VklXY04yWGtCUDc0NVlueW1BS0pER3dEOHZR?oc=5 |  |
-| tax | sejungilbo.com | [토론회] “체감 경기 회복 vs 과세 예측가능성”…`26 세제개편 쟁점은? - 세정일보 | https://news.google.com/rss/articles/CBMibEFVX3lxTE14eTJsdUFhend0enBURENHX2dBT0pFdS1mcU9pcGo3UllMbXZsU2x3OG1jb183aFBKZFJQb3ZGWlgxQUVqM1YwZDNRV1JlX0F6SWdiVHdyTzRQRXNnY0FqczZNZ1Ixam80UGFMZw?oc=5 |  |
-| tax | sejungilbo.com | [칼럼] 판례 80건을 해부하며 본 ‘세법 책’의 변화 - 세정일보 | https://news.google.com/rss/articles/CBMibEFVX3lxTE5tMFlsREN2MC01T09YUEYyOGVwTmNfRUdCc1gzSjJzSHZtUFdJNjlETjYwRGZHRnVFeUNiNm9IbkNlSXluMXZoRFkyU3FsX1NqVFNCOGo1eW1oRTkwb0VocGM5cTFJeUZPX2lzZw?oc=5 |  |
-| tax | m.ignnews.co.kr | 고동진 국회의원, 세제개편안 보완 촉구 - 강남내일신문 | https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9xd0d6S0Q1XzJTM3JCMlhtTTQ2UkhaUkhrM1BQZkZRVW9WWWNvSTNya3F1TkdhdUxRMFRkd1RtX1lscUdPbUU5MzZUVUE2LVIxV3N2cGZwUVh3a2kwdGI2TlFINjJhb2M?oc=5 |  |
-| tax | newsnjoy.or.kr | "법 지키고 싶은데 방법 모르겠다"…개정 세법 앞 해외 선교 현장 고민들 - 뉴스앤조이 | https://news.google.com/rss/articles/CBMibkFVX3lxTE9hU3p2LTdMRW9YcTVfbkxPV1BnUlJORUt6V0ZySFFtT1dJUXBZbGFwbkNCVGJIbGNMc2NvX2h1b3VTYzlCcWFMamo5Rk9iNFRGQ2VvSThsS05MSFktV05ma0U1LU5LOVFRSWVMUlp3?oc=5 |  |
 | tax | mobile.newsis.com | 세법개정안 입장문 전달하는 수도권 주거혁신포럼 - 뉴시스 | https://news.google.com/rss/articles/CBMieEFVX3lxTE15ZEZlZnkwSFdDUjZfT0tULUR6RnJJQmtrRC1TcDNJb3JvSjk0cTdvdTMxRWtYZWZseVNvZ1diVFU1SjBGNURLNzFodTkxMk9EbnI1WmZvNUZFN0RXWE9JQThubndCZDZsczdrU3JwNm9JOENiSUxQbdIBeEFVX3lxTE15ZEZlZnkwSFdDUjZfT0tULUR6RnJJQmtrRC1TcDNJb3JvSjk0cTdvdTMxRWtYZWZseVNvZ1diVFU1SjBGNURLNzFodTkxMk9EbnI1WmZvNUZFN0RXWE9JQThubndCZDZsczdrU3JwNm9JOENiSUxQbQ?oc=5 |  |
 | tax | mobile.newsis.com | 수도권 주거혁신포럼, 이재명정부의 세법개정안 입장문 전달 - 뉴시스 | https://news.google.com/rss/articles/CBMieEFVX3lxTFBsSy1rQkROS293RjhOSWt0VUhZX1VuTDRwMlJfQWk3d3lUbzR6b1Y3MjdKZTJGWkJQVVVoSFpoQXpkYWwzcjM0ZnNoYVUyZmw4UHQ4Z2o4aXNha3J1ZTBneWdiRW50YVVkeElVYVBrRzQ1V3JZRjBNetIBeEFVX3lxTFBsSy1rQkROS293RjhOSWt0VUhZX1VuTDRwMlJfQWk3d3lUbzR6b1Y3MjdKZTJGWkJQVVVoSFpoQXpkYWwzcjM0ZnNoYVUyZmw4UHQ4Z2o4aXNha3J1ZTBneWdiRW50YVVkeElVYVBrRzQ1V3JZRjBNeg?oc=5 |  |
+| tax | newsnjoy.or.kr | "법 지키고 싶은데 방법 모르겠다"…개정 세법 앞 해외 선교 현장 고민들 - 뉴스앤조이 | https://news.google.com/rss/articles/CBMibkFVX3lxTE9hU3p2LTdMRW9YcTVfbkxPV1BnUlJORUt6V0ZySFFtT1dJUXBZbGFwbkNCVGJIbGNMc2NvX2h1b3VTYzlCcWFMamo5Rk9iNFRGQ2VvSThsS05MSFktV05ma0U1LU5LOVFRSWVMUlp3?oc=5 |  |
 | tax | jejusori.net | 미래기금 이어 세제개편...제주 세입 낙수효과 혼돈 - 제주의소리 | https://news.google.com/rss/articles/CBMia0FVX3lxTE9sMjYzMlVwSzJRMFhCSjFaZGxIZlp5cDFYVjNrbE9UVmdCQ1BiQlV3eDhzcEdyWTh3S3FqenhiaWNGRWctYTJwb0lmWkcxQU0xd3VQUFFpT2pOZUkycDRPMnlVWXZ2aW5BMmdZ?oc=5 |  |
 | tax | mediagn.co.kr | 강민국 의원, “세제개편안 찬성 3%대...국회서 전면 재검토” - 경남미디어 | https://news.google.com/rss/articles/CBMia0FVX3lxTE5VeWVKWU9nRnVMVkhQU0ZYdzJNQm4xbERsZkoyYUtPZmVrcV9OWnFobUpYaTZiTWRHR2phd0VVTjJ3dm1GSzFjQWFseks5UWs4bWlDRlFDbU1FTEp1Z2F5dlJmTU04bGRNYkgw?oc=5 |  |
 | tax | mobile.newsis.com | 수도권 주거혁신포럼 재경부 차관에 이재명정부 세법개정안 입장문 전달 - 뉴시스 | https://news.google.com/rss/articles/CBMieEFVX3lxTE5BVkdQU3Zxc09DLW5VVlM0ZEU4M1phM001dW1zbmlBYzh3a0dqME1IUzBSeWFjbDVZUHRGWkExanVvNlB4YVIwQXZmc3JYenNrdGxEWmlZR3prV09fS0FJYUU0THZkZTVRV2I3UWplRkNPV0pvWWF6YdIBeEFVX3lxTE5BVkdQU3Zxc09DLW5VVlM0ZEU4M1phM001dW1zbmlBYzh3a0dqME1IUzBSeWFjbDVZUHRGWkExanVvNlB4YVIwQXZmc3JYenNrdGxEWmlZR3prV09fS0FJYUU0THZkZTVRV2I3UWplRkNPV0pvWWF6YQ?oc=5 |  |
+| tax | mobile.newsis.com | 수도권주거혁신포럼, 이재명 정부 세법개정안에 대한 입장 발표 기자회견 - 뉴시스 | https://news.google.com/rss/articles/CBMieEFVX3lxTFB0NE1qc1VIZmx2Tjc1RV9wOWcybDZsdEdyQnRCMjZ1RjFuaGNQekJaZ3FCZ0p0bUdKXy1mR1lZTlFMMjZqalhYTGJJMWE0LXhObFU0S3NmTWppOWhYWnZadHVud1h5b1RDdDZ0XzlPa1pnOW40anVHNdIBeEFVX3lxTFB0NE1qc1VIZmx2Tjc1RV9wOWcybDZsdEdyQnRCMjZ1RjFuaGNQekJaZ3FCZ0p0bUdKXy1mR1lZTlFMMjZqalhYTGJJMWE0LXhObFU0S3NmTWppOWhYWnZadHVud1h5b1RDdDZ0XzlPa1pnOW40anVHNQ?oc=5 |  |
 | tax | newsis.com | 세법개정안 관련 입장 밝히는 박수민 의원 - 뉴시스 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE1zU1RabUZhMDVpYzNPUG8wXzk0UEtlSXp0d1FCR3hxSk5SQ080OG50SG14VElTWGlPQ3QxZWVSb21EWkNxdjd0dHNIaWFwNFNraDl5V1dRTkYweGFDb292cQ?oc=5 |  |
-| tax | mobile.newsis.com | 이재명 정부 세법개정안에 대한 입장 발표 기자회견 - 뉴시스 | https://news.google.com/rss/articles/CBMieEFVX3lxTE9RNUVkeUJpOTA5UVoxM2Q3UHdjTEs3Y0ZBT1F3YUdSb0V3cjd0b3lvd0dlM2pRZHF1eWNKN3ZCX292TjU5WkpzTEczemlrbVdKYW90My1wWnhEQnJhVzBPTE8wVDQwYnFoeXJUZUpjc0NDZVNVaTZvMdIBeEFVX3lxTE9RNUVkeUJpOTA5UVoxM2Q3UHdjTEs3Y0ZBT1F3YUdSb0V3cjd0b3lvd0dlM2pRZHF1eWNKN3ZCX292TjU5WkpzTEczemlrbVdKYW90My1wWnhEQnJhVzBPTE8wVDQwYnFoeXJUZUpjc0NDZVNVaTZvMQ?oc=5 |  |
 | tax | hankookilbo.com | 野, 이재명 정부 세법 개정안 비판 "다음 총선은 부동산 심판 선거" - 한국일보 | https://news.google.com/rss/articles/CBMibkFVX3lxTE9vNWpPeUZmQTVWTEhvMDBWY1REc0FuU2w2c3BVRWdqZi1hTnY1LS1nUVdPYU9XcjlSanJTd0l6TjNOZDlfQ0g3b2ZzR0FFZGI2V1Z0bEwyZThNU2xmalp0UzlfQkZ2QXZDRkZNaHVn?oc=5 |  |
-| tax | mbnmoney.mbn.co.kr | 국세청 세법 개정건의 10건 중 8건 반영 못 해…'실적 쌓기' 지적 - 매일경제TV | https://news.google.com/rss/articles/CBMiaEFVX3lxTE0wYjVGQjdSbkZCY2RpRjFvUjNyX0tpSFFDazNZVnFkcHdXY2hCd1Z5MUJKbmdNVG56NGdRc2trbnQzYXVoSUhGM25DRy05anRvNnhPYnlOYWdDSjdKOV9wSFgtbjgyaFBo?oc=5 |  |
-| tax | pressian.com | 익산참여연대 "정부 지방교부세법 개정안 철회 촉구…지방과 충분히 협의해야" - 프레시안 | https://news.google.com/rss/articles/CBMia0FVX3lxTE0tTFE0Nzd0b0stb1gyNDFJU3hiMllsR2xxdl9KYV9LWi1DWGtLYS1waHo5U0dZbzhLY2tzdU1fblp6RnQ0TTZndGFzOHlxNXFpcjBMSUs0Yl9UN0ZHWDA1bFVxYWlxZmtXdVEw?oc=5 |  |
 | tax | goodnews1.com | 세법 시행령 재개정 논의 착수…"정당한 선교활동 위축돼선 안 돼" - 데일리굿뉴스 | https://news.google.com/rss/articles/CBMibEFVX3lxTFAzeHQ2TEdpOUlyU1E1Wmd1Ql9FN3ZMSURic2xUdk1OTF9raS1CLXZ6NlpYZ3YycFBrZkR3Ym9jYVFjTjRsczVFTTl6eC1LWXJvSFZmcjVOa0JtX0F0X2lyQlN2RXNkRU9WTEEzcA?oc=5 |  |
+| tax | mbnmoney.mbn.co.kr | 국세청 세법 개정건의 10건 중 8건 반영 못 해…'실적 쌓기' 지적 - 매일경제TV | https://news.google.com/rss/articles/CBMiaEFVX3lxTE0wYjVGQjdSbkZCY2RpRjFvUjNyX0tpSFFDazNZVnFkcHdXY2hCd1Z5MUJKbmdNVG56NGdRc2trbnQzYXVoSUhGM25DRy05anRvNnhPYnlOYWdDSjdKOV9wSFgtbjgyaFBo?oc=5 |  |
 | tax | sejungilbo.com | 국민의힘·개혁신당 수도권 의원 모임 “정부 세법 개정안, 국민 이사 발목 잡아…4대 원칙·8대 수정 요구” - 세정일보 | https://news.google.com/rss/articles/CBMibEFVX3lxTE1GWWZObzhTMTA5b2lQbjdNQkFZNTQ1cmlDeVVWbEZHWVk3Y3JjNmk2Nl9MbTFyOG5UcTdNYm9pd3V2TWQ5TklVRVhRTzBhaVZ0b2J4RTl5TGczWVJJcUwxQWEtSFRvcVNCaXBVUg?oc=5 |  |
 | tax | news1.kr | 수도권 주거혁신포럼, '정부 세법개정안 수정 요청' - 뉴스1 | https://news.google.com/rss/articles/CBMiS0FVX3lxTFB0OTdJOTBZVGs0VTF0cmdIVXkxWGFHUE5Vb1JGSXZ4RkcxQ21XTy10QVl1Z0RJYmZRS2hILVA4S2pYZ1pUb0Z1bWhPSQ?oc=5 |  |
 | tax | ytn.co.kr | 등록임대 내년까지 팔아야 세금 혜택...일시적 2주택 특례기간 3→2년 - YTN | https://news.google.com/rss/articles/CBMiXkFVX3lxTE04NnNzaUFDRl9nb3dReXB6ZzR3X1ZQOUhGZGhQQ3l1LTR5aEFUR0NhRXNJV2hZbmxlYlpkQV9aVGFVdUt2T3B3RWtIMW92YnBGZFBXdjFqYVlFYU93dWc?oc=5 |  |
+| tax | incheontoday.com | 전환사업 국비 보전 '연장' 한숨 돌린 인천시··· 지방소비세 불합리는 '여전' - 인천투데이 | https://news.google.com/rss/articles/CBMicEFVX3lxTE9MeHZXSExjaDNxVWhOc2JJNmt1RmNZQWlYb2NlMm00UnJaWEp2Z0JJdER6NmNiazBaeDdkYmhrelZLSHVyQWlhZklqNWZlRmtUZzV1ZUc5bTJFOVZJMktxZGdnX0VRV3o3V1kwY2pSM0M?oc=5 |  |
 | tax | m.sstpnews.com | 정부, 종부세 개편안 29일 만에 수정...비거주 1주택 공제 12억원 유지 - 시사타파NEWS | https://news.google.com/rss/articles/CBMiXkFVX3lxTE1YVzNVM2htdUlLWDRKRmcyRVhWZGJEMmRneUNmU1FTRzd5alY5MmgxeE9UMFBVVEJGYlBqN2pIWEVrSTBqSndBallBQ1R2bnY3SXdrbVNLamNva181VEE?oc=5 |  |
-| tax | pressian.com | 조국, 이번엔 세제개편안 비판…"표 준 국민의 이익에 충실해야" - 프레시안 | https://news.google.com/rss/articles/CBMia0FVX3lxTFBxYXRWTTMwSGViTHdRYWZleHpDQ3IzcWROZ2dCbjlTZVlLbFppdUZmajF1V3hjemdrcEh5aHlxRThOM0djczF2bWdpTDQ1NjF6bG02ODRSSEFKaTlGbUt3SWxIZWx0X3NJU3lB?oc=5 |  |
 | tax | news1.kr | 재경위원장에게 정부 세법개정안 수정요구서 전달하는 박수민 의원 - 뉴스1 | https://news.google.com/rss/articles/CBMiS0FVX3lxTFA3QmpNY1VFMklHZ2ZQdkpKRlc0Q1VHWFpvcjdnWjd5c29nRlVGcVZGRTRyTXV5SzE0cENMVzhDUU9BaDV2OEpsSVoxaw?oc=5 |  |
+| tax | pressian.com | 조국, 이번엔 세제개편안 비판…"표 준 국민의 이익에 충실해야" - 프레시안 | https://news.google.com/rss/articles/CBMia0FVX3lxTFBxYXRWTTMwSGViTHdRYWZleHpDQ3IzcWROZ2dCbjlTZVlLbFppdUZmajF1V3hjemdrcEh5aHlxRThOM0djczF2bWdpTDQ1NjF6bG02ODRSSEFKaTlGbUt3SWxIZWx0X3NJU3lB?oc=5 |  |
 | tax | newspim.com | [뉴스분석] 부동산 세제개편안 정부안 의결…與 내부서 불거지는 수정·보완 목소리 - 뉴스핌 | https://news.google.com/rss/articles/CBMiXEFVX3lxTFBaMU94ZFRIbWRacklQenVyOHN0dUxYc3AzM0ZveTR5a3Fvd0NsaW9jcVNNRGN3emRCcUFCQWJsa0J5TEFNWnd3bEc1cExsRlNSVDJCMWNNWEkxOWQz?oc=5 |  |
 | tax | nodongilbo.com | 국회예산정책처, 2026년 세법개정안 토론회 개최 - 노동일보 | https://news.google.com/rss/articles/CBMibkFVX3lxTE5Sc2Zjd0pLdFN1WVVVVUtkSUMwRXgyOGNUd3hsU0tsT1ZzY181TmlFb2hGSFRNekNBYmVNYWQ3NVROZUtUbG11X09WMW40cFJCRXpzTmszR0dVMEFNQnB2UXVQRzFISUZqalNRY3p3?oc=5 |  |
+| tax | christiandaily.co.kr | 샬롬나비, 세법 시행령 개정에 “해외 선교비 과세 우려” - 기독일보 | https://news.google.com/rss/articles/CBMiV0FVX3lxTE5rYk12WWY2QzY2SktqY0s4UDYwTnc4azhpcXBpRDhienBKS1E3Zkprc2VwUklIal9pRGRKcW1CdmRSLU5BTUE2UmdFUjYwYjlHbVo0VWhBWdIBXEFVX3lxTE1QNE5tWFA0cWJLaEdOa19PbzVFNDQ0ejhuTzdXLUdWVTlaSm9YejZtV0hJb0E5ZkdBeEY5TC1QN2ozOE1YRFhWdjJUMUxGMll2WVpLV0cwcWNFSWZi?oc=5 |  |
 | tax | kmcdaily.com | "해외 선교비에 증여세?···한교총, 개정 세법 시행령 대응 공청회 개최 - 웨슬리안타임즈 | https://news.google.com/rss/articles/CBMiakFVX3lxTFBJVHdOa3Z2WUNPOHhINmE5UWg4aEU4UVBPTUlTTnJYNXk0VDhhRURFVjdidjJsVzVsc3o1WWdvUUxZMHVTQ0poeExoeGYtTDBGRnJCM0VrbkVaNWRvSkkzX1dCOXozZ0x5R1E?oc=5 |  |
 | tax | newsis.com | 정부 세법개정안에 대한 입장 발표 기자회견 - 뉴시스 | https://news.google.com/rss/articles/CBMiYEFVX3lxTE5tRERrc0RPWUs2OERhbzV3V0R4V3ppMEpfSEF0MklRUzAtMEVveGw1VzJlTXJyV3RvQkZFa2N5bmlaZXFlUHdtNnc5QXU2Rjk2RjRTZHd3MkpwNFpxcHNUTA?oc=5 |  |
-| tax | christiandaily.co.kr | 샬롬나비, 세법 시행령 개정에 “해외 선교비 과세 우려” - 기독일보 | https://news.google.com/rss/articles/CBMiV0FVX3lxTE5rYk12WWY2QzY2SktqY0s4UDYwTnc4azhpcXBpRDhienBKS1E3Zkprc2VwUklIal9pRGRKcW1CdmRSLU5BTUE2UmdFUjYwYjlHbVo0VWhBWdIBXEFVX3lxTE1QNE5tWFA0cWJLaEdOa19PbzVFNDQ0ejhuTzdXLUdWVTlaSm9YejZtV0hJb0E5ZkdBeEY5TC1QN2ozOE1YRFhWdjJUMUxGMll2WVpLV0cwcWNFSWZi?oc=5 |  |
 | tax | news1.kr | 세법개정안 관련 입장 밝히는 수도권 주거혁신포럼 - 뉴스1 | https://news.google.com/rss/articles/CBMiS0FVX3lxTE5FS2Q2UHg4NHRralR1ZHplQnVNT01meXpjc3N5TjlwcGgyYWFWQmZCaU5UdzZmYkhkTzdDZ3hwUXZTQnBXamd0WnlvVQ?oc=5 |  |
 | tax | taxwatch.co.kr | "질문은 고쳐주지만 세금계산은 아쉽다"…세무사들이 써본 세법 AI - 택스워치 | https://news.google.com/rss/articles/CBMiY0FVX3lxTE5Zc25UbWgyV2liWlJoeGJHZW96S3NMakJvVl9DVndwUXZocXRNTldqUUg1c3JWMl9rcW1LYjBMWTZYRHFQRGRqZUFVTl94d1g5TGRBUkQ4Nlh6d0U3NnY0ZTN4Yw?oc=5 |  |
 | tax | newspim.com | 野 수도권 의원들 "주거 자유 제한하는 李정부 부동산 세제 개편 수용 불가" - 뉴스핌 | https://news.google.com/rss/articles/CBMiXEFVX3lxTFA3STdKZWkyUHFCU2ktcDMtX1JuVWdjSjhsbFNNZ2RWbDZKNVBsR1owWC1TSUgyRWxneFlLa0JuMEQzOE5LcW5QZDNzS1BuQ1M3Q29FQnpPeWlDdTJL?oc=5 |  |
 | tax | christiandaily.co.kr | 해외선교비 증여세 과세 위기에 대응 방안 모색 - 기독일보 | https://news.google.com/rss/articles/CBMiV0FVX3lxTE5xZkJCTzg2a28zcmN0TGtKWEFWOFcwcF9SbG81UC05dkp0X1pJeDhnRGtTQWdjNFo3MFB5T0FlTkpQTmxReEpjWl9rWHE2ZDNod3BJTE5QY9IBXEFVX3lxTFB4am9MaGNkdGNXWC1kVjBMWXZ0bS11YlR6SDkybi1rd09iWmZCZVBNeW5rSDRvUDhZNlB3ZF9fS0N0R01HZXR3SDYyVXM5QTVJX2hPSE4tR0I2cThp?oc=5 |  |
 | tax | christiantoday.co.kr | [크리스천투데이 영상] 한국교회총연합, ‘선교비 세금폭탄 논란’ 세법 재개정 관련 공청회 : CT YouTube - 크리스천투데이 | https://news.google.com/rss/articles/CBMiV0FVX3lxTE1GVk5OaU93VG5ublAxaEtTSG1KX3FzQUVJSmdGMEpHWFNWakw5OW4yZWJnQkdOdUlUTVVMRDgyLVBfby1ScVZLSWZ4ekkwd1oyNFRvLTJOOA?oc=5 |  |
+| tax | asiae.co.kr | [세법돋보기]가업상속 개편에 與野 제동…가상자산은 추가 논의키로 - 아시아경제 | https://news.google.com/rss/articles/CBMiggFBVV95cUxOUGkzT0doZG9acWxfZTBzMGs1N0J0SEh3eWVSNHJmM0tjc0stODN0TXc2bTl4MHg0MU5pZmZPbGVkZVlMMTRRNEZfbUd5VzB0cWtDNFpiZ29KR0hBSTBaQlREYzNSYWpEZnJ1ODJGaUZwRW83Wlh5cUNzc0lKcEdVNGJR?oc=5 |  |
 | tax | christiantoday.co.kr | “선교비 송금이 탈세냐”… 한교총, ‘과세 위기’에 대응 모색 : 교계교단 - 크리스천투데이 | https://news.google.com/rss/articles/CBMiV0FVX3lxTFA0RDI5TlhkV0Zvd2NnYVRnNlJhVjBaSmZ1SjRwejRHWlNNZ2FtemMycnU1WUwydVpGbXlnYk9sZ2IzSk9pOFNVUE5laWkwbUxwcTRtcEdVcw?oc=5 |  |
 | tax | kmctimes.com | 한교총, “해외선교비 과세 논란 ‘시행령’ 2년 유보 요청” - 기독교 타임즈 | https://news.google.com/rss/articles/CBMiakFVX3lxTE9kZkVCbHFFdlY1bTFhcUJTZ2V6a2FWTXdxZU0xYnpYUjFzb2U3RDFEaXdKc1JSV0JVUkpURGIwM3YtTzM0SUVtcTBxUmpudkV5NTkzbi1aaFJrVi1HMHhfcFA0M3d5OGJUZ0E?oc=5 |  |
 | tax | it.chosun.com | 교보생명 지주전환 늦추나… 세법 개정에 시간 벌수도 - IT조선 | https://news.google.com/rss/articles/CBMicEFVX3lxTE1qcy16Tk5wQlBhNF9NbHc5TF9Gbk0tdGFTbVdWajZIQ3lBaTdlQ2M3LUpjQ1JQa2hVdFhoZ0x1MzdPeEgxRlB5dG9mdk1jVlFQVEx5OWRiRDlGVW1aSWQ1LXJSMzdhV1NjNENPMFpEQmrSAXRBVV95cUxQdEliQTlXb1JZb3FHYXZCMFlIVWxmQjJLXzZyM3BtS2ZXWkRlN0hJRU5jY1F4ZzF6ekNsalFfVEJBakpsc0gxYnBBakFWT2VORVlSZkltQ21jbXNwV3ZJbUFFMFZ1c2tLN05VOUlPZlZJX05meA?oc=5 |  |
@@ -1177,9 +1144,7 @@
 | tax | dream.kotra.or.kr | 모로코, 2027년 재정법안 발표, 수입 선납금 도입 등 세제 개편 추진 | http://dream.kotra.or.kr/kotranews/cms/news/actionKotraBoardDetail.do?SITE_NO=3&MENU_ID=80&CONTENTS_NO=2&bbsGbn=242&bbsSn=242&pNttSn=245194 |  |
 | tax | newsnjoy.or.kr | "법 지키고 싶은데 방법 모르겠다"…개정 세법 앞 해외 선교 현장 고민... | https://www.newsnjoy.or.kr/news/articleView.html?idxno=400920 |  |
 | tax | goodnews1.com | 개정세법 시행 9개월째…해외 선교비 집행 여전히 난항 | https://www.goodnews1.com/news/articleView.html?idxno=466437 |  |
-| tax | 조세일보 | 세법개정, 소득재분배 효과…부동산은 복잡 [토론회] | http://www.joseilbo.com/news/news_read.php?uid=579256&class=7&grp= |  |
 | tax | thepublic.kr | [집중분석]민주당도 우려한 부동산 세제개편…장특공제‧종부세등 '도마... | https://www.thepublic.kr/news/articleView.html?idxno=328668 |  |
-| tax | 머니투데이 | 비거주·초고가, 종부세 부담 커지나…세제개편안 '줄다리기' | https://www.mt.co.kr/economy/2026/11/27/2026112614575979979 |  |
 | tax | 조세일보 | 채권최고액, 순자산가액 부채로 볼 수 있을까 [국세 유권해석] | http://www.joseilbo.com/news/news_read.php?uid=575604&class=7&grp= |  |
 | tax | 조세일보 | 父 먼저 살던 임대주택에 자녀 전입…특례 기간은? [국세 유권해석] | http://www.joseilbo.com/news/news_read.php?uid=575258&class=7&grp= |  |
 | tax | tfmedia.co.kr | [신간] 정종채 변호사, 26년 조세현장 경험 담은 《조세법 대계》 펴내 | https://www.tfmedia.co.kr/news/article.html?no=206845 |  |

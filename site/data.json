@@ -1,14 +1,14 @@
 {
   "meta": {
     "schema_version": "1.0",
-    "generated_at": "2026-11-27T12:49:52+09:00",
+    "generated_at": "2026-11-27T14:43:20+09:00",
     "window_days": 90,
-    "total_items": 137,
+    "total_items": 183,
     "counts_by_category": {
-      "kifrs": 71,
-      "tax": 31,
+      "kifrs": 127,
+      "tax": 29,
       "icfr": 19,
-      "esg": 16
+      "esg": 8
     },
     "sources_ok": [
       "kasb",
@@ -24,8 +24,8 @@
     ],
     "sources_failed": [],
     "google_decode_stats": {
-      "attempted": 18,
-      "success": 18,
+      "attempted": 10,
+      "success": 10,
       "reused": 0,
       "unresolved": 0
     }
@@ -69,7 +69,7 @@
       ],
       "impact": "해당 적음: 1119호는 비상장 종속기업 선택기준(미도입 제안), 1028호는 투자기구 경유 관계기업 투자 대상",
       "published_at": "2026-11-06",
-      "collected_at": "2026-11-27T12:46:17+09:00",
+      "collected_at": "2026-11-27T14:40:25+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -120,7 +120,7 @@
       ],
       "impact": "공장부지 등 토지 보유 시 재무제표 주석에 공시지가 공시 의무가 신설될 수 있어 공개초안 발표 시 확인 필요",
       "published_at": "2026-09-04",
-      "collected_at": "2026-11-27T12:46:24+09:00",
+      "collected_at": "2026-11-27T14:40:32+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -171,7 +171,7 @@
       ],
       "impact": null,
       "published_at": "2018-11-14",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -227,7 +227,7 @@
       ],
       "impact": "연결 실체인 당사는 평가범위에 포함할 종속회사 선정 시 이 가이드라인 기준 확인 필요",
       "published_at": "2024-06-05",
-      "collected_at": "2026-11-27T12:46:52+09:00",
+      "collected_at": "2026-11-27T14:40:58+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -277,7 +277,7 @@
       ],
       "impact": null,
       "published_at": "2026-11-26",
-      "collected_at": "2026-11-27T12:47:29+09:00",
+      "collected_at": "2026-11-27T14:41:36+09:00",
       "effective_date": null,
       "source": {
         "name": "금융위원회",
@@ -333,7 +333,7 @@
       ],
       "impact": null,
       "published_at": "2026-11-25",
-      "collected_at": "2026-11-27T12:47:11+09:00",
+      "collected_at": "2026-11-27T14:41:15+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -390,7 +390,7 @@
       ],
       "impact": "2026.01.01 시행 임박 — 금융상품·연결재무제표 공시 관련 조항 세부 확인 필요",
       "published_at": "2024-11-22",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -444,7 +444,7 @@
       ],
       "impact": null,
       "published_at": "2026-02-27",
-      "collected_at": "2026-11-27T12:48:23+09:00",
+      "collected_at": "2026-11-27T14:42:12+09:00",
       "effective_date": "2026-02-27",
       "source": {
         "name": "재정경제부",
@@ -499,7 +499,7 @@
       ],
       "impact": null,
       "published_at": "2026-03-20",
-      "collected_at": "2026-11-27T12:48:23+09:00",
+      "collected_at": "2026-11-27T14:42:12+09:00",
       "effective_date": "2026-03-20",
       "source": {
         "name": "재정경제부",
@@ -555,7 +555,7 @@
       ],
       "impact": null,
       "published_at": "2016-05-27",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2017-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -605,11 +605,12 @@
       "stage": "참고",
       "title": "K-IFRS 제1118호 영향 관련 사전 주석공시 모범사례",
       "summary": [
-        "첨부파일 1건"
+        "금감원이 K-IFRS 제1118호 적용 전 사전 주석공시 예시를 제시(참고용, 모든 공시사항 아님)",
+        "손익 5범주·경영진 정의 성과측정치·현금흐름 분류 변경과 예비·구체 영향분석 기재례 수록"
       ],
-      "impact": null,
+      "impact": "2027.1.1 이후 개시 연도 적용 전 연결·별도 주석에 영향평가와 성과측정치 해당 여부 기재 준비",
       "published_at": "2026-04-15",
-      "collected_at": "2026-11-27T12:47:15+09:00",
+      "collected_at": "2026-11-27T14:41:19+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -642,7 +643,7 @@
       "duplicate_sources": [],
       "related_news": [],
       "is_meeting_schedule": false,
-      "ai_generated": false,
+      "ai_generated": true,
       "revision_reason": null,
       "is_roadmap_estimate": false,
       "effective_date_note": null,
@@ -663,7 +664,7 @@
       ],
       "impact": null,
       "published_at": "2018-01-16",
-      "collected_at": "2026-11-27T12:47:15+09:00",
+      "collected_at": "2026-11-27T14:41:19+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -715,7 +716,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -762,7 +763,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-19",
-      "collected_at": "2026-11-27T12:46:14+09:00",
+      "collected_at": "2026-11-27T14:40:23+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -810,7 +811,7 @@
       ],
       "impact": null,
       "published_at": "2023-12-22",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -864,7 +865,7 @@
       ],
       "impact": null,
       "published_at": "2020-09-11",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -917,7 +918,7 @@
       ],
       "impact": null,
       "published_at": "2018-04-27",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -970,7 +971,7 @@
       ],
       "impact": null,
       "published_at": "2015-02-27",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -1023,7 +1024,7 @@
       ],
       "impact": "해외 자회사 거래가 있다면 경정청구 서류 강화분 확인, 필라2는 연결매출 7.5억유로 이상 그룹 대상이라 해당 여부 별도 확인 필요",
       "published_at": "2025-12-23",
-      "collected_at": "2026-11-27T12:48:23+09:00",
+      "collected_at": "2026-11-27T14:42:12+09:00",
       "effective_date": "2026-01-02",
       "source": {
         "name": "재정경제부",
@@ -1075,7 +1076,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-02",
-      "collected_at": "2026-11-27T12:48:37+09:00",
+      "collected_at": "2026-11-27T14:42:24+09:00",
       "effective_date": "2026-06-02",
       "source": {
         "name": "행정안전부",
@@ -1130,7 +1131,7 @@
       ],
       "impact": null,
       "published_at": "2026-09-09",
-      "collected_at": "2026-11-27T12:49:01+09:00",
+      "collected_at": "2026-11-27T14:42:45+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
@@ -1179,7 +1180,7 @@
       ],
       "impact": "'25년부터 지침이 아닌 공식 기준으로 의무화됐으므로 최신 FAQ 기준 평가·보고 실무 재점검 필요",
       "published_at": "2025-12-23",
-      "collected_at": "2026-11-27T12:46:34+09:00",
+      "collected_at": "2026-11-27T14:40:40+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -1228,7 +1229,7 @@
       ],
       "impact": "자금부정 통제 공시 유예가 2025사업연도로 종료 — 2026사업연도부터 당사도 관련 공시 준비 필요",
       "published_at": "2025-01-02",
-      "collected_at": "2026-11-27T12:46:43+09:00",
+      "collected_at": "2026-11-27T14:40:49+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "금융감독원",
@@ -1277,7 +1278,7 @@
       ],
       "impact": null,
       "published_at": "2024-06-05",
-      "collected_at": "2026-11-27T12:46:57+09:00",
+      "collected_at": "2026-11-27T14:41:02+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "금융감독원",
@@ -1323,7 +1324,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -1369,7 +1370,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-05-11",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -1415,7 +1416,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-05-11",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -1461,7 +1462,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-02-07",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -1507,7 +1508,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2022-02-07",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -1553,7 +1554,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -1599,7 +1600,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2021-10-01",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -1648,7 +1649,7 @@
       ],
       "impact": "준비할 것 없음: 증선위 고발·통보 상대 기관 명칭만 바뀌고 회사 의무·감사 절차는 그대로",
       "published_at": "2026-09-18",
-      "collected_at": "2026-11-27T12:47:40+09:00",
+      "collected_at": "2026-11-27T14:41:43+09:00",
       "effective_date": null,
       "source": {
         "name": "금융위원회",
@@ -1738,7 +1739,7 @@
       ],
       "impact": "일반 제조법인도 세율 인상 대상 — 2026.07.01 개시 사업연도부터 법인세 부담 증가 반영 필요",
       "published_at": "2025-12-23",
-      "collected_at": "2026-11-27T12:48:26+09:00",
+      "collected_at": "2026-11-27T14:42:15+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "재정경제부",
@@ -1794,7 +1795,7 @@
       ],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-27T12:48:26+09:00",
+      "collected_at": "2026-11-27T14:42:15+09:00",
       "effective_date": "2026-10-01",
       "source": {
         "name": "재정경제부",
@@ -1851,7 +1852,7 @@
       ],
       "impact": "당사는 비중소기업이라 스마트공장·리츠 조항은 대체로 무관 — 온누리상품권 기업업무추진비 지출 시엔 손금 처리 기준 변경 확인 필요",
       "published_at": "2026-07-01",
-      "collected_at": "2026-11-27T12:48:26+09:00",
+      "collected_at": "2026-11-27T14:42:15+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "재정경제부",
@@ -1905,7 +1906,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2025-10-01",
-      "collected_at": "2026-11-27T12:48:27+09:00",
+      "collected_at": "2026-11-27T14:42:16+09:00",
       "effective_date": "2026-01-02",
       "source": {
         "name": "재정경제부",
@@ -1960,7 +1961,7 @@
       ],
       "impact": null,
       "published_at": "2026-02-27",
-      "collected_at": "2026-11-27T12:48:27+09:00",
+      "collected_at": "2026-11-27T14:42:16+09:00",
       "effective_date": "2026-04-01",
       "source": {
         "name": "재정경제부",
@@ -2016,7 +2017,7 @@
       ],
       "impact": null,
       "published_at": "2026-03-20",
-      "collected_at": "2026-11-27T12:48:27+09:00",
+      "collected_at": "2026-11-27T14:42:16+09:00",
       "effective_date": "2026-04-01",
       "source": {
         "name": "재정경제부",
@@ -2073,7 +2074,7 @@
       ],
       "impact": null,
       "published_at": "2026-08-18",
-      "collected_at": "2026-11-27T12:48:31+09:00",
+      "collected_at": "2026-11-27T14:42:20+09:00",
       "effective_date": "2026-09-18",
       "source": {
         "name": "재정경제부,행정안전부",
@@ -2128,7 +2129,7 @@
       ],
       "impact": null,
       "published_at": "2026-08-31",
-      "collected_at": "2026-11-27T12:48:31+09:00",
+      "collected_at": "2026-11-27T14:42:20+09:00",
       "effective_date": "2026-09-18",
       "source": {
         "name": "재정경제부,행정안전부",
@@ -2178,12 +2179,12 @@
       "stage": "참고",
       "title": "KSSB 공시기준서 제1호 일반 요구사항",
       "summary": [
-        "2028.01.01(FY2027) 연결자산 10조원 이상 코스피 상장사부터 사업보고서 법정공시 의무화 —…",
-        "2030년 제3자 인증 의무화, 도입 초기 3년 제재 면제(고의적 그린워싱은 제외)"
+        "KSSB가 지속가능성 공시기준서 제1호 일반 요구사항을 2026.2.26 제정·공표(자발적용 가능)",
+        "거버넌스·전략·위험관리·지표 공시, 보고기업은 재무제표와 동일하며 재무제표와 동시 보고"
       ],
-      "impact": "당사는 1차 적용 대상은 아니나, 모회사 연결 공시 대응 필요(금융위 로드맵 예정 기준)",
+      "impact": "의무 시행일은 관련 법령에서 정함(원문 미기재). 공표일 속한 회계연도부터 자발 적용 가능",
       "published_at": "2026-02-26",
-      "collected_at": "2026-11-27T12:46:29+09:00",
+      "collected_at": "2026-11-27T14:40:36+09:00",
       "effective_date": "2028-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2219,7 +2220,7 @@
       "duplicate_sources": [],
       "related_news": [],
       "is_meeting_schedule": false,
-      "ai_generated": false,
+      "ai_generated": true,
       "revision_reason": null,
       "is_roadmap_estimate": true,
       "effective_date_note": null,
@@ -2236,12 +2237,12 @@
       "stage": "참고",
       "title": "KSSB 공시기준서 제2호 기후 관련 공시",
       "summary": [
-        "2028.01.01(FY2027) 연결자산 10조원 이상 코스피 상장사부터 사업보고서 법정공시 의무화 —…",
-        "2030년 제3자 인증 의무화, 도입 초기 3년 제재 면제(고의적 그린워싱은 제외)"
+        "KSSB가 지속가능성 공시기준서 제2호 기후 관련 공시를 2026.2.26 제정·공표(자발적용 가능)",
+        "기후 위험·기회, 시나리오 분석, 스코프 1·2·3 온실가스 배출량 등 산업전반 지표 공시 요구"
       ],
-      "impact": "당사는 1차 적용 대상은 아니나, 모회사 연결 공시 대응 필요(금융위 로드맵 예정 기준)",
+      "impact": "의무 시행일은 관련 법령에서 정함(원문 미기재). 최초 적용 후 3년간 스코프 3 공시 유예 가능",
       "published_at": "2026-02-26",
-      "collected_at": "2026-11-27T12:46:30+09:00",
+      "collected_at": "2026-11-27T14:40:38+09:00",
       "effective_date": "2028-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2277,7 +2278,7 @@
       "duplicate_sources": [],
       "related_news": [],
       "is_meeting_schedule": false,
-      "ai_generated": false,
+      "ai_generated": true,
       "revision_reason": null,
       "is_roadmap_estimate": true,
       "effective_date_note": null,
@@ -2299,7 +2300,7 @@
       ],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-27T12:46:12+09:00",
+      "collected_at": "2026-11-27T14:40:20+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -2347,7 +2348,7 @@
       ],
       "impact": "해외 종속·관계기업과의 그룹내 대여금 외환차이 표시범주에 대한 회계정책 선택·문서화 필요",
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-27T12:46:12+09:00",
+      "collected_at": "2026-11-27T14:40:20+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -2395,7 +2396,7 @@
       ],
       "impact": "2027년 시행 전 손익계산서 신규 구분표시 및 주석 병기 준비 필요, 조기적용 여부 확인 필요",
       "published_at": "2025-11-21",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2027-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2452,7 +2453,7 @@
       ],
       "impact": null,
       "published_at": "2023-10-13",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2505,7 +2506,7 @@
       ],
       "impact": "차입약정(코베넌트)이 있는 대출이 있다면 비유동부채 분류·상환위험 주석공시 기준 매 보고기간 재확인 필요",
       "published_at": "2023-03-17",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2558,7 +2559,7 @@
       ],
       "impact": null,
       "published_at": "2022-12-02",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2611,7 +2612,7 @@
       ],
       "impact": null,
       "published_at": "2021-09-10",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2664,7 +2665,7 @@
       ],
       "impact": null,
       "published_at": "2020-10-16",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2717,7 +2718,7 @@
       ],
       "impact": null,
       "published_at": "2020-04-24",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2769,7 +2770,7 @@
       ],
       "impact": null,
       "published_at": "2019-04-19",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2822,7 +2823,7 @@
       ],
       "impact": null,
       "published_at": "2015-05-26",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2879,7 +2880,7 @@
       ],
       "impact": null,
       "published_at": "2015-05-08",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -2952,7 +2953,7 @@
       ],
       "impact": null,
       "published_at": "2015-02-06",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2016-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3004,7 +3005,7 @@
       ],
       "impact": null,
       "published_at": "2026-10-13",
-      "collected_at": "2026-11-27T12:47:11+09:00",
+      "collected_at": "2026-11-27T14:41:15+09:00",
       "effective_date": null,
       "source": {
         "name": "금융감독원",
@@ -3057,6 +3058,58 @@
       "first_seen_at": "2026-11-15"
     },
     {
+      "id": "d0336b6a2d5987fb",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "관계기업투자 지분법 회계처리 오류 (FSS/2512-04)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-12-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 20,
+      "final_score": 61.0,
+      "matched_keywords": [
+        "회계처리"
+      ],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=207876&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2512_04.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=79ea0ea3cac0427b8b197cd415927151&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-01"
+    },
+    {
       "id": "cd682e391cdcb6b2",
       "category": "tax",
       "doc_type": "해설·교육자료",
@@ -3068,7 +3121,7 @@
       ],
       "impact": "2026.1.1 이후 개시 사업연도부터 법인세율 1%p 인상 — 중간예납·이연법인세 세율 반영 확인 필요",
       "published_at": "2026-04-15",
-      "collected_at": "2026-11-27T12:47:24+09:00",
+      "collected_at": "2026-11-27T14:41:33+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -3116,7 +3169,7 @@
       ],
       "impact": null,
       "published_at": "2025-04-14",
-      "collected_at": "2026-11-27T12:47:24+09:00",
+      "collected_at": "2026-11-27T14:41:33+09:00",
       "effective_date": null,
       "source": {
         "name": "국세청",
@@ -3164,7 +3217,7 @@
       ],
       "impact": "법인세와는 무관하나 원천징수의무자로서 출산·육아 비과세 급여 한도 등 급여 실무 반영 필요",
       "published_at": "2025-12-23",
-      "collected_at": "2026-11-27T12:48:30+09:00",
+      "collected_at": "2026-11-27T14:42:19+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "재정경제부",
@@ -3219,7 +3272,7 @@
       ],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-27T12:48:30+09:00",
+      "collected_at": "2026-11-27T14:42:19+09:00",
       "effective_date": "2026-10-01",
       "source": {
         "name": "재정경제부",
@@ -3274,7 +3327,7 @@
       ],
       "impact": "퇴직소득 원천징수의무자로서 정산 서식 변경 확인 필요(경미)",
       "published_at": "2026-05-22",
-      "collected_at": "2026-11-27T12:48:30+09:00",
+      "collected_at": "2026-11-27T14:42:19+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "재정경제부",
@@ -3330,7 +3383,7 @@
       ],
       "impact": "법인지방소득세율 인상 대상 — 법인세율 인상분과 함께 2026.01.01부터 세부담 증가 반영 필요",
       "published_at": "2025-12-31",
-      "collected_at": "2026-11-27T12:48:34+09:00",
+      "collected_at": "2026-11-27T14:42:21+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "행정안전부",
@@ -3386,7 +3439,7 @@
       ],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-27T12:48:34+09:00",
+      "collected_at": "2026-11-27T14:42:21+09:00",
       "effective_date": "2026-10-01",
       "source": {
         "name": "행정안전부",
@@ -3443,7 +3496,7 @@
       ],
       "impact": "영향 불분명 — 사업장에 태양에너지 설비가 있을 때만 2026.7.1 이후 사업소분 연면적 산정에 반영",
       "published_at": "2026-06-15",
-      "collected_at": "2026-11-27T12:48:34+09:00",
+      "collected_at": "2026-11-27T14:42:21+09:00",
       "effective_date": "2026-07-01",
       "source": {
         "name": "행정안전부",
@@ -3500,7 +3553,7 @@
       ],
       "impact": "영향 불분명 — 직원 노조비 세액공제가 있으면 연말정산 시 요건 완화분 반영 여부만 확인",
       "published_at": "2026-11-03",
-      "collected_at": "2026-11-27T12:48:47+09:00",
+      "collected_at": "2026-11-27T14:42:33+09:00",
       "effective_date": null,
       "source": {
         "name": "재정경제부",
@@ -3551,7 +3604,7 @@
       ],
       "impact": "확정 시 2027.1.1부터 주민세 사업소분 납부 방식 변경 — 사업장 부속토지 별도합산 해당 여부도 점검",
       "published_at": "2026-11-05",
-      "collected_at": "2026-11-27T12:48:56+09:00",
+      "collected_at": "2026-11-27T14:42:41+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
@@ -3603,7 +3656,7 @@
       ],
       "impact": "확정 시 2027.1.1부터 주민세 종업원분 신고서 서식 변경 — 신고 시 과세제외급여액 작성 반영",
       "published_at": "2026-11-05",
-      "collected_at": "2026-11-27T12:48:56+09:00",
+      "collected_at": "2026-11-27T14:42:41+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
@@ -3654,7 +3707,7 @@
       ],
       "impact": "확정 시 주민세 사업소분이 신고납부에서 고지 방식으로 바뀌고, 보유 토지 용도·면적 변경 시 신고 필요",
       "published_at": "2026-09-09",
-      "collected_at": "2026-11-27T12:48:56+09:00",
+      "collected_at": "2026-11-27T14:42:41+09:00",
       "effective_date": null,
       "source": {
         "name": "행정안전부",
@@ -3701,7 +3754,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-26",
-      "collected_at": "2026-11-27T12:46:07+09:00",
+      "collected_at": "2026-11-27T14:40:16+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3749,7 +3802,7 @@
       ],
       "impact": null,
       "published_at": "2026-10-22",
-      "collected_at": "2026-11-27T12:46:20+09:00",
+      "collected_at": "2026-11-27T14:40:29+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3797,7 +3850,7 @@
       ],
       "impact": null,
       "published_at": "2026-09-17",
-      "collected_at": "2026-11-27T12:46:22+09:00",
+      "collected_at": "2026-11-27T14:40:30+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3842,7 +3895,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-16",
-      "collected_at": "2026-11-27T12:46:08+09:00",
+      "collected_at": "2026-11-27T14:40:17+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -3888,7 +3941,7 @@
       ],
       "impact": "펌뱅킹·전자어음 등으로 매입채무를 결제하고 있다면 결제 인식 시점 재점검 필요 — 2026 회계연도부터 적용 준비",
       "published_at": "2024-11-22",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3941,7 +3994,7 @@
       ],
       "impact": "기준서에 명시 규정이 없는 비경상적 거래를 회계처리할 때 참조하는 상위 개념체계가 바뀌었으므로, 그런 판단이 필요할 때 새 개념체계 기준으로 재검토",
       "published_at": "2018-12-21",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -3994,7 +4047,7 @@
       ],
       "impact": null,
       "published_at": "2018-10-16",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4047,7 +4100,7 @@
       ],
       "impact": "확정급여형(DB) 퇴직연금을 운영 중이면 조기퇴직·희망퇴직 프로그램 등 제도 변경 시 재측정 손익 인식 시점·방법을 이 기준으로 재점검",
       "published_at": "2018-05-25",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4100,7 +4153,7 @@
       ],
       "impact": null,
       "published_at": "2026-03-17",
-      "collected_at": "2026-11-27T12:48:31+09:00",
+      "collected_at": "2026-11-27T14:42:20+09:00",
       "effective_date": "2026-09-18",
       "source": {
         "name": "재정경제부,행정안전부",
@@ -4151,7 +4204,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-27",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -4196,7 +4249,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2018-06-01",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -4241,7 +4294,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2012-12-01",
-      "collected_at": "2026-11-27T12:47:04+09:00",
+      "collected_at": "2026-11-27T14:41:09+09:00",
       "effective_date": null,
       "source": {
         "name": "내부회계관리제도운영위원회",
@@ -4290,7 +4343,7 @@
       ],
       "impact": "1118호 시행(2027) 대비 외화미지급금 환차이·파생상품 손익 범주 판단 시 참고(TF 논의로 확정 해석 아님)",
       "published_at": "2026-10-16",
-      "collected_at": "2026-11-27T12:46:09+09:00",
+      "collected_at": "2026-11-27T14:40:18+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -4337,7 +4390,7 @@
       ],
       "impact": "1118호 시행(2027) 대비 예상거래 환헤지 파생상품의 위험관리 문서화와 팩토링 손익 범주 분류 점검 필요",
       "published_at": "2026-08-18",
-      "collected_at": "2026-11-27T12:46:10+09:00",
+      "collected_at": "2026-11-27T14:40:19+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -4380,7 +4433,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-07-16",
-      "collected_at": "2026-11-27T12:46:12+09:00",
+      "collected_at": "2026-11-27T14:40:20+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -4423,7 +4476,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-06-16",
-      "collected_at": "2026-11-27T12:46:12+09:00",
+      "collected_at": "2026-11-27T14:40:20+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -4466,7 +4519,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-05-15",
-      "collected_at": "2026-11-27T12:46:12+09:00",
+      "collected_at": "2026-11-27T14:40:20+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -4512,7 +4565,7 @@
       ],
       "impact": null,
       "published_at": "2026-09-30",
-      "collected_at": "2026-11-27T12:46:12+09:00",
+      "collected_at": "2026-11-27T14:40:20+09:00",
       "effective_date": null,
       "source": {
         "name": "한국회계기준원",
@@ -4558,7 +4611,7 @@
       ],
       "impact": "2026 회계연도(12월 결산)부터 적용 — 결산 전 개정내용 상세 검토 필요",
       "published_at": "2026-09-04",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2026-12-31",
       "source": {
         "name": "한국회계기준원",
@@ -4609,7 +4662,7 @@
       ],
       "impact": "RE100 이행 등으로 재생에너지 PPA를 체결·검토 중이라면 해당 계약이 파생상품 평가 대상인지 판단 기준이 바뀌므로 계약조건 재검토 필요",
       "published_at": "2025-10-17",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4660,7 +4713,7 @@
       ],
       "impact": "매입채무 조기지급을 위해 금융회사가 개입하는 공급망금융(역팩토링) 약정을 이용 중이면 관련 금액·조건을 주석에 추가 공시해야 함",
       "published_at": "2023-10-27",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4711,7 +4764,7 @@
       ],
       "impact": "LG화학 등 소속 기업집단이 필라2 글로벌최저한세 적용대상(연결매출 7.5억유로 이상)이면, 당사도 연결정보 취합을 위한 익스포저·법인세비용 구분자료 준비 필요",
       "published_at": "2023-09-15",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4762,7 +4815,7 @@
       ],
       "impact": "필라2 적용대상 기업집단 소속이면, 관련 이연법인세를 인식하지 않는 이 예외규정의 적용 여부와 공시 문구를 재무제표에 반영해야 함",
       "published_at": "2023-09-15",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2023-12-13",
       "source": {
         "name": "한국회계기준원",
@@ -4813,7 +4866,7 @@
       ],
       "impact": "공장·설비를 매각 후 재리스(sale-and-leaseback)하는 거래를 검토·보유 중이면 변동리스료 조건의 회계처리 방식을 재점검 필요",
       "published_at": "2023-05-12",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4864,7 +4917,7 @@
       ],
       "impact": "제조설비 리스 계약이나 공장부지 복구충당부채를 계상하고 있다면, 관련 이연법인세자산·부채를 새로 인식해야 하는지 재점검 필요",
       "published_at": "2021-10-15",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2023-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4915,7 +4968,7 @@
       ],
       "impact": "재고자산 진부화충당금, 대손충당금 등 추정치를 매기 재산정할 때 '회계정책 변경'이 아닌 '추정치 변경'으로 구분해 주석에 표기해야 함",
       "published_at": "2021-09-10",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2026-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -4966,7 +5019,7 @@
       ],
       "impact": null,
       "published_at": "2021-04-01",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2021-04-01",
       "source": {
         "name": "한국회계기준원",
@@ -5017,7 +5070,7 @@
       ],
       "impact": null,
       "published_at": "2020-12-18",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2021-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5068,7 +5121,7 @@
       ],
       "impact": "M&A나 사업양수도를 검토 중이면 인수자산·부채 인식기준이 새 개념체계를 따르게 됨을 반영 필요(진행 중인 거래가 없으면 해당사항 없음)",
       "published_at": "2020-09-25",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5119,7 +5172,7 @@
       ],
       "impact": "신규 생산설비 시운전 단계에서 생산된 제품(시생산 농약·비료 등)을 판매하는 경우, 매각대금을 설비 취득원가에서 차감하지 말고 당기손익으로 처리해야 함",
       "published_at": "2020-09-25",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5170,7 +5223,7 @@
       ],
       "impact": "수주·장기공급계약 중 손실이 예상되는 계약이 있다면, 충당부채 산정 시 포함할 원가 범위(증분원가뿐 아니라 배분원가도 포함)를 재점검 필요",
       "published_at": "2020-09-25",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2022-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5221,7 +5274,7 @@
       ],
       "impact": null,
       "published_at": "2020-05-29",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2020-06-01",
       "source": {
         "name": "한국회계기준원",
@@ -5272,7 +5325,7 @@
       ],
       "impact": null,
       "published_at": "2019-12-20",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5323,7 +5376,7 @@
       ],
       "impact": "타사 지분·사업부 인수(M&A)를 추진할 경우 영업권 인식 여부를 좌우하는 사업결합 판단기준이 바뀌었으므로 인수 검토 시 반영 필요(진행 거래 없으면 해당사항 없음)",
       "published_at": "2019-04-19",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2020-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5374,7 +5427,7 @@
       ],
       "impact": null,
       "published_at": "2018-02-28",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5425,7 +5478,7 @@
       ],
       "impact": "관계기업·공동기업에 지분법 비적용 우선주·장기대여금 형태로 투자 중이면 손상평가를 제1109호 기대신용손실모형으로 전환해야 하는지 점검(해당 투자 없으면 해당사항 없음)",
       "published_at": "2018-01-26",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5476,7 +5529,7 @@
       ],
       "impact": "이전가격·손금인정 여부 등 세무상 다툼 소지가 있는 처리가 있다면, 관련 불확실한 법인세 부채·자산 인식 시 이 해석서 기준으로 판단해야 함",
       "published_at": "2017-12-15",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5527,7 +5580,7 @@
       ],
       "impact": "이미 2019년부터 시행되어 현재 재무제표에 반영 완료된 사항 — 신규 대규모 운용리스(공장·설비 임차 등) 체결 시에만 최초 인식 기준을 계속 참고",
       "published_at": "2017-05-22",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2019-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5578,7 +5631,7 @@
       ],
       "impact": null,
       "published_at": "2017-04-21",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5629,7 +5682,7 @@
       ],
       "impact": "원자재 선수입 대금을 선지급하거나 수출대금을 선수령하는 거래가 있다면 취득원가·수익 인식 시 적용할 환율 기준일을 재확인 필요",
       "published_at": "2017-02-24",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5680,7 +5733,7 @@
       ],
       "impact": "임직원에게 스톡옵션 등 주식기준보상을 부여하고 있다면 결제방식 변경이나 순액결제 조건의 분류 기준을 재확인 필요(제도가 없으면 해당사항 없음)",
       "published_at": "2016-11-15",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5731,7 +5784,7 @@
       ],
       "impact": "작물보호제·종자 관련 기술이전·품목허가 라이선스가 결합된 판매계약이 있다면 수행의무 구분과 수익인식 시점을 이 기준으로 재점검 필요",
       "published_at": "2016-11-15",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5782,7 +5835,7 @@
       ],
       "impact": "FVOCI로 분류한 채권 등 채무상품에서 평가손실이 발생했다면 관련 이연법인세자산 인식 여부를 재점검(해당 금융상품이 없으면 해당사항 없음)",
       "published_at": "2016-11-15",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2017-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5833,7 +5886,7 @@
       ],
       "impact": "이미 2018년부터 시행되어 현재 수익인식 회계처리에 반영 완료된 사항 — 번들판매·리베이트·반품권 등 신규 판매계약 유형 도입 시에만 5단계모형 적용을 재점검",
       "published_at": "2015-11-06",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5884,7 +5937,7 @@
       ],
       "impact": "이미 2018년부터 시행되어 현재 재무제표에 반영 완료된 사항 — 매출채권 대손충당금을 기대신용손실모형으로 산정하고 있는지만 주기적으로 재확인",
       "published_at": "2015-09-25",
-      "collected_at": "2026-11-27T12:46:27+09:00",
+      "collected_at": "2026-11-27T14:40:35+09:00",
       "effective_date": "2018-01-01",
       "source": {
         "name": "한국회계기준원",
@@ -5924,6 +5977,2756 @@
       "first_seen_at": "2026-08-31"
     },
     {
+      "id": "c56e01400b181403",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "특수관계자로부터 제공받은 담보 미공시 (FSS/2606-10)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2026-06-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=218922&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2606_10.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=1267959f0ff7472ea86543189672c7dc&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-01"
+    },
+    {
+      "id": "a29309b04e34efd5",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "투자자간 약정 주석 미기재 (FSS/2606-09)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2026-06-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=218920&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2606_09.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=2c1e5e4ba9af43c7b8d8dcae20f3ab0e&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-01"
+    },
+    {
+      "id": "ad9f613f3be21e85",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "사업결합 관련 무형자산 과소계상 (FSS/2606-08)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2026-06-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=218919&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2606_08.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=594f08cbe5da42ed94d990296b262749&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-01"
+    },
+    {
+      "id": "e02786a8e7f6ca7d",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "전환사채의 부채 및 자본요소간 금액 배분 오류 (FSS/2606-07)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2026-06-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=218918&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2606_07.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=14b63a07bc104e179f0febe818f12e22&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-01"
+    },
+    {
+      "id": "d3148325fa7c5855",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "실사주 횡령 관련 자기자본 과대계상 (FSS/2606-06)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2026-06-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=218917&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2606_06.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=f91f9f14e18742faaf5fa555f80a5195&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-01"
+    },
+    {
+      "id": "95613d5c62433bf6",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "공동기업투자주식 지분법 평가 오류 (FSS/2606-05)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2026-06-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=218916&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2606_05.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=06113ff31dce4715a7dbc23a9a83da84&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-01"
+    },
+    {
+      "id": "3cf4bad4801d036d",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "관계기업투자주식 지분법 오류 (FSS/2606-04)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2026-06-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=218915&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2606_04.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=b38eb0b211e647bdb20709618aa52fb4&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-01"
+    },
+    {
+      "id": "7aababe0453df096",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "유상사급 관련 매출 및 매출원가 과대계상 (FSS/2606-03)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2026-06-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=218905&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2606_03.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=9bc5ddfe897947c799af90796c611307&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-01"
+    },
+    {
+      "id": "9a24d8115c787f6c",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "도급공사 진행률 산정 오류 (FSS/2606-02)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2026-06-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=218904&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2606_02.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=f5bb5460de214930aef9c8453ad42600&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-01"
+    },
+    {
+      "id": "bb96e7c63d250ba6",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "영업수익 및 영업비용 과대계상 (FSS/2606-01)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2026-06-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=218902&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2606_01.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=1b1d1b6fb89a44d2a7e510319bc4a9a6&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2026-06-01"
+    },
+    {
+      "id": "33b9c640481b67a6",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "금융자산·부채 과대계상 (FSS/2512-10)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-12-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=207883&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2512_10.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=e478b8ae48124a60bb6fcecb186623ed&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-01"
+    },
+    {
+      "id": "32155128a10306c4",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "개발비 등 과대계상 (FSS/2512-09)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-12-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=207882&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2512_09.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=1400c4236fc34343aa8f704bb0fc03d0&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-01"
+    },
+    {
+      "id": "c161695e95a933e2",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "유형자산 등 손상차손 미인식 (FSS/2512-08)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-12-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=207880&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2512_08.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=ecc58c0531f04c09b2d4eb72fc11b071&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-01"
+    },
+    {
+      "id": "9afb06054fb87bfd",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "재고자산 평가충당금 과소계상 등 (FSS/2512-07)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-12-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=207879&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2512_07.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=16df1020eb994effa052ef60d5a6429e&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-01"
+    },
+    {
+      "id": "492b31ac42183ad0",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "재고자산 과대계상 (FSS/2512-06)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-12-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=207878&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2512_06.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=64c8e434fa374ad8ae0e74de558c53fc&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-01"
+    },
+    {
+      "id": "f75c3d8aadb432f5",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "관계기업투자주식 지분법 평가 오류 (FSS/2512-05)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-12-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=207877&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2512_05.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=0586db793f9d4caf98d691a03cc27fa2&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-01"
+    },
+    {
+      "id": "d3d8f32da31fedce",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "관계기업투자주식 미분류 (FSS/2512-03)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-12-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=207875&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2512_03.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=d2e02031c766499ea8e201eb89b944fb&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-01"
+    },
+    {
+      "id": "08d2a88984319e6b",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "종속기업의 라이선스 수익 인식 오류 (FSS/2512-02)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-12-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=207874&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2512_02.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=71345992417e426685377d0b92d4875f&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-01"
+    },
+    {
+      "id": "ab5fb2adaf3fff32",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "매출 및 매출원가 허위계상 (FSS/2512-01)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-12-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=207873&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2512_01.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=ecc10d43a9104608932e10839dbe7c2e&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-12-01"
+    },
+    {
+      "id": "89400b0ba9c7ce8b",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "종속기업투자주식 및 부동산 담보제공사실 주석 미기재 (FSS/2505-14)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194382&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_14.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=cd2928770fab4464aadc005744a329b4&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "4ff563dbf0739872",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "특수관계자 거래 주석 미기재 (FSS/2505-13)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194381&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_13.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=d8c50e1a77114abca3e717ae058da87e&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "d07c9939c5bc80bb",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "전환사채 유동성 분류 오류 등 (FSS/2505-12)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194380&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_12.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=9bc5faf1f40d4a029149d40ca916b506&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "843f47ea6d913135",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "금융상품 공정가치 평가 오류 (FSS/2505-11)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194379&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_11.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=ac73ceb779bb48729611a3a6f15d66f0&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "3778e7e79711bdec",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "금융부채 미인식 오류 (FSS/2505-10)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194378&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_10.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=5f6028f34e6743fe87280b65c75ba6c3&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "bfe83abafe0db67e",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "매출채권에 대한 손실충당금 과소계상 (FSS/2505-09)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194377&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_09.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=d9dc0362bcc44b3387c51ee53f08ffbb&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "05ba367062097288",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "리스기간 산정 오류 (FSS/2505-08)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194376&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_08.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=25718c62152045bda3e3606407032d5d&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "ba2a6424406c7024",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "파생상품부채 미계상 (FSS/2505-07)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194375&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_07.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=2b99b98f94294c1ab944d51b9f9954f5&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "d99e5bc73383595b",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "가장납입 및 횡령 은폐를 위한 가공의 자산계상 (FSS/2505-06)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194374&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_06.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=ddcfa4b1371d40a6904d4b65ca912a9f&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "c239bb30cabf7e06",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "공동기업투자주식 손상차손 과소계상 (FSS/2505-05)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194373&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_05.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=05bd30ac367c445a9c610aab252f756b&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "fd609942a380fdec",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "매출 기간귀속 오류 (FSS/2505-04)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194372&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_04.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=290d5cbddb484cee8a1e492935d25a52&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "0a18e76d931fdda9",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "매출 및 매출원가 과대계상 (FSS/2505-03)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194371&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_03.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=fa56de825d3c440880f9be1a6223d884&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "83ab136048b5a303",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "매출 허위계상 (FSS/2505-02)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2025-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=194370&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2505_02.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=005b5a987b7a4d6b9987baff4bd59d5b&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2025-05-01"
+    },
+    {
+      "id": "3d71636eae2c025f",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "특수관계자 여부 및 거래내역 주석 미기재 (FSS/2409-13)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138394&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_13.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=0e367950a01f43faa5f9700ffb9d1fc0&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "1a296e83b5aab0fc",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "비상장주식 공정가치 평가 오류 (FSS/2409-12)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138393&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_12.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=659c5efd269243cf9d697345527023a2&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "468aa92897d757d4",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "횡령 은폐를 위한 매출채권 허위계상 (FSS/2409-10)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138391&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_10.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=44cebced7c5f4c9a9929403c154a5c22&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "c51aaede0cad6551",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "퇴직급여충당부채 과소계상 (FSS/2409-09)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138385&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_09.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=d69b0306df704488b62e41c9109d9241&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "478f55ab97349639",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "재고자산 및 유형자산 허위계상 (FSS/2409-08)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138384&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_08.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=5f9a401b19814c57948c08385f39d8c7&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "7897b7b84b9eda22",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "관계기업투자주식 추가 취득시 취득원가 오류 (FSS/2409-06)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138382&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_06.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=e1bb90a6b4594ad89b074f00117de54f&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "dc2a1ac3155d9cce",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "종속기업투자주식 지분법 평가오류 (FSS/2409-05)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138381&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_05.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=fb68ef80b9f6454ebea6d7462f4cfd2d&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "d7e856b40b1b5c66",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "종속기업투자주식 및 영업권 손상차손 미인식 (FSS/2409-04)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138380&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_04.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=7ef0936f893749e0a09682c105b34203&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "28c7dc171fe68374",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "종속기업투자주식 손상차손 미인식 (FSS/2409-03)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138379&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_03.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=e02b114c6f1647a0be662ba7f581f741&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "63200ad399abcc30",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "종속회사의 밀어내기 매출을 통한 매출(연결) 허위 계상 등 (FSS/2409-02)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138378&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_02.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=4eece27ff66548369b9d2423b7cf7739&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "8bb17c2b3cb9c1c9",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "매출 및 매출원가 허위계상 (FSS/2409-01)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-09-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=138377&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2409_01.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=cdbe39c0da9949bca6e5062ec59d430b&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-09-01"
+    },
+    {
+      "id": "7f24133705bb2d48",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "특수관계자 거래내역 주석 미기재 (FSS/2405-14)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135721&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_14.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=8148f0f954e847839af3dd647c2422bc&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "6ff794e9bf85d91b",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "금융상품 계정분류 오류 (FSS/2405-13)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135720&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_13.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=4b26b53e4ea94c71b1deddbe1176dc47&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "ac073ea83349128b",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "이연법인세부채 과소 계상 (FSS/2405-12)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135719&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_12.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=91204061a83b43aea46dc586279d72a1&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "41c57a28b08460ab",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "전용실시권(무형자산)의 비용계상 오류 (FSS/2405-11)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135718&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_11.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=55231018677b4a279c51d58a6e9b1447&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "af2047056679413d",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "횡령 은폐를 위한 가공의 자산계상 (FSS/2405-10)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135717&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_10.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=8a9d05cb2b584d9ea40c87c92a8188b1&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "165b956d8d3458f6",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "파생상품 등 허위계상 (FSS/2405-09)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135716&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_09.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=64df70e2d66a44afaefa462e97b15916&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "4e20bb8d54b24114",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "재고자산 과대계상 (FSS/2405-08)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135715&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_08.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=d020c70222d34bcbb1eff28a40c64db0&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "4f93938b3fa676d7",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "재고자산 과대계상 (FSS/2405-07)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135714&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_07.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=c96ff9101dfd4931981afeb0c01ecd6d&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "03c51bcf81c6d6d6",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "매출 기간 귀속 오류 (FSS/2405-06)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135713&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_06.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=630a9fce2e384ba9b73258beb2798604&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "ed1b013c153a9687",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "수익인식기준 적용 오류 (FSS/2405-05)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135712&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_05.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=727daaa8884049ed95945a272ada6b7b&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "07f6271dc2226dcf",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "매출 및 매출원가 허위계상 (FSS/2405-04)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135711&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_04.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=5ebe38c1fdf84d86926087c5c9b05bbc&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
+      "id": "3c3d8c6f7f03cd45",
+      "category": "kifrs",
+      "doc_type": "결정례·판례",
+      "stage": "참고",
+      "title": "미지급장려금 과소계상에 따른 매출 과대계상 (FSS/2405-01)",
+      "summary": [
+        "첨부파일 1건"
+      ],
+      "impact": null,
+      "published_at": "2024-05-01",
+      "collected_at": "2026-11-27T14:41:26+09:00",
+      "effective_date": null,
+      "source": {
+        "name": "금융감독원",
+        "domain": "fss.or.kr",
+        "tier": 1,
+        "type": "official"
+      },
+      "trust_score": 100,
+      "keyword_score": 0,
+      "final_score": 55.0,
+      "matched_keywords": [],
+      "urls": {
+        "news": null,
+        "official": "https://www.fss.or.kr/fss/bbs/B0000135/view.do?nttId=135707&menuNo=200448"
+      },
+      "law_meta": null,
+      "attachments": [
+        {
+          "name": "FSS2405_01.pdf",
+          "url": "https://www.fss.or.kr/fss/cmmn/file/fileDown.do?menuNo=200448&atchFileId=5f227a1f79ea4dfd9dc4268e637c8eeb&fileSn=1&bbsId="
+        }
+      ],
+      "is_static": false,
+      "date_estimated": true,
+      "duplicate_count": 0,
+      "duplicate_sources": [],
+      "related_news": [],
+      "is_meeting_schedule": false,
+      "ai_generated": false,
+      "revision_reason": null,
+      "is_roadmap_estimate": false,
+      "effective_date_note": null,
+      "replied_at": null,
+      "disclosed_at": null,
+      "attachment_text": null,
+      "hidden_reason": null,
+      "first_seen_at": "2024-05-01"
+    },
+    {
       "id": "2d985b567a9e6d86",
       "category": "icfr",
       "doc_type": "FAQ",
@@ -5935,7 +8738,7 @@
       ],
       "impact": "내부회계관리제도 대상 상장법인으로서 자금부정 통제활동 공시 서식 반영 여부 확인 필요",
       "published_at": "2024-11-04",
-      "collected_at": "2026-11-27T12:46:48+09:00",
+      "collected_at": "2026-11-27T14:40:53+09:00",
       "effective_date": "2024-01-01",
       "source": {
         "name": "금융감독원",
@@ -5978,7 +8781,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-25",
-      "collected_at": "2026-11-27T12:49:26+09:00",
+      "collected_at": "2026-11-27T14:43:08+09:00",
       "effective_date": null,
       "source": {
         "name": "ESG경제",
@@ -6015,52 +8818,6 @@
       "first_seen_at": "2026-11-26"
     },
     {
-      "id": "ef1fec65e3291413",
-      "category": "esg",
-      "doc_type": "보도자료",
-      "stage": "참고",
-      "title": "ESG 공시 의무화, 투자자는 무엇을 보나…숫자보다 '숫자 뒤 설명' - 임팩트온",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-11-11",
-      "collected_at": "2026-11-27T12:49:05+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "임팩트온",
-        "domain": "https://www.impacton.net",
-        "tier": 2,
-        "type": "news"
-      },
-      "trust_score": 80,
-      "keyword_score": 30,
-      "final_score": 53.6,
-      "matched_keywords": [
-        "ESG 공시",
-        "의무화"
-      ],
-      "urls": {
-        "news": "https://www.impacton.net/news/articleView.html?idxno=30637",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 0,
-      "duplicate_sources": [],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null,
-      "is_roadmap_estimate": false,
-      "effective_date_note": null,
-      "replied_at": null,
-      "disclosed_at": null,
-      "attachment_text": null,
-      "hidden_reason": null,
-      "first_seen_at": "2026-11-12"
-    },
-    {
       "id": "ea9d33f3179fcc1a",
       "category": "kifrs",
       "doc_type": "보도자료",
@@ -6069,7 +8826,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-13",
-      "collected_at": "2026-11-27T12:49:05+09:00",
+      "collected_at": "2026-11-27T14:42:48+09:00",
       "effective_date": null,
       "source": {
         "name": "CPA뉴스",
@@ -6114,7 +8871,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-11",
-      "collected_at": "2026-11-27T12:49:26+09:00",
+      "collected_at": "2026-11-27T14:43:08+09:00",
       "effective_date": null,
       "source": {
         "name": "조세일보",
@@ -6161,7 +8918,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-25",
-      "collected_at": "2026-11-27T12:49:05+09:00",
+      "collected_at": "2026-11-27T14:42:48+09:00",
       "effective_date": null,
       "source": {
         "name": "파이낸셜뉴스",
@@ -6203,106 +8960,6 @@
       "first_seen_at": "2026-11-27"
     },
     {
-      "id": "4721f368edfaadd6",
-      "category": "tax",
-      "doc_type": "보도자료",
-      "stage": "참고",
-      "title": "전기차 생산세액공제 국회 논의 지연…지원대책 발표 또 연기",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-11-26",
-      "collected_at": "2026-11-27T12:49:26+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "서울경제",
-        "domain": "https://www.sedaily.com/article/20119476?ref=naver",
-        "tier": 4,
-        "type": "news"
-      },
-      "trust_score": 50,
-      "keyword_score": 20,
-      "final_score": 47.6,
-      "matched_keywords": [
-        "세액공제"
-      ],
-      "urls": {
-        "news": "https://www.sedaily.com/article/20119476?ref=naver",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 7,
-      "duplicate_sources": [
-        "서울경제",
-        "머니투데이",
-        "ajunews.com",
-        "newsis.com",
-        "smedaily.co.kr",
-        "view.asiae.co.kr",
-        "theopiniontimes.news",
-        "news1.kr"
-      ],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null,
-      "is_roadmap_estimate": false,
-      "effective_date_note": null,
-      "replied_at": null,
-      "disclosed_at": null,
-      "attachment_text": null,
-      "hidden_reason": null,
-      "first_seen_at": "2026-11-27"
-    },
-    {
-      "id": "0b64bb16ed30256a",
-      "category": "esg",
-      "doc_type": "기사",
-      "stage": "참고",
-      "title": "\"투자자는 정보 달라는데 기업은 난색\"…ESG 공시 의무화 진통 - 머니투데이 - 머니투데이",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-11-22",
-      "collected_at": "2026-11-27T12:49:05+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "머니투데이",
-        "domain": "https://www.mt.co.kr",
-        "tier": 4,
-        "type": "news"
-      },
-      "trust_score": 50,
-      "keyword_score": 30,
-      "final_score": 47.0,
-      "matched_keywords": [
-        "ESG 공시",
-        "의무화"
-      ],
-      "urls": {
-        "news": "https://www.mt.co.kr/stock/2026/11/23/2026112219585411228",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 0,
-      "duplicate_sources": [],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null,
-      "is_roadmap_estimate": false,
-      "effective_date_note": null,
-      "replied_at": null,
-      "disclosed_at": null,
-      "attachment_text": null,
-      "hidden_reason": null,
-      "first_seen_at": "2026-11-27"
-    },
-    {
       "id": "1f2ff5c9c294ec77",
       "category": "kifrs",
       "doc_type": "기사",
@@ -6311,7 +8968,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-23",
-      "collected_at": "2026-11-27T12:49:05+09:00",
+      "collected_at": "2026-11-27T14:42:48+09:00",
       "effective_date": null,
       "source": {
         "name": "서울경제",
@@ -6348,51 +9005,6 @@
       "first_seen_at": "2026-11-24"
     },
     {
-      "id": "f7dfce1202e06abc",
-      "category": "esg",
-      "doc_type": "기사",
-      "stage": "참고",
-      "title": "韓 ESG 공시 입법 공회전할 때…日은 면책·인증 세부안 내놨다 - 머니투데이 - 머니투데이",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-11-22",
-      "collected_at": "2026-11-27T12:49:05+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "머니투데이",
-        "domain": "https://www.mt.co.kr",
-        "tier": 4,
-        "type": "news"
-      },
-      "trust_score": 50,
-      "keyword_score": 20,
-      "final_score": 44.0,
-      "matched_keywords": [
-        "ESG 공시"
-      ],
-      "urls": {
-        "news": "https://www.mt.co.kr/stock/2026/11/22/2026111914551313723",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 0,
-      "duplicate_sources": [],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null,
-      "is_roadmap_estimate": false,
-      "effective_date_note": null,
-      "replied_at": null,
-      "disclosed_at": null,
-      "attachment_text": null,
-      "hidden_reason": null,
-      "first_seen_at": "2026-11-27"
-    },
-    {
       "id": "39893cf41db6a25f",
       "category": "kifrs",
       "doc_type": "기사",
@@ -6401,7 +9013,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-07",
-      "collected_at": "2026-11-27T12:49:05+09:00",
+      "collected_at": "2026-11-27T14:42:48+09:00",
       "effective_date": null,
       "source": {
         "name": "매일경제",
@@ -6447,7 +9059,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-09",
-      "collected_at": "2026-11-27T12:49:05+09:00",
+      "collected_at": "2026-11-27T14:42:48+09:00",
       "effective_date": null,
       "source": {
         "name": "서울경제",
@@ -6485,145 +9097,6 @@
       "first_seen_at": "2026-11-24"
     },
     {
-      "id": "f320b700eb35a85a",
-      "category": "esg",
-      "doc_type": "기사",
-      "stage": "참고",
-      "title": "ESG 공시 의무화 시대, '데이터'가 수익률 가른다 - 한국경제",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-09-03",
-      "collected_at": "2026-11-27T12:49:05+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "한국경제",
-        "domain": "https://www.hankyung.com",
-        "tier": 4,
-        "type": "news"
-      },
-      "trust_score": 50,
-      "keyword_score": 30,
-      "final_score": 36.5,
-      "matched_keywords": [
-        "ESG 공시",
-        "의무화"
-      ],
-      "urls": {
-        "news": "https://www.hankyung.com/article/202608153200G",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 0,
-      "duplicate_sources": [],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null,
-      "is_roadmap_estimate": false,
-      "effective_date_note": null,
-      "replied_at": null,
-      "disclosed_at": null,
-      "attachment_text": null,
-      "hidden_reason": null,
-      "first_seen_at": "2026-09-03"
-    },
-    {
-      "id": "ec51938d49efb01b",
-      "category": "tax",
-      "doc_type": "보도자료",
-      "stage": "참고",
-      "title": "전기차 세액공제 논의 난항···정부, 경쟁력 강화방안 발표 연기",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-11-26",
-      "collected_at": "2026-11-27T12:49:26+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "khan.co.kr",
-        "domain": "https://www.khan.co.kr/article/202611261747001",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 20,
-      "final_score": 31.1,
-      "matched_keywords": [
-        "세액공제"
-      ],
-      "urls": {
-        "news": "https://www.khan.co.kr/article/202611261747001",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 1,
-      "duplicate_sources": [
-        "khan.co.kr",
-        "한국경제"
-      ],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null,
-      "is_roadmap_estimate": false,
-      "effective_date_note": null,
-      "replied_at": null,
-      "disclosed_at": null,
-      "attachment_text": null,
-      "hidden_reason": null,
-      "first_seen_at": "2026-11-27"
-    },
-    {
-      "id": "723d25529628c8f6",
-      "category": "esg",
-      "doc_type": "해외기준",
-      "stage": "참고",
-      "title": "ISSB 자연 관련 공시 실무지침 공개초안 발표 - 법률신문",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-11-26",
-      "collected_at": "2026-11-27T12:49:05+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "lawtimes.co.kr",
-        "domain": "https://www.lawtimes.co.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 20,
-      "final_score": 31.1,
-      "matched_keywords": [
-        "ISSB"
-      ],
-      "urls": {
-        "news": "https://www.lawtimes.co.kr/news/articleView.html?idxno=230116",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 0,
-      "duplicate_sources": [],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null,
-      "is_roadmap_estimate": false,
-      "effective_date_note": null,
-      "replied_at": null,
-      "disclosed_at": null,
-      "attachment_text": null,
-      "hidden_reason": "foreign",
-      "first_seen_at": "2026-11-27"
-    },
-    {
       "id": "3465146eb3440338",
       "category": "kifrs",
       "doc_type": "제·개정",
@@ -6632,7 +9105,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-06",
-      "collected_at": "2026-11-27T12:49:05+09:00",
+      "collected_at": "2026-11-27T14:42:48+09:00",
       "effective_date": null,
       "source": {
         "name": "mobile.newsis.com",
@@ -6681,7 +9154,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-10",
-      "collected_at": "2026-11-27T12:49:05+09:00",
+      "collected_at": "2026-11-27T14:42:48+09:00",
       "effective_date": null,
       "source": {
         "name": "news33.net",
@@ -6728,7 +9201,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-09-09",
-      "collected_at": "2026-11-27T12:49:05+09:00",
+      "collected_at": "2026-11-27T14:42:48+09:00",
       "effective_date": null,
       "source": {
         "name": "etaxnews.com",
@@ -6766,147 +9239,6 @@
       "first_seen_at": "2026-10-19"
     },
     {
-      "id": "473b721b9a2f30ac",
-      "category": "esg",
-      "doc_type": "공개초안",
-      "stage": "의견수렴",
-      "title": "ESG 공시 의무화를 위한 자본시장법 개정안 발의 - 법률신문",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-09-28",
-      "collected_at": "2026-11-27T12:49:05+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "lawtimes.co.kr",
-        "domain": "https://www.lawtimes.co.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 30,
-      "final_score": 20.0,
-      "matched_keywords": [
-        "ESG 공시",
-        "의무화"
-      ],
-      "urls": {
-        "news": "https://www.lawtimes.co.kr/news/articleView.html?idxno=226944",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 0,
-      "duplicate_sources": [],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null,
-      "is_roadmap_estimate": false,
-      "effective_date_note": null,
-      "replied_at": null,
-      "disclosed_at": null,
-      "attachment_text": null,
-      "hidden_reason": null,
-      "first_seen_at": "2026-11-26"
-    },
-    {
-      "id": "c28fa6d75dc66422",
-      "category": "esg",
-      "doc_type": "해설·교육자료",
-      "stage": "참고",
-      "title": "ESG 공시 의무화 앞두고 기업 실무 점검···상장협, 대응 교육 강화 - 여성경제신문",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-10-19",
-      "collected_at": "2026-11-27T12:49:05+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "womaneconomy.co.kr",
-        "domain": "https://www.womaneconomy.co.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 30,
-      "final_score": 20.0,
-      "matched_keywords": [
-        "ESG 공시",
-        "의무화"
-      ],
-      "urls": {
-        "news": "https://www.womaneconomy.co.kr/news/articleView.html?idxno=259937",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 1,
-      "duplicate_sources": [
-        "womaneconomy.co.kr",
-        "paxetv.com"
-      ],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null,
-      "is_roadmap_estimate": false,
-      "effective_date_note": null,
-      "replied_at": null,
-      "disclosed_at": null,
-      "attachment_text": null,
-      "hidden_reason": null,
-      "first_seen_at": "2026-11-26"
-    },
-    {
-      "id": "3effb9f119387ea7",
-      "category": "esg",
-      "doc_type": "기사",
-      "stage": "참고",
-      "title": "ESG 공시 의무화 앞당긴다…2028년부터 자산 10조 원 이상 코스피 상장사 대상 - 일요주간",
-      "summary": [],
-      "impact": null,
-      "published_at": "2026-10-26",
-      "collected_at": "2026-11-27T12:49:05+09:00",
-      "effective_date": null,
-      "source": {
-        "name": "ilyoweekly.co.kr",
-        "domain": "https://ilyoweekly.co.kr",
-        "tier": 5,
-        "type": "news"
-      },
-      "trust_score": 20,
-      "keyword_score": 30,
-      "final_score": 20.0,
-      "matched_keywords": [
-        "ESG 공시",
-        "의무화"
-      ],
-      "urls": {
-        "news": "https://ilyoweekly.co.kr/news/newsview.php?ncode=1065573287539618",
-        "official": null
-      },
-      "law_meta": null,
-      "attachments": null,
-      "is_static": false,
-      "date_estimated": false,
-      "duplicate_count": 0,
-      "duplicate_sources": [],
-      "related_news": [],
-      "is_meeting_schedule": false,
-      "ai_generated": false,
-      "revision_reason": null,
-      "is_roadmap_estimate": false,
-      "effective_date_note": null,
-      "replied_at": null,
-      "disclosed_at": null,
-      "attachment_text": null,
-      "hidden_reason": null,
-      "first_seen_at": "2026-11-26"
-    },
-    {
       "id": "64ab8c34f0f39b26",
       "category": "kifrs",
       "doc_type": "기사",
@@ -6915,7 +9247,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-13",
-      "collected_at": "2026-11-27T12:49:05+09:00",
+      "collected_at": "2026-11-27T14:42:48+09:00",
       "effective_date": null,
       "source": {
         "name": "biz.chosun.com",
@@ -6960,7 +9292,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-10-29",
-      "collected_at": "2026-11-27T12:49:05+09:00",
+      "collected_at": "2026-11-27T14:42:48+09:00",
       "effective_date": null,
       "source": {
         "name": "crowe.com",
@@ -7005,7 +9337,7 @@
       "summary": [],
       "impact": null,
       "published_at": "2026-11-09",
-      "collected_at": "2026-11-27T12:49:26+09:00",
+      "collected_at": "2026-11-27T14:43:08+09:00",
       "effective_date": null,
       "source": {
         "name": "tfmedia.co.kr",
@@ -8541,7 +10873,7 @@
       "effective_date": "2028-01-01",
       "status": "upcoming",
       "importance": "medium",
-      "description": "당사는 1차 적용 대상은 아니나, 모회사 연결 공시 대응 필요(금융위 로드맵 예정 기준)",
+      "description": "의무 시행일은 관련 법령에서 정함(원문 미기재). 공표일 속한 회계연도부터 자발 적용 가능",
       "source": {
         "name": "한국회계기준원",
         "domain": "kasb.or.kr",
@@ -8562,7 +10894,7 @@
       "effective_date": "2028-01-01",
       "status": "upcoming",
       "importance": "medium",
-      "description": "당사는 1차 적용 대상은 아니나, 모회사 연결 공시 대응 필요(금융위 로드맵 예정 기준)",
+      "description": "의무 시행일은 관련 법령에서 정함(원문 미기재). 최초 적용 후 3년간 스코프 3 공시 유예 가능",
       "source": {
         "name": "한국회계기준원",
         "domain": "kasb.or.kr",
@@ -8596,14 +10928,14 @@
           "url": "https://kasb.or.kr/front/board/comm020View.do?boardMngNo=&boardNo=&cmtreadSeq=&seq=494&siteCd=002000000000000"
         },
         {
-          "standard_no": "제1107호",
+          "standard_no": "제1109호",
           "title": "2025년 자연에 의존하는 전력과 관련된 계약 (제1107호 금융상품: 공시, 제1109호 금융상품)",
           "latest_revision_date": "2025-10-17",
           "effective_date": "2026-01-01",
           "url": "https://kasb.or.kr/front/board/comm020View.do?boardMngNo=&boardNo=&cmtreadSeq=&seq=494&siteCd=002000000000000"
         },
         {
-          "standard_no": "제1109호",
+          "standard_no": "제1107호",
           "title": "2025년 자연에 의존하는 전력과 관련된 계약 (제1107호 금융상품: 공시, 제1109호 금융상품)",
           "latest_revision_date": "2025-10-17",
           "effective_date": "2026-01-01",
